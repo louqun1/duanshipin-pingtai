@@ -1,0 +1,15 @@
+D:/itffmpeg/av_media/online/duanshipin-pingtai/build/CMakeFiles/QtFrontend.dir
+D:/itffmpeg/av_media/online/duanshipin-pingtai/build/CMakeFiles/edit_cache.dir
+D:/itffmpeg/av_media/online/duanshipin-pingtai/build/CMakeFiles/rebuild_cache.dir
+D:/itffmpeg/av_media/online/duanshipin-pingtai/build/CMakeFiles/QtFrontend_autogen_timestamp_deps.dir
+D:/itffmpeg/av_media/online/duanshipin-pingtai/build/CMakeFiles/QtFrontend_autogen.dir
+D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend/CMakeFiles/ServoBackend.dir
+D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend/CMakeFiles/edit_cache.dir
+D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend/CMakeFiles/rebuild_cache.dir
+D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend/CMakeFiles/ServoBackend_autogen_timestamp_deps.dir
+D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend/CMakeFiles/ServoBackend_autogen.dir
+D:/itffmpeg/av_media/online/duanshipin-pingtai/build/frontend/CMakeFiles/FrontendWidgets.dir
+D:/itffmpeg/av_media/online/duanshipin-pingtai/build/frontend/CMakeFiles/edit_cache.dir
+D:/itffmpeg/av_media/online/duanshipin-pingtai/build/frontend/CMakeFiles/rebuild_cache.dir
+D:/itffmpeg/av_media/online/duanshipin-pingtai/build/frontend/CMakeFiles/FrontendWidgets_autogen_timestamp_deps.dir
+D:/itffmpeg/av_media/online/duanshipin-pingtai/build/frontend/CMakeFiles/FrontendWidgets_autogen.dir

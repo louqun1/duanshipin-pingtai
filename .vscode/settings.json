@@ -1,0 +1,6 @@
+{
+    "cmake.configureArgs": [
+        "-DCMAKE_PREFIX_PATH=D:/itffmpeg/Qt/6.10.2/llvm-mingw_64"
+    ],
+    "cmake.generator": "MinGW Makefiles"
+}

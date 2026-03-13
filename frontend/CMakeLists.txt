@@ -1,0 +1,24 @@
+add_library(FrontendWidgets
+    widgets/MainWindow.hpp
+    widgets/MainWindow.cpp
+    pages/AccountPage/AccountPage.hpp
+    pages/AccountPage/AccountPage.cpp
+    pages/HomePage/HomePage.hpp
+    pages/HomePage/HomePage.cpp
+    pages/StreamPage/StreamPage.hpp
+    pages/StreamPage/StreamPage.cpp
+    pages/UploadPage/UploadPage.hpp
+    pages/UploadPage/UploadPage.cpp
+)
+
+target_include_directories(FrontendWidgets
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+target_link_libraries(FrontendWidgets
+    PRIVATE
+        ServoBackend
+    PUBLIC
+        Qt6::Widgets
+)

@@ -1,0 +1,7 @@
+set(__QT_DEPLOY_TARGET_ServoBackend_FILE D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend/libServoBackend.a)
+set(__QT_DEPLOY_TARGET_ServoBackend_TYPE STATIC_LIBRARY)
+set(__QT_DEPLOY_TARGET_FrontendWidgets_FILE D:/itffmpeg/av_media/online/duanshipin-pingtai/build/frontend/libFrontendWidgets.a)
+set(__QT_DEPLOY_TARGET_FrontendWidgets_TYPE STATIC_LIBRARY)
+set(__QT_DEPLOY_TARGET_QtFrontend_FILE D:/itffmpeg/av_media/online/duanshipin-pingtai/build/bin/QtFrontend.exe)
+set(__QT_DEPLOY_TARGET_QtFrontend_TYPE EXECUTABLE)
+set(__QT_DEPLOY_TARGET_QtFrontend_RUNTIME_DLLS D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/bin/Qt6Widgets.dll;D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/bin/Qt6Gui.dll;D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/bin/Qt6Core.dll)
