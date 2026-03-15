@@ -129,13 +129,13 @@ void MainWindow::connectAccountFlow()
             &authController_, &backend::controller::auth::AuthController::requestRegister);
 
     connect(accountPage_, &frontend::pages::AccountPage::logoutRequested, this, [this]() {
-        accountPage_->showLoggedOutState("You have been signed out.");
+        accountPage_->showLoggedOutState("您已经退出登录.");
         switchToPage(Account);
     });
 
     connect(&authController_, &backend::controller::auth::AuthController::loginSucceeded,
             this, [this](const QString &username, const QString &email) {
-                showAuthenticatedAccount(username, email, QString("Welcome back, %1.").arg(username));
+                showAuthenticatedAccount(username, email, QString("欢迎回来, %1.").arg(username));
             });
     connect(&authController_, &backend::controller::auth::AuthController::registerSucceeded,
             this, [this](const QString &username, const QString &email) {

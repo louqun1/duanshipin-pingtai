@@ -3,7 +3,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "backend/libServoBackend.a"
+			"path" : "frontend/libFrontendWidgets.a"
 		}
 	],
 	"backtrace" : 1,
@@ -17,7 +17,7 @@
 		],
 		"files" : 
 		[
-			"backend/CMakeLists.txt"
+			"frontend/CMakeLists.txt"
 		],
 		"nodes" : 
 		[
@@ -39,7 +39,7 @@
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 13,
+				"line" : 14,
 				"parent" : 0
 			}
 		]
@@ -53,7 +53,11 @@
 	[
 		{
 			"backtrace" : 2,
-			"id" : "Qt6::Core::@6890427a1f51a3e7e1df"
+			"id" : "ServoBackend::@e17dcb4e28158375c849"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "Qt6::Widgets::@6890427a1f51a3e7e1df"
 		}
 	],
 	"compileGroups" : 
@@ -70,6 +74,14 @@
 				{
 					"backtrace" : 2,
 					"define" : "QT_CORE_LIB"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "QT_GUI_LIB"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "QT_WIDGETS_LIB"
 				},
 				{
 					"backtrace" : 2,
@@ -108,14 +120,18 @@
 			[
 				{
 					"backtrace" : 0,
-					"path" : "D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend/ServoBackend_autogen/include"
+					"path" : "D:/itffmpeg/av_media/online/duanshipin-pingtai/build/frontend/FrontendWidgets_autogen/include"
 				},
 				{
 					"backtrace" : 3,
+					"path" : "D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend"
+				},
+				{
+					"backtrace" : 2,
 					"path" : "D:/itffmpeg/av_media/online/duanshipin-pingtai/backend"
 				},
 				{
-					"backtrace" : 3,
+					"backtrace" : 2,
 					"path" : "D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include"
 				},
 				{
@@ -132,6 +148,16 @@
 					"backtrace" : 2,
 					"isSystem" : true,
 					"path" : "D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/mkspecs/win32-clang-g++"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui"
 				}
 			],
 			"language" : "CXX",
@@ -147,66 +173,80 @@
 			"sourceIndexes" : 
 			[
 				0,
+				2,
 				4,
-				7,
-				9
+				6,
+				8,
+				10
 			]
 		}
 	],
 	"dependencies" : 
 	[
 		{
-			"id" : "ServoBackend_autogen_timestamp_deps::@e17dcb4e28158375c849"
+			"backtrace" : 2,
+			"id" : "ServoBackend::@e17dcb4e28158375c849"
+		},
+		{
+			"id" : "FrontendWidgets_autogen_timestamp_deps::@73e8a6b9a3e1c0d3809b"
 		},
 		{
 			"backtrace" : 0,
-			"id" : "ServoBackend_autogen::@e17dcb4e28158375c849"
+			"id" : "FrontendWidgets_autogen::@73e8a6b9a3e1c0d3809b"
 		}
 	],
-	"id" : "ServoBackend::@e17dcb4e28158375c849",
+	"id" : "FrontendWidgets::@73e8a6b9a3e1c0d3809b",
 	"interfaceCompileDependencies" : 
 	[
 		{
 			"backtrace" : 2,
-			"id" : "Qt6::Core::@6890427a1f51a3e7e1df"
+			"id" : "Qt6::Widgets::@6890427a1f51a3e7e1df"
 		}
 	],
 	"interfaceLinkLibraries" : 
 	[
 		{
 			"backtrace" : 2,
-			"id" : "Qt6::Core::@6890427a1f51a3e7e1df"
+			"id" : "ServoBackend::@e17dcb4e28158375c849"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "Qt6::Widgets::@6890427a1f51a3e7e1df"
 		}
 	],
 	"linkLibraries" : 
 	[
 		{
 			"backtrace" : 2,
-			"id" : "Qt6::Core::@6890427a1f51a3e7e1df"
+			"id" : "ServoBackend::@e17dcb4e28158375c849"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "Qt6::Widgets::@6890427a1f51a3e7e1df"
 		}
 	],
-	"name" : "ServoBackend",
-	"nameOnDisk" : "libServoBackend.a",
+	"name" : "FrontendWidgets",
+	"nameOnDisk" : "libFrontendWidgets.a",
 	"orderDependencies" : 
 	[
 		{
 			"id" : "Qt6::moc::@6890427a1f51a3e7e1df"
 		},
 		{
-			"id" : "ServoBackend_autogen_timestamp_deps::@e17dcb4e28158375c849"
+			"id" : "Qt6::uic::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "FrontendWidgets_autogen_timestamp_deps::@73e8a6b9a3e1c0d3809b"
 		},
 		{
 			"backtrace" : 0,
-			"id" : "ServoBackend_autogen::@e17dcb4e28158375c849"
-		},
-		{
-			"id" : "Qt6::uic::@6890427a1f51a3e7e1df"
+			"id" : "FrontendWidgets_autogen::@73e8a6b9a3e1c0d3809b"
 		}
 	],
 	"paths" : 
 	{
-		"build" : "backend",
-		"source" : "backend"
+		"build" : "frontend",
+		"source" : "frontend"
 	},
 	"sourceGroups" : 
 	[
@@ -215,9 +255,11 @@
 			"sourceIndexes" : 
 			[
 				0,
+				2,
 				4,
-				7,
-				9
+				6,
+				8,
+				10
 			]
 		},
 		{
@@ -225,25 +267,24 @@
 			"sourceIndexes" : 
 			[
 				1,
-				2,
 				3,
 				5,
-				6,
-				8
+				7,
+				9
 			]
 		},
 		{
 			"name" : "",
 			"sourceIndexes" : 
 			[
-				10
+				11
 			]
 		},
 		{
 			"name" : "CMake Rules",
 			"sourceIndexes" : 
 			[
-				11
+				12
 			]
 		}
 	],
@@ -253,67 +294,74 @@
 			"backtrace" : 0,
 			"compileGroupIndex" : 0,
 			"isGenerated" : true,
-			"path" : "build/backend/ServoBackend_autogen/mocs_compilation.cpp",
+			"path" : "build/frontend/FrontendWidgets_autogen/mocs_compilation.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
-			"path" : "backend/domain/user/User.hpp",
-			"sourceGroupIndex" : 1
-		},
-		{
-			"backtrace" : 1,
-			"path" : "backend/repository/user/UserRepository.hpp",
-			"sourceGroupIndex" : 1
-		},
-		{
-			"backtrace" : 1,
-			"path" : "backend/infrastructure/database/InMemoryUserRepository.hpp",
+			"path" : "frontend/widgets/MainWindow.hpp",
 			"sourceGroupIndex" : 1
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "backend/infrastructure/database/InMemoryUserRepository.cpp",
+			"path" : "frontend/widgets/MainWindow.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
-			"path" : "backend/service/auth/AuthResult.hpp",
-			"sourceGroupIndex" : 1
-		},
-		{
-			"backtrace" : 1,
-			"path" : "backend/service/auth/AuthService.hpp",
+			"path" : "frontend/pages/AccountPage/AccountPage.hpp",
 			"sourceGroupIndex" : 1
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "backend/service/auth/AuthService.cpp",
+			"path" : "frontend/pages/AccountPage/AccountPage.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
-			"path" : "backend/controller/auth/AuthController.hpp",
+			"path" : "frontend/pages/HomePage/HomePage.hpp",
 			"sourceGroupIndex" : 1
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "backend/controller/auth/AuthController.cpp",
+			"path" : "frontend/pages/HomePage/HomePage.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "frontend/pages/StreamPage/StreamPage.hpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "frontend/pages/StreamPage/StreamPage.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "frontend/pages/UploadPage/UploadPage.hpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "frontend/pages/UploadPage/UploadPage.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 0,
 			"isGenerated" : true,
-			"path" : "build/backend/ServoBackend_autogen/timestamp",
+			"path" : "build/frontend/FrontendWidgets_autogen/timestamp",
 			"sourceGroupIndex" : 2
 		},
 		{
 			"backtrace" : 0,
 			"isGenerated" : true,
-			"path" : "build/backend/ServoBackend_autogen/timestamp.rule",
+			"path" : "build/frontend/FrontendWidgets_autogen/timestamp.rule",
 			"sourceGroupIndex" : 3
 		}
 	],

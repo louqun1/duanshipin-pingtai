@@ -5,7 +5,7 @@
 		"commands" : [],
 		"files" : 
 		[
-			"backend/CMakeLists.txt"
+			"frontend/CMakeLists.txt"
 		],
 		"nodes" : 
 		[
@@ -22,28 +22,28 @@
 	"dependencies" : 
 	[
 		{
-			"id" : "ServoBackend_autogen_timestamp_deps::@e17dcb4e28158375c849"
+			"id" : "FrontendWidgets_autogen_timestamp_deps::@73e8a6b9a3e1c0d3809b"
 		}
 	],
-	"id" : "ServoBackend_autogen::@e17dcb4e28158375c849",
+	"id" : "FrontendWidgets_autogen::@73e8a6b9a3e1c0d3809b",
 	"isGeneratorProvided" : true,
-	"name" : "ServoBackend_autogen",
+	"name" : "FrontendWidgets_autogen",
 	"orderDependencies" : 
 	[
 		{
 			"id" : "Qt6::moc::@6890427a1f51a3e7e1df"
 		},
 		{
-			"id" : "ServoBackend_autogen_timestamp_deps::@e17dcb4e28158375c849"
+			"id" : "Qt6::uic::@6890427a1f51a3e7e1df"
 		},
 		{
-			"id" : "Qt6::uic::@6890427a1f51a3e7e1df"
+			"id" : "FrontendWidgets_autogen_timestamp_deps::@73e8a6b9a3e1c0d3809b"
 		}
 	],
 	"paths" : 
 	{
-		"build" : "backend",
-		"source" : "backend"
+		"build" : "frontend",
+		"source" : "frontend"
 	},
 	"sourceGroups" : 
 	[
@@ -68,19 +68,19 @@
 		{
 			"backtrace" : 0,
 			"isGenerated" : true,
-			"path" : "build/backend/CMakeFiles/ServoBackend_autogen",
+			"path" : "build/frontend/CMakeFiles/FrontendWidgets_autogen",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 0,
 			"isGenerated" : true,
-			"path" : "build/backend/CMakeFiles/ServoBackend_autogen.rule",
+			"path" : "build/frontend/CMakeFiles/FrontendWidgets_autogen.rule",
 			"sourceGroupIndex" : 1
 		},
 		{
 			"backtrace" : 0,
 			"isGenerated" : true,
-			"path" : "build/backend/ServoBackend_autogen/timestamp.rule",
+			"path" : "build/frontend/FrontendWidgets_autogen/timestamp.rule",
 			"sourceGroupIndex" : 1
 		}
 	],

@@ -342,3 +342,20 @@
 4. 最后再做“程序启动时恢复登录状态”
 
 这样你会把“页面改动、控制器改动、服务改动、仓储改动”整条链都走一遍。
+
+AccountPage (QWidget)
+  └── QVBoxLayout (layout)
+       ├── QLabel (title)
+       ├── QLabel (summary)
+       └── QStackedWidget (stateStack_)
+            ├── panel (访客面板 QWidget)  ← 这就是我们讨论的 panel
+            │    └── QVBoxLayout
+            │         ├── QLabel (headline)
+            │         ├── QLabel (description)
+            │         ├── guestStatusLabel_
+            │         ├── QFormLayout (form)
+            │         │    ├── usernameEdit_ (QLineEdit)
+            │         │    ├── passwordEdit_ (QLineEdit)
+            │         │    └── emailEdit_ (QLineEdit)
+            │         └── QHBoxLayout (actions)
+            └── profilePanel (个人资料面板 QWidget)

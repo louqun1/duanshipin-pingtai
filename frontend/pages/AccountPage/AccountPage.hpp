@@ -41,6 +41,8 @@ private:
     QLabel *profileUsernameValue_ = nullptr;
     QLabel *profileEmailValue_ = nullptr;
     QLabel *profileStatusLabel_ = nullptr;
+    // 新增昵称标签
+    QLabel *profileNicknameValue_ = nullptr;
 };
 
 }  // namespace frontend::pages
