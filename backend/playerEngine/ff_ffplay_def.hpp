@@ -1,7 +1,4 @@
-#ifndef FF_FFPLAY_DEF_H
-#define FF_FFPLAY_DEF_H
-
-
+#pragma once
 #include <inttypes.h>
 #include <math.h>
 #include <limits.h>
@@ -30,7 +27,7 @@ extern "C" {
 
 #include <assert.h>
 
-#include "ijksdl_timer.h"
+#include "IjksdlTimer.hpp"
 
 #define MAX_QUEUE_SIZE (15 * 1024 * 1024)
 #define MIN_FRAMES 25
@@ -134,7 +131,8 @@ typedef struct PacketQueue {
 typedef struct AudioParams {
     int			freq;                   // 采样率
     int			channels;               // 通道数
-    int64_t		channel_layout;         // 通道布局，比如2.1声道，5.1声道等
+    // int64_t		channel_layout;         // 通道布局，比如2.1声道，5.1声道等
+    AVChannelLayout channel_layout;         // 通道布局，比如2.1声道，5.1声道等
     enum AVSampleFormat	fmt;            // 音频采样格式，比如AV_SAMPLE_FMT_S16表示为有符号16bit深度，交错排列模式。
     int			frame_size;             // 一个采样单元占用的字节数（比如2通道时，则左右通道各采样一次合成一个采样单元）
     int			bytes_per_sec;          // 一秒时间的字节数，比如采样率48Khz，2 channel，16bit，则一秒48000*2*16/8=192000
@@ -252,8 +250,4 @@ void set_clock(Clock *c, double pts, int serial);
 void init_clock(Clock *c, int *queue_serial);
 
 
- void ffp_reset_statistic(FFStatistic *dcc);
-
-
-
-#endif // FF_FFPLAY_DEF_H
+void ffp_reset_statistic(FFStatistic *dcc);
