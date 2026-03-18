@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "service/auth/AuthService.hpp"
 
@@ -16,12 +16,17 @@ public:
 public slots:
     void requestLogin(const QString &username, const QString &password);
     void requestRegister(const QString &username, const QString &password, const QString &email);
+    void requestLogout();
+    void restorePersistedSession();
 
 signals:
     void loginSucceeded(const QString &username, const QString &email);
     void loginFailed(const QString &message);
     void registerSucceeded(const QString &username, const QString &email);
     void registerFailed(const QString &message);
+    void logoutSucceeded(const QString &message);
+    void logoutFailed(const QString &message);
+    void sessionRestored(const QString &username, const QString &email);
 
 private:
     backend::service::auth::AuthService &authService_;

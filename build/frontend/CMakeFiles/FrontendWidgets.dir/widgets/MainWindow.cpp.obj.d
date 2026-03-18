@@ -394,17 +394,27 @@ frontend/CMakeFiles/FrontendWidgets.dir/widgets/MainWindow.cpp.obj: \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstring.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/controller/auth/AuthController.hpp \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/service/auth/AuthService.hpp \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/repository/session/SessionRepository.hpp \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/domain/session/Session.hpp \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QDateTime \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdatetime.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcalendar.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qlocale.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/repository/user/UserRepository.hpp \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/domain/user/User.hpp \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/service/auth/AuthResult.hpp \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QObject \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qobject.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playercontroller/service/PlayerController.hpp \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/AccountPage/AccountPage.hpp \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QWidget \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qwidget.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/HomePage/HomePage.hpp \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QVector \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qvector.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/StreamPage/StreamPage.hpp \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/UploadPage/UploadPage.hpp \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/VideoPlayerWindow.hpp \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QButtonGroup \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qbuttongroup.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QFrame \

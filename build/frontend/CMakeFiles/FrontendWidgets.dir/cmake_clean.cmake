@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/mocs_compilation.cpp.obj"
   "CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/mocs_compilation.cpp.obj.d"
+  "CMakeFiles/FrontendWidgets.dir/components/VideoCard/VideoCard.cpp.obj"
+  "CMakeFiles/FrontendWidgets.dir/components/VideoCard/VideoCard.cpp.obj.d"
   "CMakeFiles/FrontendWidgets.dir/pages/AccountPage/AccountPage.cpp.obj"
   "CMakeFiles/FrontendWidgets.dir/pages/AccountPage/AccountPage.cpp.obj.d"
   "CMakeFiles/FrontendWidgets.dir/pages/HomePage/HomePage.cpp.obj"
@@ -11,6 +13,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/FrontendWidgets.dir/pages/UploadPage/UploadPage.cpp.obj.d"
   "CMakeFiles/FrontendWidgets.dir/widgets/MainWindow.cpp.obj"
   "CMakeFiles/FrontendWidgets.dir/widgets/MainWindow.cpp.obj.d"
+  "CMakeFiles/FrontendWidgets.dir/widgets/VideoPlayerWindow.cpp.obj"
+  "CMakeFiles/FrontendWidgets.dir/widgets/VideoPlayerWindow.cpp.obj.d"
   "CMakeFiles/FrontendWidgets_autogen.dir/AutogenUsed.txt"
   "CMakeFiles/FrontendWidgets_autogen.dir/ParseCache.txt"
   "FrontendWidgets_autogen"

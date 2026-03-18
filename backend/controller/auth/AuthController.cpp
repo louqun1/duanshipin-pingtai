@@ -1,4 +1,4 @@
-﻿#include "controller/auth/AuthController.hpp"
+#include "controller/auth/AuthController.hpp"
 
 namespace backend::controller::auth {
 
@@ -28,6 +28,25 @@ void AuthController::requestRegister(const QString &username, const QString &pas
     }
 
     emit registerFailed(result.message);
+}
+
+void AuthController::requestLogout()
+{
+    const auto result = authService_.logout();
+    if (result.ok()) {
+        emit logoutSucceeded(result.message);
+        return;
+    }
+
+    emit logoutFailed(result.message);
+}
+
+void AuthController::restorePersistedSession()
+{
+    const auto result = authService_.restorePersistedSession();
+    if (result.ok() && result.user.has_value()) {
+        emit sessionRestored(result.user->username, result.user->email);
+    }
 }
 
 }  // namespace backend::controller::auth

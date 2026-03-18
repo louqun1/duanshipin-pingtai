@@ -7,9 +7,14 @@ class QButtonGroup;
 class QPushButton;
 class QStackedWidget;
 class QWidget;
+class VideoPlayerWindow;
 
 namespace backend::controller::auth {
 class AuthController;
+}
+
+namespace backend::playercontroller::service {
+class PlayerController;
 }
 
 namespace frontend::pages {
@@ -24,7 +29,10 @@ class MainWindow final : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(backend::controller::auth::AuthController &authController, QWidget *parent = nullptr);
+    explicit MainWindow(
+        backend::controller::auth::AuthController &authController,
+        backend::playercontroller::service::PlayerController &playerController,
+        QWidget *parent = nullptr);
     ~MainWindow() override = default;
 
     MainWindow(const MainWindow &) = delete;
@@ -42,14 +50,23 @@ private:
     QWidget *createNavigation();
     QPushButton *createNavigationButton(const QString &label, int pageIndex);
     void connectNavigation();
+    void connectPlaybackFlow();
     void connectAccountFlow();
     void switchToPage(int pageIndex);
-    void showAuthenticatedAccount(const QString &username, const QString &email, const QString &message);
+    void updateAuthenticatedAccount(
+        const QString &username,
+        const QString &email,
+        const QString &message,
+        bool switchToAccount);
 
     QButtonGroup *navigationGroup_ = nullptr;
     QStackedWidget *pageStack_ = nullptr;
     backend::controller::auth::AuthController &authController_;
+    backend::playercontroller::service::PlayerController &playerController_;
+    QString currentUsername_;
+    QString currentEmail_;
 
+    VideoPlayerWindow *videoPlayerWindow_ = nullptr;
     frontend::pages::HomePage *homePage_ = nullptr;
     frontend::pages::StreamPage *streamPage_ = nullptr;
     frontend::pages::UploadPage *uploadPage_ = nullptr;

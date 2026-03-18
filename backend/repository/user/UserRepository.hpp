@@ -13,6 +13,7 @@ class UserRepository
 public:
     virtual ~UserRepository() = default;
 
+    virtual std::optional<backend::domain::user::User> findById(const QString &id) const = 0;
     virtual std::optional<backend::domain::user::User> findByUsername(const QString &username) const = 0;
     virtual bool validateCredentials(const QString &username, const QString &password) const = 0;
     virtual bool save(const backend::domain::user::User &user, const QString &password) = 0;

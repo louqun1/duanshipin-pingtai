@@ -1,0 +1,59 @@
+{
+	"abstract" : true,
+	"artifacts" : 
+	[
+		{
+			"path" : "D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/bin/SDL2.dll"
+		},
+		{
+			"path" : "D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/lib/SDL2.lib"
+		}
+	],
+	"backtrace" : 2,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"flashpoint_import_shared_library"
+		],
+		"files" : 
+		[
+			"backend/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 147,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 32,
+				"parent" : 1
+			}
+		]
+	},
+	"codemodelVersion" : 
+	{
+		"major" : 2,
+		"minor" : 9
+	},
+	"id" : "SDL2::SDL2::@e17dcb4e28158375c849",
+	"imported" : true,
+	"name" : "SDL2::SDL2",
+	"nameOnDisk" : "SDL2.dll",
+	"paths" : 
+	{
+		"build" : "backend",
+		"source" : "backend"
+	},
+	"sources" : [],
+	"type" : "SHARED_LIBRARY"
+}

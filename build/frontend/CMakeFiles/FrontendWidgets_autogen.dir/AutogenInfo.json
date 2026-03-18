@@ -16,6 +16,12 @@
 	"HEADERS" : 
 	[
 		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/components/VideoCard/VideoCard.hpp",
+			"MU",
+			"N2ALAT6FDB/moc_VideoCard.cpp",
+			null
+		],
+		[
 			"D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/AccountPage/AccountPage.hpp",
 			"MU",
 			"OPMHQICM4S/moc_AccountPage.cpp",
@@ -44,6 +50,12 @@
 			"MU",
 			"IMAN36LHMA/moc_MainWindow.cpp",
 			null
+		],
+		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/VideoPlayerWindow.hpp",
+			"MU",
+			"IMAN36LHMA/moc_VideoPlayerWindow.cpp",
+			null
 		]
 	],
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
@@ -53,6 +65,7 @@
 	[
 		"QT_CORE_LIB",
 		"QT_GUI_LIB",
+		"QT_SQL_LIB",
 		"QT_WIDGETS_LIB",
 		"UNICODE",
 		"WIN32",
@@ -75,9 +88,12 @@
 		"D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend",
 		"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend",
 		"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include",
+		"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include",
+		"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/SDL2",
 		"D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore",
 		"D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include",
 		"D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/mkspecs/win32-clang-g++",
+		"D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtSql",
 		"D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets",
 		"D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui",
 		"D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++",
@@ -121,6 +137,11 @@
 	"SOURCES" : 
 	[
 		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/components/VideoCard/VideoCard.cpp",
+			"MU",
+			null
+		],
+		[
 			"D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/AccountPage/AccountPage.cpp",
 			"MU",
 			null
@@ -142,6 +163,11 @@
 		],
 		[
 			"D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/MainWindow.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/VideoPlayerWindow.cpp",
 			"MU",
 			null
 		]

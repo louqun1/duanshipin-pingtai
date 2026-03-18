@@ -11,6 +11,7 @@ class InMemoryUserRepository final : public backend::repository::user::UserRepos
 public:
     InMemoryUserRepository();
 
+    std::optional<backend::domain::user::User> findById(const QString &id) const override;
     std::optional<backend::domain::user::User> findByUsername(const QString &username) const override;
     bool validateCredentials(const QString &username, const QString &password) const override;
     bool save(const backend::domain::user::User &user, const QString &password) override;

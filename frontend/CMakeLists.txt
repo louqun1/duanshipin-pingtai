@@ -1,6 +1,10 @@
 add_library(FrontendWidgets
     widgets/MainWindow.hpp
     widgets/MainWindow.cpp
+    widgets/VideoPlayerWindow.hpp
+    widgets/VideoPlayerWindow.cpp
+    components/VideoCard/VideoCard.hpp
+    components/VideoCard/VideoCard.cpp
     pages/AccountPage/AccountPage.hpp
     pages/AccountPage/AccountPage.cpp
     pages/HomePage/HomePage.hpp

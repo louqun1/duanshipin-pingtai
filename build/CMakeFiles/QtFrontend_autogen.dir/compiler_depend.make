@@ -129,6 +129,39 @@ QtFrontend_autogen/timestamp: D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6/
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6GuiTools/Qt6GuiToolsTargets-relwithdebinfo.cmake \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6GuiTools/Qt6GuiToolsTargets.cmake \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6GuiTools/Qt6GuiToolsVersionlessTargets.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QIBaseDriverPluginAdditionalTargetInfo.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QIBaseDriverPluginConfig.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QIBaseDriverPluginTargets-relwithdebinfo.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QIBaseDriverPluginTargets.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QMimerSQLDriverPluginAdditionalTargetInfo.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QMimerSQLDriverPluginConfig.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QMimerSQLDriverPluginTargets-relwithdebinfo.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QMimerSQLDriverPluginTargets.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QOCIDriverPluginAdditionalTargetInfo.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QOCIDriverPluginConfig.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QOCIDriverPluginTargets-relwithdebinfo.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QOCIDriverPluginTargets.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QODBCDriverPluginAdditionalTargetInfo.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QODBCDriverPluginConfig.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QODBCDriverPluginTargets-relwithdebinfo.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QODBCDriverPluginTargets.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QPSQLDriverPluginAdditionalTargetInfo.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QPSQLDriverPluginConfig.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QPSQLDriverPluginTargets-relwithdebinfo.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QPSQLDriverPluginTargets.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QSQLiteDriverPluginAdditionalTargetInfo.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QSQLiteDriverPluginConfig.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QSQLiteDriverPluginTargets-relwithdebinfo.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QSQLiteDriverPluginTargets.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6SqlAdditionalTargetInfo.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6SqlConfig.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6SqlConfigVersion.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6SqlConfigVersionImpl.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6SqlDependencies.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6SqlPlugins.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6SqlTargets-relwithdebinfo.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6SqlTargets.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6SqlVersionlessAliasTargets.cmake \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Widgets/Qt6QModernWindowsStylePluginAdditionalTargetInfo.cmake \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Widgets/Qt6QModernWindowsStylePluginConfig.cmake \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Widgets/Qt6QModernWindowsStylePluginTargets-relwithdebinfo.cmake \
@@ -208,6 +241,8 @@ QtFrontend_autogen/timestamp: D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6/
   D:/itffmpeg/cmake-4.2.3/share/cmake-4.2/Modules/Platform/WindowsPaths.cmake
 
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6SqlDependencies.cmake:
+
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6/QtFeatureCommon.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6/Qt6Dependencies.cmake:
@@ -274,7 +309,11 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6/QtPublicGitHelpers.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6/QtPublicFinalizerHelpers.cmake:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QSQLiteDriverPluginTargets-relwithdebinfo.cmake:
+
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsDependencies.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QOCIDriverPluginTargets.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6/QtPublicFindPackageHelpers.cmake:
 
@@ -289,6 +328,8 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6/QtPublicSbomCpeHelpers.cmake:
 D:/itffmpeg/cmake-4.2.3/share/cmake-4.2/Modules/Platform/Linker/Windows-GNU.cmake:
 
 D:/itffmpeg/cmake-4.2.3/share/cmake-4.2/Modules/FindVulkan.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QSQLiteDriverPluginTargets.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6/QtPublicSbomCycloneDXHelpers.cmake:
 
@@ -356,6 +397,10 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsConfigVer
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsVersionlessTargets.cmake:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6SqlTargets-relwithdebinfo.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QOCIDriverPluginConfig.cmake:
+
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6EntryPointPrivate/Qt6EntryPointMinGW32Target.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6EntryPointPrivate/Qt6EntryPointPrivateAdditionalTargetInfo.cmake:
@@ -390,6 +435,8 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Gui/Qt6GuiPlugins.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Gui/Qt6GuiTargets-relwithdebinfo.cmake:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QOCIDriverPluginAdditionalTargetInfo.cmake:
+
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Gui/Qt6GuiVersionlessAliasTargets.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Gui/Qt6QGifPluginAdditionalTargetInfo.cmake:
@@ -411,6 +458,8 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Gui/Qt6QICOPluginConfig.cmake:
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Gui/Qt6QICOPluginTargets.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Gui/Qt6QJpegPluginAdditionalTargetInfo.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QIBaseDriverPluginTargets-relwithdebinfo.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Gui/Qt6QJpegPluginConfig.cmake:
 
@@ -434,6 +483,8 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Gui/Qt6QOffscreenIntegrationPlu
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Widgets/Qt6WidgetsAdditionalTargetInfo.cmake:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6SqlConfigVersion.cmake:
+
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Gui/Qt6QSvgIconPluginAdditionalTargetInfo.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Widgets/Qt6WidgetsConfig.cmake:
@@ -451,6 +502,8 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/app/bootstrap/AppBootstrap.hpp:
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Widgets/Qt6WidgetsTargets.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Gui/Qt6QSvgIconPluginTargets.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QPSQLDriverPluginTargets-relwithdebinfo.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Gui/Qt6QSvgPluginConfig.cmake:
 
@@ -499,6 +552,56 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6GuiTools/Qt6GuiToolsTargets.cma
 D:/itffmpeg/cmake-4.2.3/share/cmake-4.2/Modules/CMakeGenericSystem.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6GuiTools/Qt6GuiToolsVersionlessTargets.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QIBaseDriverPluginAdditionalTargetInfo.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QIBaseDriverPluginTargets.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QIBaseDriverPluginConfig.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QMimerSQLDriverPluginAdditionalTargetInfo.cmake:
+
+D:/itffmpeg/cmake-4.2.3/share/cmake-4.2/Modules/Compiler/GNU-CXX.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QMimerSQLDriverPluginConfig.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QMimerSQLDriverPluginTargets-relwithdebinfo.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QMimerSQLDriverPluginTargets.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QOCIDriverPluginTargets-relwithdebinfo.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QODBCDriverPluginAdditionalTargetInfo.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QODBCDriverPluginConfig.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QODBCDriverPluginTargets-relwithdebinfo.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QODBCDriverPluginTargets.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QPSQLDriverPluginAdditionalTargetInfo.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QPSQLDriverPluginConfig.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QPSQLDriverPluginTargets.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QSQLiteDriverPluginAdditionalTargetInfo.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QSQLiteDriverPluginConfig.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6SqlAdditionalTargetInfo.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6SqlConfig.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6SqlConfigVersionImpl.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6SqlPlugins.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6SqlTargets.cmake:
+
+D:/itffmpeg/cmake-4.2.3/share/cmake-4.2/Modules/CheckLibraryExists.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6SqlVersionlessAliasTargets.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Widgets/Qt6QModernWindowsStylePluginAdditionalTargetInfo.cmake:
 
@@ -572,11 +675,7 @@ D:/itffmpeg/cmake-4.2.3/share/cmake-4.2/Modules/CheckCXXCompilerFlag.cmake:
 
 D:/itffmpeg/cmake-4.2.3/share/cmake-4.2/Modules/CheckIncludeFile.cmake:
 
-D:/itffmpeg/cmake-4.2.3/share/cmake-4.2/Modules/CheckLibraryExists.cmake:
-
 D:/itffmpeg/cmake-4.2.3/share/cmake-4.2/Modules/Compiler/GNU-C.cmake:
-
-D:/itffmpeg/cmake-4.2.3/share/cmake-4.2/Modules/Compiler/GNU-CXX.cmake:
 
 D:/itffmpeg/cmake-4.2.3/share/cmake-4.2/Modules/Compiler/GNU.cmake:
 

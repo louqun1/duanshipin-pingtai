@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include <QMainWindow>
 
@@ -11,11 +11,17 @@ class AuthController;
 }
 
 namespace backend::infrastructure::database {
-class InMemoryUserRepository;
+class SQLiteDatabase;
+class SQLiteUserRepository;
+class SQLiteSessionRepository;
 }
 
 namespace backend::service::auth {
 class AuthService;
+}
+
+namespace backend::playercontroller::service {
+class PlayerController;
 }
 
 class AppBootstrap
@@ -30,8 +36,11 @@ public:
     QMainWindow *mainWindow() const;
 
 private:
-    std::unique_ptr<backend::infrastructure::database::InMemoryUserRepository> userRepository_;
+    std::unique_ptr<backend::infrastructure::database::SQLiteDatabase> sqliteDatabase_;
+    std::unique_ptr<backend::infrastructure::database::SQLiteUserRepository> userRepository_;
+    std::unique_ptr<backend::infrastructure::database::SQLiteSessionRepository> sessionRepository_;
     std::unique_ptr<backend::service::auth::AuthService> authService_;
     std::unique_ptr<backend::controller::auth::AuthController> authController_;
+    std::unique_ptr<backend::playercontroller::service::PlayerController> playerController_;
     std::unique_ptr<MainWindow> mainWindow_;
 };

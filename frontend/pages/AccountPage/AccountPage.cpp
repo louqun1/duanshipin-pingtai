@@ -218,11 +218,6 @@ namespace frontend::pages
         infoLayout->addRow("Username", profileUsernameValue_);
         styleFormLabel(infoLayout, profileUsernameValue_);
 
-        // 新增昵称行
-        profileNicknameValue_ = new QLabel(panel);
-        infoLayout->addRow("Nickname", profileNicknameValue_);
-        styleFormLabel(infoLayout, profileNicknameValue_);
-
         profileEmailValue_ = new QLabel(panel);
         infoLayout->addRow("Email", profileEmailValue_);
         styleFormLabel(infoLayout, profileEmailValue_);
@@ -236,6 +231,7 @@ namespace frontend::pages
 
         auto *logoutButton = new QPushButton("Log out", panel);
         logoutButton->setFixedWidth(120);
+        logoutButton->setStyleSheet("color: #b91c1c; font-size: 14px; font-weight: 600; background: transparent; border: 1px solid #b91c1c;");
         layout->addWidget(logoutButton, 0, Qt::AlignLeft);
         layout->addStretch();
 

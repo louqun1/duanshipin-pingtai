@@ -392,14 +392,69 @@ CMakeFiles/QtFrontend.dir/app/bootstrap/AppBootstrap.cpp.obj: \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qtabwidget.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/controller/auth/AuthController.hpp \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/service/auth/AuthService.hpp \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/repository/user/UserRepository.hpp \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/domain/user/User.hpp \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/repository/session/SessionRepository.hpp \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/domain/session/Session.hpp \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QDateTime \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdatetime.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcalendar.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qlocale.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstring.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/repository/user/UserRepository.hpp \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/domain/user/User.hpp \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/service/auth/AuthResult.hpp \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QObject \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qobject.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/infrastructure/database/InMemoryUserRepository.hpp \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QVector \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qvector.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/MainWindow.hpp
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/infrastructure/database/SQLiteDatabase.hpp \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtSql/QSqlDatabase \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtSql/qsqldatabase.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtSql/qtsqlglobal.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtSql/qtsql-config.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtSql/qtsqlexports.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qmetaobject.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/infrastructure/database/SQLiteSessionRepository.hpp \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/infrastructure/database/SQLiteUserRepository.hpp \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playercontroller/service/PlayerController.hpp \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/MainWindow.hpp \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QDir \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdir.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdirlisting.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qfiledevice.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qiodevice.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdatetime.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qfile.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/filesystem \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/fs_fwd.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/fs_path.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/locale \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/locale_facets.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/cwctype \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/wctype.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/x86_64-w64-mingw32/bits/ctype_base.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/x86_64-w64-mingw32/bits/ctype_inline.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/locale_facets.tcc \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/locale_facets_nonio.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/x86_64-w64-mingw32/bits/time_members.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/x86_64-w64-mingw32/bits/messages_members.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/codecvt.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/locale_facets_nonio.tcc \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/locale_conv.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/iomanip \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/quoted_string.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/sstream \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/istream \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/ios \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/basic_ios.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/basic_ios.tcc \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/ostream \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/ostream.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/ostream.tcc \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/istream.tcc \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/sstream.tcc \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/codecvt \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/fs_dir.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/fs_ops.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qfileinfo.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtimezone.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QStandardPaths \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstandardpaths.h

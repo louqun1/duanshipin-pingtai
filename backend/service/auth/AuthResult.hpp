@@ -12,7 +12,9 @@ enum class AuthStatus {
     Success,
     InvalidCredentials,
     UserAlreadyExists,
-    ValidationError
+    ValidationError,
+    SessionNotFound,
+    StorageError
 };
 
 struct AuthResult {

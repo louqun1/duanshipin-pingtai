@@ -1,10 +1,12 @@
 #include "widgets/MainWindow.hpp"
 
 #include "controller/auth/AuthController.hpp"
+#include "playercontroller/service/PlayerController.hpp"
 #include "pages/AccountPage/AccountPage.hpp"
 #include "pages/HomePage/HomePage.hpp"
 #include "pages/StreamPage/StreamPage.hpp"
 #include "pages/UploadPage/UploadPage.hpp"
+#include "widgets/VideoPlayerWindow.hpp"
 
 #include <QButtonGroup>
 #include <QFrame>
@@ -16,12 +18,17 @@
 #include <QWidget>
 #include <QtGlobal>
 
-MainWindow::MainWindow(backend::controller::auth::AuthController &authController, QWidget *parent)
+MainWindow::MainWindow(
+    backend::controller::auth::AuthController &authController,
+    backend::playercontroller::service::PlayerController &playerController,
+    QWidget *parent)
     : QMainWindow(parent)
     , authController_(authController)
+    , playerController_(playerController)
 {
     buildUi();
     connectNavigation();
+    connectPlaybackFlow();
     connectAccountFlow();
     switchToPage(Home);
 }
@@ -98,10 +105,10 @@ QWidget *MainWindow::createNavigation()
     navigationGroup_ = new QButtonGroup(panel);
     navigationGroup_->setExclusive(true);
 
-    layout->addWidget(createNavigationButton("Home", Home));
-    layout->addWidget(createNavigationButton("Stream", Stream));
-    layout->addWidget(createNavigationButton("Upload", Upload));
-    layout->addWidget(createNavigationButton("Account", Account));
+    layout->addWidget(createNavigationButton("主页", Home));
+    layout->addWidget(createNavigationButton("直播", Stream));
+    layout->addWidget(createNavigationButton("上传", Upload));
+    layout->addWidget(createNavigationButton("我的", Account));
     layout->addStretch();
 
     return panel;
@@ -121,34 +128,69 @@ void MainWindow::connectNavigation()
     connect(navigationGroup_, &QButtonGroup::idClicked, this, &MainWindow::switchToPage);
 }
 
+void MainWindow::connectPlaybackFlow()
+{
+    connect(homePage_, &frontend::pages::HomePage::playRequested,
+            this, [this](const QString &videoId,
+                         const QString &title,
+                         const QString &creator,
+                         const QString &duration) {
+                if (!videoPlayerWindow_) {
+                    videoPlayerWindow_ = new VideoPlayerWindow(playerController_);
+                }
+
+                videoPlayerWindow_->showSelectedVideo(videoId, title, creator, duration);
+                videoPlayerWindow_->show();
+                videoPlayerWindow_->raise();
+                videoPlayerWindow_->activateWindow();
+            });
+}
+
 void MainWindow::connectAccountFlow()
 {
     connect(accountPage_, &frontend::pages::AccountPage::loginRequested,
             &authController_, &backend::controller::auth::AuthController::requestLogin);
     connect(accountPage_, &frontend::pages::AccountPage::registerRequested,
             &authController_, &backend::controller::auth::AuthController::requestRegister);
-
-    connect(accountPage_, &frontend::pages::AccountPage::logoutRequested, this, [this]() {
-        accountPage_->showLoggedOutState("您已经退出登录.");
-        switchToPage(Account);
-    });
+    connect(accountPage_, &frontend::pages::AccountPage::logoutRequested,
+            &authController_, &backend::controller::auth::AuthController::requestLogout);
 
     connect(&authController_, &backend::controller::auth::AuthController::loginSucceeded,
             this, [this](const QString &username, const QString &email) {
-                showAuthenticatedAccount(username, email, QString("欢迎回来, %1.").arg(username));
+                updateAuthenticatedAccount(username, email, QString("欢迎回来，%1。").arg(username), true);
             });
     connect(&authController_, &backend::controller::auth::AuthController::registerSucceeded,
             this, [this](const QString &username, const QString &email) {
-                showAuthenticatedAccount(username, email, QString("Account created for %1.").arg(username));
+                updateAuthenticatedAccount(username, email, QString("已为 %1 创建账户。").arg(username), true);
+            });
+    connect(&authController_, &backend::controller::auth::AuthController::sessionRestored,
+            this, [this](const QString &username, const QString &email) {
+                updateAuthenticatedAccount(username, email, QString("%1，欢迎回来。").arg(username), false);
             });
     connect(&authController_, &backend::controller::auth::AuthController::loginFailed,
             this, [this](const QString &message) {
+                currentUsername_.clear();
+                currentEmail_.clear();
                 accountPage_->showLoggedOutState(message);
                 switchToPage(Account);
             });
     connect(&authController_, &backend::controller::auth::AuthController::registerFailed,
             this, [this](const QString &message) {
+                currentUsername_.clear();
+                currentEmail_.clear();
                 accountPage_->showLoggedOutState(message);
+                switchToPage(Account);
+            });
+    connect(&authController_, &backend::controller::auth::AuthController::logoutSucceeded,
+            this, [this](const QString &) {
+                currentUsername_.clear();
+                currentEmail_.clear();
+                accountPage_->showLoggedOutState("您已经退出登录。");
+                switchToPage(Account);
+            });
+    connect(&authController_, &backend::controller::auth::AuthController::logoutFailed,
+            this, [this](const QString &message) {
+                accountPage_->showAuthenticatedState(currentUsername_, currentEmail_, message);
                 switchToPage(Account);
             });
 }
@@ -167,8 +209,17 @@ void MainWindow::switchToPage(int pageIndex)
     }
 }
 
-void MainWindow::showAuthenticatedAccount(const QString &username, const QString &email, const QString &message)
+void MainWindow::updateAuthenticatedAccount(
+    const QString &username,
+    const QString &email,
+    const QString &message,
+    bool switchToAccount)
 {
+    currentUsername_ = username;
+    currentEmail_ = email;
     accountPage_->showAuthenticatedState(username, email, message);
-    switchToPage(Account);
+
+    if (switchToAccount) {
+        switchToPage(Account);
+    }
 }

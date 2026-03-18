@@ -181,6 +181,30 @@ FrontendWidgets_autogen/mocs_compilation.cpp.s:
 	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f frontend\CMakeFiles\FrontendWidgets.dir\build.make frontend/CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/mocs_compilation.cpp.s
 .PHONY : FrontendWidgets_autogen/mocs_compilation.cpp.s
 
+components/VideoCard/VideoCard.obj: components/VideoCard/VideoCard.cpp.obj
+.PHONY : components/VideoCard/VideoCard.obj
+
+# target to build an object file
+components/VideoCard/VideoCard.cpp.obj:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f frontend\CMakeFiles\FrontendWidgets.dir\build.make frontend/CMakeFiles/FrontendWidgets.dir/components/VideoCard/VideoCard.cpp.obj
+.PHONY : components/VideoCard/VideoCard.cpp.obj
+
+components/VideoCard/VideoCard.i: components/VideoCard/VideoCard.cpp.i
+.PHONY : components/VideoCard/VideoCard.i
+
+# target to preprocess a source file
+components/VideoCard/VideoCard.cpp.i:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f frontend\CMakeFiles\FrontendWidgets.dir\build.make frontend/CMakeFiles/FrontendWidgets.dir/components/VideoCard/VideoCard.cpp.i
+.PHONY : components/VideoCard/VideoCard.cpp.i
+
+components/VideoCard/VideoCard.s: components/VideoCard/VideoCard.cpp.s
+.PHONY : components/VideoCard/VideoCard.s
+
+# target to generate assembly for a file
+components/VideoCard/VideoCard.cpp.s:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f frontend\CMakeFiles\FrontendWidgets.dir\build.make frontend/CMakeFiles/FrontendWidgets.dir/components/VideoCard/VideoCard.cpp.s
+.PHONY : components/VideoCard/VideoCard.cpp.s
+
 pages/AccountPage/AccountPage.obj: pages/AccountPage/AccountPage.cpp.obj
 .PHONY : pages/AccountPage/AccountPage.obj
 
@@ -301,6 +325,30 @@ widgets/MainWindow.cpp.s:
 	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f frontend\CMakeFiles\FrontendWidgets.dir\build.make frontend/CMakeFiles/FrontendWidgets.dir/widgets/MainWindow.cpp.s
 .PHONY : widgets/MainWindow.cpp.s
 
+widgets/VideoPlayerWindow.obj: widgets/VideoPlayerWindow.cpp.obj
+.PHONY : widgets/VideoPlayerWindow.obj
+
+# target to build an object file
+widgets/VideoPlayerWindow.cpp.obj:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f frontend\CMakeFiles\FrontendWidgets.dir\build.make frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoPlayerWindow.cpp.obj
+.PHONY : widgets/VideoPlayerWindow.cpp.obj
+
+widgets/VideoPlayerWindow.i: widgets/VideoPlayerWindow.cpp.i
+.PHONY : widgets/VideoPlayerWindow.i
+
+# target to preprocess a source file
+widgets/VideoPlayerWindow.cpp.i:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f frontend\CMakeFiles\FrontendWidgets.dir\build.make frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoPlayerWindow.cpp.i
+.PHONY : widgets/VideoPlayerWindow.cpp.i
+
+widgets/VideoPlayerWindow.s: widgets/VideoPlayerWindow.cpp.s
+.PHONY : widgets/VideoPlayerWindow.s
+
+# target to generate assembly for a file
+widgets/VideoPlayerWindow.cpp.s:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f frontend\CMakeFiles\FrontendWidgets.dir\build.make frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoPlayerWindow.cpp.s
+.PHONY : widgets/VideoPlayerWindow.cpp.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -315,6 +363,9 @@ help:
 	@echo ... FrontendWidgets_autogen/mocs_compilation.obj
 	@echo ... FrontendWidgets_autogen/mocs_compilation.i
 	@echo ... FrontendWidgets_autogen/mocs_compilation.s
+	@echo ... components/VideoCard/VideoCard.obj
+	@echo ... components/VideoCard/VideoCard.i
+	@echo ... components/VideoCard/VideoCard.s
 	@echo ... pages/AccountPage/AccountPage.obj
 	@echo ... pages/AccountPage/AccountPage.i
 	@echo ... pages/AccountPage/AccountPage.s
@@ -330,6 +381,9 @@ help:
 	@echo ... widgets/MainWindow.obj
 	@echo ... widgets/MainWindow.i
 	@echo ... widgets/MainWindow.s
+	@echo ... widgets/VideoPlayerWindow.obj
+	@echo ... widgets/VideoPlayerWindow.i
+	@echo ... widgets/VideoPlayerWindow.s
 .PHONY : help
 
 

@@ -47,9 +47,14 @@ template <> constexpr inline auto backend::controller::auth::AuthController::qt_
         "message",
         "registerSucceeded",
         "registerFailed",
+        "logoutSucceeded",
+        "logoutFailed",
+        "sessionRestored",
         "requestLogin",
         "password",
-        "requestRegister"
+        "requestRegister",
+        "requestLogout",
+        "restorePersistedSession"
     };
 
     QtMocHelpers::UintData qt_methods {
@@ -69,14 +74,30 @@ template <> constexpr inline auto backend::controller::auth::AuthController::qt_
         QtMocHelpers::SignalData<void(const QString &)>(8, 2, QMC::AccessPublic, QMetaType::Void, {{
             { QMetaType::QString, 6 },
         }}),
+        // Signal 'logoutSucceeded'
+        QtMocHelpers::SignalData<void(const QString &)>(9, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::QString, 6 },
+        }}),
+        // Signal 'logoutFailed'
+        QtMocHelpers::SignalData<void(const QString &)>(10, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::QString, 6 },
+        }}),
+        // Signal 'sessionRestored'
+        QtMocHelpers::SignalData<void(const QString &, const QString &)>(11, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::QString, 3 }, { QMetaType::QString, 4 },
+        }}),
         // Slot 'requestLogin'
-        QtMocHelpers::SlotData<void(const QString &, const QString &)>(9, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { QMetaType::QString, 3 }, { QMetaType::QString, 10 },
+        QtMocHelpers::SlotData<void(const QString &, const QString &)>(12, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::QString, 3 }, { QMetaType::QString, 13 },
         }}),
         // Slot 'requestRegister'
-        QtMocHelpers::SlotData<void(const QString &, const QString &, const QString &)>(11, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { QMetaType::QString, 3 }, { QMetaType::QString, 10 }, { QMetaType::QString, 4 },
+        QtMocHelpers::SlotData<void(const QString &, const QString &, const QString &)>(14, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::QString, 3 }, { QMetaType::QString, 13 }, { QMetaType::QString, 4 },
         }}),
+        // Slot 'requestLogout'
+        QtMocHelpers::SlotData<void()>(15, 2, QMC::AccessPublic, QMetaType::Void),
+        // Slot 'restorePersistedSession'
+        QtMocHelpers::SlotData<void()>(16, 2, QMC::AccessPublic, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -104,8 +125,13 @@ void backend::controller::auth::AuthController::qt_static_metacall(QObject *_o, 
         case 1: _t->loginFailed((*reinterpret_cast<std::add_pointer_t<QString>>(_a[1]))); break;
         case 2: _t->registerSucceeded((*reinterpret_cast<std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[2]))); break;
         case 3: _t->registerFailed((*reinterpret_cast<std::add_pointer_t<QString>>(_a[1]))); break;
-        case 4: _t->requestLogin((*reinterpret_cast<std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[2]))); break;
-        case 5: _t->requestRegister((*reinterpret_cast<std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[2])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[3]))); break;
+        case 4: _t->logoutSucceeded((*reinterpret_cast<std::add_pointer_t<QString>>(_a[1]))); break;
+        case 5: _t->logoutFailed((*reinterpret_cast<std::add_pointer_t<QString>>(_a[1]))); break;
+        case 6: _t->sessionRestored((*reinterpret_cast<std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[2]))); break;
+        case 7: _t->requestLogin((*reinterpret_cast<std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[2]))); break;
+        case 8: _t->requestRegister((*reinterpret_cast<std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[2])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[3]))); break;
+        case 9: _t->requestLogout(); break;
+        case 10: _t->restorePersistedSession(); break;
         default: ;
         }
     }
@@ -117,6 +143,12 @@ void backend::controller::auth::AuthController::qt_static_metacall(QObject *_o, 
         if (QtMocHelpers::indexOfMethod<void (AuthController::*)(const QString & , const QString & )>(_a, &AuthController::registerSucceeded, 2))
             return;
         if (QtMocHelpers::indexOfMethod<void (AuthController::*)(const QString & )>(_a, &AuthController::registerFailed, 3))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (AuthController::*)(const QString & )>(_a, &AuthController::logoutSucceeded, 4))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (AuthController::*)(const QString & )>(_a, &AuthController::logoutFailed, 5))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (AuthController::*)(const QString & , const QString & )>(_a, &AuthController::sessionRestored, 6))
             return;
     }
 }
@@ -140,14 +172,14 @@ int backend::controller::auth::AuthController::qt_metacall(QMetaObject::Call _c,
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 6)
+        if (_id < 11)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 6;
+        _id -= 11;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 6)
+        if (_id < 11)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 6;
+        _id -= 11;
     }
     return _id;
 }
@@ -174,5 +206,23 @@ void backend::controller::auth::AuthController::registerSucceeded(const QString 
 void backend::controller::auth::AuthController::registerFailed(const QString & _t1)
 {
     QMetaObject::activate<void>(this, &staticMetaObject, 3, nullptr, _t1);
+}
+
+// SIGNAL 4
+void backend::controller::auth::AuthController::logoutSucceeded(const QString & _t1)
+{
+    QMetaObject::activate<void>(this, &staticMetaObject, 4, nullptr, _t1);
+}
+
+// SIGNAL 5
+void backend::controller::auth::AuthController::logoutFailed(const QString & _t1)
+{
+    QMetaObject::activate<void>(this, &staticMetaObject, 5, nullptr, _t1);
+}
+
+// SIGNAL 6
+void backend::controller::auth::AuthController::sessionRestored(const QString & _t1, const QString & _t2)
+{
+    QMetaObject::activate<void>(this, &staticMetaObject, 6, nullptr, _t1, _t2);
 }
 QT_WARNING_POP

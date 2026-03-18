@@ -22,6 +22,12 @@
 			null
 		],
 		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/domain/session/Session.hpp",
+			"MU",
+			"4QHUEFFV6Q/moc_Session.cpp",
+			null
+		],
+		[
 			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/domain/user/User.hpp",
 			"MU",
 			"CZ36FOEH7W/moc_User.cpp",
@@ -31,6 +37,66 @@
 			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/infrastructure/database/InMemoryUserRepository.hpp",
 			"MU",
 			"MUMJIBADJQ/moc_InMemoryUserRepository.cpp",
+			null
+		],
+		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/infrastructure/database/SQLiteDatabase.hpp",
+			"MU",
+			"MUMJIBADJQ/moc_SQLiteDatabase.cpp",
+			null
+		],
+		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/infrastructure/database/SQLiteSessionRepository.hpp",
+			"MU",
+			"MUMJIBADJQ/moc_SQLiteSessionRepository.cpp",
+			null
+		],
+		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/infrastructure/database/SQLiteUserRepository.hpp",
+			"MU",
+			"MUMJIBADJQ/moc_SQLiteUserRepository.cpp",
+			null
+		],
+		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playerEngine/FFMessage.hpp",
+			"MU",
+			"WZTJOAIVCX/moc_FFMessage.cpp",
+			null
+		],
+		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playerEngine/FFMessageQueue.hpp",
+			"MU",
+			"WZTJOAIVCX/moc_FFMessageQueue.cpp",
+			null
+		],
+		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playerEngine/FFplayer.hpp",
+			"MU",
+			"WZTJOAIVCX/moc_FFplayer.cpp",
+			null
+		],
+		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playerEngine/IjkMediaPlayer.hpp",
+			"MU",
+			"WZTJOAIVCX/moc_IjkMediaPlayer.cpp",
+			null
+		],
+		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playerEngine/ff_ffplay_def.hpp",
+			"MU",
+			"WZTJOAIVCX/moc_ff_ffplay_def.cpp",
+			null
+		],
+		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playercontroller/service/PlayerController.hpp",
+			"MU",
+			"BM62KR6TPJ/moc_PlayerController.cpp",
+			null
+		],
+		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/repository/session/SessionRepository.hpp",
+			"MU",
+			"QGU7HVFJZT/moc_SessionRepository.cpp",
 			null
 		],
 		[
@@ -58,6 +124,7 @@
 	"MOC_DEFINITIONS" : 
 	[
 		"QT_CORE_LIB",
+		"QT_SQL_LIB",
 		"UNICODE",
 		"WIN32",
 		"WIN64",
@@ -78,9 +145,12 @@
 	[
 		"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend",
 		"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include",
+		"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include",
+		"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/SDL2",
 		"D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore",
 		"D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include",
 		"D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/mkspecs/win32-clang-g++",
+		"D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtSql",
 		"D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++",
 		"D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/x86_64-w64-mingw32",
 		"D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/backward",
@@ -128,6 +198,36 @@
 		],
 		[
 			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/infrastructure/database/InMemoryUserRepository.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/infrastructure/database/SQLiteDatabase.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/infrastructure/database/SQLiteSessionRepository.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/infrastructure/database/SQLiteUserRepository.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playerEngine/FFplayer.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playerEngine/IjkMediaPlayer.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playercontroller/service/PlayerController.cpp",
 			"MU",
 			null
 		],

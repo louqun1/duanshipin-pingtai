@@ -1,10 +1,11 @@
 frontend/CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/mocs_compilation.cpp.obj: \
  D:\itffmpeg\av_media\online\duanshipin-pingtai\build\frontend\FrontendWidgets_autogen\mocs_compilation.cpp \
- D:\itffmpeg\av_media\online\duanshipin-pingtai\build\frontend\FrontendWidgets_autogen\OPMHQICM4S/moc_AccountPage.cpp \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/AccountPage/AccountPage.hpp \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstring.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qchar.h \
+ D:\itffmpeg\av_media\online\duanshipin-pingtai\build\frontend\FrontendWidgets_autogen\N2ALAT6FDB/moc_VideoCard.cpp \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/components/VideoCard/VideoCard.hpp \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QPushButton \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qpushbutton.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qtwidgetsglobal.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qtguiglobal.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qglobal.h \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/type_traits \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/x86_64-w64-mingw32/bits/c++config.h \
@@ -155,6 +156,14 @@ frontend/CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/mocs_compilation
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtresource.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qttranslation.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qversiontagging.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qtgui-config.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qtguiexports.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qtwidgets-config.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qtwidgetsexports.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qabstractbutton.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qicon.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qsize.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcheckedint_impl.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcompare.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstdlibdetection.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcomparehelpers.h \
@@ -185,6 +194,9 @@ frontend/CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/mocs_compilation
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/vector.tcc \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/array \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/compare \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qhashfunctions.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstring.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qchar.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstringview.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qbytearray.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qrefcount.h \
@@ -286,37 +298,49 @@ frontend/CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/mocs_compilation
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstringtokenizer.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q23type_traits.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstringbuilder.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstring.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstringconverter.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstringconverter_base.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QWidget \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qwidget.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qtwidgetsglobal.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qtguiglobal.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qtgui-config.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qtguiexports.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qtwidgets-config.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qtwidgetsexports.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qwindowdefs.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qobjectdefs.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qobjectdefs_impl.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qfunctionaltools_impl.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qwindowdefs_win.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qobject.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qlist.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qhashfunctions.h \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/numeric \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_numeric.h \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/pstl/glue_numeric_defs.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qmargins.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q23utility.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20utility.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qlist.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qiterator.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qbytearraylist.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstringlist.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qalgorithms.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstringmatcher.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qscopedpointer.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qmetatype.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpixmap.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpaintdevice.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qwindowdefs.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qobjectdefs.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qobjectdefs_impl.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qfunctionaltools_impl.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qwindowdefs_win.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qrect.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpoint.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qcolor.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qrgb.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qrgba64.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qshareddata.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qimage.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpixelformat.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qtransform.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpolygon.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qregion.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdatastream.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qiodevicebase.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qscopedpointer.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qspan.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/cassert \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20iterator.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qline.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qkeysequence.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qwidget.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qobject.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qmetatype.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qfloat16.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qmath.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtformat_impl.h \
@@ -338,31 +362,7 @@ frontend/CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/mocs_compilation
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/chrono.h \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/ratio \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/ctime \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qmargins.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcheckedint_impl.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q23utility.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20utility.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qaction.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qkeysequence.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qicon.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qsize.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpixmap.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpaintdevice.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qrect.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpoint.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qcolor.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qrgb.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qrgba64.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qshareddata.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qimage.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpixelformat.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qtransform.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpolygon.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qregion.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qspan.h \
- D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/cassert \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20iterator.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qline.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qvariant.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdebug.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtextstream.h \
@@ -391,11 +391,19 @@ frontend/CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/mocs_compilation
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qsizepolicy.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qcursor.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qbitmap.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstring.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtmochelpers.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtmocconstants.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20algorithm.h \
+ D:\itffmpeg\av_media\online\duanshipin-pingtai\build\frontend\FrontendWidgets_autogen\OPMHQICM4S/moc_AccountPage.cpp \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/AccountPage/AccountPage.hpp \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QWidget \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qwidget.h \
  D:\itffmpeg\av_media\online\duanshipin-pingtai\build\frontend\FrontendWidgets_autogen\N74POBLTFI/moc_HomePage.cpp \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/HomePage/HomePage.hpp \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QVector \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qvector.h \
  D:\itffmpeg\av_media\online\duanshipin-pingtai\build\frontend\FrontendWidgets_autogen\GFNKSLTE7T/moc_StreamPage.cpp \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/StreamPage/StreamPage.hpp \
  D:\itffmpeg\av_media\online\duanshipin-pingtai\build\frontend\FrontendWidgets_autogen\25PZRF2NDA/moc_UploadPage.cpp \
@@ -404,5 +412,9 @@ frontend/CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/mocs_compilation
  D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/MainWindow.hpp \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QMainWindow \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qmainwindow.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qwidget.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qtabwidget.h
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qtabwidget.h \
+ D:\itffmpeg\av_media\online\duanshipin-pingtai\build\frontend\FrontendWidgets_autogen\IMAN36LHMA/moc_VideoPlayerWindow.cpp \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/VideoPlayerWindow.hpp \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playercontroller/service/PlayerController.hpp \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QObject \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qobject.h

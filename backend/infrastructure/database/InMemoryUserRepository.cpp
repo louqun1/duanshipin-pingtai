@@ -15,6 +15,17 @@ InMemoryUserRepository::InMemoryUserRepository()
     });
 }
 
+std::optional<backend::domain::user::User> InMemoryUserRepository::findById(const QString &id) const
+{
+    for (const auto &entry : users_) {
+        if (entry.user.id == id) {
+            return entry.user;
+        }
+    }
+
+    return std::nullopt;
+}
+
 std::optional<backend::domain::user::User> InMemoryUserRepository::findByUsername(const QString &username) const
 {
     for (const auto &entry : users_) {

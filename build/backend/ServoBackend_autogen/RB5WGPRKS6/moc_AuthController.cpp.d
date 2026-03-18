@@ -1,13 +1,17 @@
 D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend/ServoBackend_autogen/RB5WGPRKS6/moc_AuthController.cpp: D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/controller/auth/AuthController.hpp \
   D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend/ServoBackend_autogen/moc_predefs.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QDateTime \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QObject \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q17memory.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20functional.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20memory.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20type_traits.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20utility.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q23type_traits.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q23utility.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qalgorithms.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qalloc.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qanystringview.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qarraydata.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qarraydataops.h \
@@ -21,6 +25,7 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend/ServoBackend_autoge
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qbytearrayalgorithms.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qbytearraylist.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qbytearrayview.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcalendar.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qchar.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcompare.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcompare_impl.h \
@@ -31,8 +36,11 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend/ServoBackend_autoge
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcontainerfwd.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcontainerinfo.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcontainertools_impl.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcontiguouscache.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdarwinhelpers.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdatastream.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdatetime.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdebug.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qexceptionhandling.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qflags.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qfloat16.h \
@@ -42,14 +50,17 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend/ServoBackend_autoge
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qgenericatomic.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qglobal.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qglobalstatic.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qhash.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qhashfunctions.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qiodevicebase.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qiterable.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qiterator.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qlatin1stringview.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qlist.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qlocale.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qlogging.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qmalloc.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qmap.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qmath.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qmetacontainer.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qmetatype.h \
@@ -66,6 +77,11 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend/ServoBackend_autoge
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qrefcount.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qscopedpointer.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qscopeguard.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qset.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qshareddata.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qshareddata_impl.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qsharedpointer.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qsharedpointer_impl.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstdlibdetection.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstring.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstringalgorithms.h \
@@ -90,6 +106,7 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend/ServoBackend_autoge
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtdeprecationdefinitions.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtdeprecationmarkers.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtenvironmentvariables.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtextstream.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtformat_impl.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtmetamacros.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtnoop.h \
@@ -102,10 +119,14 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend/ServoBackend_autoge
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtypeinfo.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtypes.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qutf8stringview.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qvariant.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qvarlengtharray.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qversiontagging.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qxptype_traits.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qyieldcpu.h \
+  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/domain/session/Session.hpp \
   D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/domain/user/User.hpp \
+  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/repository/session/SessionRepository.hpp \
   D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/repository/user/UserRepository.hpp \
   D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/service/auth/AuthResult.hpp \
   D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/service/auth/AuthService.hpp \
@@ -179,10 +200,12 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend/ServoBackend_autoge
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_list.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_map.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_multimap.h \
+  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_multiset.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_numeric.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_pair.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_raw_storage_iter.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_relops.h \
+  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_set.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_tempbuf.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_tree.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_uninitialized.h \
@@ -195,6 +218,7 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend/ServoBackend_autoge
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/uniform_int_dist.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/unique_ptr.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/unordered_map.h \
+  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/unordered_set.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/uses_allocator.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/uses_allocator_args.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/utility.h \
@@ -203,6 +227,7 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend/ServoBackend_autoge
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/cctype \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/cerrno \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/chrono \
+  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/climits \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/clocale \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/cmath \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/compare \
@@ -239,6 +264,7 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend/ServoBackend_autoge
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/pstl/glue_numeric_defs.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/pstl/pstl_config.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/ratio \
+  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/set \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/stdexcept \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/stdlib.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/streambuf \
@@ -261,6 +287,7 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend/ServoBackend_autoge
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/type_traits \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/typeinfo \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/unordered_map \
+  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/unordered_set \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/utility \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/variant \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/vector \

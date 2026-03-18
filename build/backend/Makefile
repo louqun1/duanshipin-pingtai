@@ -229,6 +229,150 @@ infrastructure/database/InMemoryUserRepository.cpp.s:
 	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/infrastructure/database/InMemoryUserRepository.cpp.s
 .PHONY : infrastructure/database/InMemoryUserRepository.cpp.s
 
+infrastructure/database/SQLiteDatabase.obj: infrastructure/database/SQLiteDatabase.cpp.obj
+.PHONY : infrastructure/database/SQLiteDatabase.obj
+
+# target to build an object file
+infrastructure/database/SQLiteDatabase.cpp.obj:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/infrastructure/database/SQLiteDatabase.cpp.obj
+.PHONY : infrastructure/database/SQLiteDatabase.cpp.obj
+
+infrastructure/database/SQLiteDatabase.i: infrastructure/database/SQLiteDatabase.cpp.i
+.PHONY : infrastructure/database/SQLiteDatabase.i
+
+# target to preprocess a source file
+infrastructure/database/SQLiteDatabase.cpp.i:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/infrastructure/database/SQLiteDatabase.cpp.i
+.PHONY : infrastructure/database/SQLiteDatabase.cpp.i
+
+infrastructure/database/SQLiteDatabase.s: infrastructure/database/SQLiteDatabase.cpp.s
+.PHONY : infrastructure/database/SQLiteDatabase.s
+
+# target to generate assembly for a file
+infrastructure/database/SQLiteDatabase.cpp.s:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/infrastructure/database/SQLiteDatabase.cpp.s
+.PHONY : infrastructure/database/SQLiteDatabase.cpp.s
+
+infrastructure/database/SQLiteSessionRepository.obj: infrastructure/database/SQLiteSessionRepository.cpp.obj
+.PHONY : infrastructure/database/SQLiteSessionRepository.obj
+
+# target to build an object file
+infrastructure/database/SQLiteSessionRepository.cpp.obj:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/infrastructure/database/SQLiteSessionRepository.cpp.obj
+.PHONY : infrastructure/database/SQLiteSessionRepository.cpp.obj
+
+infrastructure/database/SQLiteSessionRepository.i: infrastructure/database/SQLiteSessionRepository.cpp.i
+.PHONY : infrastructure/database/SQLiteSessionRepository.i
+
+# target to preprocess a source file
+infrastructure/database/SQLiteSessionRepository.cpp.i:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/infrastructure/database/SQLiteSessionRepository.cpp.i
+.PHONY : infrastructure/database/SQLiteSessionRepository.cpp.i
+
+infrastructure/database/SQLiteSessionRepository.s: infrastructure/database/SQLiteSessionRepository.cpp.s
+.PHONY : infrastructure/database/SQLiteSessionRepository.s
+
+# target to generate assembly for a file
+infrastructure/database/SQLiteSessionRepository.cpp.s:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/infrastructure/database/SQLiteSessionRepository.cpp.s
+.PHONY : infrastructure/database/SQLiteSessionRepository.cpp.s
+
+infrastructure/database/SQLiteUserRepository.obj: infrastructure/database/SQLiteUserRepository.cpp.obj
+.PHONY : infrastructure/database/SQLiteUserRepository.obj
+
+# target to build an object file
+infrastructure/database/SQLiteUserRepository.cpp.obj:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/infrastructure/database/SQLiteUserRepository.cpp.obj
+.PHONY : infrastructure/database/SQLiteUserRepository.cpp.obj
+
+infrastructure/database/SQLiteUserRepository.i: infrastructure/database/SQLiteUserRepository.cpp.i
+.PHONY : infrastructure/database/SQLiteUserRepository.i
+
+# target to preprocess a source file
+infrastructure/database/SQLiteUserRepository.cpp.i:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/infrastructure/database/SQLiteUserRepository.cpp.i
+.PHONY : infrastructure/database/SQLiteUserRepository.cpp.i
+
+infrastructure/database/SQLiteUserRepository.s: infrastructure/database/SQLiteUserRepository.cpp.s
+.PHONY : infrastructure/database/SQLiteUserRepository.s
+
+# target to generate assembly for a file
+infrastructure/database/SQLiteUserRepository.cpp.s:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/infrastructure/database/SQLiteUserRepository.cpp.s
+.PHONY : infrastructure/database/SQLiteUserRepository.cpp.s
+
+playerEngine/FFplayer.obj: playerEngine/FFplayer.cpp.obj
+.PHONY : playerEngine/FFplayer.obj
+
+# target to build an object file
+playerEngine/FFplayer.cpp.obj:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/playerEngine/FFplayer.cpp.obj
+.PHONY : playerEngine/FFplayer.cpp.obj
+
+playerEngine/FFplayer.i: playerEngine/FFplayer.cpp.i
+.PHONY : playerEngine/FFplayer.i
+
+# target to preprocess a source file
+playerEngine/FFplayer.cpp.i:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/playerEngine/FFplayer.cpp.i
+.PHONY : playerEngine/FFplayer.cpp.i
+
+playerEngine/FFplayer.s: playerEngine/FFplayer.cpp.s
+.PHONY : playerEngine/FFplayer.s
+
+# target to generate assembly for a file
+playerEngine/FFplayer.cpp.s:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/playerEngine/FFplayer.cpp.s
+.PHONY : playerEngine/FFplayer.cpp.s
+
+playerEngine/IjkMediaPlayer.obj: playerEngine/IjkMediaPlayer.cpp.obj
+.PHONY : playerEngine/IjkMediaPlayer.obj
+
+# target to build an object file
+playerEngine/IjkMediaPlayer.cpp.obj:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/playerEngine/IjkMediaPlayer.cpp.obj
+.PHONY : playerEngine/IjkMediaPlayer.cpp.obj
+
+playerEngine/IjkMediaPlayer.i: playerEngine/IjkMediaPlayer.cpp.i
+.PHONY : playerEngine/IjkMediaPlayer.i
+
+# target to preprocess a source file
+playerEngine/IjkMediaPlayer.cpp.i:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/playerEngine/IjkMediaPlayer.cpp.i
+.PHONY : playerEngine/IjkMediaPlayer.cpp.i
+
+playerEngine/IjkMediaPlayer.s: playerEngine/IjkMediaPlayer.cpp.s
+.PHONY : playerEngine/IjkMediaPlayer.s
+
+# target to generate assembly for a file
+playerEngine/IjkMediaPlayer.cpp.s:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/playerEngine/IjkMediaPlayer.cpp.s
+.PHONY : playerEngine/IjkMediaPlayer.cpp.s
+
+playercontroller/service/PlayerController.obj: playercontroller/service/PlayerController.cpp.obj
+.PHONY : playercontroller/service/PlayerController.obj
+
+# target to build an object file
+playercontroller/service/PlayerController.cpp.obj:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/playercontroller/service/PlayerController.cpp.obj
+.PHONY : playercontroller/service/PlayerController.cpp.obj
+
+playercontroller/service/PlayerController.i: playercontroller/service/PlayerController.cpp.i
+.PHONY : playercontroller/service/PlayerController.i
+
+# target to preprocess a source file
+playercontroller/service/PlayerController.cpp.i:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/playercontroller/service/PlayerController.cpp.i
+.PHONY : playercontroller/service/PlayerController.cpp.i
+
+playercontroller/service/PlayerController.s: playercontroller/service/PlayerController.cpp.s
+.PHONY : playercontroller/service/PlayerController.s
+
+# target to generate assembly for a file
+playercontroller/service/PlayerController.cpp.s:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/playercontroller/service/PlayerController.cpp.s
+.PHONY : playercontroller/service/PlayerController.cpp.s
+
 service/auth/AuthService.obj: service/auth/AuthService.cpp.obj
 .PHONY : service/auth/AuthService.obj
 
@@ -273,6 +417,24 @@ help:
 	@echo ... infrastructure/database/InMemoryUserRepository.obj
 	@echo ... infrastructure/database/InMemoryUserRepository.i
 	@echo ... infrastructure/database/InMemoryUserRepository.s
+	@echo ... infrastructure/database/SQLiteDatabase.obj
+	@echo ... infrastructure/database/SQLiteDatabase.i
+	@echo ... infrastructure/database/SQLiteDatabase.s
+	@echo ... infrastructure/database/SQLiteSessionRepository.obj
+	@echo ... infrastructure/database/SQLiteSessionRepository.i
+	@echo ... infrastructure/database/SQLiteSessionRepository.s
+	@echo ... infrastructure/database/SQLiteUserRepository.obj
+	@echo ... infrastructure/database/SQLiteUserRepository.i
+	@echo ... infrastructure/database/SQLiteUserRepository.s
+	@echo ... playerEngine/FFplayer.obj
+	@echo ... playerEngine/FFplayer.i
+	@echo ... playerEngine/FFplayer.s
+	@echo ... playerEngine/IjkMediaPlayer.obj
+	@echo ... playerEngine/IjkMediaPlayer.i
+	@echo ... playerEngine/IjkMediaPlayer.s
+	@echo ... playercontroller/service/PlayerController.obj
+	@echo ... playercontroller/service/PlayerController.i
+	@echo ... playercontroller/service/PlayerController.s
 	@echo ... service/auth/AuthService.obj
 	@echo ... service/auth/AuthService.i
 	@echo ... service/auth/AuthService.s

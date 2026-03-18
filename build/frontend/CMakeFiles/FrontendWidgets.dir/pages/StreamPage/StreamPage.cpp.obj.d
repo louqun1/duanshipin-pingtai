@@ -388,17 +388,20 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/StreamPage/StreamPage.cpp.obj: \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qsizepolicy.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qcursor.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qbitmap.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QLabel \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qlabel.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QFrame \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qframe.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qwidget.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpicture.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qiodevice.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qtextdocument.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qurl.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QVBoxLayout \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QHBoxLayout \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qboxlayout.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qlayout.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qlayoutitem.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qboxlayout.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qgridlayout.h
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qgridlayout.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QLabel \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qlabel.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qframe.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpicture.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qiodevice.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qtextdocument.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qurl.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QVBoxLayout
