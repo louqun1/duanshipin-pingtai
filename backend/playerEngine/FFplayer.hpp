@@ -118,7 +118,7 @@ public:
 
         double audio_clock = 0; // 当前音频帧的PTS+当前帧Duration
         int audio_clock_serial; // 播放序列，seek可改变此值, 解码后保存
-        int64_t audio_callback_time = 0;
+        std::atomic<int64_t> audio_callback_time{0};
         // 帧队列
         FrameQueue pictq;
         FrameQueue sampq;
@@ -126,11 +126,11 @@ public:
         // 包队列
         PacketQueue audioq;
         PacketQueue videoq;
-        int abort_request = 0;
+        std::atomic<int> abort_request{0};
 
         AVStream *audio_st = NULL;
         AVStream *video_st = NULL;
-        int force_refresh = 0;
+        std::atomic<int> force_refresh{0};
         double frame_timer = 0;
 
         int audio_stream = -1;
@@ -139,12 +139,12 @@ public:
         Decoder auddec;
         Decoder viddec;
 
-        int eof = 0;
-        int audio_no_data = 0;
-        int video_no_data = 0;
+        std::atomic<int> eof{0};
+        std::atomic<int> audio_no_data{0};
+        std::atomic<int> video_no_data{0};
         AVFormatContext *ic = NULL; // 多媒体文件元数据
 
-        int paused = 0;
+        std::atomic<int> paused{0};
         // 音频输出相关
         struct AudioParams audio_src; // 保存最新解码的音频参数
         struct AudioParams audio_tgt; // 保存SDL音频输出需要的参数  默认初始化在ff_ffplay_def.hpp (line 124)
@@ -158,24 +158,24 @@ public:
         unsigned int audio_buf1_size = 0; // 申请到的音频缓冲区audio_buf1的实际尺寸
         int audio_buf_index = 0;          // 更新拷贝位置 当前音频帧中已拷入SDL音频缓冲区
         int audio_write_buf_size = 0;
-        int audio_volume = 50;
+        std::atomic<int> audio_volume{50};
         int startup_volume = 50;
         // seek 相关
         int64_t seek_req = 0; // 请求seek位置
         int64_t seek_rel = 0; // 偏移量
-        int64_t seek_flags = 0;
+        std::atomic<int64_t> seek_flags{0};
         int64_t seek_pos = 0; // seek后的位置
         // 截屏相关
         bool req_screenshot_ = false;
         char *screen_path_ = NULL;
         // 单步运行
-        int step = 0;
-        int framedrop = 1;
-        int frame_drops_late = 0;
+        std::atomic<int> step{0};
+        std::atomic<int> framedrop{1};
+        std::atomic<int> frame_drops_late{0};
 
-        int pause_req = 0;
-        int auto_resume = 0;
-        int buffering_on = 0;
+        std::atomic<int> pause_req{0};
+        std::atomic<int> auto_resume{0};
+        std::atomic<int> buffering_on{0};
         // 变速相关
         float pf_playback_rate = 1.0;     // 播放速率
         int pf_playback_rate_changed = 0; // 播放速率改变

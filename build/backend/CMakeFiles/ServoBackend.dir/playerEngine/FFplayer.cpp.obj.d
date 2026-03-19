@@ -173,6 +173,9 @@ backend/CMakeFiles/ServoBackend.dir/playerEngine/FFplayer.cpp.obj: \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/deque.tcc \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/mutex \
  D:\itffmpeg\av_media\online\duanshipin-pingtai\backend\playerEngine\ff_ffplay_def.hpp \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/atomic \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/atomic_base.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/atomic_lockfree_defines.h \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/inttypes.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/avfft.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavdevice/avdevice.h \
@@ -465,9 +468,6 @@ backend/CMakeFiles/ServoBackend.dir/playerEngine/FFplayer.cpp.obj: \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/spdlog.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/common.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/details/null_mutex.h \
- D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/atomic \
- D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/atomic_base.h \
- D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/atomic_lockfree_defines.h \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/utility \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_relops.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/tweakme.h \

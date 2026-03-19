@@ -361,7 +361,6 @@ namespace media
     {
         std::lock_guard<std::mutex> lock(mutex_);
         video_frame_callback_ = std::move(callback);
-        bindVideoFrameCallbackLocked();
     }
 
     void IjkMediaPlayer::messageLoop()

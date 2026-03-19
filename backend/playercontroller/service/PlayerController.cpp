@@ -110,6 +110,16 @@ namespace backend::playercontroller::service
         }
         ijkPlayer_ = ijkPlayerInstance();
         int ret = ijkPlayer_->create();
+        ijkPlayer_->setEventCallback([this](media::PlayerEvent event, int arg1, void *arg2) {
+            // Handle player events here and update state accordingly.
+            // For now, we'll just log the events.
+            qDebug("Received player event: %d", static_cast<int>(event));
+        });
+        ijkPlayer_->setVideoFrameCallback([](const Frame *frame) -> int {
+            // Handle video frame callback here if needed.
+            //如果需要处理视频帧回调，请在此处处理。
+            return 0; // Return 0 for success.
+        });
         ijkPlayerCreated_ = true;
         emit ijkPlayerCreated();
     }

@@ -25,7 +25,7 @@ namespace
 
     void sync_packet_queue_stats(PacketQueue *q)
     {
-        q->nb_packets = static_cast<int>(q->packets.size());
+        q->nb_packets.store(static_cast<int>(q->packets.size()));
     }
 
     int packet_queue_put_private(PacketQueue *q, AVPacket *pkt)
@@ -50,8 +50,8 @@ namespace
         }
 
         entry.serial = q->serial;
-        q->size += entry.pkt.size + static_cast<int>(sizeof(MyAVPacketList));
-        q->duration += entry.pkt.duration;
+        q->size.store(q->size.load() + entry.pkt.size + static_cast<int>(sizeof(MyAVPacketList)));
+        q->duration.store(q->duration.load() + entry.pkt.duration);
         sync_packet_queue_stats(q);
         q->cond.notify_one();
         return 0;
@@ -96,9 +96,9 @@ int packet_queue_init(PacketQueue *q)
         av_packet_unref(&entry.pkt);
     }
     q->packets.clear();
-    q->nb_packets = 0;
-    q->size = 0;
-    q->duration = 0;
+    q->nb_packets.store(0);
+    q->size.store(0);
+    q->duration.store(0);
     q->abort_request = 1;
     q->serial = 0;
     return 0;
@@ -115,8 +115,8 @@ void packet_queue_flush(PacketQueue *q)
         }
     }
     q->packets.clear();
-    q->size = 0;
-    q->duration = 0;
+    q->size.store(0);
+    q->duration.store(0);
     sync_packet_queue_stats(q);
 }
 
@@ -133,8 +133,8 @@ void packet_queue_destroy(PacketQueue *q)
             }
         }
         q->packets.clear();
-        q->size = 0;
-        q->duration = 0;
+        q->size.store(0);
+        q->duration.store(0);
         sync_packet_queue_stats(q);
     }
     q->cond.notify_all();
@@ -166,9 +166,10 @@ double packet_queue_cache_duration(PacketQueue *q, AVRational time_base, double 
 
     const MyAVPacketList &first_pkt = q->packets.front();
     const MyAVPacketList &last_pkt = q->packets.back();
-    const double packets_duration = packet_duration * q->nb_packets;
+    const int nb_packets = q->nb_packets.load();
+    const double packets_duration = packet_duration * nb_packets;
 
-    if (q->nb_packets < 2 ||
+    if (nb_packets < 2 ||
         first_pkt.pkt.dts == AV_NOPTS_VALUE ||
         last_pkt.pkt.dts == AV_NOPTS_VALUE)
     {
@@ -196,8 +197,8 @@ int packet_queue_get(PacketQueue *q, AVPacket *pkt, int block, int *serial)
             MyAVPacketList entry = {};
             entry = std::move(q->packets.front());
             q->packets.pop_front();
-            q->size -= entry.pkt.size + static_cast<int>(sizeof(MyAVPacketList));
-            q->duration -= entry.pkt.duration;
+            q->size.store(q->size.load() - entry.pkt.size - static_cast<int>(sizeof(MyAVPacketList)));
+            q->duration.store(q->duration.load() - entry.pkt.duration);
             sync_packet_queue_stats(q);
             av_packet_move_ref(pkt, &entry.pkt);
             if (serial)
@@ -296,7 +297,7 @@ Frame *frame_queue_peek_readable(FrameQueue *f)
 {
     std::unique_lock<std::mutex> lock(f->mutex);
     f->cond.wait(lock, [f]()
-                 { return f->size > 0 || f->pktq->abort_request; });
+                 { return (f->size - f->rindex_shown) > 0 || f->pktq->abort_request; });
 
     if (f->pktq->abort_request)
     {

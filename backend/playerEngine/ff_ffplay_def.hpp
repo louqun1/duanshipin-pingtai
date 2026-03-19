@@ -1,5 +1,6 @@
 #pragma once
 
+#include <atomic>
 #include <array>
 #include <condition_variable>
 #include <deque>
@@ -105,9 +106,9 @@ typedef struct MyAVPacketList {
 
 typedef struct PacketQueue {
     std::deque<MyAVPacketList> packets;
-    int nb_packets = 0;
-    int size = 0;
-    int64_t duration = 0;
+    std::atomic<int> nb_packets{0};
+    std::atomic<int> size{0};
+    std::atomic<int64_t> duration{0};
     int abort_request = 1;// 用户退出请求标志
     int serial = 0;
     std::mutex mutex;
@@ -147,10 +148,10 @@ typedef struct Frame {
 
 typedef struct FrameQueue {
     std::array<Frame, FRAME_QUEUE_SIZE> queue{};
-    int rindex = 0;
+    int rindex = 0;     // 读索引。待播放时读取此帧进行播放，播放后此帧成为上一帧
     int windex = 0;
-    int size = 0;
-    int max_size = 0;
+    int size = 0;       // 当前帧数
+    int max_size = 0;   //可存储的最大帧数
     int keep_last = 0;
     int rindex_shown = 0;
     std::mutex mutex;
