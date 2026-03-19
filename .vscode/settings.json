@@ -2,5 +2,20 @@
     "cmake.configureArgs": [
         "-DCMAKE_PREFIX_PATH=D:/itffmpeg/Qt/6.10.2/llvm-mingw_64"
     ],
-    "cmake.generator": "MinGW Makefiles"
+    "cmake.generator": "MinGW Makefiles",
+    "files.encoding": "utf8",
+    "files.autoGuessEncoding": false,
+    "terminal.integrated.defaultProfile.windows": "Project PowerShell (UTF-8)",
+    "terminal.integrated.profiles.windows": {
+        "Project PowerShell (UTF-8)": {
+            "source": "PowerShell",
+            "args": [
+                "-NoExit",
+                "-ExecutionPolicy",
+                "Bypass",
+                "-File",
+                "${workspaceFolder}\\.vscode\\utf8-terminal.ps1"
+            ]
+        }
+    }
 }

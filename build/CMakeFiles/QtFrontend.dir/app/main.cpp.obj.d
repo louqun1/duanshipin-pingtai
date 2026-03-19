@@ -404,7 +404,7 @@ CMakeFiles/QtFrontend.dir/app/main.cpp.obj: \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qfontvariableaxis.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qsizepolicy.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qtabwidget.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/spdlog.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/logger.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/common.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/details/null_mutex.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/tweakme.h \
@@ -428,18 +428,6 @@ CMakeFiles/QtFrontend.dir/app/main.cpp.obj: \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/locale_facets_nonio.tcc \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/locale_conv.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/common-inl.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/details/registry.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/details/periodic_worker.h \
- D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/condition_variable \
- D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/std_mutex.h \
- D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/unique_lock.h \
- D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/mutex \
- D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/thread \
- D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/std_thread.h \
- D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/this_thread_sleep.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/details/periodic_worker-inl.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/details/registry-inl.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/logger.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/details/backtracer.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/details/circular_q.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/details/log_msg_buffer.h \
@@ -448,6 +436,9 @@ CMakeFiles/QtFrontend.dir/app/main.cpp.obj: \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/details/os.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/details/os-inl.h \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/sys/stat.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/thread \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/std_thread.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/this_thread_sleep.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/details/windows_include.h \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/windows.h \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/sdkddkver.h \
@@ -651,6 +642,9 @@ CMakeFiles/QtFrontend.dir/app/main.cpp.obj: \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/share.h \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/direct.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/details/log_msg_buffer-inl.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/mutex \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/std_mutex.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/unique_lock.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/details/backtracer-inl.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/logger-inl.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/pattern_formatter.h \
@@ -660,9 +654,41 @@ CMakeFiles/QtFrontend.dir/app/main.cpp.obj: \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/mdc.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/sinks/sink.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/sinks/sink-inl.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/sinks/basic_file_sink.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/details/file_helper.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/details/file_helper-inl.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/details/synchronous_factory.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/details/registry.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/details/periodic_worker.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/condition_variable \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/details/periodic_worker-inl.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/details/registry-inl.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/sinks/wincolor_sink.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/details/console_globals.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/sinks/wincolor_sink-inl.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/details/synchronous_factory.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/sinks/base_sink.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/sinks/base_sink-inl.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/sinks/basic_file_sink-inl.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/sinks/stdout_color_sinks.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/sinks/stdout_color_sinks-inl.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/spdlog.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/version.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/spdlog-inl.h
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/spdlog-inl.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/filesystem \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/fs_fwd.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/fs_path.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/iomanip \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/quoted_string.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/sstream \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/istream \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/ios \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/basic_ios.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/basic_ios.tcc \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/ostream \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/ostream.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/ostream.tcc \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/istream.tcc \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/sstream.tcc \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/codecvt \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/fs_dir.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/fs_ops.h

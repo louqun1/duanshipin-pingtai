@@ -18,8 +18,10 @@ add_library(ServoBackend STATIC
     controller/auth/AuthController.cpp
     playercontroller/service/PlayerController.hpp
     playercontroller/service/PlayerController.cpp
+    playerEngine/ff_ffplay_def.cpp
     playerEngine/ff_ffplay_def.hpp
     playerEngine/FFMessage.hpp
+    playerEngine/FFMessageQueue.cpp
     playerEngine/FFMessageQueue.hpp
     playerEngine/FFplayer.cpp
     playerEngine/FFplayer.hpp
@@ -41,6 +43,7 @@ set(_flashpoint_default_ffmpeg_root "")
 set(_flashpoint_local_ffmpeg6_root "${CMAKE_CURRENT_SOURCE_DIR}/include/ffmpeg6.0")
 set(_flashpoint_external_ffmpeg6_root "D:/itffmpeg/av_media/online/08-03-muxing_flv/ffmpeg6.0")
 set(_flashpoint_legacy_ffmpeg_root "${CMAKE_CURRENT_SOURCE_DIR}/include/ffmpeg-4.2.1-win32-dev")
+set(DLL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include/dll")
 
 if(EXISTS "${_flashpoint_local_ffmpeg6_root}/lib/avcodec.lib")
     set(_flashpoint_default_ffmpeg_root "${_flashpoint_local_ffmpeg6_root}")

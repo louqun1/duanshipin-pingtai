@@ -198,11 +198,41 @@ backend/CMakeFiles/ServoBackend.dir/playercontroller/service/PlayerController.cp
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/ServoBackend.dir/playercontroller/service/PlayerController.cpp.s"
 	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build\backend && D:\itffmpeg\x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\itffmpeg\av_media\online\duanshipin-pingtai\backend\playercontroller\service\PlayerController.cpp -o CMakeFiles\ServoBackend.dir\playercontroller\service\PlayerController.cpp.s
 
+backend/CMakeFiles/ServoBackend.dir/playerEngine/ff_ffplay_def.cpp.obj: backend/CMakeFiles/ServoBackend.dir/flags.make
+backend/CMakeFiles/ServoBackend.dir/playerEngine/ff_ffplay_def.cpp.obj: backend/CMakeFiles/ServoBackend.dir/includes_CXX.rsp
+backend/CMakeFiles/ServoBackend.dir/playerEngine/ff_ffplay_def.cpp.obj: D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playerEngine/ff_ffplay_def.cpp
+backend/CMakeFiles/ServoBackend.dir/playerEngine/ff_ffplay_def.cpp.obj: backend/CMakeFiles/ServoBackend.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object backend/CMakeFiles/ServoBackend.dir/playerEngine/ff_ffplay_def.cpp.obj"
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build\backend && D:\itffmpeg\x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT backend/CMakeFiles/ServoBackend.dir/playerEngine/ff_ffplay_def.cpp.obj -MF CMakeFiles\ServoBackend.dir\playerEngine\ff_ffplay_def.cpp.obj.d -o CMakeFiles\ServoBackend.dir\playerEngine\ff_ffplay_def.cpp.obj -c D:\itffmpeg\av_media\online\duanshipin-pingtai\backend\playerEngine\ff_ffplay_def.cpp
+
+backend/CMakeFiles/ServoBackend.dir/playerEngine/ff_ffplay_def.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/ServoBackend.dir/playerEngine/ff_ffplay_def.cpp.i"
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build\backend && D:\itffmpeg\x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\itffmpeg\av_media\online\duanshipin-pingtai\backend\playerEngine\ff_ffplay_def.cpp > CMakeFiles\ServoBackend.dir\playerEngine\ff_ffplay_def.cpp.i
+
+backend/CMakeFiles/ServoBackend.dir/playerEngine/ff_ffplay_def.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/ServoBackend.dir/playerEngine/ff_ffplay_def.cpp.s"
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build\backend && D:\itffmpeg\x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\itffmpeg\av_media\online\duanshipin-pingtai\backend\playerEngine\ff_ffplay_def.cpp -o CMakeFiles\ServoBackend.dir\playerEngine\ff_ffplay_def.cpp.s
+
+backend/CMakeFiles/ServoBackend.dir/playerEngine/FFMessageQueue.cpp.obj: backend/CMakeFiles/ServoBackend.dir/flags.make
+backend/CMakeFiles/ServoBackend.dir/playerEngine/FFMessageQueue.cpp.obj: backend/CMakeFiles/ServoBackend.dir/includes_CXX.rsp
+backend/CMakeFiles/ServoBackend.dir/playerEngine/FFMessageQueue.cpp.obj: D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playerEngine/FFMessageQueue.cpp
+backend/CMakeFiles/ServoBackend.dir/playerEngine/FFMessageQueue.cpp.obj: backend/CMakeFiles/ServoBackend.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object backend/CMakeFiles/ServoBackend.dir/playerEngine/FFMessageQueue.cpp.obj"
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build\backend && D:\itffmpeg\x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT backend/CMakeFiles/ServoBackend.dir/playerEngine/FFMessageQueue.cpp.obj -MF CMakeFiles\ServoBackend.dir\playerEngine\FFMessageQueue.cpp.obj.d -o CMakeFiles\ServoBackend.dir\playerEngine\FFMessageQueue.cpp.obj -c D:\itffmpeg\av_media\online\duanshipin-pingtai\backend\playerEngine\FFMessageQueue.cpp
+
+backend/CMakeFiles/ServoBackend.dir/playerEngine/FFMessageQueue.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/ServoBackend.dir/playerEngine/FFMessageQueue.cpp.i"
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build\backend && D:\itffmpeg\x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\itffmpeg\av_media\online\duanshipin-pingtai\backend\playerEngine\FFMessageQueue.cpp > CMakeFiles\ServoBackend.dir\playerEngine\FFMessageQueue.cpp.i
+
+backend/CMakeFiles/ServoBackend.dir/playerEngine/FFMessageQueue.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/ServoBackend.dir/playerEngine/FFMessageQueue.cpp.s"
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build\backend && D:\itffmpeg\x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\itffmpeg\av_media\online\duanshipin-pingtai\backend\playerEngine\FFMessageQueue.cpp -o CMakeFiles\ServoBackend.dir\playerEngine\FFMessageQueue.cpp.s
+
 backend/CMakeFiles/ServoBackend.dir/playerEngine/FFplayer.cpp.obj: backend/CMakeFiles/ServoBackend.dir/flags.make
 backend/CMakeFiles/ServoBackend.dir/playerEngine/FFplayer.cpp.obj: backend/CMakeFiles/ServoBackend.dir/includes_CXX.rsp
 backend/CMakeFiles/ServoBackend.dir/playerEngine/FFplayer.cpp.obj: D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playerEngine/FFplayer.cpp
 backend/CMakeFiles/ServoBackend.dir/playerEngine/FFplayer.cpp.obj: backend/CMakeFiles/ServoBackend.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object backend/CMakeFiles/ServoBackend.dir/playerEngine/FFplayer.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object backend/CMakeFiles/ServoBackend.dir/playerEngine/FFplayer.cpp.obj"
 	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build\backend && D:\itffmpeg\x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT backend/CMakeFiles/ServoBackend.dir/playerEngine/FFplayer.cpp.obj -MF CMakeFiles\ServoBackend.dir\playerEngine\FFplayer.cpp.obj.d -o CMakeFiles\ServoBackend.dir\playerEngine\FFplayer.cpp.obj -c D:\itffmpeg\av_media\online\duanshipin-pingtai\backend\playerEngine\FFplayer.cpp
 
 backend/CMakeFiles/ServoBackend.dir/playerEngine/FFplayer.cpp.i: cmake_force
@@ -217,7 +247,7 @@ backend/CMakeFiles/ServoBackend.dir/playerEngine/IjkMediaPlayer.cpp.obj: backend
 backend/CMakeFiles/ServoBackend.dir/playerEngine/IjkMediaPlayer.cpp.obj: backend/CMakeFiles/ServoBackend.dir/includes_CXX.rsp
 backend/CMakeFiles/ServoBackend.dir/playerEngine/IjkMediaPlayer.cpp.obj: D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playerEngine/IjkMediaPlayer.cpp
 backend/CMakeFiles/ServoBackend.dir/playerEngine/IjkMediaPlayer.cpp.obj: backend/CMakeFiles/ServoBackend.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object backend/CMakeFiles/ServoBackend.dir/playerEngine/IjkMediaPlayer.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object backend/CMakeFiles/ServoBackend.dir/playerEngine/IjkMediaPlayer.cpp.obj"
 	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build\backend && D:\itffmpeg\x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT backend/CMakeFiles/ServoBackend.dir/playerEngine/IjkMediaPlayer.cpp.obj -MF CMakeFiles\ServoBackend.dir\playerEngine\IjkMediaPlayer.cpp.obj.d -o CMakeFiles\ServoBackend.dir\playerEngine\IjkMediaPlayer.cpp.obj -c D:\itffmpeg\av_media\online\duanshipin-pingtai\backend\playerEngine\IjkMediaPlayer.cpp
 
 backend/CMakeFiles/ServoBackend.dir/playerEngine/IjkMediaPlayer.cpp.i: cmake_force
@@ -238,6 +268,8 @@ ServoBackend_OBJECTS = \
 "CMakeFiles/ServoBackend.dir/service/auth/AuthService.cpp.obj" \
 "CMakeFiles/ServoBackend.dir/controller/auth/AuthController.cpp.obj" \
 "CMakeFiles/ServoBackend.dir/playercontroller/service/PlayerController.cpp.obj" \
+"CMakeFiles/ServoBackend.dir/playerEngine/ff_ffplay_def.cpp.obj" \
+"CMakeFiles/ServoBackend.dir/playerEngine/FFMessageQueue.cpp.obj" \
 "CMakeFiles/ServoBackend.dir/playerEngine/FFplayer.cpp.obj" \
 "CMakeFiles/ServoBackend.dir/playerEngine/IjkMediaPlayer.cpp.obj"
 
@@ -252,11 +284,13 @@ backend/libServoBackend.a: backend/CMakeFiles/ServoBackend.dir/infrastructure/da
 backend/libServoBackend.a: backend/CMakeFiles/ServoBackend.dir/service/auth/AuthService.cpp.obj
 backend/libServoBackend.a: backend/CMakeFiles/ServoBackend.dir/controller/auth/AuthController.cpp.obj
 backend/libServoBackend.a: backend/CMakeFiles/ServoBackend.dir/playercontroller/service/PlayerController.cpp.obj
+backend/libServoBackend.a: backend/CMakeFiles/ServoBackend.dir/playerEngine/ff_ffplay_def.cpp.obj
+backend/libServoBackend.a: backend/CMakeFiles/ServoBackend.dir/playerEngine/FFMessageQueue.cpp.obj
 backend/libServoBackend.a: backend/CMakeFiles/ServoBackend.dir/playerEngine/FFplayer.cpp.obj
 backend/libServoBackend.a: backend/CMakeFiles/ServoBackend.dir/playerEngine/IjkMediaPlayer.cpp.obj
 backend/libServoBackend.a: backend/CMakeFiles/ServoBackend.dir/build.make
 backend/libServoBackend.a: backend/CMakeFiles/ServoBackend.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Linking CXX static library libServoBackend.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Linking CXX static library libServoBackend.a"
 	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build\backend && $(CMAKE_COMMAND) -P CMakeFiles\ServoBackend.dir\cmake_clean_target.cmake
 	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build\backend && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\ServoBackend.dir\link.txt --verbose=$(VERBOSE)
 

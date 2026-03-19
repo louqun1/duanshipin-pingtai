@@ -217,12 +217,22 @@
 			null
 		],
 		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playerEngine/FFMessageQueue.cpp",
+			"MU",
+			null
+		],
+		[
 			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playerEngine/FFplayer.cpp",
 			"MU",
 			null
 		],
 		[
 			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playerEngine/IjkMediaPlayer.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playerEngine/ff_ffplay_def.cpp",
 			"MU",
 			null
 		],

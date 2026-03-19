@@ -301,6 +301,30 @@ infrastructure/database/SQLiteUserRepository.cpp.s:
 	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/infrastructure/database/SQLiteUserRepository.cpp.s
 .PHONY : infrastructure/database/SQLiteUserRepository.cpp.s
 
+playerEngine/FFMessageQueue.obj: playerEngine/FFMessageQueue.cpp.obj
+.PHONY : playerEngine/FFMessageQueue.obj
+
+# target to build an object file
+playerEngine/FFMessageQueue.cpp.obj:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/playerEngine/FFMessageQueue.cpp.obj
+.PHONY : playerEngine/FFMessageQueue.cpp.obj
+
+playerEngine/FFMessageQueue.i: playerEngine/FFMessageQueue.cpp.i
+.PHONY : playerEngine/FFMessageQueue.i
+
+# target to preprocess a source file
+playerEngine/FFMessageQueue.cpp.i:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/playerEngine/FFMessageQueue.cpp.i
+.PHONY : playerEngine/FFMessageQueue.cpp.i
+
+playerEngine/FFMessageQueue.s: playerEngine/FFMessageQueue.cpp.s
+.PHONY : playerEngine/FFMessageQueue.s
+
+# target to generate assembly for a file
+playerEngine/FFMessageQueue.cpp.s:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/playerEngine/FFMessageQueue.cpp.s
+.PHONY : playerEngine/FFMessageQueue.cpp.s
+
 playerEngine/FFplayer.obj: playerEngine/FFplayer.cpp.obj
 .PHONY : playerEngine/FFplayer.obj
 
@@ -348,6 +372,30 @@ playerEngine/IjkMediaPlayer.s: playerEngine/IjkMediaPlayer.cpp.s
 playerEngine/IjkMediaPlayer.cpp.s:
 	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/playerEngine/IjkMediaPlayer.cpp.s
 .PHONY : playerEngine/IjkMediaPlayer.cpp.s
+
+playerEngine/ff_ffplay_def.obj: playerEngine/ff_ffplay_def.cpp.obj
+.PHONY : playerEngine/ff_ffplay_def.obj
+
+# target to build an object file
+playerEngine/ff_ffplay_def.cpp.obj:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/playerEngine/ff_ffplay_def.cpp.obj
+.PHONY : playerEngine/ff_ffplay_def.cpp.obj
+
+playerEngine/ff_ffplay_def.i: playerEngine/ff_ffplay_def.cpp.i
+.PHONY : playerEngine/ff_ffplay_def.i
+
+# target to preprocess a source file
+playerEngine/ff_ffplay_def.cpp.i:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/playerEngine/ff_ffplay_def.cpp.i
+.PHONY : playerEngine/ff_ffplay_def.cpp.i
+
+playerEngine/ff_ffplay_def.s: playerEngine/ff_ffplay_def.cpp.s
+.PHONY : playerEngine/ff_ffplay_def.s
+
+# target to generate assembly for a file
+playerEngine/ff_ffplay_def.cpp.s:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/playerEngine/ff_ffplay_def.cpp.s
+.PHONY : playerEngine/ff_ffplay_def.cpp.s
 
 playercontroller/service/PlayerController.obj: playercontroller/service/PlayerController.cpp.obj
 .PHONY : playercontroller/service/PlayerController.obj
@@ -426,12 +474,18 @@ help:
 	@echo ... infrastructure/database/SQLiteUserRepository.obj
 	@echo ... infrastructure/database/SQLiteUserRepository.i
 	@echo ... infrastructure/database/SQLiteUserRepository.s
+	@echo ... playerEngine/FFMessageQueue.obj
+	@echo ... playerEngine/FFMessageQueue.i
+	@echo ... playerEngine/FFMessageQueue.s
 	@echo ... playerEngine/FFplayer.obj
 	@echo ... playerEngine/FFplayer.i
 	@echo ... playerEngine/FFplayer.s
 	@echo ... playerEngine/IjkMediaPlayer.obj
 	@echo ... playerEngine/IjkMediaPlayer.i
 	@echo ... playerEngine/IjkMediaPlayer.s
+	@echo ... playerEngine/ff_ffplay_def.obj
+	@echo ... playerEngine/ff_ffplay_def.i
+	@echo ... playerEngine/ff_ffplay_def.s
 	@echo ... playercontroller/service/PlayerController.obj
 	@echo ... playercontroller/service/PlayerController.i
 	@echo ... playercontroller/service/PlayerController.s

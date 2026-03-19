@@ -39,12 +39,20 @@ set_target_properties(QtFrontend PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
 )
 
+function(flashpoint_copy_runtime_files target)
+    foreach(_flashpoint_runtime_file IN LISTS ARGN)
+        if(EXISTS "${_flashpoint_runtime_file}")
+            add_custom_command(TARGET ${target} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                    "${_flashpoint_runtime_file}"
+                    $<TARGET_FILE_DIR:${target}>
+            )
+        endif()
+    endforeach()
+endfunction()
+
 if(TARGET SDL2::SDL2)
-    add_custom_command(TARGET QtFrontend POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            $<TARGET_FILE:SDL2::SDL2>
-            $<TARGET_FILE_DIR:QtFrontend>
-    )
+    flashpoint_copy_runtime_files(QtFrontend $<TARGET_FILE:SDL2::SDL2>)
 endif()
 
 foreach(_flashpoint_runtime_target
@@ -58,13 +66,25 @@ foreach(_flashpoint_runtime_target
     FFmpeg::postproc
 )
     if(TARGET ${_flashpoint_runtime_target})
-        add_custom_command(TARGET QtFrontend POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                $<TARGET_FILE:${_flashpoint_runtime_target}>
-                $<TARGET_FILE_DIR:QtFrontend>
-        )
+        flashpoint_copy_runtime_files(QtFrontend $<TARGET_FILE:${_flashpoint_runtime_target}>)
     endif()
 endforeach()
+
+if(DEFINED FLASHPOINT_FFMPEG_ROOT AND EXISTS "${FLASHPOINT_FFMPEG_ROOT}/bin")
+    file(GLOB _flashpoint_ffmpeg_runtime_files
+        "${FLASHPOINT_FFMPEG_ROOT}/bin/*.dll"
+    )
+    flashpoint_copy_runtime_files(QtFrontend ${_flashpoint_ffmpeg_runtime_files})
+endif()
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    get_filename_component(_flashpoint_compiler_bin_dir "${CMAKE_CXX_COMPILER}" DIRECTORY)
+    flashpoint_copy_runtime_files(QtFrontend
+        "${_flashpoint_compiler_bin_dir}/libgcc_s_seh-1.dll"
+        "${_flashpoint_compiler_bin_dir}/libstdc++-6.dll"
+        "${_flashpoint_compiler_bin_dir}/libwinpthread-1.dll"
+    )
+endif()
 
 if (EXISTS "D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/bin/windeployqt.exe")
     add_custom_command(TARGET QtFrontend POST_BUILD

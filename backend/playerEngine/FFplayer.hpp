@@ -17,14 +17,14 @@ public:
     AVPacket pkt_;
     PacketQueue *queue_;
     AVCodecContext *avctx_;
-    int pkt_serial_;
-    int finished_;
+    int pkt_serial_ = -1;
+    int finished_ = 0;
     std::thread *decoder_thread_ = NULL;
 
-    int64_t start_pts;
-    AVRational start_pts_tb;
-    int64_t next_pts;
-    AVRational next_pts_tb;
+    int64_t start_pts = AV_NOPTS_VALUE;
+    AVRational start_pts_tb = {0, 1};
+    int64_t next_pts = AV_NOPTS_VALUE;
+    AVRational next_pts_tb = {0, 1};
     Decoder();
     ~Decoder();
     void decoder_init(AVCodecContext *avctx, PacketQueue *queue);
@@ -147,7 +147,7 @@ public:
         int paused = 0;
         // 音频输出相关
         struct AudioParams audio_src; // 保存最新解码的音频参数
-        struct AudioParams audio_tgt; // 保存SDL音频输出需要的参数
+        struct AudioParams audio_tgt; // 保存SDL音频输出需要的参数  默认初始化在ff_ffplay_def.hpp (line 124)
         struct SwrContext *swr_ctx = NULL;
         int audio_hw_buf_size = 0; // SDL音频缓冲区的大小(字节为单位)
         // 指向待播放的一帧音频数据，指向的数据区将被拷入SDL音频缓冲区。若经过重采样则指向audio_buf1，

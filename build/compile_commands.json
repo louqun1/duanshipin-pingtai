@@ -67,6 +67,18 @@
 },
 {
   "directory": "D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend",
+  "command": "D:\\itffmpeg\\x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1\\mingw64\\bin\\g++.exe -DQT_CORE_LIB -DQT_SQL_LIB -DUNICODE -DWIN32 -DWIN64 -DWINVER=0x0A00 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN32_WINNT=0x0A00 -D_WIN64 @CMakeFiles/ServoBackend.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\ServoBackend.dir\\playerEngine\\ff_ffplay_def.cpp.obj -c D:\\itffmpeg\\av_media\\online\\duanshipin-pingtai\\backend\\playerEngine\\ff_ffplay_def.cpp",
+  "file": "D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playerEngine/ff_ffplay_def.cpp",
+  "output": "backend/CMakeFiles/ServoBackend.dir/playerEngine/ff_ffplay_def.cpp.obj"
+},
+{
+  "directory": "D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend",
+  "command": "D:\\itffmpeg\\x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1\\mingw64\\bin\\g++.exe -DQT_CORE_LIB -DQT_SQL_LIB -DUNICODE -DWIN32 -DWIN64 -DWINVER=0x0A00 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN32_WINNT=0x0A00 -D_WIN64 @CMakeFiles/ServoBackend.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\ServoBackend.dir\\playerEngine\\FFMessageQueue.cpp.obj -c D:\\itffmpeg\\av_media\\online\\duanshipin-pingtai\\backend\\playerEngine\\FFMessageQueue.cpp",
+  "file": "D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playerEngine/FFMessageQueue.cpp",
+  "output": "backend/CMakeFiles/ServoBackend.dir/playerEngine/FFMessageQueue.cpp.obj"
+},
+{
+  "directory": "D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend",
   "command": "D:\\itffmpeg\\x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1\\mingw64\\bin\\g++.exe -DQT_CORE_LIB -DQT_SQL_LIB -DUNICODE -DWIN32 -DWIN64 -DWINVER=0x0A00 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN32_WINNT=0x0A00 -D_WIN64 @CMakeFiles/ServoBackend.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\ServoBackend.dir\\playerEngine\\FFplayer.cpp.obj -c D:\\itffmpeg\\av_media\\online\\duanshipin-pingtai\\backend\\playerEngine\\FFplayer.cpp",
   "file": "D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playerEngine/FFplayer.cpp",
   "output": "backend/CMakeFiles/ServoBackend.dir/playerEngine/FFplayer.cpp.obj"

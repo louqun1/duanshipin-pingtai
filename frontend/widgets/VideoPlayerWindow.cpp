@@ -48,7 +48,7 @@ void VideoPlayerWindow::connectPlayerController()
                 videoMetaLabel_->setText(QString("%1  |  Duration %2  |  ID %3").arg(creator, duration, videoId));
                 videoDescriptionLabel_->setText(
                     "The Home -> MainWindow -> VideoPlayerWindow -> PlayerController flow is now connected. "
-                    "This panel can keep rendering metadata while ijkPlayer is integrated behind the controller.");
+                    "此面板可以在 ijkPlayer 集成于控制器之后持续渲染元数据.");
                 queueLabel_->setText(
                     QString("Next player steps\n1. Create or reuse ijkPlayer\n2. Bind render output to this window\n3. Translate engine callbacks into UI events for %1").arg(creator));
             });

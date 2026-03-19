@@ -86,14 +86,14 @@ private:
     FFPlayer *ffplayer_ = nullptr;
     std::thread msg_thread_;
     std::atomic<bool> msg_thread_running_{false};
-    char *data_source_ = nullptr;
+    char *data_source_ = nullptr;// 当前媒体资源地址
     int mp_state_ = MP_STATE_IDLE;
 
     std::function<void(PlayerEvent, int, void*)> event_callback_;
     std::function<int(const Frame*)> video_frame_callback_;
-    bool pending_resume_after_seek_ = false;
-    int state_before_seek_ = MP_STATE_IDLE;
-    int state_before_buffering_ = MP_STATE_IDLE;
+    bool pending_resume_after_seek_ = false;    //标记在 seek 操作完成后是否需要自动恢复播放
+    int state_before_seek_ = MP_STATE_IDLE;     //seek前的状态
+    int state_before_buffering_ = MP_STATE_IDLE; //buffering->缓冲前的状态
     bool first_video_frame_dispatched_ = false;
 };
 

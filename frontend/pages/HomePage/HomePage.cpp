@@ -39,23 +39,6 @@ void HomePage::buildUi()
     auto *titleBlock = new QVBoxLayout();
     titleBlock->setContentsMargins(0, 0, 0, 0);
     titleBlock->setSpacing(6);
-
-    // auto *eyebrow = new QLabel("PHASE 3", this);
-    // eyebrow->setStyleSheet(
-    //     "font-size: 12px; font-weight: 700; letter-spacing: 1px; color: #2563eb;");
-    // titleBlock->addWidget(eyebrow);
-
-    // auto *title = new QLabel("Short video feed", this);
-    // title->setStyleSheet("font-size: 28px; font-weight: 700; color: #0f172a;");
-    // titleBlock->addWidget(title);
-
-    // auto *summary = new QLabel(
-    //     "响应式卡片会根据页面大小进行调整，因此在较大的屏幕上，桌面首页可以展示更多的视频内容。",
-    //     this);
-    // summary->setWordWrap(true);
-    // summary->setStyleSheet("font-size: 14px; color: #475569;");
-    // titleBlock->addWidget(summary);
-
     headerLayout->addLayout(titleBlock, 1);
 
     feedStatsLabel_ = new QLabel(this);
@@ -97,18 +80,18 @@ void HomePage::populateFeed()
     using frontend::components::VideoCardData;
 
     const QVector<VideoCardData> demoFeed = {
-        {"video-001", "City light walk after work", "Ari Studio", "00:42", "#2563eb", "#38bdf8"},
-        {"video-002", "Street food in one minute", "North Pier", "01:08", "#f97316", "#fb7185"},
-        {"video-003", "Desk setup refresh for editing", "Cut Lab", "00:35", "#0f766e", "#2dd4bf"},
-        {"video-004", "Weekend mountain ride log", "Miles Daily", "00:58", "#7c3aed", "#c084fc"},
-        {"video-005", "How the thumbnail was framed", "Frame Notes", "00:46", "#dc2626", "#fb7185"},
-        {"video-006", "Coffee bar workflow montage", "Daybreak", "00:51", "#ca8a04", "#facc15"},
-        {"video-007", "Late-night coding sprint", "Terminal FM", "01:12", "#1d4ed8", "#22d3ee"},
-        {"video-008", "Quick keyboard sound test", "Studio 87", "00:29", "#059669", "#34d399"},
-        {"video-009", "Minimal room makeover", "Soft Corner", "00:54", "#9333ea", "#f472b6"},
-        {"video-010", "Five cuts for a punchier intro", "Edit Coach", "01:04", "#ea580c", "#fdba74"},
-        {"video-011", "Rainy window b-roll pack", "Mono Weather", "00:39", "#334155", "#60a5fa"},
-        {"video-012", "Fast meal prep before stream", "Kitchen Loop", "00:44", "#be123c", "#fb7185"}
+        {"D:\\app\\douyin_download\\hanghang.mp4", "hanghang丝血五杀", "Ari Studio", "00:42", "#2563eb", "#38bdf8"},
+        {"D:\\app\\douyin_download\\冰川时代1.2002.BD1080p.国语.中英双字.mp4", "冰川时代", "North Pier", "01:08", "#f97316", "#fb7185"},
+        {"D:\\app\\douyin_download\\hanghang.mp4", "Desk setup refresh for editing", "Cut Lab", "00:35", "#0f766e", "#2dd4bf"},
+        {"D:\\app\\douyin_download\\hanghang.mp4", "Weekend mountain ride log", "Miles Daily", "00:58", "#7c3aed", "#c084fc"},
+        {"D:\\app\\douyin_download\\hanghang.mp4", "How the thumbnail was framed", "Frame Notes", "00:46", "#dc2626", "#fb7185"},
+        {"D:\\app\\douyin_download\\hanghang.mp4", "Coffee bar workflow montage", "Daybreak", "00:51", "#ca8a04", "#facc15"},
+        {"D:\\app\\douyin_download\\hanghang.mp4", "Late-night coding sprint", "Terminal FM", "01:12", "#1d4ed8", "#22d3ee"},
+        {"D:\\app\\douyin_download\\hanghang.mp4", "Quick keyboard sound test", "Studio 87", "00:29", "#059669", "#34d399"},
+        {"D:\\app\\douyin_download\\hanghang.mp4", "Minimal room makeover", "Soft Corner", "00:54", "#9333ea", "#f472b6"},
+        {"D:\\app\\douyin_download\\hanghang.mp4", "Five cuts for a punchier intro", "Edit Coach", "01:04", "#ea580c", "#fdba74"},
+        {"D:\\app\\douyin_download\\hanghang.mp4", "Rainy window b-roll pack]", "Mono Weather", "00:39", "#334155", "#60a5fa"},
+        {"D:\\app\\douyin_download\\hanghang.mp4", "Fast meal prep before stream", "Kitchen Loop", "00:44", "#be123c", "#fb7185"}
     };
 
     cards_.reserve(demoFeed.size());

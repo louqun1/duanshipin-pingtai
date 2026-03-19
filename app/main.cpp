@@ -1,24 +1,63 @@
 #include <QApplication>
 
 #include "bootstrap/AppBootstrap.hpp"
+#include "spdlog/logger.h"
+#include "spdlog/sinks/basic_file_sink.h"
+#include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/spdlog.h"
 
 #include <exception>
+#include <filesystem>
+#include <memory>
+#include <vector>
+
+namespace {
+
+std::string resolveLogFilePath()
+{
+    const std::filesystem::path logDir = std::filesystem::current_path() / "logs";
+    std::error_code error;
+    std::filesystem::create_directories(logDir, error);
+    return (logDir / "flashpoint.log").string();
+}
+
+void initialize_logging()
+{
+    const std::string logFilePath = resolveLogFilePath();
+    auto consoleSink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+    auto fileSink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(logFilePath, false);
+
+    std::vector<spdlog::sink_ptr> sinks{consoleSink, fileSink};
+    auto logger = std::make_shared<spdlog::logger>("flashpoint", sinks.begin(), sinks.end());
+    logger->set_level(spdlog::level::info);
+    logger->flush_on(spdlog::level::info);
+
+    spdlog::set_default_logger(logger);
+    spdlog::set_level(spdlog::level::info);
+    spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%^%l%$] [thread %t] %v");
+    spdlog::info("Logging initialized, file={}", logFilePath);
+}
+
+}  // namespace
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     QApplication::setOrganizationName("Flashpoint");
     QApplication::setApplicationName("FlashpointShortVideos");
+    initialize_logging();
     spdlog::info("Starting desktop rebuild skeleton");
 
     try {
         AppBootstrap bootstrap;
         bootstrap.mainWindow()->show();
 
-        return app.exec();
+        const int exitCode = app.exec();
+        spdlog::shutdown();
+        return exitCode;
     } catch (const std::exception &exception) {
         spdlog::error("Application bootstrap failed: {}", exception.what());
+        spdlog::shutdown();
         return 1;
     }
 }

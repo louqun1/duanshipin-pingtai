@@ -286,16 +286,17 @@ static int audio_decode_frame(FFPlayer *is)
         }
         frame_queue_next(&is->sampq);
     } while (af->serial != is->audioq.serial);
-    //    LOG(INFO) << "audioq.nb_packets=" << is->audioq.nb_packets
-    //              << ", abort_request=" << is->audioq.abort_request
-    //              << ", audio_stream=" << is->audio_stream;
-    //    if (af->frame) {
-    //        LOG(INFO) << "frame nb_samples=" << af->frame->nb_samples
-    //                  << ", channels=" << af->frame->channels
-    //                  << ", channel_layout=" << af->frame->ch_layout
-    //                  << ", format=" << af->frame->format
-    //                  << ", sample_rate=" << af->frame->sample_rate;
-    //    }
+    char layout_buf[64];
+    av_channel_layout_describe(&af->frame->ch_layout, layout_buf, sizeof(layout_buf));
+    spdlog::info("audio.nb_samples={}, channels={}, channel_layout={}, format={}, sample_rate={}",
+                 static_cast<int>(af->frame->nb_samples), static_cast<int>(af->frame->ch_layout.nb_channels), layout_buf,
+                 static_cast<int>(af->frame->format), static_cast<int>(af->frame->sample_rate));
+    if(af->frame){
+        spdlog::info("audio frame data pointers: data[0]={}, data[1]={}",
+                     static_cast<const void *>(af->frame->data[0]),
+                     static_cast<const void *>(af->frame->data[1]));
+    }
+
     // 根据frame中指定的音频参数获取缓冲区的大小 af->frame->channels * af->frame->nb_samples * 2
     data_size = av_samples_get_buffer_size(NULL, af->frame->ch_layout.nb_channels,
                                            af->frame->nb_samples,
@@ -328,6 +329,10 @@ static int audio_decode_frame(FFPlayer *is)
         swr_free(&is->swr_ctx);
         // 假设 is->audio_tgt.channel_layout 现在是 AVChannelLayout 类型（如果不是，也需要升级）
         SwrContext *swr_ctx = NULL;
+        char in_desc[64], out_desc[64];
+        av_channel_layout_describe(&dec_channel_layout, in_desc, sizeof(in_desc));
+        av_channel_layout_describe(&is->audio_tgt.channel_layout, out_desc, sizeof(out_desc));
+        spdlog::info("Input layout: '{}', Output layout: '{}'", in_desc, out_desc);
         int ret = swr_alloc_set_opts2(&swr_ctx,
                                       &is->audio_tgt.channel_layout, // 输出布局（需升级为 AVChannelLayout）
                                       is->audio_tgt.fmt,
@@ -336,6 +341,38 @@ static int audio_decode_frame(FFPlayer *is)
                                       (enum AVSampleFormat)af->frame->format,
                                       af->frame->sample_rate,
                                       0, NULL);
+        //打印swr_alloc_set_opts2参数
+        // 检查参数有效性并打印详细信息
+        bool param_error = false;
+        if (is->audio_tgt.channel_layout.nb_channels <= 0) {
+            spdlog::error("Invalid output channel_layout.nb_channels: {}", is->audio_tgt.channel_layout.nb_channels);
+            param_error = true;
+        }
+        if (is->audio_tgt.fmt == AV_SAMPLE_FMT_NONE) {
+            spdlog::error("Invalid output sample format: {}", static_cast<int>(is->audio_tgt.fmt));
+            param_error = true;
+        }
+        if (is->audio_tgt.freq <= 0) {
+            spdlog::error("Invalid output sample rate: {}", is->audio_tgt.freq);
+            param_error = true;
+        }
+        if (dec_channel_layout.nb_channels <= 0) {
+            spdlog::error("Invalid input channel_layout.nb_channels: {}", dec_channel_layout.nb_channels);
+            param_error = true;
+        }
+        if ((enum AVSampleFormat)af->frame->format == AV_SAMPLE_FMT_NONE) {
+            spdlog::error("Invalid input sample format: {}", static_cast<int>(af->frame->format));
+            param_error = true;
+        }
+        if (af->frame->sample_rate <= 0) {
+            spdlog::error("Invalid input sample rate: {}", af->frame->sample_rate);
+            param_error = true;
+        }
+        if (!param_error) {
+            spdlog::info("is->audio_tgt.channel_layout.nb_channels={}, is->audio_tgt.fmt={}, is->audio_tgt.freq={}, dec_channel_layout.nb_channels={}, af->frame->format={}, af->frame->sample_rate={}",
+                 static_cast<int>(is->audio_tgt.channel_layout.nb_channels), av_get_sample_fmt_name(is->audio_tgt.fmt), static_cast<int>(is->audio_tgt.freq),
+                 static_cast<int>(dec_channel_layout.nb_channels), av_get_sample_fmt_name((enum AVSampleFormat)af->frame->format), static_cast<int>(af->frame->sample_rate));
+        }
         if (ret < 0)
         {
             // 错误处理
@@ -497,7 +534,7 @@ static void sdl_audio_callback(void *opaque, Uint8 *stream, int len)
                                                       (float *)is->audio_buf,
                                                       actual_out_samples);
                 }
-                else if (is->audio_tgt.fmt = AV_SAMPLE_FMT_S16)
+                else if (is->audio_tgt.fmt == AV_SAMPLE_FMT_S16)
                 {
                     out_ret = sonicWriteShortToStream(is->audio_speed_convert,
                                                       (short *)is->audio_buf,
@@ -578,6 +615,7 @@ static void sdl_audio_callback(void *opaque, Uint8 *stream, int len)
 }
 int FFPlayer::audio_open(AVChannelLayout wanted_channel_layout, int wanted_nb_channels, int wanted_sample_rate, AudioParams *audio_hw_params)
 {
+    // spdlog::info("audio_open: wanted_nb_channels={}, wanted_sample_rate={}", wanted_nb_channels, wanted_sample_rate);
     SDL_AudioSpec wanted_spec;             // 音频参数设置SDL_AudioSpec
     wanted_spec.freq = wanted_sample_rate; // 采样率
     wanted_spec.format = AUDIO_S16SYS;     // 采样点格式
@@ -603,7 +641,7 @@ int FFPlayer::audio_open(AVChannelLayout wanted_channel_layout, int wanted_nb_ch
     // --- 处理通道布局 ---
     // 1. 先清理目标布局（防止内存泄漏）
     av_channel_layout_uninit(&audio_hw_params->channel_layout);
-    if (audio_hw_params->channel_layout.nb_channels > 0)
+    if ((wanted_channel_layout.nb_channels) > 0)
     {
         av_channel_layout_copy(&audio_hw_params->channel_layout, &wanted_channel_layout);;
     } else {
@@ -624,6 +662,8 @@ int FFPlayer::audio_open(AVChannelLayout wanted_channel_layout, int wanted_nb_ch
         return -1;
     }
     // 比如2帧数据，一帧就是1024个采样点， 1024*2*2 * 2 = 8192字节
+    spdlog::info("audio_hw_params->frame_size={}, audio_hw_params->bytes_per_sec={}, wanted_spec.samples={}, wanted_spec.channels={}, wanted_spec.format={}",
+                 static_cast<int>(audio_hw_params->frame_size), static_cast<int>(audio_hw_params->bytes_per_sec), static_cast<Uint16>(wanted_spec.samples), static_cast<Uint8>(wanted_spec.channels), av_get_sample_fmt_name(audio_hw_params->fmt));
     return wanted_spec.size; /* SDL内部缓存的数据字节, samples * channels *byte_per_sample */
 }
 
@@ -892,12 +932,9 @@ int FFPlayer::read_thread()
         {
             eof = 0;
         }
-        //        std::cout << "read_thread loop: ret=" << ret
-        //                  << ", pkt->stream_index=" << pkt->stream_index
-        //                  << ", audioq.size=" << audioq.size
-        //                  << ", videoq.size=" << videoq.size
-        //                  << ", eof=" << eof << std::endl;
-        //        std::cout << "pkt->stream_index: " << pkt->stream_index << ", audio_stream" << audio_stream << std::endl;
+        spdlog::info("read_thread loop: ret={}, pkt->stream_index={}, audioq.size={}, videoq.size={}, eof={}",
+                     ret, pkt->stream_index, audioq.size, videoq.size, eof);
+        spdlog::info("audio_stream: {}, video_stream: {}", audio_stream, video_stream);
         if (pkt->stream_index == audio_stream)
         {
             if (pkt->pts == AV_NOPTS_VALUE || pkt->pts < 0)
@@ -905,8 +942,8 @@ int FFPlayer::read_thread()
                 std::cout << "audio packet pts invalid: " << pkt->pts << std::endl;
                 // 你可以选择跳过这个包，或者让后续逻辑用dts或0代替
             }
-            //            std::cout << "audio packet pts: " << pkt->pts
-            //                              << "audio_pkt_size=" << pkt->size << std::endl;
+            spdlog::info("audio packet pts: {}, audio_pkt_size={}", pkt->pts, pkt->size);
+
             packet_queue_put(&audioq, pkt);
         }
         else if (pkt->stream_index == video_stream)
@@ -998,12 +1035,13 @@ void FFPlayer::video_refresh(double *remaining_time)
             {
                 frame_timer = time;
             }
-            SDL_LockMutex(pictq.mutex);
-            if (!std::isnan(vp->pts))
             {
-                update_video_pts(vp->pts, vp->pos, vp->serial);
+                std::lock_guard<std::mutex> lock(pictq.mutex);
+                if (!std::isnan(vp->pts))
+                {
+                    update_video_pts(vp->pts, vp->pos, vp->serial);
+                }
             }
-            SDL_UnlockMutex(pictq.mutex);
 
             if (frame_queue_nb_remaining(&pictq) > 1)
             {
@@ -1274,12 +1312,12 @@ int FFPlayer::ffp_seek_to_l(long msec)
     int64_t start_time = 0;
     int64_t seep_pos = milliseconds_to_fftime(msec); // 转成微秒
     int64_t duration = milliseconds_to_fftime(ffp_get_duration_l());
-    if (duration > 0 && seek_pos >= duration)
+    if (duration > 0 && seep_pos >= duration)
     {
         ffp_notify_msg1(this, FFP_MSG_SEEK_COMPLETE);
         return 0;
     }
-    spdlog::info("seek to: {}", seek_pos / 1000);
+    spdlog::info("seek to: {}", seep_pos / 1000);
     stream_seek(seep_pos, 0, 0);
     return 1;
 }
@@ -1316,6 +1354,14 @@ void Decoder::decoder_init(AVCodecContext *avctx, PacketQueue *queue)
 {
     avctx_ = avctx;
     queue_ = queue;
+    pkt_serial_ = -1;
+    finished_ = 0;
+    packet_pending_ = 0;
+    start_pts = AV_NOPTS_VALUE;
+    start_pts_tb = AVRational{0, 1};
+    next_pts = AV_NOPTS_VALUE;
+    next_pts_tb = AVRational{0, 1};
+    av_packet_unref(&pkt_);
 }
 
 int Decoder::decoder_start(AVMediaType codec_type, const char *thread_name, void *arg)
@@ -1546,7 +1592,7 @@ int Decoder::audio_thread(void *arg)
     {
         // 获取缓存情况
 
-        // 1.读取解码帧
+        // 1.从解码器读取解码帧
         if ((got_frame = decoder_decode_frame(frame)) < 0)
         {
             goto the_end;
@@ -1555,6 +1601,7 @@ int Decoder::audio_thread(void *arg)
         {
             tb.num = 1;
             tb.den = frame->sample_rate;
+            //从音频帧队列获取一个可写的Frame af
             if (!(af = frame_queue_peek_writable(&is->sampq)))
             {
                 goto the_end;
