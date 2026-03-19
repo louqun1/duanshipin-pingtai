@@ -13,6 +13,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/FrontendWidgets.dir/pages/UploadPage/UploadPage.cpp.obj.d"
   "CMakeFiles/FrontendWidgets.dir/widgets/MainWindow.cpp.obj"
   "CMakeFiles/FrontendWidgets.dir/widgets/MainWindow.cpp.obj.d"
+  "CMakeFiles/FrontendWidgets.dir/widgets/VideoOpenGLWidget.cpp.obj"
+  "CMakeFiles/FrontendWidgets.dir/widgets/VideoOpenGLWidget.cpp.obj.d"
   "CMakeFiles/FrontendWidgets.dir/widgets/VideoPlayerWindow.cpp.obj"
   "CMakeFiles/FrontendWidgets.dir/widgets/VideoPlayerWindow.cpp.obj.d"
   "CMakeFiles/FrontendWidgets_autogen.dir/AutogenUsed.txt"

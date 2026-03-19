@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QObject>
+#include <QPointer>
 #include <QString>
 #include "playerEngine/IjkMediaPlayer.hpp"
 
@@ -29,7 +30,7 @@ namespace backend::playercontroller::service
         Q_ENUM(PlaybackState)
 
         explicit PlayerController(QObject *parent = nullptr);
-        ~PlayerController() override = default;
+        ~PlayerController() override;
 
         PlaybackState playbackState() const;
         bool hasMediaLoaded() const;
@@ -60,15 +61,22 @@ namespace backend::playercontroller::service
         void updatePlaybackState(PlaybackState state, const QString &message);
         void ensureIjkPlayerCreated();
         void openMediaWithIjkPlayer();
+        void handlePlayerEvent(media::PlayerEvent event, int arg1, void *arg2);
+        int handleVideoFrame(const Frame *frame);
+        void resetVideoConverter();
         media::IjkMediaPlayer *ijkPlayerInstance();
         media::IjkMediaPlayer *ijkPlayer_ = nullptr;
-        QWidget *videoSurface_ = nullptr;
+        QPointer<QWidget> videoSurface_;
         QString currentVideoId_;
         QString currentTitle_;
         QString currentCreator_;
         QString currentDuration_;
         PlaybackState playbackState_ = PlaybackState::Idle;
         bool ijkPlayerCreated_ = false;
+        SwsContext *videoScaleContext_ = nullptr;
+        int videoScaleWidth_ = 0;
+        int videoScaleHeight_ = 0;
+        AVPixelFormat videoScaleFormat_ = AV_PIX_FMT_NONE;
     };
 
 } // namespace backend::playercontroller::service

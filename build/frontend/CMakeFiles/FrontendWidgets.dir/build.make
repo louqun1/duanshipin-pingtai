@@ -108,11 +108,26 @@ frontend/CMakeFiles/FrontendWidgets.dir/widgets/MainWindow.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/FrontendWidgets.dir/widgets/MainWindow.cpp.s"
 	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build\frontend && D:\itffmpeg\x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\itffmpeg\av_media\online\duanshipin-pingtai\frontend\widgets\MainWindow.cpp -o CMakeFiles\FrontendWidgets.dir\widgets\MainWindow.cpp.s
 
+frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoOpenGLWidget.cpp.obj: frontend/CMakeFiles/FrontendWidgets.dir/flags.make
+frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoOpenGLWidget.cpp.obj: frontend/CMakeFiles/FrontendWidgets.dir/includes_CXX.rsp
+frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoOpenGLWidget.cpp.obj: D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/VideoOpenGLWidget.cpp
+frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoOpenGLWidget.cpp.obj: frontend/CMakeFiles/FrontendWidgets.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoOpenGLWidget.cpp.obj"
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build\frontend && D:\itffmpeg\x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoOpenGLWidget.cpp.obj -MF CMakeFiles\FrontendWidgets.dir\widgets\VideoOpenGLWidget.cpp.obj.d -o CMakeFiles\FrontendWidgets.dir\widgets\VideoOpenGLWidget.cpp.obj -c D:\itffmpeg\av_media\online\duanshipin-pingtai\frontend\widgets\VideoOpenGLWidget.cpp
+
+frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoOpenGLWidget.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/FrontendWidgets.dir/widgets/VideoOpenGLWidget.cpp.i"
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build\frontend && D:\itffmpeg\x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\itffmpeg\av_media\online\duanshipin-pingtai\frontend\widgets\VideoOpenGLWidget.cpp > CMakeFiles\FrontendWidgets.dir\widgets\VideoOpenGLWidget.cpp.i
+
+frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoOpenGLWidget.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/FrontendWidgets.dir/widgets/VideoOpenGLWidget.cpp.s"
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build\frontend && D:\itffmpeg\x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\itffmpeg\av_media\online\duanshipin-pingtai\frontend\widgets\VideoOpenGLWidget.cpp -o CMakeFiles\FrontendWidgets.dir\widgets\VideoOpenGLWidget.cpp.s
+
 frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoPlayerWindow.cpp.obj: frontend/CMakeFiles/FrontendWidgets.dir/flags.make
 frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoPlayerWindow.cpp.obj: frontend/CMakeFiles/FrontendWidgets.dir/includes_CXX.rsp
 frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoPlayerWindow.cpp.obj: D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/VideoPlayerWindow.cpp
 frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoPlayerWindow.cpp.obj: frontend/CMakeFiles/FrontendWidgets.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoPlayerWindow.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoPlayerWindow.cpp.obj"
 	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build\frontend && D:\itffmpeg\x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoPlayerWindow.cpp.obj -MF CMakeFiles\FrontendWidgets.dir\widgets\VideoPlayerWindow.cpp.obj.d -o CMakeFiles\FrontendWidgets.dir\widgets\VideoPlayerWindow.cpp.obj -c D:\itffmpeg\av_media\online\duanshipin-pingtai\frontend\widgets\VideoPlayerWindow.cpp
 
 frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoPlayerWindow.cpp.i: cmake_force
@@ -127,7 +142,7 @@ frontend/CMakeFiles/FrontendWidgets.dir/components/VideoCard/VideoCard.cpp.obj: 
 frontend/CMakeFiles/FrontendWidgets.dir/components/VideoCard/VideoCard.cpp.obj: frontend/CMakeFiles/FrontendWidgets.dir/includes_CXX.rsp
 frontend/CMakeFiles/FrontendWidgets.dir/components/VideoCard/VideoCard.cpp.obj: D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/components/VideoCard/VideoCard.cpp
 frontend/CMakeFiles/FrontendWidgets.dir/components/VideoCard/VideoCard.cpp.obj: frontend/CMakeFiles/FrontendWidgets.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object frontend/CMakeFiles/FrontendWidgets.dir/components/VideoCard/VideoCard.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object frontend/CMakeFiles/FrontendWidgets.dir/components/VideoCard/VideoCard.cpp.obj"
 	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build\frontend && D:\itffmpeg\x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT frontend/CMakeFiles/FrontendWidgets.dir/components/VideoCard/VideoCard.cpp.obj -MF CMakeFiles\FrontendWidgets.dir\components\VideoCard\VideoCard.cpp.obj.d -o CMakeFiles\FrontendWidgets.dir\components\VideoCard\VideoCard.cpp.obj -c D:\itffmpeg\av_media\online\duanshipin-pingtai\frontend\components\VideoCard\VideoCard.cpp
 
 frontend/CMakeFiles/FrontendWidgets.dir/components/VideoCard/VideoCard.cpp.i: cmake_force
@@ -142,7 +157,7 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/AccountPage/AccountPage.cpp.obj: f
 frontend/CMakeFiles/FrontendWidgets.dir/pages/AccountPage/AccountPage.cpp.obj: frontend/CMakeFiles/FrontendWidgets.dir/includes_CXX.rsp
 frontend/CMakeFiles/FrontendWidgets.dir/pages/AccountPage/AccountPage.cpp.obj: D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/AccountPage/AccountPage.cpp
 frontend/CMakeFiles/FrontendWidgets.dir/pages/AccountPage/AccountPage.cpp.obj: frontend/CMakeFiles/FrontendWidgets.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object frontend/CMakeFiles/FrontendWidgets.dir/pages/AccountPage/AccountPage.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object frontend/CMakeFiles/FrontendWidgets.dir/pages/AccountPage/AccountPage.cpp.obj"
 	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build\frontend && D:\itffmpeg\x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT frontend/CMakeFiles/FrontendWidgets.dir/pages/AccountPage/AccountPage.cpp.obj -MF CMakeFiles\FrontendWidgets.dir\pages\AccountPage\AccountPage.cpp.obj.d -o CMakeFiles\FrontendWidgets.dir\pages\AccountPage\AccountPage.cpp.obj -c D:\itffmpeg\av_media\online\duanshipin-pingtai\frontend\pages\AccountPage\AccountPage.cpp
 
 frontend/CMakeFiles/FrontendWidgets.dir/pages/AccountPage/AccountPage.cpp.i: cmake_force
@@ -157,7 +172,7 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/HomePage/HomePage.cpp.obj: fronten
 frontend/CMakeFiles/FrontendWidgets.dir/pages/HomePage/HomePage.cpp.obj: frontend/CMakeFiles/FrontendWidgets.dir/includes_CXX.rsp
 frontend/CMakeFiles/FrontendWidgets.dir/pages/HomePage/HomePage.cpp.obj: D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/HomePage/HomePage.cpp
 frontend/CMakeFiles/FrontendWidgets.dir/pages/HomePage/HomePage.cpp.obj: frontend/CMakeFiles/FrontendWidgets.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object frontend/CMakeFiles/FrontendWidgets.dir/pages/HomePage/HomePage.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object frontend/CMakeFiles/FrontendWidgets.dir/pages/HomePage/HomePage.cpp.obj"
 	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build\frontend && D:\itffmpeg\x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT frontend/CMakeFiles/FrontendWidgets.dir/pages/HomePage/HomePage.cpp.obj -MF CMakeFiles\FrontendWidgets.dir\pages\HomePage\HomePage.cpp.obj.d -o CMakeFiles\FrontendWidgets.dir\pages\HomePage\HomePage.cpp.obj -c D:\itffmpeg\av_media\online\duanshipin-pingtai\frontend\pages\HomePage\HomePage.cpp
 
 frontend/CMakeFiles/FrontendWidgets.dir/pages/HomePage/HomePage.cpp.i: cmake_force
@@ -172,7 +187,7 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/StreamPage/StreamPage.cpp.obj: fro
 frontend/CMakeFiles/FrontendWidgets.dir/pages/StreamPage/StreamPage.cpp.obj: frontend/CMakeFiles/FrontendWidgets.dir/includes_CXX.rsp
 frontend/CMakeFiles/FrontendWidgets.dir/pages/StreamPage/StreamPage.cpp.obj: D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/StreamPage/StreamPage.cpp
 frontend/CMakeFiles/FrontendWidgets.dir/pages/StreamPage/StreamPage.cpp.obj: frontend/CMakeFiles/FrontendWidgets.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object frontend/CMakeFiles/FrontendWidgets.dir/pages/StreamPage/StreamPage.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object frontend/CMakeFiles/FrontendWidgets.dir/pages/StreamPage/StreamPage.cpp.obj"
 	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build\frontend && D:\itffmpeg\x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT frontend/CMakeFiles/FrontendWidgets.dir/pages/StreamPage/StreamPage.cpp.obj -MF CMakeFiles\FrontendWidgets.dir\pages\StreamPage\StreamPage.cpp.obj.d -o CMakeFiles\FrontendWidgets.dir\pages\StreamPage\StreamPage.cpp.obj -c D:\itffmpeg\av_media\online\duanshipin-pingtai\frontend\pages\StreamPage\StreamPage.cpp
 
 frontend/CMakeFiles/FrontendWidgets.dir/pages/StreamPage/StreamPage.cpp.i: cmake_force
@@ -187,7 +202,7 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/UploadPage/UploadPage.cpp.obj: fro
 frontend/CMakeFiles/FrontendWidgets.dir/pages/UploadPage/UploadPage.cpp.obj: frontend/CMakeFiles/FrontendWidgets.dir/includes_CXX.rsp
 frontend/CMakeFiles/FrontendWidgets.dir/pages/UploadPage/UploadPage.cpp.obj: D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/UploadPage/UploadPage.cpp
 frontend/CMakeFiles/FrontendWidgets.dir/pages/UploadPage/UploadPage.cpp.obj: frontend/CMakeFiles/FrontendWidgets.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object frontend/CMakeFiles/FrontendWidgets.dir/pages/UploadPage/UploadPage.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object frontend/CMakeFiles/FrontendWidgets.dir/pages/UploadPage/UploadPage.cpp.obj"
 	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build\frontend && D:\itffmpeg\x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT frontend/CMakeFiles/FrontendWidgets.dir/pages/UploadPage/UploadPage.cpp.obj -MF CMakeFiles\FrontendWidgets.dir\pages\UploadPage\UploadPage.cpp.obj.d -o CMakeFiles\FrontendWidgets.dir\pages\UploadPage\UploadPage.cpp.obj -c D:\itffmpeg\av_media\online\duanshipin-pingtai\frontend\pages\UploadPage\UploadPage.cpp
 
 frontend/CMakeFiles/FrontendWidgets.dir/pages/UploadPage/UploadPage.cpp.i: cmake_force
@@ -202,6 +217,7 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/UploadPage/UploadPage.cpp.s: cmake
 FrontendWidgets_OBJECTS = \
 "CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/mocs_compilation.cpp.obj" \
 "CMakeFiles/FrontendWidgets.dir/widgets/MainWindow.cpp.obj" \
+"CMakeFiles/FrontendWidgets.dir/widgets/VideoOpenGLWidget.cpp.obj" \
 "CMakeFiles/FrontendWidgets.dir/widgets/VideoPlayerWindow.cpp.obj" \
 "CMakeFiles/FrontendWidgets.dir/components/VideoCard/VideoCard.cpp.obj" \
 "CMakeFiles/FrontendWidgets.dir/pages/AccountPage/AccountPage.cpp.obj" \
@@ -214,6 +230,7 @@ FrontendWidgets_EXTERNAL_OBJECTS =
 
 frontend/libFrontendWidgets.a: frontend/CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/mocs_compilation.cpp.obj
 frontend/libFrontendWidgets.a: frontend/CMakeFiles/FrontendWidgets.dir/widgets/MainWindow.cpp.obj
+frontend/libFrontendWidgets.a: frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoOpenGLWidget.cpp.obj
 frontend/libFrontendWidgets.a: frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoPlayerWindow.cpp.obj
 frontend/libFrontendWidgets.a: frontend/CMakeFiles/FrontendWidgets.dir/components/VideoCard/VideoCard.cpp.obj
 frontend/libFrontendWidgets.a: frontend/CMakeFiles/FrontendWidgets.dir/pages/AccountPage/AccountPage.cpp.obj
@@ -222,7 +239,7 @@ frontend/libFrontendWidgets.a: frontend/CMakeFiles/FrontendWidgets.dir/pages/Str
 frontend/libFrontendWidgets.a: frontend/CMakeFiles/FrontendWidgets.dir/pages/UploadPage/UploadPage.cpp.obj
 frontend/libFrontendWidgets.a: frontend/CMakeFiles/FrontendWidgets.dir/build.make
 frontend/libFrontendWidgets.a: frontend/CMakeFiles/FrontendWidgets.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX static library libFrontendWidgets.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking CXX static library libFrontendWidgets.a"
 	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build\frontend && $(CMAKE_COMMAND) -P CMakeFiles\FrontendWidgets.dir\cmake_clean_target.cmake
 	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build\frontend && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\FrontendWidgets.dir\link.txt --verbose=$(VERBOSE)
 

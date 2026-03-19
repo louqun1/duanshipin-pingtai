@@ -1,3 +1,4 @@
+#include "widgets/VideoOpenGLWidget.hpp"
 #include "widgets/VideoPlayerWindow.hpp"
 
 #include "playercontroller/service/PlayerController.hpp"
@@ -18,7 +19,7 @@ VideoPlayerWindow::VideoPlayerWindow(
 {
     buildUi();
     connectPlayerController();
-    playerController_.attachVideoSurface(playerSurface_);
+    playerController_.attachVideoSurface(videoSurfaceWidget_);
     showEmptyState();
 }
 
@@ -145,6 +146,10 @@ void VideoPlayerWindow::buildUi()
     auto *playerLayout = new QVBoxLayout(playerSurface_);
     playerLayout->setContentsMargins(28, 28, 28, 28);
     playerLayout->setSpacing(12);
+
+    videoSurfaceWidget_ = new VideoOpenGLWidget(playerSurface_);
+    videoSurfaceWidget_->setMinimumSize(584, 320);
+    playerLayout->addWidget(videoSurfaceWidget_, 1);
 
     playerTitleLabel_ = new QLabel(playerSurface_);
     playerTitleLabel_->setStyleSheet("font-size: 26px; font-weight: 700; color: #f8fafc;");

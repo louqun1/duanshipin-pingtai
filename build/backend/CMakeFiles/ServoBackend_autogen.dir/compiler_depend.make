@@ -3,6 +3,7 @@
 
 backend/ServoBackend_autogen/timestamp: D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QDateTime \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QObject \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPointer \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q17memory.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20functional.h \
@@ -74,6 +75,7 @@ backend/ServoBackend_autogen/timestamp: D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/incl
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qobjectdefs_impl.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qoverload.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpair.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpointer.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qprocessordetection.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qrefcount.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qscopedpointer.h \
@@ -630,11 +632,11 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qfunctionpointer.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/wmmintrin.h:
 
+D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/ia32intrin.h:
+
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/parseutils.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/cstdint:
-
-D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/ia32intrin.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QObject:
 
@@ -645,6 +647,10 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q17memory.h:
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qglobal.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPointer:
+
+D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/basic_string.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20memory.h:
 
@@ -902,6 +908,12 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/time.h:
 
+D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/error.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpointer.h:
+
+D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/SDL2/SDL_keyboard.h:
+
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qprocessordetection.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qrefcount.h:
@@ -1115,10 +1127,6 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/SDL2/SDL_hidapi.h:
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/SDL2/SDL_hints.h:
-
-D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/error.h:
-
-D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/SDL2/SDL_keyboard.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/stdexcept:
 
@@ -1481,8 +1489,6 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/allocator.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/atomic_base.h:
-
-D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/basic_string.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/char_traits.h:
 

@@ -325,6 +325,30 @@ widgets/MainWindow.cpp.s:
 	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f frontend\CMakeFiles\FrontendWidgets.dir\build.make frontend/CMakeFiles/FrontendWidgets.dir/widgets/MainWindow.cpp.s
 .PHONY : widgets/MainWindow.cpp.s
 
+widgets/VideoOpenGLWidget.obj: widgets/VideoOpenGLWidget.cpp.obj
+.PHONY : widgets/VideoOpenGLWidget.obj
+
+# target to build an object file
+widgets/VideoOpenGLWidget.cpp.obj:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f frontend\CMakeFiles\FrontendWidgets.dir\build.make frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoOpenGLWidget.cpp.obj
+.PHONY : widgets/VideoOpenGLWidget.cpp.obj
+
+widgets/VideoOpenGLWidget.i: widgets/VideoOpenGLWidget.cpp.i
+.PHONY : widgets/VideoOpenGLWidget.i
+
+# target to preprocess a source file
+widgets/VideoOpenGLWidget.cpp.i:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f frontend\CMakeFiles\FrontendWidgets.dir\build.make frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoOpenGLWidget.cpp.i
+.PHONY : widgets/VideoOpenGLWidget.cpp.i
+
+widgets/VideoOpenGLWidget.s: widgets/VideoOpenGLWidget.cpp.s
+.PHONY : widgets/VideoOpenGLWidget.s
+
+# target to generate assembly for a file
+widgets/VideoOpenGLWidget.cpp.s:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f frontend\CMakeFiles\FrontendWidgets.dir\build.make frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoOpenGLWidget.cpp.s
+.PHONY : widgets/VideoOpenGLWidget.cpp.s
+
 widgets/VideoPlayerWindow.obj: widgets/VideoPlayerWindow.cpp.obj
 .PHONY : widgets/VideoPlayerWindow.obj
 
@@ -381,6 +405,9 @@ help:
 	@echo ... widgets/MainWindow.obj
 	@echo ... widgets/MainWindow.i
 	@echo ... widgets/MainWindow.s
+	@echo ... widgets/VideoOpenGLWidget.obj
+	@echo ... widgets/VideoOpenGLWidget.i
+	@echo ... widgets/VideoOpenGLWidget.s
 	@echo ... widgets/VideoPlayerWindow.obj
 	@echo ... widgets/VideoPlayerWindow.i
 	@echo ... widgets/VideoPlayerWindow.s

@@ -11,7 +11,7 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_PREFIX_PATH "D:/itffmpeg/Qt/6.10.2/llvm-mingw_64")
 
-find_package(Qt6 REQUIRED COMPONENTS Core Widgets Sql)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets Sql OpenGL OpenGLWidgets)
 
 add_subdirectory(backend)
 add_subdirectory(frontend)
@@ -32,6 +32,7 @@ target_link_libraries(QtFrontend
         ServoBackend
         FrontendWidgets
         Qt6::Core
+        Qt6::Gui
         Qt6::Widgets
 )
 

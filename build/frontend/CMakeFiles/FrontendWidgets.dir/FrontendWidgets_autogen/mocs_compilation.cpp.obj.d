@@ -413,11 +413,46 @@ frontend/CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/mocs_compilation
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QMainWindow \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qmainwindow.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qtabwidget.h \
+ D:\itffmpeg\av_media\online\duanshipin-pingtai\build\frontend\FrontendWidgets_autogen\IMAN36LHMA/moc_VideoOpenGLWidget.cpp \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/VideoOpenGLWidget.hpp \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QByteArray \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qbytearray.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QOpenGLFunctions \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qopenglfunctions.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qopengl.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/GL/gl.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qopenglext.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qopenglcontext.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qnativeinterface.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QSurfaceFormat \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qsurfaceformat.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qopenglcontext_platform.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtOpenGL/QOpenGLShaderProgram \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtOpenGL/qopenglshaderprogram.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtOpenGL/qtopenglglobal.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtOpenGL/qtopenglexports.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qvector2d.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qvectornd.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qvector3d.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qvector4d.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qmatrix4x4.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qgenericmatrix.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtOpenGL/QOpenGLTexture \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtOpenGL/qopengltexture.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QScopedPointer \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qscopedpointer.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtOpenGLWidgets/QOpenGLWidget \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtOpenGLWidgets/qopenglwidget.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtOpenGLWidgets/qtopenglwidgetsglobal.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtOpenGLWidgets/qtopenglwidgetsexports.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QWidget \
  D:\itffmpeg\av_media\online\duanshipin-pingtai\build\frontend\FrontendWidgets_autogen\IMAN36LHMA/moc_VideoPlayerWindow.cpp \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/VideoPlayerWindow.hpp \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playercontroller/service/PlayerController.hpp \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QObject \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qobject.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPointer \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpointer.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playerEngine/IjkMediaPlayer.hpp \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/mutex \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/std_mutex.h \

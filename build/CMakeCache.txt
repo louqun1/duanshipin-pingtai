@@ -362,6 +362,12 @@ Qt6GuiTools_DIR:PATH=D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6GuiTools
 //The directory containing a CMake configuration file for Qt6Gui.
 Qt6Gui_DIR:PATH=D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Gui
 
+//The directory containing a CMake configuration file for Qt6OpenGLWidgets.
+Qt6OpenGLWidgets_DIR:PATH=D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets
+
+//The directory containing a CMake configuration file for Qt6OpenGL.
+Qt6OpenGL_DIR:PATH=D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL
+
 //The directory containing a CMake configuration file for Qt6Sql.
 Qt6Sql_DIR:PATH=D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql
 

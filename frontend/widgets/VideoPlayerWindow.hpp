@@ -8,6 +8,8 @@
 class QLabel;
 class QPushButton;
 class QWidget;
+class QFrame;
+class VideoOpenGLWidget;
 
 class VideoPlayerWindow final : public QWidget
 {
@@ -30,7 +32,8 @@ private:
     void showEmptyState();
 
     backend::playercontroller::service::PlayerController &playerController_;
-    QWidget *playerSurface_ = nullptr;
+    QFrame *playerSurface_ = nullptr;
+    VideoOpenGLWidget *videoSurfaceWidget_ = nullptr;
     QLabel *playerTitleLabel_ = nullptr;
     QLabel *playerHintLabel_ = nullptr;
     QLabel *videoTitleLabel_ = nullptr;

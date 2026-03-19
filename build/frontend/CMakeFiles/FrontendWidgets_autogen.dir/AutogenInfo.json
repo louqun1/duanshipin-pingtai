@@ -52,6 +52,12 @@
 			null
 		],
 		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/VideoOpenGLWidget.hpp",
+			"MU",
+			"IMAN36LHMA/moc_VideoOpenGLWidget.cpp",
+			null
+		],
+		[
 			"D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/VideoPlayerWindow.hpp",
 			"MU",
 			"IMAN36LHMA/moc_VideoPlayerWindow.cpp",
@@ -65,6 +71,8 @@
 	[
 		"QT_CORE_LIB",
 		"QT_GUI_LIB",
+		"QT_OPENGLWIDGETS_LIB",
+		"QT_OPENGL_LIB",
 		"QT_SQL_LIB",
 		"QT_WIDGETS_LIB",
 		"UNICODE",
@@ -93,9 +101,11 @@
 		"D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore",
 		"D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include",
 		"D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/mkspecs/win32-clang-g++",
+		"D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui",
 		"D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtSql",
 		"D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets",
-		"D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui",
+		"D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtOpenGLWidgets",
+		"D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtOpenGL",
 		"D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++",
 		"D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/x86_64-w64-mingw32",
 		"D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/backward",
@@ -163,6 +173,11 @@
 		],
 		[
 			"D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/MainWindow.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/VideoOpenGLWidget.cpp",
 			"MU",
 			null
 		],

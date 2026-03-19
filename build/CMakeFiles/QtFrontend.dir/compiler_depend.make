@@ -7,6 +7,7 @@ CMakeFiles/QtFrontend.dir/app/bootstrap/AppBootstrap.cpp.obj: D:/itffmpeg/av_med
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QDateTime \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QDir \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QObject \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPointer \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QStandardPaths \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q17memory.h \
@@ -92,6 +93,7 @@ CMakeFiles/QtFrontend.dir/app/bootstrap/AppBootstrap.cpp.obj: D:/itffmpeg/av_med
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qoverload.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpair.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpoint.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpointer.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qprocessordetection.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qrect.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qrefcount.h \
@@ -1518,6 +1520,22 @@ QtFrontend_autogen/timestamp: D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6/
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6GuiTools/Qt6GuiToolsTargets-relwithdebinfo.cmake \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6GuiTools/Qt6GuiToolsTargets.cmake \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6GuiTools/Qt6GuiToolsVersionlessTargets.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLAdditionalTargetInfo.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLConfig.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLConfigVersion.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLConfigVersionImpl.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLDependencies.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLTargets-relwithdebinfo.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLTargets.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLVersionlessAliasTargets.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsAdditionalTargetInfo.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfig.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfigVersion.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfigVersionImpl.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsDependencies.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsTargets-relwithdebinfo.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsTargets.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsVersionlessAliasTargets.cmake \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QIBaseDriverPluginAdditionalTargetInfo.cmake \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QIBaseDriverPluginConfig.cmake \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QIBaseDriverPluginTargets-relwithdebinfo.cmake \
@@ -1700,12 +1718,6 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QObject:
 
-D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcompare.h:
-
-D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q17memory.h:
-
-D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qimage.h:
-
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qglobal.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdir.h:
@@ -1714,11 +1726,25 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString:
 
+D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/basic_string.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPointer:
+
+D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/sinks/sink.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcompare.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q17memory.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qimage.h:
+
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20functional.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/mm3dnow.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsDependencies.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsDependencies.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QSQLiteDriverPluginTargets-relwithdebinfo.cmake:
 
@@ -1798,13 +1824,15 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qbytearraylist.h:
 
-D:/itffmpeg/cmake-4.2.3/share/cmake-4.2/Modules/CheckCXXSourceCompiles.cmake:
-
-D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6/QtPublicToolHelpers.cmake:
-
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/atomic_lockfree_defines.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qarraydataops.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLConfig.cmake:
+
+D:/itffmpeg/cmake-4.2.3/share/cmake-4.2/Modules/CheckCXXSourceCompiles.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6/QtPublicToolHelpers.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qarraydatapointer.h:
 
@@ -1838,9 +1866,9 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/fmt/bundle
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtclasshelpermacros.h:
 
-D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcompare_impl.h:
-
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Widgets/Qt6WidgetsDependencies.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcompare_impl.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qbytearrayview.h:
 
@@ -1848,11 +1876,9 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qchar.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/locale_classes.h:
 
-D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qhashfunctions.h:
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Widgets/Qt6WidgetsTargets.cmake:
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/MainWindow.hpp:
-
-D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Widgets/Qt6WidgetsTargets.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Gui/Qt6QSvgIconPluginTargets.cmake:
 
@@ -1893,8 +1919,6 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcontainerinfo.h:
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6SqlConfig.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdarwinhelpers.h:
-
-D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6WidgetsTools/Qt6WidgetsToolsConfigVersionImpl.cmake:
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/codec_desc.h:
 
@@ -1947,6 +1971,8 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qhash.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtdeprecationdefinitions.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qhashfunctions.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qnumeric.h:
 
@@ -2068,6 +2094,20 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpoint.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsTargets-relwithdebinfo.cmake:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsTargets-relwithdebinfo.cmake:
+
+D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/error.h:
+
+D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/details/log_msg_buffer.h:
+
+D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/SDL2/SDL_keyboard.h:
+
+D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/processenv.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6GuiTools/Qt6GuiToolsConfigVersionImpl.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpointer.h:
+
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/virtdisk.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qprocessordetection.h:
@@ -2123,6 +2163,8 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstandardpaths.h:
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstdlibdetection.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsTargets.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsTargets.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstringalgorithms.h:
 
@@ -2262,11 +2304,11 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6EntryPointPrivate/Qt6EntryPoint
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qversiontagging.h:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6WidgetsTools/Qt6WidgetsToolsVersionlessTargets.cmake:
+
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/macros.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qxptype_traits.h:
-
-D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6WidgetsTools/Qt6WidgetsToolsVersionlessTargets.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qyieldcpu.h:
 
@@ -2276,8 +2318,6 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qaction.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qbitmap.h:
 
-CMakeFiles/4.2.3/CMakeCCompiler.cmake:
-
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libswresample/swresample.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qbrush.h:
@@ -2285,8 +2325,6 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qbrush.h:
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qcursor.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qfont.h:
-
-D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/iomanip:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/atomic:
 
@@ -2436,9 +2474,9 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/SDL2/SDL_clipboard.h:
 
-D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Core/Qt6CoreTargets-relwithdebinfo.cmake:
-
 CMakeFiles/4.2.3/CMakeRCCompiler.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Core/Qt6CoreTargets-relwithdebinfo.cmake:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/avx512vpopcntdqvlintrin.h:
 
@@ -2452,11 +2490,13 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/frame.h:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsConfig.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfig.cmake:
+
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/SDL2/SDL_endian.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Gui/Qt6GuiConfigVersionImpl.cmake:
-
-D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsConfig.cmake:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/avxifmaintrin.h:
 
@@ -2481,16 +2521,6 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/SDL2/SDL_hidapi.h:
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/SDL2/SDL_hints.h:
-
-D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/error.h:
-
-D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/details/log_msg_buffer.h:
-
-D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/SDL2/SDL_keyboard.h:
-
-D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/processenv.h:
-
-D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6GuiTools/Qt6GuiToolsConfigVersionImpl.cmake:
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/SDL2/SDL_keycode.h:
 
@@ -2549,6 +2579,8 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/wbnoinvdintrin.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsConfigVersionImpl.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfigVersionImpl.cmake:
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/SDL2/SDL_scancode.h:
 
@@ -2666,9 +2698,9 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6/FindWrapVulkanHeaders.cmake:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/amxbf16intrin.h:
 
-D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/pixdesc.h:
-
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6WidgetsTools/Qt6WidgetsToolsTargets.cmake:
+
+D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/pixdesc.h:
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/rational.h:
 
@@ -2802,9 +2834,9 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/avx512ifmavlintrin.h:
 
-D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/avx512vbmiintrin.h:
-
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Widgets/Qt6WidgetsPlugins.cmake:
+
+D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/avx512vbmiintrin.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/avx512vlbwintrin.h:
 
@@ -2852,13 +2884,11 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/atomic_base.h:
 
-D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/basic_string.h:
-
-D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/sinks/sink.h:
-
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/char_traits.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/ext/concurrence.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLConfigVersion.cmake:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/charconv.h:
 
@@ -2890,6 +2920,8 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/fs_dir.h:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLVersionlessAliasTargets.cmake:
+
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/streambuf_iterator.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Gui/Qt6GuiTargets.cmake:
@@ -2920,13 +2952,13 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/locale_conv.h:
 
-D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/locale_facets.h:
-
-D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/iterator:
+D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/spdlog-inl.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Widgets/Qt6WidgetsVersionlessAliasTargets.cmake:
 
-D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/spdlog-inl.h:
+D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/locale_facets.h:
+
+D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/iterator:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/locale_facets_nonio.h:
 
@@ -2985,6 +3017,8 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QODBCDriverPluginConfig.
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_deque.h:
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/details/file_helper.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLConfigVersionImpl.cmake:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_iterator.h:
 
@@ -3084,6 +3118,8 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/tr1/exp_integral.tcc:
 
+D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/iomanip:
+
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Gui/Qt6QWindowsIntegrationPluginTargets.cmake:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/ios:
@@ -3134,6 +3170,8 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/tr1/gamma.tcc:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLAdditionalTargetInfo.cmake:
+
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/tr1/hypergeometric.tcc:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/tr1/legendre_function.tcc:
@@ -3142,9 +3180,9 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Core/Qt6CoreConfigVersionImpl.c
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/tr1/modified_bessel_func.tcc:
 
-D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/tr1/poly_hermite.tcc:
-
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6WidgetsTools/Qt6WidgetsToolsConfig.cmake:
+
+D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/tr1/poly_hermite.tcc:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/tr1/poly_laguerre.tcc:
 
@@ -3450,9 +3488,9 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/apisetcconv.h:
 
-D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/bemapiset.h:
-
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6WidgetsTools/Qt6WidgetsToolsConfigVersion.cmake:
+
+D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/bemapiset.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/concurrencysal.h:
 
@@ -3588,7 +3626,11 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Core/Qt6CoreConfigVersion.cmake
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsAdditionalTargetInfo.cmake:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsAdditionalTargetInfo.cmake:
+
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsConfigVersion.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfigVersion.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsVersionlessTargets.cmake:
 
@@ -3668,6 +3710,14 @@ D:/itffmpeg/cmake-4.2.3/share/cmake-4.2/Modules/CMakeGenericSystem.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6GuiTools/Qt6GuiToolsVersionlessTargets.cmake:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLDependencies.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLTargets-relwithdebinfo.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLTargets.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsVersionlessAliasTargets.cmake:
+
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QIBaseDriverPluginAdditionalTargetInfo.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QMimerSQLDriverPluginAdditionalTargetInfo.cmake:
@@ -3704,11 +3754,15 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Widgets/Qt6WidgetsTargets-relwi
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6WidgetsTools/Qt6WidgetsToolsAdditionalTargetInfo.cmake:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6WidgetsTools/Qt6WidgetsToolsConfigVersionImpl.cmake:
+
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6WidgetsTools/Qt6WidgetsToolsDependencies.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6WidgetsTools/Qt6WidgetsToolsTargets-relwithdebinfo.cmake:
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/CMakeLists.txt:
+
+CMakeFiles/4.2.3/CMakeCCompiler.cmake:
 
 CMakeFiles/4.2.3/CMakeCXXCompiler.cmake:
 

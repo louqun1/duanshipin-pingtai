@@ -129,6 +129,22 @@ QtFrontend_autogen/timestamp: D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6/
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6GuiTools/Qt6GuiToolsTargets-relwithdebinfo.cmake \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6GuiTools/Qt6GuiToolsTargets.cmake \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6GuiTools/Qt6GuiToolsVersionlessTargets.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLAdditionalTargetInfo.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLConfig.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLConfigVersion.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLConfigVersionImpl.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLDependencies.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLTargets-relwithdebinfo.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLTargets.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLVersionlessAliasTargets.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsAdditionalTargetInfo.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfig.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfigVersion.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfigVersionImpl.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsDependencies.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsTargets-relwithdebinfo.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsTargets.cmake \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsVersionlessAliasTargets.cmake \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QIBaseDriverPluginAdditionalTargetInfo.cmake \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QIBaseDriverPluginConfig.cmake \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QIBaseDriverPluginTargets-relwithdebinfo.cmake \
@@ -289,6 +305,8 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Core/Qt6CoreConfig.cmake:
 
 D:/itffmpeg/cmake-4.2.3/share/cmake-4.2/Modules/CheckCXXSourceCompiles.cmake:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLConfig.cmake:
+
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6/QtPublicToolHelpers.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6/QtPublicAppleHelpers.cmake:
@@ -310,6 +328,8 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6/QtPublicGitHelpers.cmake:
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6/QtPublicFinalizerHelpers.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QSQLiteDriverPluginTargets-relwithdebinfo.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsDependencies.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsDependencies.cmake:
 
@@ -355,6 +375,8 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Core/Qt6CoreTargets-relwithdebi
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6/QtPublicSbomHelpers.cmake:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsTargets-relwithdebinfo.cmake:
+
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsTargets-relwithdebinfo.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6/QtPublicWalkLibsHelpers.cmake:
@@ -362,6 +384,8 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6/QtPublicWalkLibsHelpers.cmake:
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Gui/Qt6QICOPluginTargets-relwithdebinfo.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6/QtPublicSbomOpsHelpers.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfigVersionImpl.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsConfigVersionImpl.cmake:
 
@@ -385,13 +409,21 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Core/Qt6CoreConfigVersion.cmake
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Core/Qt6CoreDependencies.cmake:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsAdditionalTargetInfo.cmake:
+
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsAdditionalTargetInfo.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfig.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Gui/Qt6GuiConfigVersionImpl.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsConfig.cmake:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsTargets.cmake:
+
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsTargets.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfigVersion.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsConfigVersion.cmake:
 
@@ -552,6 +584,22 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6GuiTools/Qt6GuiToolsTargets.cma
 D:/itffmpeg/cmake-4.2.3/share/cmake-4.2/Modules/CMakeGenericSystem.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6GuiTools/Qt6GuiToolsVersionlessTargets.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLAdditionalTargetInfo.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLConfigVersion.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLConfigVersionImpl.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLDependencies.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLTargets-relwithdebinfo.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLTargets.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLVersionlessAliasTargets.cmake:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsVersionlessAliasTargets.cmake:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QIBaseDriverPluginAdditionalTargetInfo.cmake:
 

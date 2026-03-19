@@ -138,7 +138,6 @@ bin/QtFrontend.exe: CMakeFiles/QtFrontend.dir/app/bootstrap/AppBootstrap.cpp.obj
 bin/QtFrontend.exe: CMakeFiles/QtFrontend.dir/build.make
 bin/QtFrontend.exe: backend/libServoBackend.a
 bin/QtFrontend.exe: frontend/libFrontendWidgets.a
-bin/QtFrontend.exe: D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/libQt6Widgets.a
 bin/QtFrontend.exe: backend/libServoBackend.a
 bin/QtFrontend.exe: D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/libQt6Sql.a
 bin/QtFrontend.exe: D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/lib/SDL2.lib
@@ -150,6 +149,9 @@ bin/QtFrontend.exe: D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/inclu
 bin/QtFrontend.exe: D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/lib/avdevice.lib
 bin/QtFrontend.exe: D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/lib/avfilter.lib
 bin/QtFrontend.exe: D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/lib/postproc.lib
+bin/QtFrontend.exe: D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/libQt6OpenGLWidgets.a
+bin/QtFrontend.exe: D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/libQt6Widgets.a
+bin/QtFrontend.exe: D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/libQt6OpenGL.a
 bin/QtFrontend.exe: D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/libQt6Gui.a
 bin/QtFrontend.exe: D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/libQt6Core.a
 bin/QtFrontend.exe: CMakeFiles/QtFrontend.dir/linkLibs.rsp

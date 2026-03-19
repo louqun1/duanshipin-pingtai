@@ -124,7 +124,9 @@
 	"MOC_DEFINITIONS" : 
 	[
 		"QT_CORE_LIB",
+		"QT_GUI_LIB",
 		"QT_SQL_LIB",
+		"QT_WIDGETS_LIB",
 		"UNICODE",
 		"WIN32",
 		"WIN64",
@@ -150,7 +152,9 @@
 		"D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore",
 		"D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include",
 		"D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/mkspecs/win32-clang-g++",
+		"D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui",
 		"D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtSql",
+		"D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets",
 		"D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++",
 		"D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/x86_64-w64-mingw32",
 		"D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/backward",

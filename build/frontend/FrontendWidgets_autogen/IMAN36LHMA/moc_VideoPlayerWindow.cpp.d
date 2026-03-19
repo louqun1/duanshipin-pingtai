@@ -1,6 +1,7 @@
 D:/itffmpeg/av_media/online/duanshipin-pingtai/build/frontend/FrontendWidgets_autogen/IMAN36LHMA/moc_VideoPlayerWindow.cpp: D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/VideoPlayerWindow.hpp \
   D:/itffmpeg/av_media/online/duanshipin-pingtai/build/frontend/FrontendWidgets_autogen/moc_predefs.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QObject \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPointer \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q17memory.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20functional.h \
@@ -75,6 +76,7 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/build/frontend/FrontendWidgets_au
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qoverload.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpair.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpoint.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpointer.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qprocessordetection.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qrect.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qrefcount.h \

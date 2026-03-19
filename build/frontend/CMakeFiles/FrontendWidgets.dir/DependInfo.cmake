@@ -16,6 +16,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/StreamPage/StreamPage.cpp" "frontend/CMakeFiles/FrontendWidgets.dir/pages/StreamPage/StreamPage.cpp.obj" "gcc" "frontend/CMakeFiles/FrontendWidgets.dir/pages/StreamPage/StreamPage.cpp.obj.d"
   "D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/UploadPage/UploadPage.cpp" "frontend/CMakeFiles/FrontendWidgets.dir/pages/UploadPage/UploadPage.cpp.obj" "gcc" "frontend/CMakeFiles/FrontendWidgets.dir/pages/UploadPage/UploadPage.cpp.obj.d"
   "D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/MainWindow.cpp" "frontend/CMakeFiles/FrontendWidgets.dir/widgets/MainWindow.cpp.obj" "gcc" "frontend/CMakeFiles/FrontendWidgets.dir/widgets/MainWindow.cpp.obj.d"
+  "D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/VideoOpenGLWidget.cpp" "frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoOpenGLWidget.cpp.obj" "gcc" "frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoOpenGLWidget.cpp.obj.d"
   "D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/VideoPlayerWindow.cpp" "frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoPlayerWindow.cpp.obj" "gcc" "frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoPlayerWindow.cpp.obj.d"
   )
 

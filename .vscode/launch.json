@@ -6,7 +6,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/bin/QtFrontend.exe",
-            "cwd": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}/build/bin",
             "MIMode": "gdb"
         }
     ]

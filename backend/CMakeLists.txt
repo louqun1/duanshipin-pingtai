@@ -211,7 +211,9 @@ target_include_directories(ServoBackend
 target_link_libraries(ServoBackend
     PUBLIC
         Qt6::Core
+        Qt6::Gui
         Qt6::Sql
+        Qt6::Widgets
         SDL2::SDL2
         FFmpeg::avcodec
         FFmpeg::avformat

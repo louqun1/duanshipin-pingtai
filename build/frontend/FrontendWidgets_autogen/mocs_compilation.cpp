@@ -5,4 +5,5 @@
 #include "GFNKSLTE7T/moc_StreamPage.cpp"
 #include "25PZRF2NDA/moc_UploadPage.cpp"
 #include "IMAN36LHMA/moc_MainWindow.cpp"
+#include "IMAN36LHMA/moc_VideoOpenGLWidget.cpp"
 #include "IMAN36LHMA/moc_VideoPlayerWindow.cpp"

@@ -1,6 +1,7 @@
 D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend/ServoBackend_autogen/BM62KR6TPJ/moc_PlayerController.cpp: D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playercontroller/service/PlayerController.hpp \
   D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend/ServoBackend_autogen/moc_predefs.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QObject \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPointer \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q17memory.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20functional.h \
@@ -62,10 +63,14 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend/ServoBackend_autoge
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qobjectdefs_impl.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qoverload.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpair.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpointer.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qprocessordetection.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qrefcount.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qscopedpointer.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qscopeguard.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qshareddata.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qsharedpointer.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qsharedpointer_impl.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstdlibdetection.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstring.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstringalgorithms.h \

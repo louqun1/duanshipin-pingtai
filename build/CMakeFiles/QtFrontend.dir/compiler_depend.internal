@@ -9,6 +9,7 @@ CMakeFiles/QtFrontend.dir/app/bootstrap/AppBootstrap.cpp.obj
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QDateTime
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QDir
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QObject
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPointer
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QStandardPaths
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q17memory.h
@@ -94,6 +95,7 @@ CMakeFiles/QtFrontend.dir/app/bootstrap/AppBootstrap.cpp.obj
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qoverload.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpair.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpoint.h
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpointer.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qprocessordetection.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qrect.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qrefcount.h
@@ -1522,6 +1524,22 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/build/QtFrontend_autogen/timestam
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6GuiTools/Qt6GuiToolsTargets-relwithdebinfo.cmake
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6GuiTools/Qt6GuiToolsTargets.cmake
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6GuiTools/Qt6GuiToolsVersionlessTargets.cmake
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLAdditionalTargetInfo.cmake
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLConfig.cmake
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLConfigVersion.cmake
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLConfigVersionImpl.cmake
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLDependencies.cmake
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLTargets-relwithdebinfo.cmake
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLTargets.cmake
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLVersionlessAliasTargets.cmake
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsAdditionalTargetInfo.cmake
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfig.cmake
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfigVersion.cmake
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfigVersionImpl.cmake
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsDependencies.cmake
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsTargets-relwithdebinfo.cmake
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsTargets.cmake
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsVersionlessAliasTargets.cmake
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QIBaseDriverPluginAdditionalTargetInfo.cmake
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QIBaseDriverPluginConfig.cmake
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Sql/Qt6QIBaseDriverPluginTargets-relwithdebinfo.cmake

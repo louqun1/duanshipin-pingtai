@@ -326,6 +326,11 @@ backend/CMakeFiles/ServoBackend.dir/playercontroller/service/PlayerController.cp
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/chrono.h \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/ratio \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/ctime \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPointer \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpointer.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qsharedpointer.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qshareddata.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qsharedpointer_impl.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstring.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playerEngine/IjkMediaPlayer.hpp \
@@ -592,4 +597,69 @@ backend/CMakeFiles/ServoBackend.dir/playercontroller/service/PlayerController.cp
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/packet.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/version.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QByteArray \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qbytearray.h
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qbytearray.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QDebug \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdebug.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtextstream.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcontiguouscache.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/climits \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/set \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_set.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_multiset.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/unordered_set \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/unordered_set.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qmap.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qshareddata_impl.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qset.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qhash.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qvarlengtharray.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qalloc.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QMetaObject \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qobjectdefs.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QWidget \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qwidget.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qtwidgetsglobal.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qtguiglobal.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qtgui-config.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qtguiexports.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qtwidgets-config.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qtwidgetsexports.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qwindowdefs.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qwindowdefs_win.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qobject.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qmargins.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcheckedint_impl.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q23utility.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20utility.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qaction.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qkeysequence.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qicon.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qsize.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpixmap.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpaintdevice.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qrect.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpoint.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qcolor.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qrgb.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qrgba64.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qimage.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpixelformat.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qtransform.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpolygon.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qregion.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qspan.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/cassert \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20iterator.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qline.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qvariant.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdebug.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpalette.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qbrush.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qfont.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qendian.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qfontmetrics.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qfontinfo.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qfontvariableaxis.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qsizepolicy.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qcursor.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qbitmap.h

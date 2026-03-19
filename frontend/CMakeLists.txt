@@ -1,6 +1,8 @@
 add_library(FrontendWidgets
     widgets/MainWindow.hpp
     widgets/MainWindow.cpp
+    widgets/VideoOpenGLWidget.hpp
+    widgets/VideoOpenGLWidget.cpp
     widgets/VideoPlayerWindow.hpp
     widgets/VideoPlayerWindow.cpp
     components/VideoCard/VideoCard.hpp
@@ -25,4 +27,5 @@ target_link_libraries(FrontendWidgets
         ServoBackend
     PUBLIC
         Qt6::Widgets
+        Qt6::OpenGLWidgets
 )

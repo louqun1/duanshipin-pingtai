@@ -3,6 +3,7 @@
 
 backend/ServoBackend_autogen/timestamp: D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QDateTime \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QObject \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPointer \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q17memory.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20functional.h \
@@ -74,6 +75,7 @@ backend/ServoBackend_autogen/timestamp: D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/incl
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qobjectdefs_impl.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qoverload.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpair.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpointer.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qprocessordetection.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qrefcount.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qscopedpointer.h \
@@ -614,6 +616,7 @@ backend/ServoBackend_autogen/timestamp: D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/incl
 backend/CMakeFiles/ServoBackend.dir/ServoBackend_autogen/mocs_compilation.cpp.obj: backend/ServoBackend_autogen/mocs_compilation.cpp \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QDateTime \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QObject \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPointer \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q17memory.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20algorithm.h \
@@ -686,6 +689,7 @@ backend/CMakeFiles/ServoBackend.dir/ServoBackend_autogen/mocs_compilation.cpp.ob
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qobjectdefs_impl.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qoverload.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpair.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpointer.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qprocessordetection.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qrefcount.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qscopedpointer.h \
@@ -4960,14 +4964,21 @@ backend/CMakeFiles/ServoBackend.dir/playerEngine/ff_ffplay_def.cpp.obj: D:/itffm
 
 backend/CMakeFiles/ServoBackend.dir/playercontroller/service/PlayerController.cpp.obj: D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playercontroller/service/PlayerController.cpp \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QByteArray \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QDebug \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QMetaObject \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QObject \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPointer \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q17memory.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20functional.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20iterator.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20memory.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20type_traits.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20utility.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q23type_traits.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q23utility.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qalgorithms.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qalloc.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qanystringview.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qarraydata.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qarraydataops.h \
@@ -4982,6 +4993,7 @@ backend/CMakeFiles/ServoBackend.dir/playercontroller/service/PlayerController.cp
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qbytearraylist.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qbytearrayview.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qchar.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcheckedint_impl.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcompare.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcompare_impl.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcomparehelpers.h \
@@ -4991,8 +5003,11 @@ backend/CMakeFiles/ServoBackend.dir/playercontroller/service/PlayerController.cp
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcontainerfwd.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcontainerinfo.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcontainertools_impl.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcontiguouscache.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdarwinhelpers.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdatastream.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdebug.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qendian.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qexceptionhandling.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qflags.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qfloat16.h \
@@ -5002,14 +5017,18 @@ backend/CMakeFiles/ServoBackend.dir/playercontroller/service/PlayerController.cp
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qgenericatomic.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qglobal.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qglobalstatic.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qhash.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qhashfunctions.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qiodevicebase.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qiterable.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qiterator.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qlatin1stringview.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qline.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qlist.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qlogging.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qmalloc.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qmap.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qmargins.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qmath.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qmetacontainer.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qmetatype.h \
@@ -5022,10 +5041,20 @@ backend/CMakeFiles/ServoBackend.dir/playercontroller/service/PlayerController.cp
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qobjectdefs_impl.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qoverload.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpair.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpoint.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpointer.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qprocessordetection.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qrect.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qrefcount.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qscopedpointer.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qscopeguard.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qset.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qshareddata.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qshareddata_impl.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qsharedpointer.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qsharedpointer_impl.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qsize.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qspan.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstdlibdetection.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstring.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstringalgorithms.h \
@@ -5050,6 +5079,7 @@ backend/CMakeFiles/ServoBackend.dir/playercontroller/service/PlayerController.cp
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtdeprecationdefinitions.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtdeprecationmarkers.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtenvironmentvariables.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtextstream.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtformat_impl.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtmetamacros.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtnoop.h \
@@ -5062,9 +5092,43 @@ backend/CMakeFiles/ServoBackend.dir/playercontroller/service/PlayerController.cp
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtypeinfo.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtypes.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qutf8stringview.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qvariant.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qvarlengtharray.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qversiontagging.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qxptype_traits.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qyieldcpu.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qaction.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qbitmap.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qbrush.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qcolor.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qcursor.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qfont.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qfontinfo.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qfontmetrics.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qfontvariableaxis.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qicon.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qimage.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qkeysequence.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpaintdevice.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpalette.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpixelformat.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpixmap.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpolygon.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qregion.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qrgb.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qrgba64.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qtgui-config.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qtguiexports.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qtguiglobal.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qtransform.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qwindowdefs.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qwindowdefs_win.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QWidget \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qsizepolicy.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qtwidgets-config.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qtwidgetsexports.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qtwidgetsglobal.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qwidget.h \
   D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/SDL2/SDL.h \
   D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/SDL2/SDL_assert.h \
   D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/SDL2/SDL_atomic.h \
@@ -5303,10 +5367,12 @@ backend/CMakeFiles/ServoBackend.dir/playercontroller/service/PlayerController.cp
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_list.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_map.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_multimap.h \
+  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_multiset.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_numeric.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_pair.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_raw_storage_iter.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_relops.h \
+  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_set.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_tempbuf.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_tree.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_uninitialized.h \
@@ -5321,14 +5387,17 @@ backend/CMakeFiles/ServoBackend.dir/playercontroller/service/PlayerController.cp
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/unique_lock.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/unique_ptr.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/unordered_map.h \
+  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/unordered_set.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/uses_allocator.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/uses_allocator_args.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/utility.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/vector.tcc \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/version.h \
+  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/cassert \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/cctype \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/cerrno \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/chrono \
+  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/climits \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/clocale \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/cmath \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/compare \
@@ -5371,6 +5440,7 @@ backend/CMakeFiles/ServoBackend.dir/playercontroller/service/PlayerController.cp
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/pstl/glue_numeric_defs.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/pstl/pstl_config.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/ratio \
+  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/set \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/stdexcept \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/stdlib.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/streambuf \
@@ -5394,6 +5464,7 @@ backend/CMakeFiles/ServoBackend.dir/playercontroller/service/PlayerController.cp
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/type_traits \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/typeinfo \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/unordered_map \
+  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/unordered_set \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/utility \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/variant \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/vector \
@@ -5916,15 +5987,17 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qfunctionpointer.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/wmmintrin.h:
 
+D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/ia32intrin.h:
+
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/parseutils.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/cstdint:
 
-D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/ia32intrin.h:
-
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QObject:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcompare.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qimage.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q17memory.h:
 
@@ -5933,6 +6006,12 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcryptographichash.h:
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qglobal.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString:
+
+D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/sinks/sink.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPointer:
+
+D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/basic_string.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20memory.h:
 
@@ -5955,6 +6034,8 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcontiguouscache.h:
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/locale_facets.tcc:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20type_traits.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qrgba64.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/securitybaseapi.h:
 
@@ -6176,6 +6257,8 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/infrastructure/database/S
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/SDL2/SDL_joystick.h:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qtwidgetsglobal.h:
+
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qlocale.h:
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libswscale/swscale.h:
@@ -6191,6 +6274,8 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qmath.h:
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qmetatype.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/clocale:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qline.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/cstring:
 
@@ -6231,6 +6316,16 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/details/console_globals.h:
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/time.h:
+
+D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/details/log_msg_buffer.h:
+
+D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/error.h:
+
+D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/processenv.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpointer.h:
+
+D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/SDL2/SDL_keyboard.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/virtdisk.h:
 
@@ -6337,6 +6432,8 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtdeprecationmarkers.h:
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/ostream_insert.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtenvironmentvariables.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qmargins.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtextstream.h:
 
@@ -6464,14 +6561,6 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/SDL2/SDL_hints.h:
 
-D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/details/log_msg_buffer.h:
-
-D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/error.h:
-
-D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/processenv.h:
-
-D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/SDL2/SDL_keyboard.h:
-
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/stdexcept:
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/SDL2/SDL_keycode.h:
@@ -6519,6 +6608,8 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/SDL2/SDL_quit.h:
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/SDL2/SDL_rect.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qtwidgetsexports.h:
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/SDL2/SDL_render.h:
 
@@ -6588,6 +6679,8 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/x86_64-w64-mingw32/bits/gthr.h:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qwindowdefs.h:
+
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/samplefmt.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/unordered_map:
@@ -6640,6 +6733,8 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/dict.h:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qsizepolicy.h:
+
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/hwcontext.h:
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/imgutils.h:
@@ -6653,6 +6748,8 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/log.h:
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/mathematics.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qrect.h:
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/mem.h:
 
@@ -6836,6 +6933,8 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_bvector.h:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpaintdevice.h:
+
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/avx512vpopcntdqintrin.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/backward/auto_ptr.h:
@@ -6860,6 +6959,8 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtmocconstants.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/bmiintrin.h:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qfontinfo.h:
+
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/atomic:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/backward/binders.h:
@@ -6875,10 +6976,6 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/allocator.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/atomic_base.h:
-
-D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/sinks/sink.h:
-
-D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/basic_string.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/char_traits.h:
 
@@ -6929,6 +7026,8 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/hash_bytes.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/ios_base.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qicon.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/list.tcc:
 
@@ -7015,6 +7114,8 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/mutex:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/streambuf_iterator.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qtgui-config.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/x86_64-w64-mingw32/bits/time_members.h:
 
@@ -7266,6 +7367,8 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/setjmp.h:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcheckedint_impl.h:
+
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/swprintf.inl:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/sys/timeb.h:
@@ -7370,6 +7473,8 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/istream:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qwidget.h:
+
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/locale:
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/spdlog/fmt/bundled/format.h:
@@ -7434,6 +7539,8 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/concurrencysal.h:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qtransform.h:
+
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/consoleapi.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/consoleapi2.h:
@@ -7445,6 +7552,8 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/driverspecs.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/errhandlingapi.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qtguiglobal.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/fibersapi.h:
 
@@ -7498,9 +7607,13 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/wincontypes.h:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qregion.h:
+
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/windows.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/winreg.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpalette.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/winsvc.h:
 
@@ -7509,3 +7622,45 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/winver.h:
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playerEngine/sonic.hpp:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QDebug:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QMetaObject:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpoint.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qsize.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qaction.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qbitmap.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qbrush.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qcolor.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qcursor.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qfont.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qfontmetrics.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qtwidgets-config.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qfontvariableaxis.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qkeysequence.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpixelformat.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpixmap.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpolygon.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qrgb.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qtguiexports.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qwindowdefs_win.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QWidget:
