@@ -457,6 +457,8 @@ frontend/CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/mocs_compilation
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qobject.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPointer \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpointer.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QtGlobal \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qglobal.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playerEngine/IjkMediaPlayer.hpp \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/mutex \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/std_mutex.h \

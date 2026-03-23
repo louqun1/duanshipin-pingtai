@@ -333,6 +333,8 @@ backend/CMakeFiles/ServoBackend.dir/playercontroller/service/PlayerController.cp
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qsharedpointer_impl.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstring.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QtGlobal \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qglobal.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playerEngine/IjkMediaPlayer.hpp \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/mutex \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/std_mutex.h \
@@ -616,6 +618,13 @@ backend/CMakeFiles/ServoBackend.dir/playercontroller/service/PlayerController.cp
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qalloc.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QMetaObject \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qobjectdefs.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QTimer \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtimer.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qbasictimer.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qabstracteventdispatcher.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qobject.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qeventloop.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdeadlinetimer.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QWidget \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qwidget.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -626,7 +635,6 @@ backend/CMakeFiles/ServoBackend.dir/playercontroller/service/PlayerController.cp
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qtwidgetsexports.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qwindowdefs.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qwindowdefs_win.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qobject.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qmargins.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcheckedint_impl.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q23utility.h \

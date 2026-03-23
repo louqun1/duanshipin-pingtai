@@ -4,6 +4,7 @@
 #include <QByteArray>
 #include <QDebug>
 #include <QMetaObject>
+#include <QTimer>
 #include <QtWidgets/QWidget>
 
 #include <cstring>
@@ -116,6 +117,11 @@ namespace backend::playercontroller::service
     PlayerController::PlayerController(QObject *parent)
         : QObject(parent)
     {
+        playbackProgressTimer_ = new QTimer(this);  //创建定时器，250ms触发一次，用于同步播放进度
+        playbackProgressTimer_->setInterval(250);
+        connect(playbackProgressTimer_, &QTimer::timeout,
+                this, &PlayerController::syncPlaybackProgress);
+        playbackProgressTimer_->start();    //启动定时器
     }
 
     PlayerController::~PlayerController()
@@ -148,6 +154,9 @@ namespace backend::playercontroller::service
         currentTitle_ = title;
         currentCreator_ = creator;
         currentDuration_ = duration;
+        seekInFlight_ = false;  //重置 seek 状态，取消任何未完成的 seek 操作，防止多次seek请求导致状态混乱
+        pendingSeekPositionMs_ = -1;    //重置待处理的 seek 位置(实际上是用来保存最后一次请求的 seek 位置)
+        updatePlaybackProgress(0, 0);
 
         emit mediaChanged(currentVideoId_, currentTitle_, currentCreator_, currentDuration_);
         updatePlaybackState(PlaybackState::Opening, QString("OpenMedia received for %1").arg(currentTitle_));
@@ -229,6 +238,37 @@ namespace backend::playercontroller::service
         }
     }
 
+    void PlayerController::requestSeek(int positionMs)
+    {
+        if (!hasMediaLoaded())
+        {
+            return;
+        }
+
+        if (!ijkPlayer_)
+        {
+            updatePlaybackState(PlaybackState::Error, QString("ijkPlayer is not available."));
+            return;
+        }
+
+        qint64 seekTargetMs = positionMs < 0 ? 0 : static_cast<qint64>(positionMs);
+        if (totalDurationMs_ > 0 && seekTargetMs > totalDurationMs_)
+        {
+            seekTargetMs = totalDurationMs_;
+        }
+
+        const int ret = ijkPlayer_->seekTo(static_cast<long>(seekTargetMs));
+        if (ret != 0)
+        {
+            updatePlaybackState(playbackState_, QString("Seek request was rejected by ijkPlayer."));
+            return;
+        }
+
+        seekInFlight_ = true;
+        pendingSeekPositionMs_ = seekTargetMs;
+        updatePlaybackProgress(seekTargetMs, totalDurationMs_);
+    }
+
     void PlayerController::requestStop()
     {
         if (!hasMediaLoaded())
@@ -272,6 +312,9 @@ namespace backend::playercontroller::service
         currentTitle_.clear();
         currentCreator_.clear();
         currentDuration_.clear();
+        seekInFlight_ = false;
+        pendingSeekPositionMs_ = -1;
+        updatePlaybackProgress(0, 0);
 
         if (playbackState_ != PlaybackState::Idle)
         {
@@ -283,6 +326,25 @@ namespace backend::playercontroller::service
     {
         playbackState_ = state;
         emit playbackStateChanged(playbackState_, message);
+    }
+
+    void PlayerController::updatePlaybackProgress(qint64 positionMs, qint64 durationMs)
+    {
+        if (positionMs < 0)
+            positionMs = 0;
+
+        if (durationMs < 0)
+            durationMs = 0;
+
+        if (durationMs > 0 && positionMs > durationMs)
+            positionMs = durationMs;
+
+        if (currentPositionMs_ == positionMs && totalDurationMs_ == durationMs)//如果没有变化，就不发出信号了
+            return;
+
+        currentPositionMs_ = positionMs;
+        totalDurationMs_ = durationMs;
+        emit playbackProgressChanged(currentPositionMs_, totalDurationMs_);
     }
 
     void PlayerController::ensureIjkPlayerCreated()
@@ -356,6 +418,23 @@ namespace backend::playercontroller::service
                 },
                 Qt::QueuedConnection);
         };
+        auto queueProgressSync = [this]() {
+            QMetaObject::invokeMethod(
+                this,
+                [this]() {
+                    syncPlaybackProgress();
+                },
+                Qt::QueuedConnection);
+        };
+        auto queueSeekStateReset = [this]() {
+            QMetaObject::invokeMethod(
+                this,
+                [this]() {
+                    seekInFlight_ = false;
+                    pendingSeekPositionMs_ = -1;
+                },
+                Qt::QueuedConnection);
+        };
 
         switch (event)
         {
@@ -366,30 +445,70 @@ namespace backend::playercontroller::service
         case media::PlayerEvent::Prepared:
             queuePlaybackStateUpdate(PlaybackState::Prepared,
                                      QString("Media prepared. Ready to play."));
+            queueProgressSync();
             break;
         case media::PlayerEvent::Playing:
             queuePlaybackStateUpdate(PlaybackState::Playing,
                                      QString("Playback is running."));
+            queueProgressSync();
             break;
         case media::PlayerEvent::Paused:
             queuePlaybackStateUpdate(PlaybackState::Paused,
                                      QString("Playback paused."));
+            queueProgressSync();
             break;
         case media::PlayerEvent::Stopped:
             queuePlaybackStateUpdate(PlaybackState::Stopped,
                                      QString("Playback stopped."));
+            queueProgressSync();
+            break;
+        case media::PlayerEvent::SeekCompleted:
+            queueSeekStateReset();
+            queueProgressSync();
             break;
         case media::PlayerEvent::PlaybackFinished:
             queuePlaybackStateUpdate(PlaybackState::Stopped,
                                      QString("Playback finished."));
+            queueSeekStateReset();
+            queueProgressSync();
             break;
         case media::PlayerEvent::ErrorOccurred:
             queuePlaybackStateUpdate(PlaybackState::Error,
                                      QString("ijkPlayer reported an error (%1).").arg(arg1));
+            queueSeekStateReset();
             break;
         default:
             break;
         }
+    }
+
+    void PlayerController::syncPlaybackProgress()
+    {
+        if (!ijkPlayer_ || !ijkPlayerCreated_ || !hasMediaLoaded())
+        {
+            updatePlaybackProgress(0, 0);
+            return;
+        }
+
+        if (seekInFlight_)
+        {
+            updatePlaybackProgress(pendingSeekPositionMs_ >= 0 ? pendingSeekPositionMs_ : currentPositionMs_,
+                                   totalDurationMs_);
+            return;
+        }
+
+        qint64 durationMs = static_cast<qint64>(ijkPlayer_->getDuration());
+        qint64 positionMs = static_cast<qint64>(ijkPlayer_->getCurrentPosition());
+        if (durationMs < 0)
+        {
+            durationMs = 0;
+        }
+        if (positionMs < 0)
+        {
+            positionMs = 0;
+        }
+
+        updatePlaybackProgress(positionMs, durationMs);
     }
 
     int PlayerController::handleVideoFrame(const Frame *frame)

@@ -49,6 +49,9 @@ template <> constexpr inline auto backend::playercontroller::service::PlayerCont
         "PlaybackState",
         "state",
         "message",
+        "playbackProgressChanged",
+        "positionMs",
+        "durationMs",
         "ijkPlayerCreated",
         "ijkPlayerOpenRequested",
         "attachVideoSurface",
@@ -58,6 +61,7 @@ template <> constexpr inline auto backend::playercontroller::service::PlayerCont
         "requestPlay",
         "requestPause",
         "requestTogglePlayback",
+        "requestSeek",
         "requestStop",
         "releasePlaybackResources",
         "Idle",
@@ -78,43 +82,51 @@ template <> constexpr inline auto backend::playercontroller::service::PlayerCont
         QtMocHelpers::SignalData<void(enum PlaybackState, const QString &)>(7, 2, QMC::AccessPublic, QMetaType::Void, {{
             { 0x80000000 | 8, 9 }, { QMetaType::QString, 10 },
         }}),
+        // Signal 'playbackProgressChanged'
+        QtMocHelpers::SignalData<void(qint64, qint64)>(11, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::LongLong, 12 }, { QMetaType::LongLong, 13 },
+        }}),
         // Signal 'ijkPlayerCreated'
-        QtMocHelpers::SignalData<void()>(11, 2, QMC::AccessPublic, QMetaType::Void),
+        QtMocHelpers::SignalData<void()>(14, 2, QMC::AccessPublic, QMetaType::Void),
         // Signal 'ijkPlayerOpenRequested'
-        QtMocHelpers::SignalData<void(const QString &, const QString &)>(12, 2, QMC::AccessPublic, QMetaType::Void, {{
+        QtMocHelpers::SignalData<void(const QString &, const QString &)>(15, 2, QMC::AccessPublic, QMetaType::Void, {{
             { QMetaType::QString, 3 }, { QMetaType::QString, 4 },
         }}),
         // Slot 'attachVideoSurface'
-        QtMocHelpers::SlotData<void(QWidget *)>(13, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { 0x80000000 | 14, 15 },
+        QtMocHelpers::SlotData<void(QWidget *)>(16, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { 0x80000000 | 17, 18 },
         }}),
         // Slot 'openMedia'
-        QtMocHelpers::SlotData<void(const QString &, const QString &, const QString &, const QString &)>(16, 2, QMC::AccessPublic, QMetaType::Void, {{
+        QtMocHelpers::SlotData<void(const QString &, const QString &, const QString &, const QString &)>(19, 2, QMC::AccessPublic, QMetaType::Void, {{
             { QMetaType::QString, 3 }, { QMetaType::QString, 4 }, { QMetaType::QString, 5 }, { QMetaType::QString, 6 },
         }}),
         // Slot 'requestPlay'
-        QtMocHelpers::SlotData<void()>(17, 2, QMC::AccessPublic, QMetaType::Void),
-        // Slot 'requestPause'
-        QtMocHelpers::SlotData<void()>(18, 2, QMC::AccessPublic, QMetaType::Void),
-        // Slot 'requestTogglePlayback'
-        QtMocHelpers::SlotData<void()>(19, 2, QMC::AccessPublic, QMetaType::Void),
-        // Slot 'requestStop'
         QtMocHelpers::SlotData<void()>(20, 2, QMC::AccessPublic, QMetaType::Void),
-        // Slot 'releasePlaybackResources'
+        // Slot 'requestPause'
         QtMocHelpers::SlotData<void()>(21, 2, QMC::AccessPublic, QMetaType::Void),
+        // Slot 'requestTogglePlayback'
+        QtMocHelpers::SlotData<void()>(22, 2, QMC::AccessPublic, QMetaType::Void),
+        // Slot 'requestSeek'
+        QtMocHelpers::SlotData<void(int)>(23, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::Int, 12 },
+        }}),
+        // Slot 'requestStop'
+        QtMocHelpers::SlotData<void()>(24, 2, QMC::AccessPublic, QMetaType::Void),
+        // Slot 'releasePlaybackResources'
+        QtMocHelpers::SlotData<void()>(25, 2, QMC::AccessPublic, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
     QtMocHelpers::UintData qt_enums {
         // enum 'PlaybackState'
         QtMocHelpers::EnumData<enum PlaybackState>(8, 8, QMC::EnumIsScoped).add({
-            {   22, PlaybackState::Idle },
-            {   23, PlaybackState::Opening },
-            {   24, PlaybackState::Prepared },
-            {   25, PlaybackState::Playing },
-            {   26, PlaybackState::Paused },
-            {   27, PlaybackState::Stopped },
-            {   28, PlaybackState::Error },
+            {   26, PlaybackState::Idle },
+            {   27, PlaybackState::Opening },
+            {   28, PlaybackState::Prepared },
+            {   29, PlaybackState::Playing },
+            {   30, PlaybackState::Paused },
+            {   31, PlaybackState::Stopped },
+            {   32, PlaybackState::Error },
         }),
     };
     return QtMocHelpers::metaObjectData<PlayerController, qt_meta_tag_ZN7backend16playercontroller7service16PlayerControllerE_t>(QMC::MetaObjectFlag{}, qt_stringData,
@@ -137,15 +149,17 @@ void backend::playercontroller::service::PlayerController::qt_static_metacall(QO
         switch (_id) {
         case 0: _t->mediaChanged((*reinterpret_cast<std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[2])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[3])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[4]))); break;
         case 1: _t->playbackStateChanged((*reinterpret_cast<std::add_pointer_t<enum PlaybackState>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[2]))); break;
-        case 2: _t->ijkPlayerCreated(); break;
-        case 3: _t->ijkPlayerOpenRequested((*reinterpret_cast<std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[2]))); break;
-        case 4: _t->attachVideoSurface((*reinterpret_cast<std::add_pointer_t<QWidget*>>(_a[1]))); break;
-        case 5: _t->openMedia((*reinterpret_cast<std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[2])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[3])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[4]))); break;
-        case 6: _t->requestPlay(); break;
-        case 7: _t->requestPause(); break;
-        case 8: _t->requestTogglePlayback(); break;
-        case 9: _t->requestStop(); break;
-        case 10: _t->releasePlaybackResources(); break;
+        case 2: _t->playbackProgressChanged((*reinterpret_cast<std::add_pointer_t<qint64>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<qint64>>(_a[2]))); break;
+        case 3: _t->ijkPlayerCreated(); break;
+        case 4: _t->ijkPlayerOpenRequested((*reinterpret_cast<std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[2]))); break;
+        case 5: _t->attachVideoSurface((*reinterpret_cast<std::add_pointer_t<QWidget*>>(_a[1]))); break;
+        case 6: _t->openMedia((*reinterpret_cast<std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[2])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[3])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[4]))); break;
+        case 7: _t->requestPlay(); break;
+        case 8: _t->requestPause(); break;
+        case 9: _t->requestTogglePlayback(); break;
+        case 10: _t->requestSeek((*reinterpret_cast<std::add_pointer_t<int>>(_a[1]))); break;
+        case 11: _t->requestStop(); break;
+        case 12: _t->releasePlaybackResources(); break;
         default: ;
         }
     }
@@ -154,9 +168,11 @@ void backend::playercontroller::service::PlayerController::qt_static_metacall(QO
             return;
         if (QtMocHelpers::indexOfMethod<void (PlayerController::*)(PlaybackState , const QString & )>(_a, &PlayerController::playbackStateChanged, 1))
             return;
-        if (QtMocHelpers::indexOfMethod<void (PlayerController::*)()>(_a, &PlayerController::ijkPlayerCreated, 2))
+        if (QtMocHelpers::indexOfMethod<void (PlayerController::*)(qint64 , qint64 )>(_a, &PlayerController::playbackProgressChanged, 2))
             return;
-        if (QtMocHelpers::indexOfMethod<void (PlayerController::*)(const QString & , const QString & )>(_a, &PlayerController::ijkPlayerOpenRequested, 3))
+        if (QtMocHelpers::indexOfMethod<void (PlayerController::*)()>(_a, &PlayerController::ijkPlayerCreated, 3))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (PlayerController::*)(const QString & , const QString & )>(_a, &PlayerController::ijkPlayerOpenRequested, 4))
             return;
     }
 }
@@ -180,14 +196,14 @@ int backend::playercontroller::service::PlayerController::qt_metacall(QMetaObjec
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 11)
+        if (_id < 13)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 11;
+        _id -= 13;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 11)
+        if (_id < 13)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 11;
+        _id -= 13;
     }
     return _id;
 }
@@ -205,14 +221,20 @@ void backend::playercontroller::service::PlayerController::playbackStateChanged(
 }
 
 // SIGNAL 2
-void backend::playercontroller::service::PlayerController::ijkPlayerCreated()
+void backend::playercontroller::service::PlayerController::playbackProgressChanged(qint64 _t1, qint64 _t2)
 {
-    QMetaObject::activate(this, &staticMetaObject, 2, nullptr);
+    QMetaObject::activate<void>(this, &staticMetaObject, 2, nullptr, _t1, _t2);
 }
 
 // SIGNAL 3
+void backend::playercontroller::service::PlayerController::ijkPlayerCreated()
+{
+    QMetaObject::activate(this, &staticMetaObject, 3, nullptr);
+}
+
+// SIGNAL 4
 void backend::playercontroller::service::PlayerController::ijkPlayerOpenRequested(const QString & _t1, const QString & _t2)
 {
-    QMetaObject::activate<void>(this, &staticMetaObject, 3, nullptr, _t1, _t2);
+    QMetaObject::activate<void>(this, &staticMetaObject, 4, nullptr, _t1, _t2);
 }
 QT_WARNING_POP

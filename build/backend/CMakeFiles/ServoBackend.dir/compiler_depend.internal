@@ -6,6 +6,7 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend/ServoBackend_autoge
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QObject
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPointer
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QtGlobal
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q17memory.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20functional.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20memory.h
@@ -620,6 +621,7 @@ backend/CMakeFiles/ServoBackend.dir/ServoBackend_autogen/mocs_compilation.cpp.ob
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QObject
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPointer
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QtGlobal
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q17memory.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20algorithm.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20functional.h
@@ -4981,6 +4983,8 @@ backend/CMakeFiles/ServoBackend.dir/playercontroller/service/PlayerController.cp
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QObject
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPointer
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QTimer
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QtGlobal
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q17memory.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20functional.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20iterator.h
@@ -4989,6 +4993,7 @@ backend/CMakeFiles/ServoBackend.dir/playercontroller/service/PlayerController.cp
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20utility.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q23type_traits.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q23utility.h
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qabstracteventdispatcher.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qalgorithms.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qalloc.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qanystringview.h
@@ -4999,6 +5004,7 @@ backend/CMakeFiles/ServoBackend.dir/playercontroller/service/PlayerController.cp
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qatomic.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qatomic_cxx11.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qbasicatomic.h
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qbasictimer.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qbindingstorage.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qbytearray.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qbytearrayalgorithms.h
@@ -5018,8 +5024,10 @@ backend/CMakeFiles/ServoBackend.dir/playercontroller/service/PlayerController.cp
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcontiguouscache.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdarwinhelpers.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdatastream.h
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdeadlinetimer.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdebug.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qendian.h
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qeventloop.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qexceptionhandling.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qflags.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qfloat16.h
@@ -5093,6 +5101,7 @@ backend/CMakeFiles/ServoBackend.dir/playercontroller/service/PlayerController.cp
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtenvironmentvariables.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtextstream.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtformat_impl.h
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtimer.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtmetamacros.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtnoop.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtpreprocessorsupport.h

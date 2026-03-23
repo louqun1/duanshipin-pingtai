@@ -430,6 +430,8 @@ frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoPlayerWindow.cpp.obj: \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpointer.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstring.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QtGlobal \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qglobal.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playerEngine/IjkMediaPlayer.hpp \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/mutex \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/std_mutex.h \
@@ -741,4 +743,8 @@ frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoPlayerWindow.cpp.obj: \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QPushButton \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qpushbutton.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qabstractbutton.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSignalBlocker \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QSlider \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qslider.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qabstractslider.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QVBoxLayout

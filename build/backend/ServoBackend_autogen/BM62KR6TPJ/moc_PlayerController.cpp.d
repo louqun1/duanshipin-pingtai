@@ -3,6 +3,7 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend/ServoBackend_autoge
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QObject \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPointer \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QtGlobal \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q17memory.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20functional.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20memory.h \

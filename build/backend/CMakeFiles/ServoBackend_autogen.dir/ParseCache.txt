@@ -361,6 +361,7 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playercontroller/service/
  mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QObject
  mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPointer
  mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString
+ mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QtGlobal
  mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q17memory.h
  mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20functional.h
  mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20memory.h

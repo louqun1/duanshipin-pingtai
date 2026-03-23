@@ -7,6 +7,7 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/build/frontend/FrontendWidgets_au
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSize \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSizeF \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QtGlobal \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q17memory.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20functional.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20iterator.h \

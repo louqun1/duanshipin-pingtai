@@ -10,6 +10,7 @@ class QLabel;
 class QPushButton;
 class QWidget;
 class QFrame;
+class QSlider;
 class VideoOpenGLWidget;
 
 class VideoPlayerWindow final : public QWidget
@@ -32,15 +33,20 @@ private:
     void buildUi();
     void connectPlayerController();
     void showEmptyState();
+    void updateProgressDisplay(int positionMs, int durationMs);
 
     backend::playercontroller::service::PlayerController &playerController_;
     QFrame *playerSurface_ = nullptr;
     VideoOpenGLWidget *videoSurfaceWidget_ = nullptr;
     QLabel *playerTitleLabel_ = nullptr;
     QLabel *playerHintLabel_ = nullptr;
+    QLabel *currentTimeLabel_ = nullptr;
+    QLabel *durationTimeLabel_ = nullptr;
     QLabel *videoTitleLabel_ = nullptr;
     QLabel *videoMetaLabel_ = nullptr;
     QLabel *videoDescriptionLabel_ = nullptr;
     QLabel *queueLabel_ = nullptr;
+    QSlider *progressSlider_ = nullptr;
     QPushButton *playButton_ = nullptr;
+    bool isSliderScrubbing_ = false;
 };

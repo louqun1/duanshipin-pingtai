@@ -7,9 +7,56 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPushButton>
+#include <QSignalBlocker>
+#include <QSlider>
 #include <QVBoxLayout>
 
+#include <limits>
+
 using PlaybackState = backend::playercontroller::service::PlayerController::PlaybackState;
+
+namespace
+{
+
+QString formatPlaybackTime(int totalMilliseconds)
+{
+    if (totalMilliseconds < 0)
+    {
+        totalMilliseconds = 0;
+    }
+
+    const int totalSeconds = totalMilliseconds / 1000;
+    const int hours = totalSeconds / 3600;
+    const int minutes = (totalSeconds % 3600) / 60;
+    const int seconds = totalSeconds % 60;
+
+    if (hours > 0)
+    {
+        return QString("%1:%2:%3")
+            .arg(hours)
+            .arg(minutes, 2, 10, QLatin1Char('0'))
+            .arg(seconds, 2, 10, QLatin1Char('0'));
+    }
+
+    return QString("%1:%2")
+        .arg(minutes, 2, 10, QLatin1Char('0'))
+        .arg(seconds, 2, 10, QLatin1Char('0'));
+}
+
+int clampSliderValue(qint64 value)
+{
+    if (value < 0)
+    {
+        return 0;
+    }
+    if (value > std::numeric_limits<int>::max())
+    {
+        return std::numeric_limits<int>::max();
+    }
+    return static_cast<int>(value);
+}
+
+} // namespace
 
 VideoPlayerWindow::VideoPlayerWindow(
     backend::playercontroller::service::PlayerController &playerController,
@@ -33,6 +80,8 @@ void VideoPlayerWindow::showSelectedVideo(
     playerHintLabel_->setText(QString("Forwarding OpenMedia to PlayerController for %1.").arg(videoId));
     playButton_->setText("Opening...");
     playButton_->setEnabled(false);
+    progressSlider_->setEnabled(false);
+    updateProgressDisplay(0, 0);
 
     playerController_.openMedia(videoId, title, creator, duration);
 
@@ -69,40 +118,72 @@ void VideoPlayerWindow::connectPlayerController()
                     playerTitleLabel_->setText("No video selected yet");
                     playButton_->setText("Waiting for selection");
                     playButton_->setEnabled(false);
+                    progressSlider_->setEnabled(false);
                     break;
                 case PlaybackState::Opening:
                     playerTitleLabel_->setText("PlayerController is opening media");
                     playButton_->setText("Opening...");
                     playButton_->setEnabled(false);
+                    progressSlider_->setEnabled(false);
                     break;
                 case PlaybackState::Prepared:
                     playerTitleLabel_->setText("PlayerController prepared the media");
                     playButton_->setText("Play");
                     playButton_->setEnabled(true);
+                    progressSlider_->setEnabled(progressSlider_->maximum() > 0);
                     break;
                 case PlaybackState::Playing:
                     playerTitleLabel_->setText("Playback is running through PlayerController");
                     playButton_->setText("Pause");
                     playButton_->setEnabled(true);
+                    progressSlider_->setEnabled(progressSlider_->maximum() > 0);
                     break;
                 case PlaybackState::Paused:
                     playerTitleLabel_->setText("Playback paused");
                     playButton_->setText("Resume");
                     playButton_->setEnabled(true);
+                    progressSlider_->setEnabled(progressSlider_->maximum() > 0);
                     break;
                 case PlaybackState::Stopped:
                     playerTitleLabel_->setText("Playback stopped");
                     playButton_->setText("Play");
                     playButton_->setEnabled(true);
+                    progressSlider_->setEnabled(progressSlider_->maximum() > 0);
                     break;
                 case PlaybackState::Error:
                     playerTitleLabel_->setText("Playback error");
                     playButton_->setText("Retry");
                     playButton_->setEnabled(true);
+                    progressSlider_->setEnabled(false);
                     break;
                 }
 
                 playerHintLabel_->setText(message);
+            });
+
+    connect(&playerController_, &backend::playercontroller::service::PlayerController::playbackProgressChanged,
+            this, [this](qint64 positionMs, qint64 durationMs) {
+                const int sliderMaximum = clampSliderValue(durationMs);
+                const int sliderValue = clampSliderValue(positionMs);
+                const PlaybackState state = playerController_.playbackState();
+                const bool canSeek = sliderMaximum > 0 &&
+                                     (state == PlaybackState::Prepared ||
+                                      state == PlaybackState::Playing ||
+                                      state == PlaybackState::Paused ||
+                                      state == PlaybackState::Stopped);
+
+                {
+                    QSignalBlocker blocker(progressSlider_);
+                    progressSlider_->setRange(0, sliderMaximum);
+                    if (!isSliderScrubbing_)
+                    {
+                        progressSlider_->setValue(sliderValue);
+                    }
+                }
+
+                progressSlider_->setEnabled(canSeek);
+                updateProgressDisplay(isSliderScrubbing_ ? progressSlider_->value() : sliderValue,
+                                      sliderMaximum);
             });
 
     connect(&playerController_, &backend::playercontroller::service::PlayerController::ijkPlayerCreated,
@@ -118,6 +199,18 @@ void VideoPlayerWindow::connectPlayerController()
 
     connect(playButton_, &QPushButton::clicked,
             &playerController_, &backend::playercontroller::service::PlayerController::requestTogglePlayback);
+
+    connect(progressSlider_, &QSlider::sliderPressed, this, [this]() {
+        isSliderScrubbing_ = true;
+        updateProgressDisplay(progressSlider_->value(), progressSlider_->maximum());
+    });
+    connect(progressSlider_, &QSlider::sliderMoved, this, [this](int value) {
+        updateProgressDisplay(value, progressSlider_->maximum());
+    });
+    connect(progressSlider_, &QSlider::sliderReleased, this, [this]() {
+        isSliderScrubbing_ = false;
+        playerController_.requestSeek(progressSlider_->value());
+    });
 }
 
 void VideoPlayerWindow::buildUi()
@@ -167,6 +260,48 @@ void VideoPlayerWindow::buildUi()
     playerHintLabel_->setWordWrap(true);
     playerHintLabel_->setStyleSheet("font-size: 14px; color: rgba(248, 250, 252, 0.82);");
     playerLayout->addWidget(playerHintLabel_);
+
+    progressSlider_ = new QSlider(Qt::Horizontal, playerSurface_);
+    progressSlider_->setRange(0, 0);
+    progressSlider_->setEnabled(false);
+    progressSlider_->setCursor(Qt::PointingHandCursor);
+    progressSlider_->setStyleSheet(
+        "QSlider::groove:horizontal {"
+        "  height: 6px;"
+        "  border-radius: 3px;"
+        "  background: rgba(248, 250, 252, 0.24);"
+        "}"
+        "QSlider::sub-page:horizontal {"
+        "  border-radius: 3px;"
+        "  background: #f8fafc;"
+        "}"
+        "QSlider::handle:horizontal {"
+        "  width: 14px;"
+        "  margin: -5px 0;"
+        "  border-radius: 7px;"
+        "  background: #ffffff;"
+        "}"
+        "QSlider::add-page:horizontal {"
+        "  border-radius: 3px;"
+        "  background: rgba(248, 250, 252, 0.16);"
+        "}");
+    playerLayout->addWidget(progressSlider_);
+
+    auto *timeRow = new QHBoxLayout();
+    timeRow->setContentsMargins(0, 0, 0, 0);
+    timeRow->setSpacing(12);
+
+    currentTimeLabel_ = new QLabel("00:00", playerSurface_);
+    currentTimeLabel_->setStyleSheet("font-size: 12px; color: rgba(248, 250, 252, 0.82);");
+    timeRow->addWidget(currentTimeLabel_);
+
+    timeRow->addStretch();
+
+    durationTimeLabel_ = new QLabel("00:00", playerSurface_);
+    durationTimeLabel_->setStyleSheet("font-size: 12px; color: rgba(248, 250, 252, 0.82);");
+    timeRow->addWidget(durationTimeLabel_);
+
+    playerLayout->addLayout(timeRow);
     playerLayout->addStretch();
 
     auto *playerFooter = new QHBoxLayout();
@@ -255,4 +390,18 @@ void VideoPlayerWindow::showEmptyState()
         "What will fit here next\n1. ijkPlayer render output\n2. Playback progress and transport controls\n3. Related actions and comments");
     playButton_->setText("Waiting for selection");
     playButton_->setEnabled(false);
+    progressSlider_->setEnabled(false);
+    {
+        QSignalBlocker blocker(progressSlider_);
+        progressSlider_->setRange(0, 0);
+        progressSlider_->setValue(0);
+    }
+    isSliderScrubbing_ = false;
+    updateProgressDisplay(0, 0);
+}
+
+void VideoPlayerWindow::updateProgressDisplay(int positionMs, int durationMs)
+{
+    currentTimeLabel_->setText(formatPlaybackTime(positionMs));
+    durationTimeLabel_->setText(formatPlaybackTime(durationMs));
 }
