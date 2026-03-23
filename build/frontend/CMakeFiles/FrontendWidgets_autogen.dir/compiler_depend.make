@@ -153,8 +153,10 @@ frontend/FrontendWidgets_autogen/timestamp: D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qxptype_traits.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qyieldcpu.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QCloseEvent \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QKeyEvent \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QMatrix3x3 \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QOpenGLFunctions \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QResizeEvent \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QSurfaceFormat \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QTransform \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QVector3D \
@@ -335,6 +337,7 @@ frontend/FrontendWidgets_autogen/timestamp: D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/
   D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playercontroller/service/PlayerController.hpp \
   frontend/FrontendWidgets_autogen/moc_predefs.h \
   D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/CMakeLists.txt \
+  D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/FrontendWidgets.qrc \
   D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/components/VideoCard/VideoCard.cpp \
   D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/components/VideoCard/VideoCard.hpp \
   D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/AccountPage/AccountPage.cpp \
@@ -1081,6 +1084,8 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qnamespace.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/shared_ptr_atomic.h:
 
+D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/FrontendWidgets.qrc:
+
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qnativeinterface.h:
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/StreamPage/StreamPage.hpp:
@@ -1237,8 +1242,6 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qvarlengtharray.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtpreprocessorsupport.h:
 
-D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/cctype:
-
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtresource.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtversion.h:
@@ -1285,6 +1288,10 @@ D:/itffmpeg/cmake-4.2.3/bin/cmake.exe:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QCloseEvent:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QKeyEvent:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpalette.h:
+
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/ext/aligned_buffer.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QMatrix3x3:
@@ -1292,6 +1299,8 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QMatrix3x3:
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qinputmethod.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QOpenGLFunctions:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QResizeEvent:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QSurfaceFormat:
 
@@ -1362,8 +1371,6 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpaintdevice.h:
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/avx512vpopcntdqintrin.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/backward/auto_ptr.h:
-
-D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpalette.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpixelformat.h:
 
@@ -1894,6 +1901,8 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/version.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/cassert:
+
+D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/cctype:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/cerrno:
 

@@ -1430,6 +1430,9 @@
 		},
 		{
 			"path" : "frontend/CMakeLists.txt"
+		},
+		{
+			"path" : "frontend/FrontendWidgets.qrc"
 		}
 	],
 	"kind" : "cmakeFiles",

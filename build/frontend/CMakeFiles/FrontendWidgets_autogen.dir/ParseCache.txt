@@ -908,6 +908,8 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/VideoPlayerWindo
  mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qxptype_traits.h
  mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qyieldcpu.h
  mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QCloseEvent
+ mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QKeyEvent
+ mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QResizeEvent
  mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QTransform
  mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qaction.h
  mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qbitmap.h

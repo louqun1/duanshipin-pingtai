@@ -148,6 +148,8 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/build/frontend/FrontendWidgets_au
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qxptype_traits.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qyieldcpu.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QCloseEvent \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QKeyEvent \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QResizeEvent \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QTransform \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qaction.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qbitmap.h \

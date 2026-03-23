@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/player-controls">
+        <file alias="play.png">widgets/icon/play.png</file>
+        <file alias="pause.png">widgets/icon/pause.png</file>
+        <file alias="volume-low.png">widgets/icon/volume-low.png</file>
+        <file alias="volume-mid.png">widgets/icon/volume-mid.png</file>
+        <file alias="volume-high.png">widgets/icon/volume-high.png</file>
+        <file alias="volume-muted.png">widgets/icon/volume-muted.png</file>
+        <file alias="fullscreen.png">widgets/icon/fullscreen.png</file>
+    </qresource>
+</RCC>

@@ -714,6 +714,9 @@ frontend/CMakeFiles/FrontendWidgets.dir/widgets/MainWindow.cpp.obj: \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcoreapplication_platform.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qinputmethod.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qguiapplication_platform.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QKeyEvent \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QRect \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QResizeEvent \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QButtonGroup \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qbuttongroup.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QFrame \

@@ -725,26 +725,45 @@ frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoPlayerWindow.cpp.obj: \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qinputmethod.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qlocale.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qguiapplication_platform.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QKeyEvent \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QRect \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QResizeEvent \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QWidget \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QEvent \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcoreevent.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QFrame \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qframe.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qwidget.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QGraphicsOpacityEffect \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qgraphicseffect.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QHBoxLayout \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qboxlayout.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qlayout.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qlayoutitem.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qboxlayout.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qgridlayout.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QIcon \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qicon.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QLabel \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qlabel.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qframe.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpicture.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qtextdocument.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPropertyAnimation \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpropertyanimation.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qvariantanimation.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qabstractanimation.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qeasingcurve.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QPushButton \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qpushbutton.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qabstractbutton.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSignalBlocker \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSize \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QSlider \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qslider.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qabstractslider.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QVBoxLayout
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QTimer \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtimer.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QVBoxLayout \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QtResource \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtresource.h

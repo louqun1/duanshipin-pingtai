@@ -112,6 +112,21 @@ namespace backend::playercontroller::service
             return VideoColorMatrix::Bt601;
         }
 
+        int clampVolume(int volume)
+        {
+            if (volume < 0)
+            {
+                return 0;
+            }
+
+            if (volume > 100)
+            {
+                return 100;
+            }
+
+            return volume;
+        }
+
     } // namespace
 
     PlayerController::PlayerController(QObject *parent)
@@ -123,6 +138,8 @@ namespace backend::playercontroller::service
                 this, &PlayerController::syncPlaybackProgress);
         playbackProgressTimer_->start();    //启动定时器
     }
+
+    
 
     PlayerController::~PlayerController()
     {
@@ -269,6 +286,27 @@ namespace backend::playercontroller::service
         updatePlaybackProgress(seekTargetMs, totalDurationMs_);
     }
 
+    void PlayerController::requestSetVolume(int volume)
+    {
+        updatePlaybackVolume(volume);
+        applyPlaybackVolume();
+    }
+
+    void PlayerController::requestToggleMute()
+    {
+        if (playbackVolume_ > 0)
+        {
+            lastNonZeroVolume_ = playbackVolume_;
+            updatePlaybackVolume(0);
+        }
+        else
+        {
+            updatePlaybackVolume(lastNonZeroVolume_ > 0 ? lastNonZeroVolume_ : 50);
+        }
+
+        applyPlaybackVolume();
+    }
+
     void PlayerController::requestStop()
     {
         if (!hasMediaLoaded())
@@ -347,6 +385,31 @@ namespace backend::playercontroller::service
         emit playbackProgressChanged(currentPositionMs_, totalDurationMs_);
     }
 
+    void PlayerController::updatePlaybackVolume(int volume, bool forceEmit)
+    {
+        const int clampedVolume = clampVolume(volume);
+        if (clampedVolume > 0)
+        {
+            lastNonZeroVolume_ = clampedVolume;
+        }
+
+        if (!forceEmit && playbackVolume_ == clampedVolume)
+        {
+            return;
+        }
+
+        playbackVolume_ = clampedVolume;
+        emit playbackVolumeChanged(playbackVolume_, playbackVolume_ == 0);
+    }
+
+    void PlayerController::applyPlaybackVolume()
+    {
+        if (ijkPlayer_)
+        {
+            ijkPlayer_->setPlaybackVolume(playbackVolume_);
+        }
+    }
+
     void PlayerController::ensureIjkPlayerCreated()
     {
         if (ijkPlayerCreated_)
@@ -369,6 +432,7 @@ namespace backend::playercontroller::service
             return;
         }
 
+        applyPlaybackVolume();
         ijkPlayerCreated_ = true;
         emit ijkPlayerCreated();
     }
@@ -377,6 +441,7 @@ namespace backend::playercontroller::service
     {
         if (ijkPlayerCreated_ && ijkPlayer_)
         {
+            applyPlaybackVolume();
             const QByteArray encodedVideoId = currentVideoId_.toUtf8();
             if (ijkPlayer_->setDataSource(encodedVideoId.constData()) != 0)
             {

@@ -9,6 +9,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "" "frontend/FrontendWidgets_autogen/timestamp" "custom" "frontend/FrontendWidgets_autogen/deps"
+  "D:/itffmpeg/av_media/online/duanshipin-pingtai/build/frontend/FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.cpp" "frontend/CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.cpp.obj" "gcc" "frontend/CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.cpp.obj.d"
   "D:/itffmpeg/av_media/online/duanshipin-pingtai/build/frontend/FrontendWidgets_autogen/mocs_compilation.cpp" "frontend/CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/mocs_compilation.cpp.obj" "gcc" "frontend/CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/mocs_compilation.cpp.obj.d"
   "D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/components/VideoCard/VideoCard.cpp" "frontend/CMakeFiles/FrontendWidgets.dir/components/VideoCard/VideoCard.cpp.obj" "gcc" "frontend/CMakeFiles/FrontendWidgets.dir/components/VideoCard/VideoCard.cpp.obj.d"
   "D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/AccountPage/AccountPage.cpp" "frontend/CMakeFiles/FrontendWidgets.dir/pages/AccountPage/AccountPage.cpp.obj" "gcc" "frontend/CMakeFiles/FrontendWidgets.dir/pages/AccountPage/AccountPage.cpp.obj.d"

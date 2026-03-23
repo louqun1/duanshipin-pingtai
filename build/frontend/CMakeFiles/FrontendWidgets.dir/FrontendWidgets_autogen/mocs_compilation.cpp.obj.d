@@ -751,4 +751,7 @@ frontend/CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/mocs_compilation
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcoreapplication_platform.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qinputmethod.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qlocale.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qguiapplication_platform.h
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qguiapplication_platform.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QKeyEvent \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QRect \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QResizeEvent

@@ -132,18 +132,18 @@ frontend/clean: frontend/CMakeFiles/FrontendWidgets_autogen.dir/clean
 # Target rules for target CMakeFiles/QtFrontend.dir
 
 # All Build rule for target.
-CMakeFiles/QtFrontend.dir/all: frontend/CMakeFiles/FrontendWidgets.dir/all
 CMakeFiles/QtFrontend.dir/all: backend/CMakeFiles/ServoBackend.dir/all
-CMakeFiles/QtFrontend.dir/all: CMakeFiles/QtFrontend_autogen.dir/all
+CMakeFiles/QtFrontend.dir/all: frontend/CMakeFiles/FrontendWidgets.dir/all
 CMakeFiles/QtFrontend.dir/all: CMakeFiles/QtFrontend_autogen_timestamp_deps.dir/all
+CMakeFiles/QtFrontend.dir/all: CMakeFiles/QtFrontend_autogen.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\QtFrontend.dir\build.make CMakeFiles/QtFrontend.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\QtFrontend.dir\build.make CMakeFiles/QtFrontend.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=13,14,15,16,17 "Built target QtFrontend"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=15,16,17,18,19 "Built target QtFrontend"
 .PHONY : CMakeFiles/QtFrontend.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/QtFrontend.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles 33
+	$(CMAKE_COMMAND) -E cmake_progress_start D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles 35
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/QtFrontend.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles 0
 .PHONY : CMakeFiles/QtFrontend.dir/rule
@@ -155,7 +155,7 @@ QtFrontend: CMakeFiles/QtFrontend.dir/rule
 # codegen rule for target.
 CMakeFiles/QtFrontend.dir/codegen: CMakeFiles/QtFrontend_autogen_timestamp_deps.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\QtFrontend.dir\build.make CMakeFiles/QtFrontend.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=13,14,15,16,17 "Finished codegen for target QtFrontend"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=15,16,17,18,19 "Finished codegen for target QtFrontend"
 .PHONY : CMakeFiles/QtFrontend.dir/codegen
 
 # clean rule for target.
@@ -167,8 +167,8 @@ CMakeFiles/QtFrontend.dir/clean:
 # Target rules for target CMakeFiles/QtFrontend_autogen_timestamp_deps.dir
 
 # All Build rule for target.
-CMakeFiles/QtFrontend_autogen_timestamp_deps.dir/all: frontend/CMakeFiles/FrontendWidgets.dir/all
 CMakeFiles/QtFrontend_autogen_timestamp_deps.dir/all: backend/CMakeFiles/ServoBackend.dir/all
+CMakeFiles/QtFrontend_autogen_timestamp_deps.dir/all: frontend/CMakeFiles/FrontendWidgets.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\QtFrontend_autogen_timestamp_deps.dir\build.make CMakeFiles/QtFrontend_autogen_timestamp_deps.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\QtFrontend_autogen_timestamp_deps.dir\build.make CMakeFiles/QtFrontend_autogen_timestamp_deps.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num= "Built target QtFrontend_autogen_timestamp_deps"
@@ -176,7 +176,7 @@ CMakeFiles/QtFrontend_autogen_timestamp_deps.dir/all: backend/CMakeFiles/ServoBa
 
 # Build rule for subdir invocation for target.
 CMakeFiles/QtFrontend_autogen_timestamp_deps.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles 27
+	$(CMAKE_COMMAND) -E cmake_progress_start D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles 29
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/QtFrontend_autogen_timestamp_deps.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles 0
 .PHONY : CMakeFiles/QtFrontend_autogen_timestamp_deps.dir/rule
@@ -203,12 +203,12 @@ CMakeFiles/QtFrontend_autogen_timestamp_deps.dir/clean:
 CMakeFiles/QtFrontend_autogen.dir/all: CMakeFiles/QtFrontend_autogen_timestamp_deps.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\QtFrontend_autogen.dir\build.make CMakeFiles/QtFrontend_autogen.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\QtFrontend_autogen.dir\build.make CMakeFiles/QtFrontend_autogen.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=18 "Built target QtFrontend_autogen"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=20 "Built target QtFrontend_autogen"
 .PHONY : CMakeFiles/QtFrontend_autogen.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/QtFrontend_autogen.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles 28
+	$(CMAKE_COMMAND) -E cmake_progress_start D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles 30
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/QtFrontend_autogen.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles 0
 .PHONY : CMakeFiles/QtFrontend_autogen.dir/rule
@@ -220,7 +220,7 @@ QtFrontend_autogen: CMakeFiles/QtFrontend_autogen.dir/rule
 # codegen rule for target.
 CMakeFiles/QtFrontend_autogen.dir/codegen: CMakeFiles/QtFrontend_autogen_timestamp_deps.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\QtFrontend_autogen.dir\build.make CMakeFiles/QtFrontend_autogen.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=18 "Finished codegen for target QtFrontend_autogen"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=20 "Finished codegen for target QtFrontend_autogen"
 .PHONY : CMakeFiles/QtFrontend_autogen.dir/codegen
 
 # clean rule for target.
@@ -236,7 +236,7 @@ backend/CMakeFiles/ServoBackend.dir/all: backend/CMakeFiles/ServoBackend_autogen
 backend/CMakeFiles/ServoBackend.dir/all: backend/CMakeFiles/ServoBackend_autogen.dir/all
 	$(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/depend
 	$(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=19,20,21,22,23,24,25,26,27,28,29,30,31,32 "Built target ServoBackend"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=21,22,23,24,25,26,27,28,29,30,31,32,33,34 "Built target ServoBackend"
 .PHONY : backend/CMakeFiles/ServoBackend.dir/all
 
 # Build rule for subdir invocation for target.
@@ -253,7 +253,7 @@ ServoBackend: backend/CMakeFiles/ServoBackend.dir/rule
 # codegen rule for target.
 backend/CMakeFiles/ServoBackend.dir/codegen: backend/CMakeFiles/ServoBackend_autogen_timestamp_deps.dir/all
 	$(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=19,20,21,22,23,24,25,26,27,28,29,30,31,32 "Finished codegen for target ServoBackend"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=21,22,23,24,25,26,27,28,29,30,31,32,33,34 "Finished codegen for target ServoBackend"
 .PHONY : backend/CMakeFiles/ServoBackend.dir/codegen
 
 # clean rule for target.
@@ -300,7 +300,7 @@ backend/CMakeFiles/ServoBackend_autogen_timestamp_deps.dir/clean:
 backend/CMakeFiles/ServoBackend_autogen.dir/all: backend/CMakeFiles/ServoBackend_autogen_timestamp_deps.dir/all
 	$(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend_autogen.dir\build.make backend/CMakeFiles/ServoBackend_autogen.dir/depend
 	$(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend_autogen.dir\build.make backend/CMakeFiles/ServoBackend_autogen.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=33 "Built target ServoBackend_autogen"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=35 "Built target ServoBackend_autogen"
 .PHONY : backend/CMakeFiles/ServoBackend_autogen.dir/all
 
 # Build rule for subdir invocation for target.
@@ -317,7 +317,7 @@ ServoBackend_autogen: backend/CMakeFiles/ServoBackend_autogen.dir/rule
 # codegen rule for target.
 backend/CMakeFiles/ServoBackend_autogen.dir/codegen: backend/CMakeFiles/ServoBackend_autogen_timestamp_deps.dir/all
 	$(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend_autogen.dir\build.make backend/CMakeFiles/ServoBackend_autogen.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=33 "Finished codegen for target ServoBackend_autogen"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=35 "Finished codegen for target ServoBackend_autogen"
 .PHONY : backend/CMakeFiles/ServoBackend_autogen.dir/codegen
 
 # clean rule for target.
@@ -334,12 +334,12 @@ frontend/CMakeFiles/FrontendWidgets.dir/all: frontend/CMakeFiles/FrontendWidgets
 frontend/CMakeFiles/FrontendWidgets.dir/all: frontend/CMakeFiles/FrontendWidgets_autogen.dir/all
 	$(MAKE) $(MAKESILENT) -f frontend\CMakeFiles\FrontendWidgets.dir\build.make frontend/CMakeFiles/FrontendWidgets.dir/depend
 	$(MAKE) $(MAKESILENT) -f frontend\CMakeFiles\FrontendWidgets.dir\build.make frontend/CMakeFiles/FrontendWidgets.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11 "Built target FrontendWidgets"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13 "Built target FrontendWidgets"
 .PHONY : frontend/CMakeFiles/FrontendWidgets.dir/all
 
 # Build rule for subdir invocation for target.
 frontend/CMakeFiles/FrontendWidgets.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles 27
+	$(CMAKE_COMMAND) -E cmake_progress_start D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles 29
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 frontend/CMakeFiles/FrontendWidgets.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles 0
 .PHONY : frontend/CMakeFiles/FrontendWidgets.dir/rule
@@ -351,7 +351,7 @@ FrontendWidgets: frontend/CMakeFiles/FrontendWidgets.dir/rule
 # codegen rule for target.
 frontend/CMakeFiles/FrontendWidgets.dir/codegen: frontend/CMakeFiles/FrontendWidgets_autogen_timestamp_deps.dir/all
 	$(MAKE) $(MAKESILENT) -f frontend\CMakeFiles\FrontendWidgets.dir\build.make frontend/CMakeFiles/FrontendWidgets.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11 "Finished codegen for target FrontendWidgets"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13 "Finished codegen for target FrontendWidgets"
 .PHONY : frontend/CMakeFiles/FrontendWidgets.dir/codegen
 
 # clean rule for target.
@@ -398,7 +398,7 @@ frontend/CMakeFiles/FrontendWidgets_autogen_timestamp_deps.dir/clean:
 frontend/CMakeFiles/FrontendWidgets_autogen.dir/all: frontend/CMakeFiles/FrontendWidgets_autogen_timestamp_deps.dir/all
 	$(MAKE) $(MAKESILENT) -f frontend\CMakeFiles\FrontendWidgets_autogen.dir\build.make frontend/CMakeFiles/FrontendWidgets_autogen.dir/depend
 	$(MAKE) $(MAKESILENT) -f frontend\CMakeFiles\FrontendWidgets_autogen.dir\build.make frontend/CMakeFiles/FrontendWidgets_autogen.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=12 "Built target FrontendWidgets_autogen"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=14 "Built target FrontendWidgets_autogen"
 .PHONY : frontend/CMakeFiles/FrontendWidgets_autogen.dir/all
 
 # Build rule for subdir invocation for target.
@@ -415,7 +415,7 @@ FrontendWidgets_autogen: frontend/CMakeFiles/FrontendWidgets_autogen.dir/rule
 # codegen rule for target.
 frontend/CMakeFiles/FrontendWidgets_autogen.dir/codegen: frontend/CMakeFiles/FrontendWidgets_autogen_timestamp_deps.dir/all
 	$(MAKE) $(MAKESILENT) -f frontend\CMakeFiles\FrontendWidgets_autogen.dir\build.make frontend/CMakeFiles/FrontendWidgets_autogen.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=12 "Finished codegen for target FrontendWidgets_autogen"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\CMakeFiles --progress-num=14 "Finished codegen for target FrontendWidgets_autogen"
 .PHONY : frontend/CMakeFiles/FrontendWidgets_autogen.dir/codegen
 
 # clean rule for target.

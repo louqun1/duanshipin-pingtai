@@ -157,6 +157,30 @@ FrontendWidgets_autogen/fast:
 	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f frontend\CMakeFiles\FrontendWidgets_autogen.dir\build.make frontend/CMakeFiles/FrontendWidgets_autogen.dir/build
 .PHONY : FrontendWidgets_autogen/fast
 
+FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.obj: FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.cpp.obj
+.PHONY : FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.obj
+
+# target to build an object file
+FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.cpp.obj:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f frontend\CMakeFiles\FrontendWidgets.dir\build.make frontend/CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.cpp.obj
+.PHONY : FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.cpp.obj
+
+FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.i: FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.cpp.i
+.PHONY : FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.i
+
+# target to preprocess a source file
+FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.cpp.i:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f frontend\CMakeFiles\FrontendWidgets.dir\build.make frontend/CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.cpp.i
+.PHONY : FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.cpp.i
+
+FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.s: FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.cpp.s
+.PHONY : FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.s
+
+# target to generate assembly for a file
+FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.cpp.s:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f frontend\CMakeFiles\FrontendWidgets.dir\build.make frontend/CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.cpp.s
+.PHONY : FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.cpp.s
+
 FrontendWidgets_autogen/mocs_compilation.obj: FrontendWidgets_autogen/mocs_compilation.cpp.obj
 .PHONY : FrontendWidgets_autogen/mocs_compilation.obj
 
@@ -384,6 +408,9 @@ help:
 	@echo ... FrontendWidgets_autogen
 	@echo ... FrontendWidgets_autogen_timestamp_deps
 	@echo ... FrontendWidgets
+	@echo ... FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.obj
+	@echo ... FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.i
+	@echo ... FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.s
 	@echo ... FrontendWidgets_autogen/mocs_compilation.obj
 	@echo ... FrontendWidgets_autogen/mocs_compilation.i
 	@echo ... FrontendWidgets_autogen/mocs_compilation.s

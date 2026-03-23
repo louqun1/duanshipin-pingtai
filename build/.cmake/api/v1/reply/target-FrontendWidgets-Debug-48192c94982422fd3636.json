@@ -33,13 +33,13 @@
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 25,
+				"line" : 26,
 				"parent" : 0
 			},
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 20,
+				"line" : 21,
 				"parent" : 0
 			}
 		]
@@ -212,14 +212,15 @@
 			"sourceIndexes" : 
 			[
 				0,
-				2,
-				4,
-				6,
-				8,
-				10,
-				12,
-				14,
-				16
+				3,
+				5,
+				7,
+				9,
+				11,
+				13,
+				15,
+				17,
+				19
 			]
 		}
 	],
@@ -287,6 +288,9 @@
 			"id" : "Qt6::moc::@6890427a1f51a3e7e1df"
 		},
 		{
+			"id" : "Qt6::rcc::@6890427a1f51a3e7e1df"
+		},
+		{
 			"id" : "Qt6::uic::@6890427a1f51a3e7e1df"
 		},
 		{
@@ -309,6 +313,29 @@
 			"sourceIndexes" : 
 			[
 				0,
+				3,
+				5,
+				7,
+				9,
+				11,
+				13,
+				15,
+				17,
+				19
+			]
+		},
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				1,
+				18
+			]
+		},
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
 				2,
 				4,
 				6,
@@ -320,31 +347,11 @@
 			]
 		},
 		{
-			"name" : "Header Files",
-			"sourceIndexes" : 
-			[
-				1,
-				3,
-				5,
-				7,
-				9,
-				11,
-				13,
-				15
-			]
-		},
-		{
-			"name" : "",
-			"sourceIndexes" : 
-			[
-				17
-			]
-		},
-		{
 			"name" : "CMake Rules",
 			"sourceIndexes" : 
 			[
-				18
+				20,
+				21
 			]
 		}
 	],
@@ -359,8 +366,13 @@
 		},
 		{
 			"backtrace" : 1,
-			"path" : "frontend/widgets/MainWindow.hpp",
+			"path" : "frontend/FrontendWidgets.qrc",
 			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "frontend/widgets/MainWindow.hpp",
+			"sourceGroupIndex" : 2
 		},
 		{
 			"backtrace" : 1,
@@ -371,7 +383,7 @@
 		{
 			"backtrace" : 1,
 			"path" : "frontend/widgets/VideoOpenGLWidget.hpp",
-			"sourceGroupIndex" : 1
+			"sourceGroupIndex" : 2
 		},
 		{
 			"backtrace" : 1,
@@ -382,7 +394,7 @@
 		{
 			"backtrace" : 1,
 			"path" : "frontend/widgets/VideoPlayerWindow.hpp",
-			"sourceGroupIndex" : 1
+			"sourceGroupIndex" : 2
 		},
 		{
 			"backtrace" : 1,
@@ -393,7 +405,7 @@
 		{
 			"backtrace" : 1,
 			"path" : "frontend/components/VideoCard/VideoCard.hpp",
-			"sourceGroupIndex" : 1
+			"sourceGroupIndex" : 2
 		},
 		{
 			"backtrace" : 1,
@@ -404,7 +416,7 @@
 		{
 			"backtrace" : 1,
 			"path" : "frontend/pages/AccountPage/AccountPage.hpp",
-			"sourceGroupIndex" : 1
+			"sourceGroupIndex" : 2
 		},
 		{
 			"backtrace" : 1,
@@ -415,7 +427,7 @@
 		{
 			"backtrace" : 1,
 			"path" : "frontend/pages/HomePage/HomePage.hpp",
-			"sourceGroupIndex" : 1
+			"sourceGroupIndex" : 2
 		},
 		{
 			"backtrace" : 1,
@@ -426,7 +438,7 @@
 		{
 			"backtrace" : 1,
 			"path" : "frontend/pages/StreamPage/StreamPage.hpp",
-			"sourceGroupIndex" : 1
+			"sourceGroupIndex" : 2
 		},
 		{
 			"backtrace" : 1,
@@ -437,7 +449,7 @@
 		{
 			"backtrace" : 1,
 			"path" : "frontend/pages/UploadPage/UploadPage.hpp",
-			"sourceGroupIndex" : 1
+			"sourceGroupIndex" : 2
 		},
 		{
 			"backtrace" : 1,
@@ -449,12 +461,25 @@
 			"backtrace" : 0,
 			"isGenerated" : true,
 			"path" : "build/frontend/FrontendWidgets_autogen/timestamp",
-			"sourceGroupIndex" : 2
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "build/frontend/FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.cpp",
+			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 0,
 			"isGenerated" : true,
 			"path" : "build/frontend/FrontendWidgets_autogen/timestamp.rule",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/frontend/FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.cpp.rule",
 			"sourceGroupIndex" : 3
 		}
 	],

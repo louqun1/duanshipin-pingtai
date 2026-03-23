@@ -30,15 +30,11 @@
 		},
 		{
 			"backtrace" : 0,
-			"id" : "Qt6::Gui::@6890427a1f51a3e7e1df"
-		},
-		{
-			"backtrace" : 0,
 			"id" : "Qt6::Core::@6890427a1f51a3e7e1df"
 		},
 		{
 			"backtrace" : 0,
-			"id" : "Qt6::uic::@6890427a1f51a3e7e1df"
+			"id" : "Qt6::Gui::@6890427a1f51a3e7e1df"
 		},
 		{
 			"backtrace" : 0,
@@ -46,11 +42,11 @@
 		},
 		{
 			"backtrace" : 0,
-			"id" : "Qt6::Sql::@6890427a1f51a3e7e1df"
+			"id" : "Qt6::uic::@6890427a1f51a3e7e1df"
 		},
 		{
 			"backtrace" : 0,
-			"id" : "FFmpeg::avdevice::@e17dcb4e28158375c849"
+			"id" : "Qt6::Sql::@6890427a1f51a3e7e1df"
 		},
 		{
 			"backtrace" : 0,
@@ -58,19 +54,7 @@
 		},
 		{
 			"backtrace" : 0,
-			"id" : "FFmpeg::swresample::@e17dcb4e28158375c849"
-		},
-		{
-			"backtrace" : 0,
 			"id" : "FFmpeg::avformat::@e17dcb4e28158375c849"
-		},
-		{
-			"backtrace" : 0,
-			"id" : "FFmpeg::avcodec::@e17dcb4e28158375c849"
-		},
-		{
-			"backtrace" : 0,
-			"id" : "SDL2::SDL2::@e17dcb4e28158375c849"
 		},
 		{
 			"backtrace" : 0,
@@ -78,11 +62,27 @@
 		},
 		{
 			"backtrace" : 0,
+			"id" : "SDL2::SDL2::@e17dcb4e28158375c849"
+		},
+		{
+			"backtrace" : 0,
 			"id" : "FFmpeg::postproc::@e17dcb4e28158375c849"
 		},
 		{
 			"backtrace" : 0,
+			"id" : "FFmpeg::avcodec::@e17dcb4e28158375c849"
+		},
+		{
+			"backtrace" : 0,
 			"id" : "FFmpeg::avfilter::@e17dcb4e28158375c849"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "FFmpeg::swresample::@e17dcb4e28158375c849"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "FFmpeg::avdevice::@e17dcb4e28158375c849"
 		}
 	],
 	"paths" : 

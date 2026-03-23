@@ -48,6 +48,8 @@ namespace backend::playercontroller::service
         void requestPause();
         void requestTogglePlayback();
         void requestSeek(int positionMs);
+        void requestSetVolume(int volume);
+        void requestToggleMute();
         void requestStop();
         void releasePlaybackResources();
 
@@ -59,12 +61,15 @@ namespace backend::playercontroller::service
             const QString &duration);
         void playbackStateChanged(PlaybackState state, const QString &message);
         void playbackProgressChanged(qint64 positionMs, qint64 durationMs);
+        void playbackVolumeChanged(int volume, bool muted);
         void ijkPlayerCreated();
         void ijkPlayerOpenRequested(const QString &videoId, const QString &title);
 
     private:
         void updatePlaybackState(PlaybackState state, const QString &message);
         void updatePlaybackProgress(qint64 positionMs, qint64 durationMs);
+        void updatePlaybackVolume(int volume, bool forceEmit = false);
+        void applyPlaybackVolume();
         void ensureIjkPlayerCreated();
         void openMediaWithIjkPlayer();
         void syncPlaybackProgress();
@@ -85,6 +90,8 @@ namespace backend::playercontroller::service
         qint64 totalDurationMs_ = 0;
         bool seekInFlight_ = false;
         qint64 pendingSeekPositionMs_ = -1;
+        int playbackVolume_ = 50;
+        int lastNonZeroVolume_ = 50;
         SwsContext *videoScaleContext_ = nullptr;
         int videoScaleWidth_ = 0;
         int videoScaleHeight_ = 0;

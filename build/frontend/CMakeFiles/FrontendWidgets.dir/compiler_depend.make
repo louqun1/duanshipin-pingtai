@@ -153,8 +153,10 @@ frontend/FrontendWidgets_autogen/timestamp: D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qxptype_traits.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qyieldcpu.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QCloseEvent \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QKeyEvent \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QMatrix3x3 \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QOpenGLFunctions \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QResizeEvent \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QSurfaceFormat \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QTransform \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QVector3D \
@@ -335,6 +337,7 @@ frontend/FrontendWidgets_autogen/timestamp: D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/
   D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playercontroller/service/PlayerController.hpp \
   frontend/FrontendWidgets_autogen/moc_predefs.h \
   D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/CMakeLists.txt \
+  D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/FrontendWidgets.qrc \
   D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/components/VideoCard/VideoCard.cpp \
   D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/components/VideoCard/VideoCard.hpp \
   D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/AccountPage/AccountPage.cpp \
@@ -710,6 +713,8 @@ frontend/FrontendWidgets_autogen/timestamp: D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/winapifamily.h \
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/winsdkver.h
 
+frontend/CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.cpp.obj: frontend/FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.cpp
+
 frontend/CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/mocs_compilation.cpp.obj: frontend/FrontendWidgets_autogen/mocs_compilation.cpp \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QByteArray \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QList \
@@ -866,8 +871,10 @@ frontend/CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/mocs_compilation
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qxptype_traits.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qyieldcpu.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QCloseEvent \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QKeyEvent \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QMatrix3x3 \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QOpenGLFunctions \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QResizeEvent \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QSurfaceFormat \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QTransform \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QVector3D \
@@ -3655,6 +3662,8 @@ frontend/CMakeFiles/FrontendWidgets.dir/widgets/MainWindow.cpp.obj: D:/itffmpeg/
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qxptype_traits.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qyieldcpu.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QCloseEvent \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QKeyEvent \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QResizeEvent \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QTransform \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qaction.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qbitmap.h \
@@ -4628,16 +4637,20 @@ frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoOpenGLWidget.cpp.obj: D:/it
 
 frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoPlayerWindow.cpp.obj: D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/VideoPlayerWindow.cpp \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QByteArray \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QEvent \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QList \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QObject \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPointer \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPropertyAnimation \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QRect \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QScopedPointer \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSignalBlocker \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSize \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSizeF \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QTimer \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QtGlobal \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QtResource \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q17memory.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20functional.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20iterator.h \
@@ -4646,6 +4659,7 @@ frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoPlayerWindow.cpp.obj: D:/it
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20utility.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q23type_traits.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q23utility.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qabstractanimation.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qabstracteventdispatcher.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qalgorithms.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qalloc.h \
@@ -4682,6 +4696,7 @@ frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoPlayerWindow.cpp.obj: D:/it
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdatastream.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdeadlinetimer.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdebug.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qeasingcurve.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qendian.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qeventloop.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qexceptionhandling.h \
@@ -4723,6 +4738,7 @@ frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoPlayerWindow.cpp.obj: D:/it
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpoint.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpointer.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qprocessordetection.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpropertyanimation.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qrect.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qrefcount.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qscopedpointer.h \
@@ -4760,6 +4776,7 @@ frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoPlayerWindow.cpp.obj: D:/it
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtenvironmentvariables.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtextstream.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtformat_impl.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtimer.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtmetamacros.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtnoop.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtpreprocessorsupport.h \
@@ -4773,13 +4790,17 @@ frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoPlayerWindow.cpp.obj: D:/it
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qurl.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qutf8stringview.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qvariant.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qvariantanimation.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qvarlengtharray.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qversiontagging.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qxptype_traits.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qyieldcpu.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QCloseEvent \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QIcon \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QKeyEvent \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QMatrix3x3 \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QOpenGLFunctions \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QResizeEvent \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QSurfaceFormat \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QTransform \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QVector3D \
@@ -4843,6 +4864,7 @@ frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoPlayerWindow.cpp.obj: D:/it
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtOpenGLWidgets/qtopenglwidgetsexports.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtOpenGLWidgets/qtopenglwidgetsglobal.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QFrame \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QGraphicsOpacityEffect \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QHBoxLayout \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QLabel \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QPushButton \
@@ -4853,6 +4875,7 @@ frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoPlayerWindow.cpp.obj: D:/it
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qabstractslider.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qboxlayout.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qframe.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qgraphicseffect.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qgridlayout.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qlabel.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qlayout.h \
@@ -5353,6 +5376,8 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qobjectdefs_impl.h:
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/SDL2/SDL_log.h:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QEvent:
+
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/ctime:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QList:
@@ -5595,6 +5620,8 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qeventpoint.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcompilerdetection.h:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QIcon:
+
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdbool.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qttypetraits.h:
@@ -5638,6 +5665,8 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qhash.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtdeprecationdefinitions.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtimer.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qhashfunctions.h:
 
@@ -5717,6 +5746,8 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qnamespace.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/shared_ptr_atomic.h:
 
+D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/FrontendWidgets.qrc:
+
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qnativeinterface.h:
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/StreamPage/StreamPage.hpp:
@@ -5736,6 +5767,8 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qobjectdefs.h:
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/std_function.h:
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/eval.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qgraphicseffect.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/serializeintrin.h:
 
@@ -5778,6 +5811,8 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qshareddata.h:
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qguiapplication.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/concept_check.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qabstractanimation.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qshareddata_impl.h:
 
@@ -5881,8 +5916,6 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qvarlengtharray.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtpreprocessorsupport.h:
 
-D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/cctype:
-
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtresource.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtversion.h:
@@ -5929,6 +5962,10 @@ D:/itffmpeg/cmake-4.2.3/bin/cmake.exe:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QCloseEvent:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QKeyEvent:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpalette.h:
+
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qabstractslider.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/ext/aligned_buffer.h:
@@ -5938,6 +5975,8 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QMatrix3x3:
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qinputmethod.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QOpenGLFunctions:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QResizeEvent:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QLabel:
 
@@ -6010,8 +6049,6 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpaintdevice.h:
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/avx512vpopcntdqintrin.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/backward/auto_ptr.h:
-
-D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpalette.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpixelformat.h:
 
@@ -6297,6 +6334,8 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/pixdesc.h:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QGraphicsOpacityEffect:
+
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libswresample/version.h:
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libswscale/version.h:
@@ -6577,6 +6616,8 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qstackedwidget.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/cassert:
 
+D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/cctype:
+
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/cerrno:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/chrono:
@@ -6791,6 +6832,8 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/sched.h:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpropertyanimation.h:
+
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/sdkddkver.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/sec_api/string_s.h:
@@ -6810,6 +6853,8 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/wchar.h:
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/winapifamily.h:
+
+frontend/FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.cpp:
 
 frontend/FrontendWidgets_autogen/mocs_compilation.cpp:
 
@@ -6859,8 +6904,6 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QLineEdit:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qlineedit.h:
 
-D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QResizeEvent:
-
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QScrollArea:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qabstractscrollarea.h:
@@ -6881,6 +6924,16 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/repository/user/UserRepos
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/service/auth/AuthService.hpp:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPropertyAnimation:
+
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSignalBlocker:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QTimer:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QtResource:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qeasingcurve.h:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qvariantanimation.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QSlider:

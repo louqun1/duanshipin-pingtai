@@ -1,4 +1,5 @@
 add_library(FrontendWidgets
+    FrontendWidgets.qrc
     widgets/MainWindow.hpp
     widgets/MainWindow.cpp
     widgets/VideoOpenGLWidget.hpp

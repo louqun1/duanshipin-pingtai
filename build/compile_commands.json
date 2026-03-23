@@ -142,5 +142,11 @@
   "command": "D:\\itffmpeg\\x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1\\mingw64\\bin\\g++.exe -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DWINVER=0x0A00 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN32_WINNT=0x0A00 -D_WIN64 @CMakeFiles/FrontendWidgets.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\FrontendWidgets.dir\\pages\\UploadPage\\UploadPage.cpp.obj -c D:\\itffmpeg\\av_media\\online\\duanshipin-pingtai\\frontend\\pages\\UploadPage\\UploadPage.cpp",
   "file": "D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/UploadPage/UploadPage.cpp",
   "output": "frontend/CMakeFiles/FrontendWidgets.dir/pages/UploadPage/UploadPage.cpp.obj"
+},
+{
+  "directory": "D:/itffmpeg/av_media/online/duanshipin-pingtai/build/frontend",
+  "command": "D:\\itffmpeg\\x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1\\mingw64\\bin\\g++.exe -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DWINVER=0x0A00 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN32_WINNT=0x0A00 -D_WIN64 @CMakeFiles/FrontendWidgets.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\FrontendWidgets.dir\\FrontendWidgets_autogen\\EWIEGA46WW\\qrc_FrontendWidgets.cpp.obj -c D:\\itffmpeg\\av_media\\online\\duanshipin-pingtai\\build\\frontend\\FrontendWidgets_autogen\\EWIEGA46WW\\qrc_FrontendWidgets.cpp",
+  "file": "D:/itffmpeg/av_media/online/duanshipin-pingtai/build/frontend/FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.cpp",
+  "output": "frontend/CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.cpp.obj"
 }
 ]

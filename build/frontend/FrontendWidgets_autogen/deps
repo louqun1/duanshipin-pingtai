@@ -151,8 +151,10 @@ FrontendWidgets_autogen/timestamp: \
 	D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qxptype_traits.h \
 	D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qyieldcpu.h \
 	D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QCloseEvent \
+	D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QKeyEvent \
 	D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QMatrix3x3 \
 	D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QOpenGLFunctions \
+	D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QResizeEvent \
 	D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QSurfaceFormat \
 	D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QTransform \
 	D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QVector3D \
@@ -333,6 +335,7 @@ FrontendWidgets_autogen/timestamp: \
 	D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playercontroller/service/PlayerController.hpp \
 	D:/itffmpeg/av_media/online/duanshipin-pingtai/build/frontend/FrontendWidgets_autogen/moc_predefs.h \
 	D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/CMakeLists.txt \
+	D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/FrontendWidgets.qrc \
 	D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/components/VideoCard/VideoCard.cpp \
 	D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/components/VideoCard/VideoCard.hpp \
 	D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/AccountPage/AccountPage.cpp \

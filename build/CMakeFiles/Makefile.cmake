@@ -213,6 +213,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "CMakeFiles/4.2.3/CMakeRCCompiler.cmake"
   "CMakeFiles/4.2.3/CMakeSystem.cmake"
   "D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/CMakeLists.txt"
+  "D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/FrontendWidgets.qrc"
   "D:/itffmpeg/cmake-4.2.3/share/cmake-4.2/Modules/CMakeCInformation.cmake"
   "D:/itffmpeg/cmake-4.2.3/share/cmake-4.2/Modules/CMakeCXXInformation.cmake"
   "D:/itffmpeg/cmake-4.2.3/share/cmake-4.2/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake"
@@ -276,6 +277,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
   "backend/CMakeFiles/ServoBackend_autogen.dir/AutogenInfo.json"
   "backend/CMakeFiles/CMakeDirectoryInformation.cmake"
   "frontend/CMakeFiles/FrontendWidgets_autogen.dir/AutogenInfo.json"
+  "frontend/CMakeFiles/FrontendWidgets_autogen.dir/AutoRcc_FrontendWidgets_EWIEGA46WW_Info.json"
   "frontend/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 

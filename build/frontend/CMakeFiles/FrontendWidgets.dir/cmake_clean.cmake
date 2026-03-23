@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.cpp.obj"
+  "CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.cpp.obj.d"
   "CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/mocs_compilation.cpp.obj"
   "CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/mocs_compilation.cpp.obj.d"
   "CMakeFiles/FrontendWidgets.dir/components/VideoCard/VideoCard.cpp.obj"
@@ -20,6 +22,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/FrontendWidgets_autogen.dir/AutogenUsed.txt"
   "CMakeFiles/FrontendWidgets_autogen.dir/ParseCache.txt"
   "FrontendWidgets_autogen"
+  "FrontendWidgets_autogen/EWIEGA46WW/qrc_FrontendWidgets.cpp"
   "FrontendWidgets_autogen/mocs_compilation.cpp"
   "FrontendWidgets_autogen/timestamp"
   "libFrontendWidgets.a"
