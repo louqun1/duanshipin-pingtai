@@ -1,5 +1,6 @@
 #include "widgets/VideoOpenGLWidget.hpp"
 
+#include <array>
 #include <QOpenGLShader>
 
 namespace
@@ -21,20 +22,19 @@ constexpr const char *kFragmentShaderSource = R"(
 uniform sampler2D yTexture;
 uniform sampler2D uTexture;
 uniform sampler2D vTexture;
+uniform mat3 colorConversionMatrix;
+uniform vec3 colorOffset;
+uniform vec3 colorScale;
 varying vec2 vTexCoord;
 
 void main()
 {
-    float y = texture2D(yTexture, vTexCoord).r;
-    float u = texture2D(uTexture, vTexCoord).r - 0.5;
-    float v = texture2D(vTexture, vTexCoord).r - 0.5;
-
-    y = 1.16438356 * (y - 0.0625);
-
-    vec3 rgb;
-    rgb.r = y + 1.59602678 * v;
-    rgb.g = y - 0.39176229 * u - 0.81296764 * v;
-    rgb.b = y + 2.01723214 * u;
+    vec3 yuv = vec3(
+        texture2D(yTexture, vTexCoord).r,
+        texture2D(uTexture, vTexCoord).r,
+        texture2D(vTexture, vTexCoord).r);
+    vec3 normalizedYuv = (yuv + colorOffset) * colorScale;
+    vec3 rgb = colorConversionMatrix * normalizedYuv;
 
     gl_FragColor = vec4(rgb, 1.0);
 }
@@ -56,6 +56,21 @@ std::unique_ptr<QOpenGLTexture> createPlaneTexture(int width, int height)
     texture->setMagnificationFilter(QOpenGLTexture::Linear);
     texture->setWrapMode(QOpenGLTexture::ClampToEdge);
     return texture;
+}
+
+QMatrix3x3 makeColorMatrix(const std::array<float, 9> &values)
+{
+    QMatrix3x3 matrix;
+    matrix(0, 0) = values[0];
+    matrix(0, 1) = values[1];
+    matrix(0, 2) = values[2];
+    matrix(1, 0) = values[3];
+    matrix(1, 1) = values[4];
+    matrix(1, 2) = values[5];
+    matrix(2, 0) = values[6];
+    matrix(2, 1) = values[7];
+    matrix(2, 2) = values[8];
+    return matrix;
 }
 
 } // namespace
@@ -81,7 +96,9 @@ void VideoOpenGLWidget::presentFrame(
     int frameHeight,
     const QByteArray &planeY,
     const QByteArray &planeU,
-    const QByteArray &planeV)
+    const QByteArray &planeV,
+    int colorMatrix,
+    bool fullRange)
 {
     if (frameWidth <= 0 || frameHeight <= 0)
     {
@@ -94,6 +111,10 @@ void VideoOpenGLWidget::presentFrame(
     planeY_ = planeY;
     planeU_ = planeU;
     planeV_ = planeV;
+    colorMatrix_ = colorMatrix == static_cast<int>(ColorMatrix::Bt709)
+                       ? ColorMatrix::Bt709
+                       : ColorMatrix::Bt601;
+    fullRange_ = fullRange;
     frameDirty_ = true;
     update();
 }
@@ -195,6 +216,9 @@ void VideoOpenGLWidget::paintGL()
     program_.setUniformValue("yTexture", 0);
     program_.setUniformValue("uTexture", 1);
     program_.setUniformValue("vTexture", 2);
+    program_.setUniformValue("colorConversionMatrix", colorConversionMatrix());
+    program_.setUniformValue("colorOffset", colorOffset());
+    program_.setUniformValue("colorScale", colorScale());
     program_.enableAttributeArray("position");
     program_.enableAttributeArray("texCoord");
     program_.setAttributeArray("position", GL_FLOAT, vertices, 2);
@@ -262,4 +286,42 @@ void VideoOpenGLWidget::uploadTexture(QOpenGLTexture *texture, const QByteArray 
     }
 
     texture->setData(QOpenGLTexture::Red, QOpenGLTexture::UInt8, planeData.constData());
+}
+
+QMatrix3x3 VideoOpenGLWidget::colorConversionMatrix() const
+{
+    if (colorMatrix_ == ColorMatrix::Bt709)
+    {
+        return makeColorMatrix({
+            1.0f, 0.0f, 1.5748f,
+            1.0f, -0.187324f, -0.468124f,
+            1.0f, 1.8556f, 0.0f,
+        });
+    }
+
+    return makeColorMatrix({
+        1.0f, 0.0f, 1.402f,
+        1.0f, -0.344136f, -0.714136f,
+        1.0f, 1.772f, 0.0f,
+    });
+}
+
+QVector3D VideoOpenGLWidget::colorOffset() const
+{
+    if (fullRange_)
+    {
+        return {0.0f, -0.5f, -0.5f};
+    }
+
+    return {-16.0f / 255.0f, -128.0f / 255.0f, -128.0f / 255.0f};
+}
+
+QVector3D VideoOpenGLWidget::colorScale() const
+{
+    if (fullRange_)
+    {
+        return {1.0f, 1.0f, 1.0f};
+    }
+
+    return {255.0f / 219.0f, 255.0f / 224.0f, 255.0f / 224.0f};
 }

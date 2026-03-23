@@ -417,6 +417,8 @@ frontend/CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/mocs_compilation
  D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/VideoOpenGLWidget.hpp \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QByteArray \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qbytearray.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QMatrix3x3 \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qgenericmatrix.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QOpenGLFunctions \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qopenglfunctions.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qopengl.h \
@@ -446,6 +448,8 @@ frontend/CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/mocs_compilation
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtOpenGLWidgets/qtopenglwidgetsglobal.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtOpenGLWidgets/qtopenglwidgetsexports.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QWidget \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QVector3D \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qvectornd.h \
  D:\itffmpeg\av_media\online\duanshipin-pingtai\build\frontend\FrontendWidgets_autogen\IMAN36LHMA/moc_VideoPlayerWindow.cpp \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/VideoPlayerWindow.hpp \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playercontroller/service/PlayerController.hpp \

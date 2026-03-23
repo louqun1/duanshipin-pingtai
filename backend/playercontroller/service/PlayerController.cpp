@@ -14,6 +14,12 @@ namespace backend::playercontroller::service
     namespace
     {
 
+        enum class VideoColorMatrix
+        {
+            Bt601 = 0,
+            Bt709 = 1
+        };
+
         QByteArray copyPlane(
             const uint8_t *sourceData,
             int sourceLineSize,
@@ -55,6 +61,54 @@ namespace backend::playercontroller::service
             }
 
             return plane;
+        }
+
+        bool isFullRangeSource(AVPixelFormat sourceFormat, AVColorRange colorRange)
+        {
+            if (colorRange == AVCOL_RANGE_JPEG)
+            {
+                return true;
+            }
+
+            switch (sourceFormat)
+            {
+            case AV_PIX_FMT_YUVJ420P:
+            case AV_PIX_FMT_YUVJ422P:
+            case AV_PIX_FMT_YUVJ444P:
+            case AV_PIX_FMT_YUVJ440P:
+            case AV_PIX_FMT_YUVJ411P:
+                return true;
+            default:
+                return false;
+            }
+        }
+
+        VideoColorMatrix resolveColorMatrix(const AVFrame *frame)
+        {
+            if (!frame)
+            {
+                return VideoColorMatrix::Bt601;
+            }
+
+            switch (frame->colorspace)
+            {
+            case AVCOL_SPC_BT709:
+                return VideoColorMatrix::Bt709;
+            case AVCOL_SPC_FCC:
+            case AVCOL_SPC_BT470BG:
+            case AVCOL_SPC_SMPTE170M:
+            case AVCOL_SPC_SMPTE240M:
+                return VideoColorMatrix::Bt601;
+            default:
+                break;
+            }
+
+            if (frame->width >= 1280 || frame->height > 576)
+            {
+                return VideoColorMatrix::Bt709;
+            }
+
+            return VideoColorMatrix::Bt601;
         }
 
     } // namespace
@@ -104,11 +158,12 @@ namespace backend::playercontroller::service
         }
 
         ensureIjkPlayerCreated();
-        openMediaWithIjkPlayer();
+        if (!ijkPlayerCreated_ || !ijkPlayer_)
+        {
+            return;
+        }
 
-        updatePlaybackState(
-            PlaybackState::Prepared,
-            QString("PlayerController is ready to hand this media to ijkPlayer."));
+        openMediaWithIjkPlayer();
     }
 
     void PlayerController::requestPlay()
@@ -119,7 +174,17 @@ namespace backend::playercontroller::service
             return;
         }
 
-        updatePlaybackState(PlaybackState::Playing, QString("Play requested."));
+        if (!ijkPlayer_)
+        {
+            updatePlaybackState(PlaybackState::Error, QString("ijkPlayer is not available."));
+            return;
+        }
+
+        const int ret = ijkPlayer_->start();
+        if (ret != 0)
+        {
+            updatePlaybackState(playbackState_, QString("Play request was rejected by ijkPlayer."));
+        }
     }
 
     void PlayerController::requestPause()
@@ -129,10 +194,20 @@ namespace backend::playercontroller::service
             return;
         }
 
-        updatePlaybackState(PlaybackState::Paused, QString("Pause requested."));
+        if (!ijkPlayer_)
+        {
+            updatePlaybackState(PlaybackState::Error, QString("ijkPlayer is not available."));
+            return;
+        }
+
+        const int ret = ijkPlayer_->pause();
+        if (ret != 0)
+        {
+            updatePlaybackState(playbackState_, QString("Pause request was rejected by ijkPlayer."));
+        }
     }
 
-    void PlayerController::requestTogglePlayback()
+    void PlayerController::requestTogglePlayback()//请求切换播放状态
     {
         if (!hasMediaLoaded())
         {
@@ -156,7 +231,17 @@ namespace backend::playercontroller::service
             return;
         }
 
-        updatePlaybackState(PlaybackState::Stopped, QString("Stop requested."));
+        if (!ijkPlayer_)
+        {
+            updatePlaybackState(PlaybackState::Error, QString("ijkPlayer is not available."));
+            return;
+        }
+
+        const int ret = ijkPlayer_->stop();
+        if (ret != 0)
+        {
+            updatePlaybackState(playbackState_, QString("Stop request was rejected by ijkPlayer."));
+        }
     }
 
     void PlayerController::updatePlaybackState(PlaybackState state, const QString &message)
@@ -193,11 +278,22 @@ namespace backend::playercontroller::service
 
     void PlayerController::openMediaWithIjkPlayer()
     {
-        if (ijkPlayer_)
+        if (ijkPlayerCreated_ && ijkPlayer_)
         {
             const QByteArray encodedVideoId = currentVideoId_.toUtf8();
-            ijkPlayer_->setDataSource(encodedVideoId.constData());
-            ijkPlayer_->prepareAsync();
+            if (ijkPlayer_->setDataSource(encodedVideoId.constData()) != 0)
+            {
+                updatePlaybackState(PlaybackState::Error,
+                                    QString("Failed to set media source on ijkPlayer."));
+                return;
+            }
+
+            if (ijkPlayer_->prepareAsync() != 0)
+            {
+                updatePlaybackState(PlaybackState::Error,
+                                    QString("Failed to prepare media with ijkPlayer."));
+                return;
+            }
         }
 
         emit ijkPlayerOpenRequested(currentVideoId_, currentTitle_);
@@ -214,9 +310,51 @@ namespace backend::playercontroller::service
 
     void PlayerController::handlePlayerEvent(media::PlayerEvent event, int arg1, void *arg2)
     {
-        Q_UNUSED(arg1);
         Q_UNUSED(arg2);
         qDebug("Received player event: %d", static_cast<int>(event));
+
+        auto queuePlaybackStateUpdate = [this](PlaybackState state, const QString &message) {
+            QMetaObject::invokeMethod(
+                this,
+                [this, state, message]() {
+                    updatePlaybackState(state, message);
+                },
+                Qt::QueuedConnection);
+        };
+
+        switch (event)
+        {
+        case media::PlayerEvent::OpenInputStarted:
+            queuePlaybackStateUpdate(PlaybackState::Opening,
+                                     QString("ijkPlayer started opening %1.").arg(currentTitle_));
+            break;
+        case media::PlayerEvent::Prepared:
+            queuePlaybackStateUpdate(PlaybackState::Prepared,
+                                     QString("Media prepared. Ready to play."));
+            break;
+        case media::PlayerEvent::Playing:
+            queuePlaybackStateUpdate(PlaybackState::Playing,
+                                     QString("Playback is running."));
+            break;
+        case media::PlayerEvent::Paused:
+            queuePlaybackStateUpdate(PlaybackState::Paused,
+                                     QString("Playback paused."));
+            break;
+        case media::PlayerEvent::Stopped:
+            queuePlaybackStateUpdate(PlaybackState::Stopped,
+                                     QString("Playback stopped."));
+            break;
+        case media::PlayerEvent::PlaybackFinished:
+            queuePlaybackStateUpdate(PlaybackState::Stopped,
+                                     QString("Playback finished."));
+            break;
+        case media::PlayerEvent::ErrorOccurred:
+            queuePlaybackStateUpdate(PlaybackState::Error,
+                                     QString("ijkPlayer reported an error (%1).").arg(arg1));
+            break;
+        default:
+            break;
+        }
     }
 
     int PlayerController::handleVideoFrame(const Frame *frame)
@@ -237,6 +375,8 @@ namespace backend::playercontroller::service
         const int frameHeight = rawFrame->height;
         const int chromaWidth = (frameWidth + 1) / 2;
         const int chromaHeight = (frameHeight + 1) / 2;
+        const VideoColorMatrix colorMatrix = resolveColorMatrix(rawFrame);
+        const bool fullRange = isFullRangeSource(sourceFormat, rawFrame->color_range);
 
         QByteArray planeY;
         QByteArray planeU;
@@ -319,7 +459,9 @@ namespace backend::playercontroller::service
                                   Q_ARG(int, frameHeight),
                                   Q_ARG(QByteArray, planeY),
                                   Q_ARG(QByteArray, planeU),
-                                  Q_ARG(QByteArray, planeV));
+                                  Q_ARG(QByteArray, planeV),
+                                  Q_ARG(int, static_cast<int>(colorMatrix)),
+                                  Q_ARG(bool, fullRange));
         return 0;
     }
 

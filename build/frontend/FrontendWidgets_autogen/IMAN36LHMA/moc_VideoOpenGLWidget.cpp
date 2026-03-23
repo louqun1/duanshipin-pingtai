@@ -46,17 +46,19 @@ template <> constexpr inline auto VideoOpenGLWidget::qt_create_metaobjectdata<qt
         "planeY",
         "planeU",
         "planeV",
+        "colorMatrix",
+        "fullRange",
         "clearFrame"
     };
 
     QtMocHelpers::UintData qt_methods {
         // Method 'presentFrame'
-        QtMocHelpers::MethodData<void(int, int, const QByteArray &, const QByteArray &, const QByteArray &)>(1, 2, QMC::AccessPublic, QMetaType::Void, {{
+        QtMocHelpers::MethodData<void(int, int, const QByteArray &, const QByteArray &, const QByteArray &, int, bool)>(1, 2, QMC::AccessPublic, QMetaType::Void, {{
             { QMetaType::Int, 3 }, { QMetaType::Int, 4 }, { QMetaType::QByteArray, 5 }, { QMetaType::QByteArray, 6 },
-            { QMetaType::QByteArray, 7 },
+            { QMetaType::QByteArray, 7 }, { QMetaType::Int, 8 }, { QMetaType::Bool, 9 },
         }}),
         // Method 'clearFrame'
-        QtMocHelpers::MethodData<void()>(8, 2, QMC::AccessPublic, QMetaType::Void),
+        QtMocHelpers::MethodData<void()>(10, 2, QMC::AccessPublic, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -80,7 +82,7 @@ void VideoOpenGLWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
     auto *_t = static_cast<VideoOpenGLWidget *>(_o);
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: _t->presentFrame((*reinterpret_cast<std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<int>>(_a[2])),(*reinterpret_cast<std::add_pointer_t<QByteArray>>(_a[3])),(*reinterpret_cast<std::add_pointer_t<QByteArray>>(_a[4])),(*reinterpret_cast<std::add_pointer_t<QByteArray>>(_a[5]))); break;
+        case 0: _t->presentFrame((*reinterpret_cast<std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<int>>(_a[2])),(*reinterpret_cast<std::add_pointer_t<QByteArray>>(_a[3])),(*reinterpret_cast<std::add_pointer_t<QByteArray>>(_a[4])),(*reinterpret_cast<std::add_pointer_t<QByteArray>>(_a[5])),(*reinterpret_cast<std::add_pointer_t<int>>(_a[6])),(*reinterpret_cast<std::add_pointer_t<bool>>(_a[7]))); break;
         case 1: _t->clearFrame(); break;
         default: ;
         }

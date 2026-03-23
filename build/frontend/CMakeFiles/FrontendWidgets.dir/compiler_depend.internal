@@ -138,8 +138,10 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/build/frontend/FrontendWidgets_au
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qversiontagging.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qxptype_traits.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qyieldcpu.h
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QMatrix3x3
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QOpenGLFunctions
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QSurfaceFormat
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QVector3D
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qaction.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qbitmap.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qbrush.h
@@ -824,8 +826,10 @@ frontend/CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/mocs_compilation
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qversiontagging.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qxptype_traits.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qyieldcpu.h
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QMatrix3x3
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QOpenGLFunctions
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QSurfaceFormat
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QVector3D
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qaction.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qbitmap.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qbrush.h
@@ -4264,8 +4268,10 @@ frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoOpenGLWidget.cpp.obj
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qversiontagging.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qxptype_traits.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qyieldcpu.h
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QMatrix3x3
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QOpenGLFunctions
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QSurfaceFormat
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QVector3D
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qaction.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qbitmap.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qbrush.h
@@ -4690,8 +4696,10 @@ frontend/CMakeFiles/FrontendWidgets.dir/widgets/VideoPlayerWindow.cpp.obj
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qversiontagging.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qxptype_traits.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qyieldcpu.h
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QMatrix3x3
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QOpenGLFunctions
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QSurfaceFormat
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QVector3D
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qaction.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qbitmap.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qbrush.h
