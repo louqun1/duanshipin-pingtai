@@ -46,6 +46,7 @@ namespace backend::playercontroller::service
         void requestPause();
         void requestTogglePlayback();
         void requestStop();
+        void releasePlaybackResources();
 
     signals:
         void mediaChanged(

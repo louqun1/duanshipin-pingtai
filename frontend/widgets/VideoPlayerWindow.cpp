@@ -35,6 +35,14 @@ void VideoPlayerWindow::showSelectedVideo(
     playButton_->setEnabled(false);
 
     playerController_.openMedia(videoId, title, creator, duration);
+
+}
+
+void VideoPlayerWindow::closeEvent(QCloseEvent *event)
+{
+    playerController_.releasePlaybackResources();
+    showEmptyState();
+    QWidget::closeEvent(event);
 }
 
 void VideoPlayerWindow::connectPlayerController()

@@ -59,6 +59,7 @@ template <> constexpr inline auto backend::playercontroller::service::PlayerCont
         "requestPause",
         "requestTogglePlayback",
         "requestStop",
+        "releasePlaybackResources",
         "Idle",
         "Opening",
         "Prepared",
@@ -99,19 +100,21 @@ template <> constexpr inline auto backend::playercontroller::service::PlayerCont
         QtMocHelpers::SlotData<void()>(19, 2, QMC::AccessPublic, QMetaType::Void),
         // Slot 'requestStop'
         QtMocHelpers::SlotData<void()>(20, 2, QMC::AccessPublic, QMetaType::Void),
+        // Slot 'releasePlaybackResources'
+        QtMocHelpers::SlotData<void()>(21, 2, QMC::AccessPublic, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
     QtMocHelpers::UintData qt_enums {
         // enum 'PlaybackState'
         QtMocHelpers::EnumData<enum PlaybackState>(8, 8, QMC::EnumIsScoped).add({
-            {   21, PlaybackState::Idle },
-            {   22, PlaybackState::Opening },
-            {   23, PlaybackState::Prepared },
-            {   24, PlaybackState::Playing },
-            {   25, PlaybackState::Paused },
-            {   26, PlaybackState::Stopped },
-            {   27, PlaybackState::Error },
+            {   22, PlaybackState::Idle },
+            {   23, PlaybackState::Opening },
+            {   24, PlaybackState::Prepared },
+            {   25, PlaybackState::Playing },
+            {   26, PlaybackState::Paused },
+            {   27, PlaybackState::Stopped },
+            {   28, PlaybackState::Error },
         }),
     };
     return QtMocHelpers::metaObjectData<PlayerController, qt_meta_tag_ZN7backend16playercontroller7service16PlayerControllerE_t>(QMC::MetaObjectFlag{}, qt_stringData,
@@ -142,6 +145,7 @@ void backend::playercontroller::service::PlayerController::qt_static_metacall(QO
         case 7: _t->requestPause(); break;
         case 8: _t->requestTogglePlayback(); break;
         case 9: _t->requestStop(); break;
+        case 10: _t->releasePlaybackResources(); break;
         default: ;
         }
     }
@@ -176,14 +180,14 @@ int backend::playercontroller::service::PlayerController::qt_metacall(QMetaObjec
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 10)
+        if (_id < 11)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 10;
+        _id -= 11;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 10)
+        if (_id < 11)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 10;
+        _id -= 11;
     }
     return _id;
 }

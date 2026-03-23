@@ -120,7 +120,7 @@ namespace backend::playercontroller::service
 
     PlayerController::~PlayerController()
     {
-        resetVideoConverter();
+        releasePlaybackResources();
     }
 
     PlayerController::PlaybackState PlayerController::playbackState() const
@@ -220,8 +220,13 @@ namespace backend::playercontroller::service
             requestPause();
             return;
         }
-
-        requestPlay();
+        if (playbackState_ == PlaybackState::Paused ||
+            playbackState_ == PlaybackState::Prepared ||
+            playbackState_ == PlaybackState::Stopped)
+        {
+            requestPlay();
+            return;
+        }
     }
 
     void PlayerController::requestStop()
@@ -241,6 +246,36 @@ namespace backend::playercontroller::service
         if (ret != 0)
         {
             updatePlaybackState(playbackState_, QString("Stop request was rejected by ijkPlayer."));
+        }
+    }
+
+    void PlayerController::releasePlaybackResources()
+    {
+        if (videoSurface_)
+        {
+            QMetaObject::invokeMethod(videoSurface_.data(), "clearFrame", Qt::QueuedConnection);
+        }
+
+        resetVideoConverter();
+
+        if (ijkPlayer_)
+        {
+            ijkPlayer_->setEventCallback({});
+            ijkPlayer_->setVideoFrameCallback({});
+            ijkPlayer_->stop();
+            delete ijkPlayer_;
+            ijkPlayer_ = nullptr;
+        }
+
+        ijkPlayerCreated_ = false;
+        currentVideoId_.clear();
+        currentTitle_.clear();
+        currentCreator_.clear();
+        currentDuration_.clear();
+
+        if (playbackState_ != PlaybackState::Idle)
+        {
+            updatePlaybackState(PlaybackState::Idle, QString("Playback resources released."));
         }
     }
 

@@ -410,7 +410,8 @@ namespace media
 
         case FFP_MSG_PREPARED:
             changeState(MP_STATE_PREPARED);
-            notifyEvent(PlayerEvent::Prepared);
+            notifyEvent(PlayerEvent::Prepared);//已经根据文件，选择好了流和解码器，准备好了播放
+            
             return;
 
         case FFP_MSG_SEEK_COMPLETE:

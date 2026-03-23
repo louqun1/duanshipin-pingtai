@@ -190,6 +190,15 @@ int FFPlayer::stream_open(const char *file_name)
     init_clock(&vidclk, &videoq.serial);
     init_clock(&audclk, &audioq.serial);
     audio_clock_serial = -1;
+    // prepareAsync only prepares streams and buffers. start() is the point that should
+    // actually resume A/V clocks and output.
+    pause_req.store(1);
+    paused.store(1);
+    auto_resume.store(0);
+    buffering_on.store(0);
+    step.store(0);
+    audclk.paused = 1;
+    vidclk.paused = 1;
     // 初始化音量等
 
     // 创建解复用器读数据线程read_thread

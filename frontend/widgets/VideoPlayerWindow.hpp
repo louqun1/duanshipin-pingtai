@@ -2,6 +2,7 @@
 
 #include "playercontroller/service/PlayerController.hpp"
 
+#include <QCloseEvent>
 #include <QString>
 #include <QWidget>
 
@@ -27,6 +28,7 @@ public:
         const QString &duration);
 
 private:
+    void closeEvent(QCloseEvent *event) override;
     void buildUi();
     void connectPlayerController();
     void showEmptyState();
