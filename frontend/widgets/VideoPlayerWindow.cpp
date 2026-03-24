@@ -248,6 +248,7 @@ VideoPlayerWindow::VideoPlayerWindow(
 }
 
 void VideoPlayerWindow::showSelectedVideo(
+    const QString &mediaUrl,
     const QString &videoId,
     const QString &title,
     const QString &creator,
@@ -263,7 +264,7 @@ void VideoPlayerWindow::showSelectedVideo(
     showFullscreenControls();
     scheduleFullscreenControlsHide();
 
-    playerController_.openMedia(videoId, title, creator, duration);
+    playerController_.openMedia(mediaUrl, videoId, title, creator, duration);
 }
 
 bool VideoPlayerWindow::eventFilter(QObject *watched, QEvent *event)

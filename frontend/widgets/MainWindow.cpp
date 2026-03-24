@@ -131,7 +131,8 @@ void MainWindow::connectNavigation()
 void MainWindow::connectPlaybackFlow()
 {
     connect(homePage_, &frontend::pages::HomePage::playRequested,
-            this, [this](const QString &videoId,
+            this, [this](const QString &mediaUrl,
+                         const QString &videoId,
                          const QString &title,
                          const QString &creator,
                          const QString &duration) {
@@ -139,7 +140,7 @@ void MainWindow::connectPlaybackFlow()
                     videoPlayerWindow_ = new VideoPlayerWindow(playerController_);
                 }
 
-                videoPlayerWindow_->showSelectedVideo(videoId, title, creator, duration);
+                videoPlayerWindow_->showSelectedVideo(mediaUrl, videoId, title, creator, duration);
                 videoPlayerWindow_->show();
                 videoPlayerWindow_->raise();
                 videoPlayerWindow_->activateWindow();

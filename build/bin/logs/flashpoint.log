@@ -87275,3 +87275,40 @@
 [2026-03-24 08:50:37.440] [info] [thread 8828] leave
 [2026-03-24 08:50:37.483] [info] [thread 5516] AVMEDIA_TYPE_VIDEO
 [2026-03-24 08:50:37.483] [info] [thread 15352] leave
+[2026-03-24 16:16:53.564] [info] [thread 5052] Logging initialized, file=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\bin\logs\flashpoint.log
+[2026-03-24 16:16:53.564] [info] [thread 5052] Starting desktop rebuild skeleton
+[2026-03-24 16:19:56.565] [info] [thread 22456] Logging initialized, file=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\bin\logs\flashpoint.log
+[2026-03-24 16:19:56.566] [info] [thread 22456] Starting desktop rebuild skeleton
+[2026-03-24 16:46:57.838] [info] [thread 16704] Logging initialized, file=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\bin\logs\flashpoint.log
+[2026-03-24 16:46:57.838] [info] [thread 16704] Starting desktop rebuild skeleton
+[2026-03-24 16:47:11.803] [info] [thread 16704] IjkMediaPlayer()
+[2026-03-24 16:47:11.804] [info] [thread 16704] ffp_create
+[2026-03-24 16:47:11.804] [info] [thread 15924] IjkMediaPlayer message loop started
+[2026-03-24 16:47:11.805] [info] [thread 16704] audio_volume: 64
+[2026-03-24 16:47:11.805] [info] [thread 16704] audio_volume: 64
+[2026-03-24 16:47:11.825] [info] [thread 15924] Unhandled message: 10
+[2026-03-24 16:47:23.560] [info] [thread 16704] ~IjkMediaPlayer()
+[2026-03-24 16:47:23.560] [info] [thread 15924] IjkMediaPlayer message loop ended
+[2026-03-24 16:47:23.561] [info] [thread 20652] leave
+[2026-03-24 16:48:01.244] [info] [thread 22988] Logging initialized, file=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\bin\logs\flashpoint.log
+[2026-03-24 16:48:01.244] [info] [thread 22988] Starting desktop rebuild skeleton
+[2026-03-24 16:48:12.019] [info] [thread 22988] IjkMediaPlayer()
+[2026-03-24 16:48:12.019] [info] [thread 22988] ffp_create
+[2026-03-24 16:48:12.019] [info] [thread 22988] audio_volume: 64
+[2026-03-24 16:48:12.019] [info] [thread 24128] IjkMediaPlayer message loop started
+[2026-03-24 16:48:12.020] [info] [thread 22988] audio_volume: 64
+[2026-03-24 16:48:12.031] [info] [thread 24128] Unhandled message: 10
+[2026-03-24 16:48:14.568] [info] [thread 22988] ~IjkMediaPlayer()
+[2026-03-24 16:48:14.568] [info] [thread 24128] IjkMediaPlayer message loop ended
+[2026-03-24 16:48:14.574] [info] [thread 23864] leave
+[2026-03-24 17:14:48.639] [info] [thread 3360] Logging initialized, file=D:\itffmpeg\av_media\online\duanshipin-pingtai\build\bin\logs\flashpoint.log
+[2026-03-24 17:14:48.640] [info] [thread 3360] Starting desktop rebuild skeleton
+[2026-03-24 17:14:58.556] [info] [thread 3360] IjkMediaPlayer()
+[2026-03-24 17:14:58.557] [info] [thread 3360] ffp_create
+[2026-03-24 17:14:58.557] [info] [thread 9796] IjkMediaPlayer message loop started
+[2026-03-24 17:14:58.558] [info] [thread 3360] audio_volume: 64
+[2026-03-24 17:14:58.558] [info] [thread 3360] audio_volume: 64
+[2026-03-24 17:14:58.575] [info] [thread 9796] Unhandled message: 10
+[2026-03-24 17:15:08.545] [info] [thread 3360] ~IjkMediaPlayer()
+[2026-03-24 17:15:08.546] [info] [thread 9796] IjkMediaPlayer message loop ended
+[2026-03-24 17:15:08.550] [info] [thread 18656] leave

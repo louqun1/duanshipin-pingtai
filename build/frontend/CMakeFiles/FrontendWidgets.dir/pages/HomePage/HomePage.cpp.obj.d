@@ -331,8 +331,8 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/HomePage/HomePage.cpp.obj: \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/ctime \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qeventloop.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdeadlinetimer.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstring.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QStringList \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstringlist.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QVector \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qvector.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QWidget \
@@ -403,8 +403,8 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/HomePage/HomePage.cpp.obj: \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qpushbutton.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qabstractbutton.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qwidget.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QMetaObject \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qobjectdefs.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstring.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QFrame \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qframe.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QGridLayout \
@@ -415,13 +415,75 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/HomePage/HomePage.cpp.obj: \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qgridlayout.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QHBoxLayout \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qboxlayout.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QJsonArray \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qjsonarray.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qjsonvalue.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcborvalue.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcborcommon.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdatetime.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcalendar.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qlocale.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qregularexpression.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qurl.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/quuid.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qjsondocument.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qjsonparseerror.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QJsonDocument \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qjsondocument.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QJsonObject \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qjsonobject.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QLabel \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qlabel.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qframe.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpicture.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qiodevice.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qtextdocument.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QMetaObject \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qobjectdefs.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtNetwork/QNetworkAccessManager \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtNetwork/qnetworkaccessmanager.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtNetwork/qtnetworkglobal.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtNetwork/qtnetwork-config.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtNetwork/qtnetworkexports.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtNetwork/qnetworkrequest.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtNetwork/qhttpheaders.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qmetaobject.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSharedDataPointer \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qshareddata.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QUrl \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qurl.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QVariant \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qvariant.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q26numeric.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QList \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qlist.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QObject \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qobject.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtNetwork/QSslConfiguration \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtNetwork/qsslconfiguration.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtNetwork/qsslsocket.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtNetwork/qtcpsocket.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtNetwork/qabstractsocket.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtNetwork/qhostaddress.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtNetwork/qsslerror.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtNetwork/qsslcertificate.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcryptographichash.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtNetwork/qssl.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QFlags \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qflags.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtNetwork/QSslPreSharedKeyAuthenticator \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtNetwork/qsslpresharedkeyauthenticator.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QMetaType \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qmetatype.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtNetwork/QNetworkReply \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtNetwork/qnetworkreply.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QIODevice \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qiodevice.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtNetwork/QNetworkRequest \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtNetwork/qnetworkrequest.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtNetwork/QNetworkAccessManager \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtNetwork/QNetworkRequest \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QResizeEvent \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qevent.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcoreevent.h \
@@ -431,10 +493,6 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/HomePage/HomePage.cpp.obj: \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpointingdevice.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qinputdevice.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qscreen.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QList \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qlist.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QObject \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qobject.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QRect \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qrect.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSize \
@@ -448,10 +506,10 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/HomePage/HomePage.cpp.obj: \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcoreapplication.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcoreapplication_platform.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qinputmethod.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qlocale.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qguiapplication_platform.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QScrollArea \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qscrollarea.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qabstractscrollarea.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QShowEvent \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QUrl \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QVBoxLayout

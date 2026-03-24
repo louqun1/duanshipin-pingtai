@@ -6,15 +6,18 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"net/url"
+	"path"
 	"strconv"
 	"strings"
 	"time"
 
 	"vod-platform-server/internal/config"
 	"vod-platform-server/internal/db"
+	"vod-platform-server/internal/storage"
 )
 
 type videoRow struct {
@@ -44,8 +47,9 @@ type videoResponse struct {
 }
 
 type apiServer struct {
-	cfg      config.Config
-	database *sql.DB
+	cfg          config.Config
+	database     *sql.DB
+	mediaStorage *storage.MinIOStorage
 }
 
 func main() {
@@ -57,14 +61,29 @@ func main() {
 	}
 	defer database.Close()
 
+	mediaStorage, err := storage.NewMinIOStorage(cfg)
+	if err != nil {
+		log.Fatalf("connect minio: %v", err)
+	}
+	ctx := context.Background()
+	if err := mediaStorage.EnsureVODBucket(ctx); err != nil {
+		log.Fatalf("check vod bucket: %v", err)
+	}
+	if err := mediaStorage.EnsureImageBucket(ctx); err != nil {
+		log.Fatalf("check image bucket: %v", err)
+	}
+
 	server := &apiServer{
-		cfg:      cfg,
-		database: database,
+		cfg:          cfg,
+		database:     database,
+		mediaStorage: mediaStorage,
 	}
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/api/videos", server.handleVideos)
 	mux.HandleFunc("/api/videos/", server.handleVideoDetail)
+	mux.HandleFunc("/vod/", server.handleVODObject)
+	mux.HandleFunc("/image/", server.handleImageObject)
 	mux.HandleFunc("/healthz", handleHealthz)
 
 	log.Printf("api listening on %s", cfg.HTTPAddr)
@@ -121,7 +140,7 @@ func (s *apiServer) handleVideos(writer http.ResponseWriter, request *http.Reque
 			return
 		}
 
-		responses = append(responses, s.toVideoResponse(row))
+		responses = append(responses, s.toVideoResponse(row, s.cfg.PublicBaseURL))
 	}
 
 	if err := rows.Err(); err != nil {
@@ -165,7 +184,7 @@ func (s *apiServer) handleVideoDetail(writer http.ResponseWriter, request *http.
 		return
 	}
 
-	writeJSON(writer, http.StatusOK, s.toVideoResponse(row))
+	writeJSON(writer, http.StatusOK, s.toVideoResponse(row, s.cfg.PublicBaseURL))
 }
 
 func (s *apiServer) findVideoByID(ctx context.Context, videoID int64) (videoRow, error) {
@@ -193,7 +212,7 @@ func (s *apiServer) findVideoByID(ctx context.Context, videoID int64) (videoRow,
 	return result, err
 }
 
-func (s *apiServer) toVideoResponse(row videoRow) videoResponse {
+func (s *apiServer) toVideoResponse(row videoRow, baseURL string) videoResponse {
 	response := videoResponse{
 		ID:        row.ID,
 		Title:     row.Title,
@@ -205,10 +224,10 @@ func (s *apiServer) toVideoResponse(row videoRow) videoResponse {
 		response.Description = row.Description.String
 	}
 	if row.CoverObjectKey.Valid {
-		response.CoverURL = buildObjectURL(s.cfg.PublicBaseURL, s.cfg.ImageBucket, row.CoverObjectKey.String)
+		response.CoverURL = buildMediaURL(baseURL, "/image/", row.CoverObjectKey.String)
 	}
 	if row.PlayObjectKey.Valid {
-		response.PlayURL = buildObjectURL(s.cfg.PublicBaseURL, s.cfg.VODBucket, row.PlayObjectKey.String)
+		response.PlayURL = buildMediaURL(baseURL, "/vod/", row.PlayObjectKey.String)
 	}
 	if row.DurationMs.Valid {
 		value := row.DurationMs.Int64
@@ -226,15 +245,105 @@ func (s *apiServer) toVideoResponse(row videoRow) videoResponse {
 	return response
 }
 
-func buildObjectURL(baseURL, bucket, objectKey string) string {
+func (s *apiServer) handleVODObject(writer http.ResponseWriter, request *http.Request) {
+	s.handleBucketObject(writer, request, "/vod/", func(ctx context.Context, objectKey string) (io.ReadSeekCloser, objectInfo, error) {
+		stream, info, err := s.mediaStorage.OpenVODObject(ctx, objectKey)
+		return stream, objectInfo{
+			ContentType:  info.ContentType,
+			ETag:         info.ETag,
+			LastModified: info.LastModified,
+		}, err
+	})
+}
+
+func (s *apiServer) handleImageObject(writer http.ResponseWriter, request *http.Request) {
+	s.handleBucketObject(writer, request, "/image/", func(ctx context.Context, objectKey string) (io.ReadSeekCloser, objectInfo, error) {
+		stream, info, err := s.mediaStorage.OpenImageObject(ctx, objectKey)
+		return stream, objectInfo{
+			ContentType:  info.ContentType,
+			ETag:         info.ETag,
+			LastModified: info.LastModified,
+		}, err
+	})
+}
+
+type objectInfo struct {
+	ContentType  string
+	ETag         string
+	LastModified time.Time
+}
+
+func (s *apiServer) handleBucketObject(
+	writer http.ResponseWriter,
+	request *http.Request,
+	routePrefix string,
+	openObject func(ctx context.Context, objectKey string) (io.ReadSeekCloser, objectInfo, error),
+) {
+	if request.Method != http.MethodGet && request.Method != http.MethodHead {
+		writeMethodNotAllowed(writer)
+		return
+	}
+
+	objectKey := normalizeObjectKey(request.URL.Path, routePrefix)
+	if objectKey == "" {
+		writeNotFound(writer)
+		return
+	}
+
+	ctx, cancel := context.WithTimeout(request.Context(), 30*time.Second)
+	defer cancel()
+
+	stream, info, err := openObject(ctx, objectKey)
+	if err != nil {
+		if storage.IsObjectNotFound(err) {
+			writeNotFound(writer)
+			return
+		}
+		writeServerError(writer, fmt.Errorf("open object %s: %w", objectKey, err))
+		return
+	}
+	defer stream.Close()
+
+	if info.ContentType != "" {
+		writer.Header().Set("Content-Type", info.ContentType)
+	}
+	if info.ETag != "" {
+		writer.Header().Set("ETag", fmt.Sprintf(`"%s"`, strings.Trim(info.ETag, `"`)))
+	}
+
+	http.ServeContent(writer, request, path.Base(objectKey), info.LastModified, stream)
+}
+
+func buildMediaURL(baseURL, routePrefix, objectKey string) string {
 	trimmedBase := strings.TrimRight(baseURL, "/")
-	segments := []string{trimmedBase, url.PathEscape(bucket)}
+	trimmedPrefix := strings.Trim(routePrefix, "/")
+	segments := []string{trimmedBase}
+	if trimmedPrefix != "" {
+		segments = append(segments, url.PathEscape(trimmedPrefix))
+	}
 
 	for _, segment := range strings.Split(strings.TrimLeft(objectKey, "/"), "/") {
+		if segment == "" {
+			continue
+		}
 		segments = append(segments, url.PathEscape(segment))
 	}
 
 	return strings.Join(segments, "/")
+}
+
+func normalizeObjectKey(requestPath, routePrefix string) string {
+	rawPath := strings.TrimPrefix(requestPath, routePrefix)
+	if rawPath == "" {
+		return ""
+	}
+
+	cleaned := path.Clean("/" + rawPath)
+	if cleaned == "/" || cleaned == "." {
+		return ""
+	}
+
+	return strings.TrimPrefix(cleaned, "/")
 }
 
 func writeJSON(writer http.ResponseWriter, statusCode int, payload any) {

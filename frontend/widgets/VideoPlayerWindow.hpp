@@ -31,6 +31,7 @@ public:
         QWidget *parent = nullptr);
 
     void showSelectedVideo(
+        const QString &mediaUrl,
         const QString &videoId,
         const QString &title,
         const QString &creator,

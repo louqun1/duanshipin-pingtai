@@ -1,12 +1,14 @@
-﻿#pragma once
+#pragma once
 
 #include <QEvent>
-#include <QString>
+#include <QStringList>
 #include <QVector>
 #include <QWidget>
 
 class QGridLayout;
 class QLabel;
+class QNetworkAccessManager;
+class QNetworkReply;
 class QResizeEvent;
 class QScrollArea;
 class QShowEvent;
@@ -26,6 +28,7 @@ public:
 
 signals:
     void playRequested(
+        const QString &mediaUrl,
         const QString &videoId,
         const QString &title,
         const QString &creator,
@@ -37,15 +40,36 @@ protected:
     void showEvent(QShowEvent *event) override;
 
 private:
+    struct RemoteVideoItem {
+        QString id;
+        QString title;
+        QString creator;
+        QString duration;
+        QString status;
+        QString coverUrl;
+        QString playUrl;
+    };
+
     void buildUi();
-    void populateFeed();
+    void fetchFeed();
+    void handleFeedReply(QNetworkReply *reply);
+    void requestVideoDetail(const RemoteVideoItem &item);
+    void handleVideoDetailReply(QNetworkReply *reply, RemoteVideoItem fallbackItem);
     void relayoutCards();
+    void clearCards();
+    void setStatusMessage(const QString &message);
 
     QScrollArea *feedScrollArea_ = nullptr;
     QWidget *feedContainer_ = nullptr;
     QGridLayout *feedGrid_ = nullptr;
     QLabel *feedStatsLabel_ = nullptr;
+    QNetworkAccessManager *networkManager_ = nullptr;
     QVector<frontend::components::VideoCard *> cards_;
+    QVector<RemoteVideoItem> feedItems_;
+    QStringList apiBaseUrls_;
+    int apiBaseUrlIndex_ = 0;
+    QString activeApiBaseUrl_;
+    bool feedRequested_ = false;
 };
 
 }  // namespace frontend::pages

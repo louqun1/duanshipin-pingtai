@@ -11,7 +11,27 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_PREFIX_PATH "D:/itffmpeg/Qt/6.10.2/llvm-mingw_64")
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets Sql OpenGL OpenGLWidgets)
+# Qt6Gui advertises optional Vulkan headers. On machines without a Vulkan SDK,
+# pre-creating the nolink target keeps configure output clean while still using
+# real headers if they are discoverable.
+find_path(FLASHPOINT_VULKAN_INCLUDE_DIR
+    NAMES vulkan/vulkan.h
+)
+
+if(NOT TARGET WrapVulkanHeaders::WrapVulkanHeaders)
+    add_library(WrapVulkanHeaders::WrapVulkanHeaders INTERFACE IMPORTED)
+    if(FLASHPOINT_VULKAN_INCLUDE_DIR)
+        set_target_properties(WrapVulkanHeaders::WrapVulkanHeaders PROPERTIES
+            INTERFACE_INCLUDE_DIRECTORIES "${FLASHPOINT_VULKAN_INCLUDE_DIR}"
+        )
+    endif()
+    set_target_properties(WrapVulkanHeaders::WrapVulkanHeaders PROPERTIES
+        _qt_is_nolink_target TRUE
+        _qt_skip_include_dir_for_pri TRUE
+    )
+endif()
+
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets Network Sql OpenGL OpenGLWidgets)
 
 add_subdirectory(backend)
 add_subdirectory(frontend)
@@ -90,6 +110,7 @@ endif()
 if (EXISTS "D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/bin/windeployqt.exe")
     add_custom_command(TARGET QtFrontend POST_BUILD
         COMMAND D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/bin/windeployqt.exe
+        --no-system-dxc-compiler
         $<TARGET_FILE:QtFrontend>
     )
 endif()

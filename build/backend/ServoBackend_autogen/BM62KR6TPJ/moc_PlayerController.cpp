@@ -61,6 +61,7 @@ template <> constexpr inline auto backend::playercontroller::service::PlayerCont
         "QWidget*",
         "surface",
         "openMedia",
+        "mediaUrl",
         "requestPlay",
         "requestPause",
         "requestTogglePlayback",
@@ -106,42 +107,43 @@ template <> constexpr inline auto backend::playercontroller::service::PlayerCont
             { 0x80000000 | 20, 21 },
         }}),
         // Slot 'openMedia'
-        QtMocHelpers::SlotData<void(const QString &, const QString &, const QString &, const QString &)>(22, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { QMetaType::QString, 3 }, { QMetaType::QString, 4 }, { QMetaType::QString, 5 }, { QMetaType::QString, 6 },
+        QtMocHelpers::SlotData<void(const QString &, const QString &, const QString &, const QString &, const QString &)>(22, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::QString, 23 }, { QMetaType::QString, 3 }, { QMetaType::QString, 4 }, { QMetaType::QString, 5 },
+            { QMetaType::QString, 6 },
         }}),
         // Slot 'requestPlay'
-        QtMocHelpers::SlotData<void()>(23, 2, QMC::AccessPublic, QMetaType::Void),
-        // Slot 'requestPause'
         QtMocHelpers::SlotData<void()>(24, 2, QMC::AccessPublic, QMetaType::Void),
-        // Slot 'requestTogglePlayback'
+        // Slot 'requestPause'
         QtMocHelpers::SlotData<void()>(25, 2, QMC::AccessPublic, QMetaType::Void),
+        // Slot 'requestTogglePlayback'
+        QtMocHelpers::SlotData<void()>(26, 2, QMC::AccessPublic, QMetaType::Void),
         // Slot 'requestSeek'
-        QtMocHelpers::SlotData<void(int)>(26, 2, QMC::AccessPublic, QMetaType::Void, {{
+        QtMocHelpers::SlotData<void(int)>(27, 2, QMC::AccessPublic, QMetaType::Void, {{
             { QMetaType::Int, 12 },
         }}),
         // Slot 'requestSetVolume'
-        QtMocHelpers::SlotData<void(int)>(27, 2, QMC::AccessPublic, QMetaType::Void, {{
+        QtMocHelpers::SlotData<void(int)>(28, 2, QMC::AccessPublic, QMetaType::Void, {{
             { QMetaType::Int, 15 },
         }}),
         // Slot 'requestToggleMute'
-        QtMocHelpers::SlotData<void()>(28, 2, QMC::AccessPublic, QMetaType::Void),
-        // Slot 'requestStop'
         QtMocHelpers::SlotData<void()>(29, 2, QMC::AccessPublic, QMetaType::Void),
-        // Slot 'releasePlaybackResources'
+        // Slot 'requestStop'
         QtMocHelpers::SlotData<void()>(30, 2, QMC::AccessPublic, QMetaType::Void),
+        // Slot 'releasePlaybackResources'
+        QtMocHelpers::SlotData<void()>(31, 2, QMC::AccessPublic, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
     QtMocHelpers::UintData qt_enums {
         // enum 'PlaybackState'
         QtMocHelpers::EnumData<enum PlaybackState>(8, 8, QMC::EnumIsScoped).add({
-            {   31, PlaybackState::Idle },
-            {   32, PlaybackState::Opening },
-            {   33, PlaybackState::Prepared },
-            {   34, PlaybackState::Playing },
-            {   35, PlaybackState::Paused },
-            {   36, PlaybackState::Stopped },
-            {   37, PlaybackState::Error },
+            {   32, PlaybackState::Idle },
+            {   33, PlaybackState::Opening },
+            {   34, PlaybackState::Prepared },
+            {   35, PlaybackState::Playing },
+            {   36, PlaybackState::Paused },
+            {   37, PlaybackState::Stopped },
+            {   38, PlaybackState::Error },
         }),
     };
     return QtMocHelpers::metaObjectData<PlayerController, qt_meta_tag_ZN7backend16playercontroller7service16PlayerControllerE_t>(QMC::MetaObjectFlag{}, qt_stringData,
@@ -169,7 +171,7 @@ void backend::playercontroller::service::PlayerController::qt_static_metacall(QO
         case 4: _t->ijkPlayerCreated(); break;
         case 5: _t->ijkPlayerOpenRequested((*reinterpret_cast<std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[2]))); break;
         case 6: _t->attachVideoSurface((*reinterpret_cast<std::add_pointer_t<QWidget*>>(_a[1]))); break;
-        case 7: _t->openMedia((*reinterpret_cast<std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[2])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[3])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[4]))); break;
+        case 7: _t->openMedia((*reinterpret_cast<std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[2])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[3])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[4])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[5]))); break;
         case 8: _t->requestPlay(); break;
         case 9: _t->requestPause(); break;
         case 10: _t->requestTogglePlayback(); break;

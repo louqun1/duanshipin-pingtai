@@ -6713,3 +6713,235 @@ eason: "no_exist"
         - "C:/Program Files (x86)/BionicHeadBackend"
 ...
 ...
+
+---
+events:
+  -
+    kind: "find_package-v1"
+    backtrace:
+      - "D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6/Qt6Config.cmake:241 (find_package)"
+      - "CMakeLists.txt:14 (find_package)"
+    name: "Qt6Network"
+    configs:
+      -
+        filename: "Qt6NetworkConfig.cmake"
+        kind: "cmake"
+      -
+        filename: "qt6network-config.cmake"
+        kind: "cmake"
+    version_request:
+      exact: false
+    settings:
+      required: "optional"
+      quiet: false
+      global: false
+      policy_scope: true
+      bypass_provider: false
+      names:
+        - "Qt6Network"
+      search_paths:
+        - "D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake"
+      path_suffixes:
+        - ""
+      paths:
+        CMAKE_FIND_USE_CMAKE_PATH: false
+        CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+        CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+        CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+        CMAKE_FIND_USE_INSTALL_PREFIX: true
+        CMAKE_FIND_USE_PACKAGE_ROOT_PATH: true
+        CMAKE_FIND_USE_CMAKE_PACKAGE_REGISTRY: true
+        CMAKE_FIND_USE_SYSTEM_PACKAGE_REGISTRY: true
+        CMAKE_FIND_ROOT_PATH_MODE: "BOTH"
+    candidates:
+      -
+        path: "D:/itffmpeg/av_media/online/duanshipin-pingtai/build/CMakeFiles/pkgRedirects/Qt6NetworkConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "D:/itffmpeg/av_media/online/duanshipin-pingtai/build/CMakeFiles/pkgRedirects/qt6network-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6NetworkConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/qt6network-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6NetworkPrivate/Qt6NetworkConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6NetworkPrivate/qt6network-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+    found:
+      path: "D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/lib/cmake/Qt6Network/Qt6NetworkConfig.cmake"
+      mode: "config"
+      version: "6.10.2"
+    search_context:
+      CMAKE_PREFIX_PATH:
+        - "D:/itffmpeg/Qt/6.10.2/llvm-mingw_64"
+      ENV{PATH}:
+        - "C:\\Users\\louqun\\.codex\\tmp\\arg0\\codex-arg0XQgsGg"
+        - "D:\\itffmpeg\\Microsoft VS Code"
+        - "D:\\app\\vmware\\bin\\"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files"
+        - "C:\\Windows\\System32"
+        - "D:\\app\\xshell8\\"
+        - "D:\\app\\xftp\\"
+        - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\NvDLISR"
+        - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
+        - "D:\\itffmpeg\\bin"
+        - "D:\\itffmpeg\\Microsoft VS Code\\node\\"
+        - "D:\\itffmpeg\\VisualStudio(2019)\\IDE\\Common7\\IDE\\CommonExtensions\\Microsoft\\TeamFoundation\\Team Explorer\\Git\\cmd"
+        - "C:\\Program Files\\Git\\cmd"
+        - "D:\\itffmpeg\\cmake-4.2.3\\bin\\cmake.exe"
+        - "C:\\Users\\louqun\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "D:\\app\\cursor\\resources\\app\\bin"
+        - "D:\\itffmpeg\\Microsoft VS Code\\bin"
+        - "D:\\itffmpeg\\x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1\\mingw64\\bin"
+        - "D:\\itffmpeg\\Microsoft VS Code\\node\\node_global"
+        - "c:\\Users\\louqun\\.vscode\\extensions\\openai.chatgpt-26.5318.11754-win32-x64\\bin\\windows-x86_64"
+      CMAKE_INSTALL_PREFIX: "C:/Program Files (x86)/BionicHeadBackend"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "C:/Program Files"
+        - "C:/Program Files (x86)"
+        - "D:/itffmpeg/cmake-4.2.3"
+        - "C:/Program Files (x86)/BionicHeadBackend"
+...
+
+---
+events:
+  -
+    kind: "find-v1"
+    backtrace:
+      - "CMakeLists.txt:17 (find_path)"
+    mode: "path"
+    variable: "FLASHPOINT_VULKAN_INCLUDE_DIR"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "vulkan/vulkan.h"
+    candidate_directories:
+      - "D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/"
+      - "D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/"
+      - "C:/Users/louqun/.codex/tmp/arg0/codex-arg0XQgsGg/"
+      - "D:/itffmpeg/Microsoft VS Code/"
+      - "D:/app/vmware/bin/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/"
+      - "D:/app/xshell8/"
+      - "D:/app/xftp/"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA App/NvDLISR/"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
+      - "D:/itffmpeg/bin/"
+      - "D:/itffmpeg/Microsoft VS Code/node/"
+      - "D:/itffmpeg/VisualStudio(2019)/IDE/Common7/IDE/CommonExtensions/Microsoft/TeamFoundation/Team Explorer/Git/cmd/"
+      - "C:/Program Files/Git/cmd/"
+      - "D:/itffmpeg/cmake-4.2.3/bin/cmake.exe/"
+      - "C:/Users/louqun/AppData/Local/Microsoft/WindowsApps/"
+      - "D:/app/cursor/resources/app/bin/"
+      - "D:/itffmpeg/Microsoft VS Code/bin/"
+      - "D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/bin/"
+      - "D:/itffmpeg/Microsoft VS Code/node/node_global/"
+      - "C:/Users/louqun/.vscode/extensions/openai.chatgpt-26.5318.11754-win32-x64/bin/windows-x86_64/"
+      - "C:/Program Files/include/"
+      - "C:/Program Files/"
+      - "C:/Program Files (x86)/include/"
+      - "C:/Program Files (x86)/"
+      - "D:/itffmpeg/cmake-4.2.3/include/"
+      - "D:/itffmpeg/cmake-4.2.3/"
+      - "C:/Program Files (x86)/BionicHeadBackend/include/"
+      - "C:/Program Files (x86)/BionicHeadBackend/"
+    searched_directories:
+      - "D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/vulkan/vulkan.h"
+      - "D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/vulkan/vulkan.h"
+      - "C:/Users/louqun/.codex/tmp/arg0/codex-arg0XQgsGg/vulkan/vulkan.h"
+      - "D:/itffmpeg/Microsoft VS Code/vulkan/vulkan.h"
+      - "D:/app/vmware/bin/vulkan/vulkan.h"
+      - "C:/Windows/System32/vulkan/vulkan.h"
+      - "C:/Windows/vulkan/vulkan.h"
+      - "C:/Windows/System32/wbem/vulkan/vulkan.h"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/vulkan/vulkan.h"
+      - "C:/Windows/System32/OpenSSH/vulkan/vulkan.h"
+      - "C:/Program Files/vulkan/vulkan.h"
+      - "D:/app/xshell8/vulkan/vulkan.h"
+      - "D:/app/xftp/vulkan/vulkan.h"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA App/NvDLISR/vulkan/vulkan.h"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/vulkan/vulkan.h"
+      - "D:/itffmpeg/bin/vulkan/vulkan.h"
+      - "D:/itffmpeg/Microsoft VS Code/node/vulkan/vulkan.h"
+      - "D:/itffmpeg/VisualStudio(2019)/IDE/Common7/IDE/CommonExtensions/Microsoft/TeamFoundation/Team Explorer/Git/cmd/vulkan/vulkan.h"
+      - "C:/Program Files/Git/cmd/vulkan/vulkan.h"
+      - "D:/itffmpeg/cmake-4.2.3/bin/cmake.exe/vulkan/vulkan.h"
+      - "C:/Users/louqun/AppData/Local/Microsoft/WindowsApps/vulkan/vulkan.h"
+      - "D:/app/cursor/resources/app/bin/vulkan/vulkan.h"
+      - "D:/itffmpeg/Microsoft VS Code/bin/vulkan/vulkan.h"
+      - "D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/bin/vulkan/vulkan.h"
+      - "D:/itffmpeg/Microsoft VS Code/node/node_global/vulkan/vulkan.h"
+      - "C:/Users/louqun/.vscode/extensions/openai.chatgpt-26.5318.11754-win32-x64/bin/windows-x86_64/vulkan/vulkan.h"
+      - "C:/Program Files/include/vulkan/vulkan.h"
+      - "C:/Program Files/vulkan/vulkan.h"
+      - "C:/Program Files (x86)/include/vulkan/vulkan.h"
+      - "C:/Program Files (x86)/vulkan/vulkan.h"
+      - "D:/itffmpeg/cmake-4.2.3/include/vulkan/vulkan.h"
+      - "D:/itffmpeg/cmake-4.2.3/vulkan/vulkan.h"
+      - "C:/Program Files (x86)/BionicHeadBackend/include/vulkan/vulkan.h"
+      - "C:/Program Files (x86)/BionicHeadBackend/vulkan/vulkan.h"
+    found: false
+    search_context:
+      CMAKE_PREFIX_PATH:
+        - "D:/itffmpeg/Qt/6.10.2/llvm-mingw_64"
+      ENV{PATH}:
+        - "C:\\Users\\louqun\\.codex\\tmp\\arg0\\codex-arg0XQgsGg"
+        - "D:\\itffmpeg\\Microsoft VS Code"
+        - "D:\\app\\vmware\\bin\\"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files"
+        - "C:\\Windows\\System32"
+        - "D:\\app\\xshell8\\"
+        - "D:\\app\\xftp\\"
+        - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\NvDLISR"
+        - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
+        - "D:\\itffmpeg\\bin"
+        - "D:\\itffmpeg\\Microsoft VS Code\\node\\"
+        - "D:\\itffmpeg\\VisualStudio(2019)\\IDE\\Common7\\IDE\\CommonExtensions\\Microsoft\\TeamFoundation\\Team Explorer\\Git\\cmd"
+        - "C:\\Program Files\\Git\\cmd"
+        - "D:\\itffmpeg\\cmake-4.2.3\\bin\\cmake.exe"
+        - "C:\\Users\\louqun\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "D:\\app\\cursor\\resources\\app\\bin"
+        - "D:\\itffmpeg\\Microsoft VS Code\\bin"
+        - "D:\\itffmpeg\\x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1\\mingw64\\bin"
+        - "D:\\itffmpeg\\Microsoft VS Code\\node\\node_global"
+        - "c:\\Users\\louqun\\.vscode\\extensions\\openai.chatgpt-26.5318.11754-win32-x64\\bin\\windows-x86_64"
+      CMAKE_INSTALL_PREFIX: "C:/Program Files (x86)/BionicHeadBackend"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "C:/Program Files"
+        - "C:/Program Files (x86)"
+        - "D:/itffmpeg/cmake-4.2.3"
+        - "C:/Program Files (x86)/BionicHeadBackend"
+...

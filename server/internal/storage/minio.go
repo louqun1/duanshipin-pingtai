@@ -3,6 +3,8 @@ package storage
 import (
 	"context"
 	"fmt"
+	"io"
+	"net/http"
 
 	"vod-platform-server/internal/config"
 
@@ -86,6 +88,29 @@ func (s *MinIOStorage) DownloadFile(ctx context.Context, bucket, objectKey, loca
 	return nil
 }
 
+func (s *MinIOStorage) OpenObject(ctx context.Context, bucket, objectKey string) (io.ReadSeekCloser, minio.ObjectInfo, error) {
+	object, err := s.client.GetObject(ctx, bucket, objectKey, minio.GetObjectOptions{})
+	if err != nil {
+		return nil, minio.ObjectInfo{}, fmt.Errorf("open %s from minio bucket %s: %w", objectKey, bucket, err)
+	}
+
+	info, err := object.Stat()
+	if err != nil {
+		_ = object.Close()
+		return nil, minio.ObjectInfo{}, fmt.Errorf("stat %s from minio bucket %s: %w", objectKey, bucket, err)
+	}
+
+	return object, info, nil
+}
+
+func (s *MinIOStorage) OpenVODObject(ctx context.Context, objectKey string) (io.ReadSeekCloser, minio.ObjectInfo, error) {
+	return s.OpenObject(ctx, s.vodBucket, objectKey)
+}
+
+func (s *MinIOStorage) OpenImageObject(ctx context.Context, objectKey string) (io.ReadSeekCloser, minio.ObjectInfo, error) {
+	return s.OpenObject(ctx, s.imageBucket, objectKey)
+}
+
 func (s *MinIOStorage) RawBucket() string {
 	return s.rawBucket
 }
@@ -96,4 +121,16 @@ func (s *MinIOStorage) VODBucket() string {
 
 func (s *MinIOStorage) ImageBucket() string {
 	return s.imageBucket
+}
+
+func IsObjectNotFound(err error) bool {
+	if err == nil {
+		return false
+	}
+
+	response := minio.ToErrorResponse(err)
+	return response.StatusCode == http.StatusNotFound ||
+		response.Code == "NoSuchKey" ||
+		response.Code == "NoSuchBucket" ||
+		response.Code == "NoSuchVersion"
 }

@@ -41,6 +41,7 @@ template <> constexpr inline auto frontend::pages::HomePage::qt_create_metaobjec
         "frontend::pages::HomePage",
         "playRequested",
         "",
+        "mediaUrl",
         "videoId",
         "title",
         "creator",
@@ -49,8 +50,9 @@ template <> constexpr inline auto frontend::pages::HomePage::qt_create_metaobjec
 
     QtMocHelpers::UintData qt_methods {
         // Signal 'playRequested'
-        QtMocHelpers::SignalData<void(const QString &, const QString &, const QString &, const QString &)>(1, 2, QMC::AccessPublic, QMetaType::Void, {{
+        QtMocHelpers::SignalData<void(const QString &, const QString &, const QString &, const QString &, const QString &)>(1, 2, QMC::AccessPublic, QMetaType::Void, {{
             { QMetaType::QString, 3 }, { QMetaType::QString, 4 }, { QMetaType::QString, 5 }, { QMetaType::QString, 6 },
+            { QMetaType::QString, 7 },
         }}),
     };
     QtMocHelpers::UintData qt_properties {
@@ -75,12 +77,12 @@ void frontend::pages::HomePage::qt_static_metacall(QObject *_o, QMetaObject::Cal
     auto *_t = static_cast<HomePage *>(_o);
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: _t->playRequested((*reinterpret_cast<std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[2])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[3])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[4]))); break;
+        case 0: _t->playRequested((*reinterpret_cast<std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[2])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[3])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[4])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[5]))); break;
         default: ;
         }
     }
     if (_c == QMetaObject::IndexOfMethod) {
-        if (QtMocHelpers::indexOfMethod<void (HomePage::*)(const QString & , const QString & , const QString & , const QString & )>(_a, &HomePage::playRequested, 0))
+        if (QtMocHelpers::indexOfMethod<void (HomePage::*)(const QString & , const QString & , const QString & , const QString & , const QString & )>(_a, &HomePage::playRequested, 0))
             return;
     }
 }
@@ -117,8 +119,8 @@ int frontend::pages::HomePage::qt_metacall(QMetaObject::Call _c, int _id, void *
 }
 
 // SIGNAL 0
-void frontend::pages::HomePage::playRequested(const QString & _t1, const QString & _t2, const QString & _t3, const QString & _t4)
+void frontend::pages::HomePage::playRequested(const QString & _t1, const QString & _t2, const QString & _t3, const QString & _t4, const QString & _t5)
 {
-    QMetaObject::activate<void>(this, &staticMetaObject, 0, nullptr, _t1, _t2, _t3, _t4);
+    QMetaObject::activate<void>(this, &staticMetaObject, 0, nullptr, _t1, _t2, _t3, _t4, _t5);
 }
 QT_WARNING_POP

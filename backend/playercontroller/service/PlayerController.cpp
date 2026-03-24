@@ -162,11 +162,13 @@ namespace backend::playercontroller::service
     }
 
     void PlayerController::openMedia(
+        const QString &mediaUrl,
         const QString &videoId,
         const QString &title,
         const QString &creator,
         const QString &duration)
     {
+        currentMediaUrl_ = mediaUrl;
         currentVideoId_ = videoId;
         currentTitle_ = title;
         currentCreator_ = creator;
@@ -346,6 +348,7 @@ namespace backend::playercontroller::service
         }
 
         ijkPlayerCreated_ = false;
+        currentMediaUrl_.clear();
         currentVideoId_.clear();
         currentTitle_.clear();
         currentCreator_.clear();
@@ -442,8 +445,8 @@ namespace backend::playercontroller::service
         if (ijkPlayerCreated_ && ijkPlayer_)
         {
             applyPlaybackVolume();
-            const QByteArray encodedVideoId = currentVideoId_.toUtf8();
-            if (ijkPlayer_->setDataSource(encodedVideoId.constData()) != 0)
+            const QByteArray encodedMediaUrl = currentMediaUrl_.toUtf8();
+            if (ijkPlayer_->setDataSource(encodedMediaUrl.constData()) != 0)
             {
                 updatePlaybackState(PlaybackState::Error,
                                     QString("Failed to set media source on ijkPlayer."));

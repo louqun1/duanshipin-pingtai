@@ -40,6 +40,7 @@ namespace backend::playercontroller::service
     public slots:
         void attachVideoSurface(QWidget *surface);
         void openMedia(
+            const QString &mediaUrl,
             const QString &videoId,
             const QString &title,
             const QString &creator,
@@ -79,6 +80,7 @@ namespace backend::playercontroller::service
         media::IjkMediaPlayer *ijkPlayerInstance();
         media::IjkMediaPlayer *ijkPlayer_ = nullptr;
         QPointer<QWidget> videoSurface_;
+        QString currentMediaUrl_;
         QString currentVideoId_;
         QString currentTitle_;
         QString currentCreator_;

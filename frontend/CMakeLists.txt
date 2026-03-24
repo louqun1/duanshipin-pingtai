@@ -27,6 +27,7 @@ target_link_libraries(FrontendWidgets
     PRIVATE
         ServoBackend
     PUBLIC
+        Qt6::Network
         Qt6::Widgets
         Qt6::OpenGLWidgets
 )

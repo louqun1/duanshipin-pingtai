@@ -22,7 +22,7 @@ func Load() Config {
 	return Config{
 		MySQLDSN:      getEnv("MYSQL_DSN", "vod_user:vod_pass_123@tcp(127.0.0.1:3307)/vod_platform?charset=utf8mb4&parseTime=True&loc=Local"),
 		HTTPAddr:      getEnv("HTTP_ADDR", ":8080"),
-		PublicBaseURL: getEnv("PUBLIC_BASE_URL", "http://192.168.99.128:9000"),
+		PublicBaseURL: getEnv("PUBLIC_BASE_URL", "http://192.168.99.128:8080"),
 		MinIOEndpoint: getEnv("MINIO_ENDPOINT", "127.0.0.1:9000"),
 		MinIOAccess:   getEnv("MINIO_ACCESS_KEY", "minioadmin"),
 		MinIOSecret:   getEnv("MINIO_SECRET_KEY", "minioadmin123"),
