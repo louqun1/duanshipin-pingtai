@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <QEvent>
 #include <QString>
 #include <QVector>
 #include <QWidget>
@@ -8,6 +9,7 @@ class QGridLayout;
 class QLabel;
 class QResizeEvent;
 class QScrollArea;
+class QShowEvent;
 
 namespace frontend::components {
 class VideoCard;
@@ -30,7 +32,9 @@ signals:
         const QString &duration);
 
 protected:
+    bool eventFilter(QObject *watched, QEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
+    void showEvent(QShowEvent *event) override;
 
 private:
     void buildUi();

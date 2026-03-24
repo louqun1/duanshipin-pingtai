@@ -2,12 +2,14 @@
 
 #include "components/VideoCard/VideoCard.hpp"
 
+#include <QMetaObject>
 #include <QFrame>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QResizeEvent>
 #include <QScrollArea>
+#include <QShowEvent>
 #include <QVBoxLayout>
 
 namespace frontend::pages {
@@ -18,12 +20,31 @@ HomePage::HomePage(QWidget *parent)
     buildUi();
     populateFeed();
     relayoutCards();
+    QMetaObject::invokeMethod(this, [this]() { relayoutCards(); }, Qt::QueuedConnection);
+}
+
+bool HomePage::eventFilter(QObject *watched, QEvent *event)
+{
+    if (feedScrollArea_ &&
+        watched == feedScrollArea_->viewport() &&
+        (event->type() == QEvent::Resize || event->type() == QEvent::Show))
+    {
+        QMetaObject::invokeMethod(this, [this]() { relayoutCards(); }, Qt::QueuedConnection);
+    }
+
+    return QWidget::eventFilter(watched, event);
 }
 
 void HomePage::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
     relayoutCards();
+}
+
+void HomePage::showEvent(QShowEvent *event)
+{
+    QWidget::showEvent(event);
+    QMetaObject::invokeMethod(this, [this]() { relayoutCards(); }, Qt::QueuedConnection);
 }
 
 void HomePage::buildUi()
@@ -62,6 +83,7 @@ void HomePage::buildUi()
     feedScrollArea_->setStyleSheet(
         "QScrollArea { background: transparent; }"
         "QScrollArea > QWidget > QWidget { background: transparent; }");
+    feedScrollArea_->viewport()->installEventFilter(this);
 
     feedContainer_ = new QWidget(feedScrollArea_);
     feedGrid_ = new QGridLayout(feedContainer_);

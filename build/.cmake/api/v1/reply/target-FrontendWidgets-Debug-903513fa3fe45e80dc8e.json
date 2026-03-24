@@ -231,11 +231,11 @@
 			"id" : "ServoBackend::@e17dcb4e28158375c849"
 		},
 		{
-			"id" : "FrontendWidgets_autogen_timestamp_deps::@73e8a6b9a3e1c0d3809b"
-		},
-		{
 			"backtrace" : 0,
 			"id" : "FrontendWidgets_autogen::@73e8a6b9a3e1c0d3809b"
+		},
+		{
+			"id" : "FrontendWidgets_autogen_timestamp_deps::@73e8a6b9a3e1c0d3809b"
 		}
 	],
 	"id" : "FrontendWidgets::@73e8a6b9a3e1c0d3809b",
@@ -294,11 +294,11 @@
 			"id" : "Qt6::uic::@6890427a1f51a3e7e1df"
 		},
 		{
-			"id" : "FrontendWidgets_autogen_timestamp_deps::@73e8a6b9a3e1c0d3809b"
-		},
-		{
 			"backtrace" : 0,
 			"id" : "FrontendWidgets_autogen::@73e8a6b9a3e1c0d3809b"
+		},
+		{
+			"id" : "FrontendWidgets_autogen_timestamp_deps::@73e8a6b9a3e1c0d3809b"
 		}
 	],
 	"paths" : 

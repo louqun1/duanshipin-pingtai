@@ -56,6 +56,7 @@ private:
     void showFullscreenControls();
     void hideFullscreenControls();
     void scheduleFullscreenControlsHide();
+    void setMouseCursorHidden(bool hidden);
     void installInteractionTracking(QWidget *widget);
 
     backend::playercontroller::service::PlayerController &playerController_;
@@ -89,5 +90,6 @@ private:
     QRect normalGeometry_;
     bool restoreMaximized_ = false;
     bool isFullscreen_ = false;
+    bool isMouseCursorHidden_ = false;
     bool isSliderScrubbing_ = false;
 };

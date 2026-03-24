@@ -5,7 +5,7 @@
 		"commands" : [],
 		"files" : 
 		[
-			"CMakeLists.txt"
+			"frontend/CMakeLists.txt"
 		],
 		"nodes" : 
 		[
@@ -24,15 +24,11 @@
 		{
 			"backtrace" : 0,
 			"id" : "ServoBackend::@e17dcb4e28158375c849"
-		},
-		{
-			"backtrace" : 0,
-			"id" : "FrontendWidgets::@73e8a6b9a3e1c0d3809b"
 		}
 	],
-	"id" : "QtFrontend_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+	"id" : "FrontendWidgets_autogen_timestamp_deps::@73e8a6b9a3e1c0d3809b",
 	"isGeneratorProvided" : true,
-	"name" : "QtFrontend_autogen_timestamp_deps",
+	"name" : "FrontendWidgets_autogen_timestamp_deps",
 	"orderDependencies" : 
 	[
 		{
@@ -41,11 +37,7 @@
 		},
 		{
 			"backtrace" : 0,
-			"id" : "Qt6::Core::@6890427a1f51a3e7e1df"
-		},
-		{
-			"backtrace" : 0,
-			"id" : "Qt6::Gui::@6890427a1f51a3e7e1df"
+			"id" : "Qt6::uic::@6890427a1f51a3e7e1df"
 		},
 		{
 			"backtrace" : 0,
@@ -53,21 +45,17 @@
 		},
 		{
 			"backtrace" : 0,
-			"id" : "Qt6::uic::@6890427a1f51a3e7e1df"
+			"id" : "Qt6::OpenGLWidgets::@6890427a1f51a3e7e1df"
 		},
 		{
 			"backtrace" : 0,
 			"id" : "ServoBackend::@e17dcb4e28158375c849"
-		},
-		{
-			"backtrace" : 0,
-			"id" : "FrontendWidgets::@73e8a6b9a3e1c0d3809b"
 		}
 	],
 	"paths" : 
 	{
-		"build" : ".",
-		"source" : "."
+		"build" : "frontend",
+		"source" : "frontend"
 	},
 	"sources" : [],
 	"type" : "UTILITY"

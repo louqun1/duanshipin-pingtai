@@ -388,11 +388,11 @@
 			"id" : "ServoBackend::@e17dcb4e28158375c849"
 		},
 		{
-			"backtrace" : 2,
-			"id" : "FrontendWidgets::@73e8a6b9a3e1c0d3809b"
+			"id" : "QtFrontend_autogen_timestamp_deps::@6890427a1f51a3e7e1df"
 		},
 		{
-			"id" : "QtFrontend_autogen_timestamp_deps::@6890427a1f51a3e7e1df"
+			"backtrace" : 2,
+			"id" : "FrontendWidgets::@73e8a6b9a3e1c0d3809b"
 		},
 		{
 			"backtrace" : 0,

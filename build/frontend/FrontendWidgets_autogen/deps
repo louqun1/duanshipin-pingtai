@@ -1,5 +1,6 @@
 FrontendWidgets_autogen/timestamp: \
 	D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QByteArray \
+	D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QEvent \
 	D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QList \
 	D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QObject \
 	D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPointer \

@@ -162,8 +162,8 @@ QString videoViewportStyle(bool fullscreen)
 QString overlayCardStyle()
 {
     return QStringLiteral(
-        "background: rgba(15, 23, 42, 0.62);"
-        "border: 1px solid rgba(226, 232, 240, 0.16);"
+        "background: rgba(15, 23, 42, 0.28);"
+        "border: 0;"
         "border-radius: 18px;");
 }
 
@@ -176,16 +176,16 @@ QString primaryControlButtonStyle()
         "  padding: 0;"
         "  border: 0;"
         "  border-radius: 14px;"
-        "  background: #f8fafc;"
-        "  color: #0f172a;"
+        "  background: transparent;"
+        "  color: #f8fafc;"
         "  font-size: 14px;"
         "  font-weight: 700;"
         "}"
-        "QPushButton:hover { background: #ffffff; }"
-        "QPushButton:pressed { background: #e2e8f0; }"
+        "QPushButton:hover { background: rgba(248, 250, 252, 0.10); }"
+        "QPushButton:pressed { background: rgba(248, 250, 252, 0.16); }"
         "QPushButton:disabled {"
-        "  background: rgba(248, 250, 252, 0.24);"
-        "  color: rgba(248, 250, 252, 0.70);"
+        "  background: transparent;"
+        "  color: rgba(248, 250, 252, 0.40);"
         "}");
 }
 
@@ -196,15 +196,15 @@ QString secondaryControlButtonStyle()
         "  min-width: 44px;"
         "  min-height: 44px;"
         "  padding: 0;"
-        "  border: 1px solid rgba(248, 250, 252, 0.18);"
+        "  border: 0;"
         "  border-radius: 14px;"
-        "  background: rgba(15, 23, 42, 0.34);"
+        "  background: transparent;"
         "  color: #f8fafc;"
         "  font-size: 13px;"
         "  font-weight: 700;"
         "}"
-        "QPushButton:hover { background: rgba(248, 250, 252, 0.12); }"
-        "QPushButton:pressed { background: rgba(248, 250, 252, 0.18); }");
+        "QPushButton:hover { background: rgba(248, 250, 252, 0.10); }"
+        "QPushButton:pressed { background: rgba(248, 250, 252, 0.16); }");
 }
 
 QString sliderStyle(const QString &filledColor, const QString &trackColor, const QString &handleColor)
@@ -474,7 +474,7 @@ void VideoPlayerWindow::buildUi()
     setWindowTitle("Video Player");
     setFocusPolicy(Qt::StrongFocus);
     setMouseTracking(true);
-    resize(1120, 760);
+    resize(1704, 794);
     setStyleSheet(windowStyleSheet());
 
     windowLayout_ = new QVBoxLayout(this);
@@ -774,6 +774,7 @@ void VideoPlayerWindow::setFullscreen(bool fullscreen)
     else
     {
         fullscreenOverlayTimer_->stop();
+        setMouseCursorHidden(false);
         showNormal();
         if (restoreMaximized_)
         {
@@ -869,6 +870,7 @@ void VideoPlayerWindow::showFullscreenControls()
     controlBarOpacityAnimation_->stop();
     controlBar_->show();
     controlBar_->raise();
+    setMouseCursorHidden(false);
 
     if (!isFullscreen_)
     {
@@ -886,6 +888,7 @@ void VideoPlayerWindow::hideFullscreenControls()
     if (!isFullscreen_ || isSliderScrubbing_ || controlBar_->underMouse())
     {
         scheduleFullscreenControlsHide();
+        setMouseCursorHidden(false);
         return;
     }
 
@@ -893,6 +896,7 @@ void VideoPlayerWindow::hideFullscreenControls()
     controlBarOpacityAnimation_->setStartValue(controlBarOpacityEffect_->opacity());
     controlBarOpacityAnimation_->setEndValue(0.0);
     controlBarOpacityAnimation_->start();
+    setMouseCursorHidden(true);
 }
 
 void VideoPlayerWindow::scheduleFullscreenControlsHide()
@@ -900,6 +904,7 @@ void VideoPlayerWindow::scheduleFullscreenControlsHide()
     if (!isFullscreen_)
     {
         fullscreenOverlayTimer_->stop();
+        setMouseCursorHidden(false);
         return;
     }
 
@@ -909,6 +914,28 @@ void VideoPlayerWindow::scheduleFullscreenControlsHide()
     }
 
     fullscreenOverlayTimer_->start();
+}
+
+void VideoPlayerWindow::setMouseCursorHidden(bool hidden)
+{
+    if (!isFullscreen_)
+    {
+        hidden = false;
+    }
+
+    if (isMouseCursorHidden_ == hidden)
+    {
+        return;
+    }
+
+    isMouseCursorHidden_ = hidden;
+    if (hidden)
+    {
+        setCursor(Qt::BlankCursor);
+        return;
+    }
+
+    unsetCursor();
 }
 
 void VideoPlayerWindow::installInteractionTracking(QWidget *widget)

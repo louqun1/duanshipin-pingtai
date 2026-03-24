@@ -265,11 +265,11 @@
 	"dependencies" : 
 	[
 		{
-			"id" : "ServoBackend_autogen_timestamp_deps::@e17dcb4e28158375c849"
-		},
-		{
 			"backtrace" : 0,
 			"id" : "ServoBackend_autogen::@e17dcb4e28158375c849"
+		},
+		{
+			"id" : "ServoBackend_autogen_timestamp_deps::@e17dcb4e28158375c849"
 		}
 	],
 	"id" : "ServoBackend::@e17dcb4e28158375c849",
@@ -449,11 +449,11 @@
 			"id" : "Qt6::uic::@6890427a1f51a3e7e1df"
 		},
 		{
-			"id" : "ServoBackend_autogen_timestamp_deps::@e17dcb4e28158375c849"
-		},
-		{
 			"backtrace" : 0,
 			"id" : "ServoBackend_autogen::@e17dcb4e28158375c849"
+		},
+		{
+			"id" : "ServoBackend_autogen_timestamp_deps::@e17dcb4e28158375c849"
 		}
 	],
 	"paths" : 
