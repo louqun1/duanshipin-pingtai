@@ -25,6 +25,7 @@ class HomePage final : public QWidget
 
 public:
     explicit HomePage(QWidget *parent = nullptr);
+    void refreshFeed();
 
 signals:
     void playRequested(

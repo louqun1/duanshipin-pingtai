@@ -126,6 +126,12 @@ QPushButton *MainWindow::createNavigationButton(const QString &label, int pageIn
 void MainWindow::connectNavigation()
 {
     connect(navigationGroup_, &QButtonGroup::idClicked, this, &MainWindow::switchToPage);
+    connect(uploadPage_, &frontend::pages::UploadPage::uploadSucceeded, this, [this]() {
+        if (homePage_) {
+            homePage_->refreshFeed();
+        }
+        switchToPage(Home);
+    });
 }
 
 void MainWindow::connectPlaybackFlow()

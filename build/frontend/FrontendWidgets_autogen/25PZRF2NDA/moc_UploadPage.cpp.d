@@ -1,5 +1,6 @@
 D:/itffmpeg/av_media/online/duanshipin-pingtai/build/frontend/FrontendWidgets_autogen/25PZRF2NDA/moc_UploadPage.cpp: D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/UploadPage/UploadPage.hpp \
   D:/itffmpeg/av_media/online/duanshipin-pingtai/build/frontend/FrontendWidgets_autogen/moc_predefs.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q17memory.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20functional.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20iterator.h \

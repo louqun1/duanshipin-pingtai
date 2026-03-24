@@ -116,6 +116,13 @@ HomePage::HomePage(QWidget *parent)
     fetchFeed();
 }
 
+void HomePage::refreshFeed()
+{
+    feedRequested_ = false;
+    setStatusMessage(QString("Refreshing %1 ...").arg(apiVideosUrl(apiBaseUrls_.value(apiBaseUrlIndex_, apiBaseUrl()))));
+    fetchFeed();
+}
+
 bool HomePage::eventFilter(QObject *watched, QEvent *event)
 {
     if (feedScrollArea_ &&

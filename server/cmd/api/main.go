@@ -10,6 +10,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"os"
 	"path"
 	"strconv"
 	"strings"
@@ -17,6 +18,7 @@ import (
 
 	"vod-platform-server/internal/config"
 	"vod-platform-server/internal/db"
+	"vod-platform-server/internal/ingest"
 	"vod-platform-server/internal/storage"
 )
 
@@ -66,6 +68,9 @@ func main() {
 		log.Fatalf("connect minio: %v", err)
 	}
 	ctx := context.Background()
+	if err := mediaStorage.EnsureRawBucket(ctx); err != nil {
+		log.Fatalf("check raw bucket: %v", err)
+	}
 	if err := mediaStorage.EnsureVODBucket(ctx); err != nil {
 		log.Fatalf("check vod bucket: %v", err)
 	}
@@ -81,6 +86,7 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/api/videos", server.handleVideos)
+	mux.HandleFunc("/api/videos/upload", server.handleVideoUpload)
 	mux.HandleFunc("/api/videos/", server.handleVideoDetail)
 	mux.HandleFunc("/vod/", server.handleVODObject)
 	mux.HandleFunc("/image/", server.handleImageObject)
@@ -150,6 +156,87 @@ func (s *apiServer) handleVideos(writer http.ResponseWriter, request *http.Reque
 
 	writeJSON(writer, http.StatusOK, map[string]any{
 		"items": responses,
+	})
+}
+
+func (s *apiServer) handleVideoUpload(writer http.ResponseWriter, request *http.Request) {
+	const (
+		uploadFormMemory = 32 << 20
+		maxUploadSize    = int64(4) << 30
+	)
+
+	if request.Method != http.MethodPost {
+		writeMethodNotAllowed(writer)
+		return
+	}
+	if request.URL.Path != "/api/videos/upload" {
+		writeNotFound(writer)
+		return
+	}
+
+	request.Body = http.MaxBytesReader(writer, request.Body, maxUploadSize)
+	if err := request.ParseMultipartForm(uploadFormMemory); err != nil {
+		writeJSON(writer, http.StatusBadRequest, map[string]string{"error": "invalid multipart upload"})
+		return
+	}
+	if request.MultipartForm != nil {
+		defer request.MultipartForm.RemoveAll()
+	}
+
+	file, header, err := request.FormFile("file")
+	if err != nil {
+		writeJSON(writer, http.StatusBadRequest, map[string]string{"error": "missing file field"})
+		return
+	}
+	defer file.Close()
+
+	tempFile, err := os.CreateTemp("", "vod-upload-*")
+	if err != nil {
+		writeServerError(writer, fmt.Errorf("create temp upload file: %w", err))
+		return
+	}
+	tempPath := tempFile.Name()
+	defer os.Remove(tempPath)
+
+	if _, err := io.Copy(tempFile, file); err != nil {
+		_ = tempFile.Close()
+		writeServerError(writer, fmt.Errorf("write temp upload file: %w", err))
+		return
+	}
+	if err := tempFile.Close(); err != nil {
+		writeServerError(writer, fmt.Errorf("close temp upload file: %w", err))
+		return
+	}
+
+	description := strings.TrimSpace(request.FormValue("desc"))
+	if description == "" {
+		description = strings.TrimSpace(request.FormValue("description"))
+	}
+
+	ctx, cancel := context.WithTimeout(request.Context(), 15*time.Minute)
+	defer cancel()
+
+	result, err := ingest.IngestLocalFile(
+		ctx,
+		s.database,
+		s.mediaStorage,
+		tempPath,
+		header.Filename,
+		strings.TrimSpace(request.FormValue("title")),
+		description,
+	)
+	if err != nil {
+		writeServerError(writer, fmt.Errorf("ingest uploaded file: %w", err))
+		return
+	}
+
+	writeJSON(writer, http.StatusCreated, map[string]any{
+		"id":        result.VideoID,
+		"jobId":     result.JobID,
+		"title":     result.Title,
+		"status":    result.Status,
+		"message":   "upload accepted and queued for transcoding",
+		"createdAt": time.Now().Format(time.RFC3339),
 	})
 }
 

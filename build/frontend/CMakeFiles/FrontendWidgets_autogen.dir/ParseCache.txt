@@ -2208,6 +2208,7 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/VideoOpenGLWidge
  mdp:D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/wchar.h
 D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/UploadPage/UploadPage.hpp
  mmc:Q_OBJECT
+ mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString
  mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q17memory.h
  mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20functional.h
  mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20iterator.h
