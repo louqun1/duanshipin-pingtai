@@ -18,12 +18,15 @@
 #include <QResizeEvent>
 #include <QScrollArea>
 #include <QShowEvent>
+#include <QTimer>
 #include <QUrl>
 #include <QVBoxLayout>
 
 namespace frontend::pages {
 
 namespace {
+
+constexpr int kPendingRefreshIntervalMs = 3000;
 
 QString formatDurationMs(qint64 durationMs)
 {
@@ -110,6 +113,14 @@ HomePage::HomePage(QWidget *parent)
     : QWidget(parent)
 {
     networkManager_ = new QNetworkAccessManager(this);//发送HTTP/HTTPS GET 请求，发送 POST 请求，下载文件，上传数据，处理网络响应等。
+    pendingRefreshTimer_ = new QTimer(this);
+    pendingRefreshTimer_->setInterval(kPendingRefreshIntervalMs);
+    pendingRefreshTimer_->setSingleShot(false);
+    connect(pendingRefreshTimer_, &QTimer::timeout, this, [this]() {
+        if (!feedRequested_) {
+            fetchFeed();
+        }
+    });
     apiBaseUrls_ = apiBaseUrlCandidates();
     buildUi();
     setStatusMessage(QString("Connecting to %1 ...").arg(apiVideosUrl(apiBaseUrls_.value(apiBaseUrlIndex_))));
@@ -230,6 +241,8 @@ void HomePage::handleFeedReply(QNetworkReply *reply)
             return;
         }
 
+        feedRequested_ = false;
+        updatePendingRefreshTimer();
         setStatusMessage(
             QString("Failed to load %1: %2. Start server/cmd/api or set FLASHPOINT_API_BASE_URL.")
                 .arg(apiVideosUrl(attemptedBaseUrl), reply->errorString()));
@@ -238,10 +251,13 @@ void HomePage::handleFeedReply(QNetworkReply *reply)
 
     const auto document = QJsonDocument::fromJson(reply->readAll());
     if (!document.isObject()) {
+        feedRequested_ = false;
+        updatePendingRefreshTimer();
         setStatusMessage(QString("Invalid response from %1.").arg(apiVideosUrl(attemptedBaseUrl)));
         return;
     }
 
+    feedRequested_ = false;
     activeApiBaseUrl_ = attemptedBaseUrl;
 
     const auto items = document.object().value("items").toArray();
@@ -281,6 +297,7 @@ void HomePage::handleFeedReply(QNetworkReply *reply)
         cards_.append(card);
     }
 
+    updatePendingRefreshTimer();
     relayoutCards();
     setStatusMessage(QString("Loaded %1 videos from %2").arg(cards_.size()).arg(apiVideosUrl(activeApiBaseUrl_)));
 }
@@ -368,6 +385,30 @@ void HomePage::handleVideoDetailReply(QNetworkReply *reply, RemoteVideoItem fall
         QString("Status %1").arg(status),
         duration);
     setStatusMessage(QString("Opening %1").arg(title));
+}
+
+void HomePage::updatePendingRefreshTimer()
+{
+    if (!pendingRefreshTimer_) {
+        return;
+    }
+
+    bool hasPendingItems = false;
+    for (const auto &item : feedItems_) {
+        if (item.status == "queued" || item.status == "processing") {
+            hasPendingItems = true;
+            break;
+        }
+    }
+
+    if (hasPendingItems) {
+        if (!pendingRefreshTimer_->isActive()) {
+            pendingRefreshTimer_->start();
+        }
+        return;
+    }
+
+    pendingRefreshTimer_->stop();
 }
 
 void HomePage::relayoutCards()

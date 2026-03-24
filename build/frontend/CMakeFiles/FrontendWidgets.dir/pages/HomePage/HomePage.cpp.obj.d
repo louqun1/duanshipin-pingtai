@@ -515,5 +515,7 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/HomePage/HomePage.cpp.obj: \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qscrollarea.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qabstractscrollarea.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QShowEvent \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QTimer \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtimer.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QUrl \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QVBoxLayout

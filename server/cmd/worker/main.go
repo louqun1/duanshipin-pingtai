@@ -9,10 +9,13 @@ import (
 	"log"
 	"mime"
 	"os"
+	"os/signal"
 	"os/exec"
 	"path/filepath"
 	"strconv"
 	"strings"
+	"syscall"
+	"time"
 
 	"vod-platform-server/internal/config"
 	"vod-platform-server/internal/db"
@@ -42,9 +45,15 @@ type ffprobeResult struct {
 	} `json:"format"`
 }
 
+const (
+	idlePollInterval  = 3 * time.Second
+	errorRetryInterval = 5 * time.Second
+)
+
 func main() {
 	cfg := config.Load()
-	ctx := context.Background()
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
 
 	database, err := db.OpenMySQL(cfg.MySQLDSN)
 	if err != nil {
@@ -67,26 +76,51 @@ func main() {
 		log.Fatalf("check image bucket: %v", err)
 	}
 
-	job, err := pickPendingJob(ctx, database)
-	if err != nil {
-		log.Fatalf("pick pending job: %v", err)
-	}
-	if job == nil {
-		log.Println("no pending transcode job found")
-		return
-	}
+	log.Printf("worker started: polling for pending jobs every %s", idlePollInterval)
 
-	if err := markJobRunning(ctx, database, job.ID); err != nil {
-		log.Fatalf("mark job running: %v", err)
-	}
+	idleLogged := false
+	for {
+		select {
+		case <-ctx.Done():
+			log.Println("worker shutting down")
+			return
+		default:
+		}
 
-	if err := processJob(ctx, database, minioStorage, *job); err != nil {
-		_ = markJobFailed(ctx, database, job.ID, err.Error())
-		_ = markVideoFailed(ctx, database, job.VideoID, err.Error())
-		log.Fatalf("process job %d: %v", job.ID, err)
-	}
+		job, err := claimPendingJob(ctx, database)
+		if err != nil {
+			log.Printf("claim pending job: %v", err)
+			if !waitForNextIteration(ctx, errorRetryInterval) {
+				log.Println("worker shutting down")
+				return
+			}
+			continue
+		}
 
-	log.Printf("worker finished: job_id=%d video_id=%d", job.ID, job.VideoID)
+		if job == nil {
+			if !idleLogged {
+				log.Println("no pending transcode job found; waiting for new uploads")
+				idleLogged = true
+			}
+			if !waitForNextIteration(ctx, idlePollInterval) {
+				log.Println("worker shutting down")
+				return
+			}
+			continue
+		}
+
+		idleLogged = false
+		log.Printf("worker picked job: job_id=%d video_id=%d", job.ID, job.VideoID)
+
+		if err := processJob(ctx, database, minioStorage, *job); err != nil {
+			_ = markJobFailed(ctx, database, job.ID, err.Error())
+			_ = markVideoFailed(ctx, database, job.VideoID, err.Error())
+			log.Printf("process job %d failed: %v", job.ID, err)
+			continue
+		}
+
+		log.Printf("worker finished: job_id=%d video_id=%d", job.ID, job.VideoID)
+	}
 }
 
 func processJob(ctx context.Context, database *sql.DB, minioStorage *storage.MinIOStorage, job transcodeJob) error {
@@ -113,16 +147,16 @@ func processJob(ctx context.Context, database *sql.DB, minioStorage *storage.Min
 		return err
 	}
 
-	meta, err := probeVideo(inputPath)
+	meta, err := probeVideo(ctx, inputPath)
 	if err != nil {
 		return err
 	}
 
-	if err := transcodeToHLS(inputPath, hlsDir); err != nil {
+	if err := transcodeToHLS(ctx, inputPath, hlsDir); err != nil {
 		return err
 	}
 
-	if err := generateCover(inputPath, coverPath); err != nil {
+	if err := generateCover(ctx, inputPath, coverPath); err != nil {
 		return err
 	}
 
@@ -146,36 +180,63 @@ func processJob(ctx context.Context, database *sql.DB, minioStorage *storage.Min
 	return nil
 }
 
-func pickPendingJob(ctx context.Context, database *sql.DB) (*transcodeJob, error) {
-	row := database.QueryRowContext(
+func claimPendingJob(ctx context.Context, database *sql.DB) (*transcodeJob, error) {
+	tx, err := database.BeginTx(ctx, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	var job transcodeJob
+	row := tx.QueryRowContext(
 		ctx,
 		`SELECT id, video_id, payload_json
 		 FROM transcode_jobs
 		 WHERE status = 'pending'
 		 ORDER BY id ASC
-		 LIMIT 1`,
+		 LIMIT 1
+		 FOR UPDATE`,
 	)
 
-	var job transcodeJob
 	if err := row.Scan(&job.ID, &job.VideoID, &job.PayloadJSON); err != nil {
+		_ = tx.Rollback()
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, nil
 		}
 		return nil, err
 	}
 
-	return &job, nil
-}
-
-func markJobRunning(ctx context.Context, database *sql.DB, jobID int64) error {
-	_, err := database.ExecContext(
+	if _, err := tx.ExecContext(
 		ctx,
 		`UPDATE transcode_jobs
-		 SET status = 'running', started_at = NOW(), error_message = NULL
+		 SET status = 'running',
+		     started_at = NOW(),
+		     finished_at = NULL,
+		     error_message = NULL
 		 WHERE id = ?`,
-		jobID,
-	)
-	return err
+		job.ID,
+	); err != nil {
+		_ = tx.Rollback()
+		return nil, err
+	}
+
+	if _, err := tx.ExecContext(
+		ctx,
+		`UPDATE videos
+		 SET status = 'processing',
+		     transcode_error = NULL
+		 WHERE id = ?`,
+		job.VideoID,
+	); err != nil {
+		_ = tx.Rollback()
+		return nil, err
+	}
+
+	if err := tx.Commit(); err != nil {
+		_ = tx.Rollback()
+		return nil, err
+	}
+
+	return &job, nil
 }
 
 func markJobSuccess(ctx context.Context, database *sql.DB, jobID int64) error {
@@ -242,8 +303,9 @@ type videoMeta struct {
 	Height     int
 }
 
-func probeVideo(inputPath string) (videoMeta, error) {
-	cmd := exec.Command(
+func probeVideo(ctx context.Context, inputPath string) (videoMeta, error) {
+	cmd := exec.CommandContext(
+		ctx,
 		"ffprobe",
 		"-v", "error",
 		"-print_format", "json",
@@ -279,11 +341,12 @@ func probeVideo(inputPath string) (videoMeta, error) {
 	return meta, nil
 }
 
-func transcodeToHLS(inputPath, hlsDir string) error {
+func transcodeToHLS(ctx context.Context, inputPath, hlsDir string) error {
 	indexPath := filepath.Join(hlsDir, "index.m3u8")
 	segmentPattern := filepath.Join(hlsDir, "seg_%03d.ts")
 
-	cmd := exec.Command(
+	cmd := exec.CommandContext(
+		ctx,
 		"ffmpeg",
 		"-y",
 		"-i", inputPath,
@@ -307,8 +370,9 @@ func transcodeToHLS(inputPath, hlsDir string) error {
 	return nil
 }
 
-func generateCover(inputPath, coverPath string) error {
-	cmd := exec.Command(
+func generateCover(ctx context.Context, inputPath, coverPath string) error {
+	cmd := exec.CommandContext(
+		ctx,
 		"ffmpeg",
 		"-y",
 		"-i", inputPath,
@@ -358,4 +422,16 @@ func detectContentType(filePath string) string {
 		return "application/octet-stream"
 	}
 	return contentType
+}
+
+func waitForNextIteration(ctx context.Context, interval time.Duration) bool {
+	timer := time.NewTimer(interval)
+	defer timer.Stop()
+
+	select {
+	case <-ctx.Done():
+		return false
+	case <-timer.C:
+		return true
+	}
 }

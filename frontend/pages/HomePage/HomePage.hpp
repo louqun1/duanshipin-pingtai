@@ -12,6 +12,7 @@ class QNetworkReply;
 class QResizeEvent;
 class QScrollArea;
 class QShowEvent;
+class QTimer;
 
 namespace frontend::components {
 class VideoCard;
@@ -57,6 +58,7 @@ private:
     void requestCardCover(const QString &coverUrl, frontend::components::VideoCard *card);
     void requestVideoDetail(const RemoteVideoItem &item);
     void handleVideoDetailReply(QNetworkReply *reply, RemoteVideoItem fallbackItem);
+    void updatePendingRefreshTimer();
     void relayoutCards();
     void clearCards();
     void setStatusMessage(const QString &message);
@@ -72,6 +74,7 @@ private:
     int apiBaseUrlIndex_ = 0;
     QString activeApiBaseUrl_;
     bool feedRequested_ = false;
+    QTimer *pendingRefreshTimer_ = nullptr;
 };
 
 }  // namespace frontend::pages
