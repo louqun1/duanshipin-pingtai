@@ -128,6 +128,7 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/build/frontend/FrontendWidgets_au
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qversiontagging.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qxptype_traits.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qyieldcpu.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QPixmap \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qaction.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qbitmap.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qbrush.h \

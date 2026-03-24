@@ -53,6 +53,7 @@ private:
     void buildUi();
     void fetchFeed();
     void handleFeedReply(QNetworkReply *reply);
+    void requestCardCover(const QString &coverUrl, frontend::components::VideoCard *card);
     void requestVideoDetail(const RemoteVideoItem &item);
     void handleVideoDetailReply(QNetworkReply *reply, RemoteVideoItem fallbackItem);
     void relayoutCards();

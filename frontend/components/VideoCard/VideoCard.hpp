@@ -1,9 +1,11 @@
 #pragma once
 
+#include <QPixmap>
 #include <QPushButton>
 #include <QString>
 
 class QLabel;
+class QResizeEvent;
 class QWidget;
 
 namespace frontend::components {
@@ -26,14 +28,23 @@ public:
 
     QString videoId() const;
     void setCardWidth(int width);
+    void setPosterPixmap(const QPixmap &pixmap);
+
+protected:
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
     void updatePreviewHeight();
+    void updatePosterAppearance();
 
     QString videoId_;
+    QString accentStart_;
+    QString accentEnd_;
     QWidget *posterWidget_ = nullptr;
+    QLabel *posterImageLabel_ = nullptr;
     QLabel *titleLabel_ = nullptr;
     QLabel *metaLabel_ = nullptr;
+    QPixmap posterPixmap_;
 };
 
 }  // namespace frontend::components

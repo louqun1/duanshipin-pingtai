@@ -158,6 +158,7 @@ frontend/FrontendWidgets_autogen/timestamp: D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QKeyEvent \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QMatrix3x3 \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QOpenGLFunctions \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QPixmap \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QResizeEvent \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QSurfaceFormat \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QTransform \
@@ -1305,6 +1306,8 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QMatrix3x3:
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qinputmethod.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QOpenGLFunctions:
+
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QPixmap:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QResizeEvent:
 

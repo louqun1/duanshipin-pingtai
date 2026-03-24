@@ -2,6 +2,10 @@
 
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QPainter>
+#include <QPainterPath>
+#include <QResizeEvent>
+#include <QStackedLayout>
 #include <QVBoxLayout>
 #include <QWidget>
 
@@ -19,6 +23,8 @@ void makeTransparentForMouse(QWidget *widget)
 VideoCard::VideoCard(const VideoCardData &data, QWidget *parent)
     : QPushButton(parent)
     , videoId_(data.id)
+    , accentStart_(data.accentStart)
+    , accentEnd_(data.accentEnd)
 {
     setCursor(Qt::PointingHandCursor);
     setFlat(true);
@@ -55,15 +61,21 @@ VideoCard::VideoCard(const VideoCardData &data, QWidget *parent)
     layout->setSpacing(12);
 
     posterWidget_ = new QWidget(this);
-    posterWidget_->setStyleSheet(
-        QString(
-            "border-radius: 18px;"
-            "background: qlineargradient(x1:0, y1:0, x2:1, y2:1,"
-            " stop:0 %1, stop:1 %2);")
-            .arg(data.accentStart, data.accentEnd));
     makeTransparentForMouse(posterWidget_);
 
-    auto *posterLayout = new QVBoxLayout(posterWidget_);
+    auto *posterStack = new QStackedLayout(posterWidget_);
+    posterStack->setStackingMode(QStackedLayout::StackAll);
+    posterStack->setContentsMargins(0, 0, 0, 0);
+
+    posterImageLabel_ = new QLabel(posterWidget_);
+    posterImageLabel_->setAlignment(Qt::AlignCenter);
+    posterImageLabel_->setStyleSheet("background: transparent;");
+    makeTransparentForMouse(posterImageLabel_);
+    posterStack->addWidget(posterImageLabel_);
+
+    auto *posterOverlay = new QWidget(posterWidget_);
+    makeTransparentForMouse(posterOverlay);
+    auto *posterLayout = new QVBoxLayout(posterOverlay);
     posterLayout->setContentsMargins(14, 14, 14, 14);
     posterLayout->setSpacing(10);
 
@@ -102,10 +114,14 @@ VideoCard::VideoCard(const VideoCardData &data, QWidget *parent)
     playLabel->setWordWrap(true);
     playLabel->setStyleSheet(
         "color: #f8fafc;"
+        "padding: 10px 12px;"
+        "border-radius: 14px;"
+        "background: rgba(15, 23, 42, 0.42);"
         "font-size: 18px;"
         "font-weight: 700;");
     makeTransparentForMouse(playLabel);
     posterLayout->addWidget(playLabel);
+    posterStack->addWidget(posterOverlay);
 
     layout->addWidget(posterWidget_);
 
@@ -135,6 +151,18 @@ void VideoCard::setCardWidth(int width)
     updatePreviewHeight();
 }
 
+void VideoCard::setPosterPixmap(const QPixmap &pixmap)
+{
+    posterPixmap_ = pixmap;
+    updatePosterAppearance();
+}
+
+void VideoCard::resizeEvent(QResizeEvent *event)
+{
+    QPushButton::resizeEvent(event);
+    updatePosterAppearance();
+}
+
 void VideoCard::updatePreviewHeight()
 {
     const int previewHeight = qMax(260, (width() * 5) / 4);
@@ -144,6 +172,55 @@ void VideoCard::updatePreviewHeight()
     titleLabel_->setFixedWidth(textWidth);
     metaLabel_->setFixedWidth(textWidth);
     setFixedHeight(previewHeight + titleLabel_->sizeHint().height() + metaLabel_->sizeHint().height() + 52);
+    updatePosterAppearance();
+}
+
+void VideoCard::updatePosterAppearance()
+{
+    if (!posterWidget_ || !posterImageLabel_) {
+        return;
+    }
+
+    const QSize targetSize = posterWidget_->size();
+    if (targetSize.width() <= 0 || targetSize.height() <= 0) {
+        return;
+    }
+
+    if (posterPixmap_.isNull()) {
+        posterWidget_->setStyleSheet(
+            QString(
+                "border-radius: 18px;"
+                "background: qlineargradient(x1:0, y1:0, x2:1, y2:1,"
+                " stop:0 %1, stop:1 %2);")
+                .arg(accentStart_, accentEnd_));
+        posterImageLabel_->clear();
+        return;
+    }
+
+    posterWidget_->setStyleSheet("border-radius: 18px; background: #0f172a;");
+
+    const QPixmap scaled = posterPixmap_.scaled(
+        targetSize,
+        Qt::KeepAspectRatioByExpanding,
+        Qt::SmoothTransformation);
+
+    QPixmap rounded(targetSize);
+    rounded.fill(Qt::transparent);
+
+    QPainter painter(&rounded);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
+
+    QPainterPath clipPath;
+    clipPath.addRoundedRect(QRectF(rounded.rect()), 18.0, 18.0);
+    painter.setClipPath(clipPath);
+
+    const QPoint offset(
+        (targetSize.width() - scaled.width()) / 2,
+        (targetSize.height() - scaled.height()) / 2);
+    painter.drawPixmap(offset, scaled);
+
+    posterImageLabel_->setPixmap(rounded);
 }
 
 }  // namespace frontend::components

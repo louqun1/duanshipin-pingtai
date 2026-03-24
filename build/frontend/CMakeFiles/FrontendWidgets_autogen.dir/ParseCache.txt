@@ -786,6 +786,7 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/components/VideoCard/Vid
  mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qversiontagging.h
  mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qxptype_traits.h
  mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qyieldcpu.h
+ mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QPixmap
  mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qaction.h
  mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qbitmap.h
  mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qbrush.h

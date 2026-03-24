@@ -399,6 +399,8 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/HomePage/HomePage.cpp.obj: \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qcursor.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qbitmap.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/components/VideoCard/VideoCard.hpp \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QPixmap \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpixmap.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QPushButton \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qpushbutton.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qabstractbutton.h \
@@ -484,6 +486,8 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/HomePage/HomePage.cpp.obj: \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtNetwork/qnetworkrequest.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtNetwork/QNetworkAccessManager \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtNetwork/QNetworkRequest \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPointer \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qpointer.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QResizeEvent \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qevent.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcoreevent.h \

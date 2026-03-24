@@ -1,4 +1,4 @@
-#include "pages/HomePage/HomePage.hpp"
+﻿#include "pages/HomePage/HomePage.hpp"
 
 #include "components/VideoCard/VideoCard.hpp"
 
@@ -13,6 +13,8 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QPixmap>
+#include <QPointer>
 #include <QResizeEvent>
 #include <QScrollArea>
 #include <QShowEvent>
@@ -71,15 +73,16 @@ QString apiBaseUrl()
         return configured;
     }
 
-    return QStringLiteral("http://127.0.0.1:8080");
+    return QStringLiteral("http://192.168.99.128:8080");
 }
 
 QStringList apiBaseUrlCandidates()
 {
     QStringList candidates;
     candidates << apiBaseUrl()
+               << QStringLiteral("http://192.168.99.128:8080")
                << QStringLiteral("http://localhost:8080")
-               << QStringLiteral("http://192.168.99.128:8080");
+               << QStringLiteral("http://127.0.0.1:8080");
     candidates.removeDuplicates();
     return candidates;
 }
@@ -106,7 +109,7 @@ bool isConnectionFailure(QNetworkReply::NetworkError error)
 HomePage::HomePage(QWidget *parent)
     : QWidget(parent)
 {
-    networkManager_ = new QNetworkAccessManager(this);
+    networkManager_ = new QNetworkAccessManager(this);//发送HTTP/HTTPS GET 请求，发送 POST 请求，下载文件，上传数据，处理网络响应等。
     apiBaseUrls_ = apiBaseUrlCandidates();
     buildUi();
     setStatusMessage(QString("Connecting to %1 ...").arg(apiVideosUrl(apiBaseUrls_.value(apiBaseUrlIndex_))));
@@ -195,7 +198,7 @@ void HomePage::fetchFeed()
     feedRequested_ = true;
     const QString baseUrl = apiBaseUrls_.value(apiBaseUrlIndex_, apiBaseUrl());
     auto *reply = networkManager_->get(QNetworkRequest(QUrl(apiVideosUrl(baseUrl))));
-    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {//这次请求完成后，自动调用 handleFeedReply(reply)
         handleFeedReply(reply);
     });
 }
@@ -264,6 +267,7 @@ void HomePage::handleFeedReply(QNetworkReply *reply)
         };
 
         auto *card = new frontend::components::VideoCard(cardData, feedContainer_);
+        requestCardCover(item.coverUrl, card);
         connect(card, &QPushButton::clicked, this, [this, item]() {
             requestVideoDetail(item);
         });
@@ -272,6 +276,38 @@ void HomePage::handleFeedReply(QNetworkReply *reply)
 
     relayoutCards();
     setStatusMessage(QString("Loaded %1 videos from %2").arg(cards_.size()).arg(apiVideosUrl(activeApiBaseUrl_)));
+}
+
+void HomePage::requestCardCover(const QString &coverUrl, frontend::components::VideoCard *card)
+{
+    if (!card) {
+        return;
+    }
+
+    const QUrl imageUrl(coverUrl);
+    if (!imageUrl.isValid() || imageUrl.isEmpty()) {
+        return;
+    }
+
+    QNetworkRequest request(imageUrl);
+    request.setAttribute(QNetworkRequest::RedirectPolicyAttribute, QNetworkRequest::NoLessSafeRedirectPolicy);
+
+    auto *reply = networkManager_->get(request);
+    const QPointer<frontend::components::VideoCard> safeCard(card);
+    connect(reply, &QNetworkReply::finished, this, [reply, safeCard]() {
+        reply->deleteLater();
+
+        if (!safeCard || reply->error() != QNetworkReply::NoError) {
+            return;
+        }
+
+        QPixmap pixmap;
+        if (!pixmap.loadFromData(reply->readAll())) {
+            return;
+        }
+
+        safeCard->setPosterPixmap(pixmap);
+    });
 }
 
 void HomePage::requestVideoDetail(const RemoteVideoItem &item)
