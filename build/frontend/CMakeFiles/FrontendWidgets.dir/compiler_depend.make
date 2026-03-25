@@ -3720,7 +3720,6 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/UploadPage/UploadPage.cpp.obj: D:/
 
 frontend/CMakeFiles/FrontendWidgets.dir/widgets/MainWindow.cpp.obj: D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/MainWindow.cpp \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QByteArray \
-  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QDateTime \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QEvent \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QList \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QObject \
@@ -3757,7 +3756,6 @@ frontend/CMakeFiles/FrontendWidgets.dir/widgets/MainWindow.cpp.obj: D:/itffmpeg/
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qbytearrayalgorithms.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qbytearraylist.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qbytearrayview.h \
-  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcalendar.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qchar.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcheckedint_impl.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcompare.h \
@@ -3775,7 +3773,6 @@ frontend/CMakeFiles/FrontendWidgets.dir/widgets/MainWindow.cpp.obj: D:/itffmpeg/
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcoreevent.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdarwinhelpers.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdatastream.h \
-  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdatetime.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdeadlinetimer.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdebug.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qendian.h \
@@ -3944,8 +3941,6 @@ frontend/CMakeFiles/FrontendWidgets.dir/widgets/MainWindow.cpp.obj: D:/itffmpeg/
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qtwidgetsglobal.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qwidget.h \
   D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/controller/auth/AuthController.hpp \
-  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/domain/session/Session.hpp \
-  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/domain/user/User.hpp \
   D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/SDL2/SDL.h \
   D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/SDL2/SDL_assert.h \
   D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/SDL2/SDL_atomic.h \
@@ -4052,10 +4047,6 @@ frontend/CMakeFiles/FrontendWidgets.dir/widgets/MainWindow.cpp.obj: D:/itffmpeg/
   D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playerEngine/IjksdlTimer.hpp \
   D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playerEngine/ff_ffplay_def.hpp \
   D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playercontroller/service/PlayerController.hpp \
-  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/repository/session/SessionRepository.hpp \
-  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/repository/user/UserRepository.hpp \
-  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/service/auth/AuthResult.hpp \
-  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/service/auth/AuthService.hpp \
   D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/AccountPage/AccountPage.hpp \
   D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/HomePage/HomePage.hpp \
   D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/StreamPage/StreamPage.hpp \
@@ -6081,8 +6072,6 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qsharedpointer_impl.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qsize.h:
 
-D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/service/auth/AuthResult.hpp:
-
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qspan.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstdlibdetection.h:
@@ -6413,8 +6402,6 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/range_access.h:
 
-D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/domain/user/User.hpp:
-
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qformlayout.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qtextdocument.h:
@@ -6676,8 +6663,6 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/AccountPage/Accoun
 D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/HomePage/HomePage.cpp:
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/UploadPage/UploadPage.hpp:
-
-D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/repository/session/SessionRepository.hpp:
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/MainWindow.cpp:
 
@@ -7339,17 +7324,9 @@ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86
 
 D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/x86_64-w64-mingw32/bits/messages_members.h:
 
-D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QDateTime:
-
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QButtonGroup:
 
 D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/controller/auth/AuthController.hpp:
-
-D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/domain/session/Session.hpp:
-
-D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/repository/user/UserRepository.hpp:
-
-D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/service/auth/AuthService.hpp:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPropertyAnimation:
 

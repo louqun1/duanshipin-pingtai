@@ -53,6 +53,8 @@ void MainWindow::buildUi()
     uploadPage_ = new frontend::pages::UploadPage(pageStack_);
     accountPage_ = new frontend::pages::AccountPage(pageStack_);
 
+    uploadPage_->setAuthToken(authController_.sessionToken());
+
     pageStack_->addWidget(homePage_);
     pageStack_->addWidget(streamPage_);
     pageStack_->addWidget(uploadPage_);
@@ -164,14 +166,17 @@ void MainWindow::connectAccountFlow()
 
     connect(&authController_, &backend::controller::auth::AuthController::loginSucceeded,
             this, [this](const QString &username, const QString &email) {
+                uploadPage_->setAuthToken(authController_.sessionToken());
                 updateAuthenticatedAccount(username, email, QString("欢迎回来，%1。").arg(username), true);
             });
     connect(&authController_, &backend::controller::auth::AuthController::registerSucceeded,
             this, [this](const QString &username, const QString &email) {
+                uploadPage_->setAuthToken(authController_.sessionToken());
                 updateAuthenticatedAccount(username, email, QString("已为 %1 创建账户。").arg(username), true);
             });
     connect(&authController_, &backend::controller::auth::AuthController::sessionRestored,
             this, [this](const QString &username, const QString &email) {
+                uploadPage_->setAuthToken(authController_.sessionToken());
                 updateAuthenticatedAccount(username, email, QString("%1，欢迎回来。").arg(username), false);
             });
     connect(&authController_, &backend::controller::auth::AuthController::loginFailed,
@@ -192,6 +197,7 @@ void MainWindow::connectAccountFlow()
             this, [this](const QString &) {
                 currentUsername_.clear();
                 currentEmail_.clear();
+                uploadPage_->setAuthToken(QString());
                 accountPage_->showLoggedOutState("您已经退出登录。");
                 switchToPage(Account);
             });

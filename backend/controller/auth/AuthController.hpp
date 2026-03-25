@@ -1,8 +1,10 @@
 #pragma once
 
-#include "service/auth/AuthService.hpp"
-
 #include <QObject>
+#include <QString>
+
+class QNetworkAccessManager;
+class QNetworkReply;
 
 namespace backend::controller::auth {
 
@@ -11,7 +13,10 @@ class AuthController final : public QObject
     Q_OBJECT
 
 public:
-    explicit AuthController(backend::service::auth::AuthService &authService, QObject *parent = nullptr);
+    explicit AuthController(QObject *parent = nullptr);
+
+    QString sessionToken() const;
+    bool isAuthenticated() const;
 
 public slots:
     void requestLogin(const QString &username, const QString &password);
@@ -29,7 +34,20 @@ signals:
     void sessionRestored(const QString &username, const QString &email);
 
 private:
-    backend::service::auth::AuthService &authService_;
+    enum class AuthAction {
+        Login,
+        Register,
+        Logout,
+        Restore
+    };
+
+    void handleAuthReply(QNetworkReply *reply, AuthAction action);
+    void persistSessionToken(const QString &token);
+    void clearPersistedSessionToken();
+    QString loadPersistedSessionToken() const;
+
+    QNetworkAccessManager *networkManager_ = nullptr;
+    QString sessionToken_;
 };
 
 }  // namespace backend::controller::auth

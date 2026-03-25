@@ -19,6 +19,7 @@ class UploadPage final : public QWidget
 
 public:
     explicit UploadPage(QWidget *parent = nullptr);
+    void setAuthToken(const QString &token);
 
 signals:
     void uploadSucceeded();
@@ -32,6 +33,7 @@ private:
     void setStatusMessage(const QString &message, bool isError = false);
     bool validateForm(QString *errorMessage = nullptr) const;
 
+    QString authToken_;
     QString selectedFilePath_;
     QLabel *selectedFileLabel_ = nullptr;
     QLineEdit *titleEdit_ = nullptr;

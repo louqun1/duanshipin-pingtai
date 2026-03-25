@@ -47,6 +47,7 @@ private:
         QString id;
         QString title;
         QString creator;
+        QString uploaderUsername;
         QString duration;
         QString status;
         QString coverUrl;

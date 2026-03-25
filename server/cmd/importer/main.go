@@ -34,6 +34,9 @@ func main() {
 		log.Fatalf("connect mysql: %v", err)
 	}
 	defer database.Close()
+	if err := db.EnsureSchema(ctx, database); err != nil {
+		log.Fatalf("ensure mysql schema: %v", err)
+	}
 
 	minioStorage, err := storage.NewMinIOStorage(cfg)
 	if err != nil {
@@ -51,6 +54,7 @@ func main() {
 		*filePath,
 		strings.TrimSpace(*title),
 		strings.TrimSpace(*description),
+		nil,
 	)
 	if err != nil {
 		log.Fatalf("import video: %v", err)

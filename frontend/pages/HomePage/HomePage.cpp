@@ -338,18 +338,21 @@ void HomePage::handleFeedReply(QNetworkReply *reply)
         RemoteVideoItem item;
         item.id = QString::number(object.value("id").toVariant().toLongLong());
         item.title = object.value("title").toString("Untitled video");
-        item.creator = object.value("status").toString("unknown");
+        item.uploaderUsername = object.value("uploaderUsername").toString();
         item.duration = formatDurationMs(object.value("durationMs").toVariant().toLongLong());
         item.status = object.value("status").toString();
         item.coverUrl = object.value("coverUrl").toString();
         item.playUrl = object.value("playUrl").toString();
+        item.creator = item.uploaderUsername.isEmpty()
+            ? QString("Status %1").arg(item.status)
+            : QString("@%1").arg(item.uploaderUsername);
 
         feedItems_.append(item);
 
         frontend::components::VideoCardData cardData{
             item.id,
             item.title,
-            QString("Status %1").arg(item.status),
+            item.creator,
             item.duration,
             cardAccentStart(index),
             cardAccentEnd(index)
@@ -519,7 +522,7 @@ void HomePage::handleVideoDetailReply(QNetworkReply *reply, RemoteVideoItem fall
         playUrl,
         fallbackItem.id,
         title,
-        QString("Status %1").arg(status),
+        fallbackItem.creator,
         duration);
     setStatusMessage(QString("Opening %1").arg(title));
 }

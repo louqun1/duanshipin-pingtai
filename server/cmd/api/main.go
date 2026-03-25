@@ -24,6 +24,8 @@ import (
 
 type videoRow struct {
 	ID             int64
+	UserID         sql.NullInt64
+	UploaderName   sql.NullString
 	Title          string
 	Description    sql.NullString
 	Status         string
@@ -36,16 +38,18 @@ type videoRow struct {
 }
 
 type videoResponse struct {
-	ID          int64   `json:"id"`
-	Title       string  `json:"title"`
-	Description string  `json:"description,omitempty"`
-	Status      string  `json:"status"`
-	CoverURL    string  `json:"coverUrl,omitempty"`
-	PlayURL     string  `json:"playUrl,omitempty"`
-	DurationMs  *int64  `json:"durationMs,omitempty"`
-	Width       *int64  `json:"width,omitempty"`
-	Height      *int64  `json:"height,omitempty"`
-	CreatedAt   string  `json:"createdAt"`
+	ID               int64   `json:"id"`
+	UserID           *int64  `json:"userId,omitempty"`
+	UploaderUsername string  `json:"uploaderUsername,omitempty"`
+	Title            string  `json:"title"`
+	Description      string  `json:"description,omitempty"`
+	Status           string  `json:"status"`
+	CoverURL         string  `json:"coverUrl,omitempty"`
+	PlayURL          string  `json:"playUrl,omitempty"`
+	DurationMs       *int64  `json:"durationMs,omitempty"`
+	Width            *int64  `json:"width,omitempty"`
+	Height           *int64  `json:"height,omitempty"`
+	CreatedAt        string  `json:"createdAt"`
 }
 
 type apiServer struct {
@@ -63,12 +67,15 @@ func main() {
 		log.Fatalf("connect mysql: %v", err)
 	}
 	defer database.Close()
+	ctx := context.Background()
+	if err := db.EnsureSchema(ctx, database); err != nil {
+		log.Fatalf("ensure mysql schema: %v", err)
+	}
 
 	mediaStorage, err := storage.NewMinIOStorage(cfg)
 	if err != nil {
 		log.Fatalf("connect minio: %v", err)
 	}
-	ctx := context.Background()
 	if err := mediaStorage.EnsureRawBucket(ctx); err != nil {
 		log.Fatalf("check raw bucket: %v", err)
 	}
@@ -87,6 +94,10 @@ func main() {
 	}
 
 	mux := http.NewServeMux()
+	mux.HandleFunc("/api/auth/register", server.handleRegister)
+	mux.HandleFunc("/api/auth/login", server.handleLogin)
+	mux.HandleFunc("/api/auth/logout", server.handleLogout)
+	mux.HandleFunc("/api/me", server.handleMe)
 	mux.HandleFunc("/api/events", server.handleEvents)
 	mux.HandleFunc("/api/videos", server.handleVideos)
 	mux.HandleFunc("/api/videos/upload", server.handleVideoUpload)
@@ -121,9 +132,10 @@ func (s *apiServer) handleVideos(writer http.ResponseWriter, request *http.Reque
 
 	rows, err := s.database.QueryContext(
 		ctx,
-		`SELECT id, title, description, status, cover_object_key, play_object_key, duration_ms, width, height, created_at
-		 FROM videos
-		 ORDER BY id DESC`,
+		`SELECT v.id, v.user_id, u.username, v.title, v.description, v.status, v.cover_object_key, v.play_object_key, v.duration_ms, v.width, v.height, v.created_at
+		 FROM videos v
+		 LEFT JOIN users u ON u.id = v.user_id
+		 ORDER BY v.id DESC`,
 	)
 	if err != nil {
 		writeServerError(writer, fmt.Errorf("query videos: %w", err))
@@ -136,6 +148,8 @@ func (s *apiServer) handleVideos(writer http.ResponseWriter, request *http.Reque
 		var row videoRow
 		if err := rows.Scan(
 			&row.ID,
+			&row.UserID,
+			&row.UploaderName,
 			&row.Title,
 			&row.Description,
 			&row.Status,
@@ -175,6 +189,14 @@ func (s *apiServer) handleVideoUpload(writer http.ResponseWriter, request *http.
 	}
 	if request.URL.Path != "/api/videos/upload" {
 		writeNotFound(writer)
+		return
+	}
+
+	authCtx, authCancel := context.WithTimeout(request.Context(), 5*time.Second)
+	authUser, err := s.requireAuthenticatedUser(authCtx, request)
+	authCancel()
+	if err != nil {
+		writeJSON(writer, http.StatusUnauthorized, map[string]string{"error": err.Error()})
 		return
 	}
 
@@ -228,6 +250,7 @@ func (s *apiServer) handleVideoUpload(writer http.ResponseWriter, request *http.
 		header.Filename,
 		strings.TrimSpace(request.FormValue("title")),
 		description,
+		&authUser.ID,
 	)
 	if err != nil {
 		writeServerError(writer, fmt.Errorf("ingest uploaded file: %w", err))
@@ -284,15 +307,18 @@ func (s *apiServer) handleVideoDetail(writer http.ResponseWriter, request *http.
 func (s *apiServer) findVideoByID(ctx context.Context, videoID int64) (videoRow, error) {
 	row := s.database.QueryRowContext(
 		ctx,
-		`SELECT id, title, description, status, cover_object_key, play_object_key, duration_ms, width, height, created_at
-		 FROM videos
-		 WHERE id = ?`,
+		`SELECT v.id, v.user_id, u.username, v.title, v.description, v.status, v.cover_object_key, v.play_object_key, v.duration_ms, v.width, v.height, v.created_at
+		 FROM videos v
+		 LEFT JOIN users u ON u.id = v.user_id
+		 WHERE v.id = ?`,
 		videoID,
 	)
 
 	var result videoRow
 	err := row.Scan(
 		&result.ID,
+		&result.UserID,
+		&result.UploaderName,
 		&result.Title,
 		&result.Description,
 		&result.Status,
@@ -314,6 +340,13 @@ func (s *apiServer) toVideoResponse(row videoRow, baseURL string) videoResponse 
 		CreatedAt: row.CreatedAt.Format(time.RFC3339),
 	}
 
+	if row.UserID.Valid {
+		value := row.UserID.Int64
+		response.UserID = &value
+	}
+	if row.UploaderName.Valid {
+		response.UploaderUsername = row.UploaderName.String
+	}
 	if row.Description.Valid {
 		response.Description = row.Description.String
 	}

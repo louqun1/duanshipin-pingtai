@@ -393,16 +393,6 @@ frontend/CMakeFiles/FrontendWidgets.dir/widgets/MainWindow.cpp.obj: \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstring.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/controller/auth/AuthController.hpp \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/service/auth/AuthService.hpp \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/repository/session/SessionRepository.hpp \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/domain/session/Session.hpp \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QDateTime \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdatetime.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcalendar.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qlocale.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/repository/user/UserRepository.hpp \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/domain/user/User.hpp \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/service/auth/AuthResult.hpp \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QObject \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qobject.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playercontroller/service/PlayerController.hpp \
@@ -719,6 +709,7 @@ frontend/CMakeFiles/FrontendWidgets.dir/widgets/MainWindow.cpp.obj: \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcoreapplication.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcoreapplication_platform.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qinputmethod.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qlocale.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qguiapplication_platform.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QKeyEvent \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QRect \

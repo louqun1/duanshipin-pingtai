@@ -212,6 +212,7 @@ target_link_libraries(ServoBackend
     PUBLIC
         Qt6::Core
         Qt6::Gui
+        Qt6::Network
         Qt6::Sql
         Qt6::Widgets
         SDL2::SDL2

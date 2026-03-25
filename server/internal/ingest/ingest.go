@@ -36,6 +36,7 @@ func IngestLocalFile(
 	originalFilename string,
 	title string,
 	description string,
+	uploaderUserID *int64,
 ) (Result, error) {
 	absolutePath, err := filepath.Abs(localPath)
 	if err != nil {
@@ -58,7 +59,15 @@ func IngestLocalFile(
 
 	contentType := detectContentType(safeFilename, absolutePath)
 
-	videoID, err := insertVideo(ctx, database, resolvedTitle, strings.TrimSpace(description), fileInfo.Size(), contentType)
+	videoID, err := insertVideo(
+		ctx,
+		database,
+		uploaderUserID,
+		resolvedTitle,
+		strings.TrimSpace(description),
+		fileInfo.Size(),
+		contentType,
+	)
 	if err != nil {
 		return Result{}, fmt.Errorf("insert video row: %w", err)
 	}
@@ -134,11 +143,24 @@ func buildSourceObjectKey(videoID int64, filename string) string {
 	return fmt.Sprintf("video/%d/source/%s", videoID, filename)
 }
 
-func insertVideo(ctx context.Context, database *sql.DB, title, description string, fileSize int64, mimeType string) (int64, error) {
+func insertVideo(
+	ctx context.Context,
+	database *sql.DB,
+	uploaderUserID *int64,
+	title, description string,
+	fileSize int64,
+	mimeType string,
+) (int64, error) {
+	var userIDValue any
+	if uploaderUserID != nil {
+		userIDValue = *uploaderUserID
+	}
+
 	result, err := database.ExecContext(
 		ctx,
-		`INSERT INTO videos (title, description, source_object_key, status, file_size, mime_type)
-		 VALUES (?, ?, ?, 'uploaded', ?, ?)`,
+		`INSERT INTO videos (user_id, title, description, source_object_key, status, file_size, mime_type)
+		 VALUES (?, ?, ?, ?, 'uploaded', ?, ?)`,
+		userIDValue,
 		title,
 		nullIfEmpty(description),
 		"pending",

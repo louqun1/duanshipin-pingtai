@@ -55,6 +55,17 @@ UploadPage::UploadPage(QWidget *parent)
     buildUi();
 }
 
+void UploadPage::setAuthToken(const QString &token)
+{
+    authToken_ = token.trimmed();
+    if (authToken_.isEmpty()) {
+        setStatusMessage("Sign in before uploading a video.", true);
+        return;
+    }
+
+    setStatusMessage(QString("Signed in. Ready to upload to %1").arg(apiVideoUploadUrl(apiBaseUrl())));
+}
+
 void UploadPage::buildUi()
 {
     auto *layout = new QVBoxLayout(this);
@@ -66,7 +77,7 @@ void UploadPage::buildUi()
     layout->addWidget(title);
 
     auto *summary = new QLabel(
-        "Select a local video file, send it to the API server, and queue it for transcoding. "
+        "Sign in first, then select a local video file and send it to the API server for transcoding. "
         "If your worker is running on the VM, the uploaded video will move from queued to ready automatically.",
         this);
     summary->setWordWrap(true);
@@ -276,7 +287,7 @@ void UploadPage::buildUi()
     contentLayout->addWidget(notesPanel, 2);
     layout->addLayout(contentLayout, 1);
 
-    setStatusMessage(QString("Ready to upload to %1").arg(apiVideoUploadUrl(apiBaseUrl())));
+    setStatusMessage("Sign in before uploading a video.");
 
     connect(selectFileButton_, &QPushButton::clicked, this, &UploadPage::pickVideoFile);
     connect(uploadButton_, &QPushButton::clicked, this, &UploadPage::submitUpload);
@@ -351,6 +362,7 @@ void UploadPage::submitUpload()
     multiPart->append(filePart);
 
     QNetworkRequest request(QUrl(apiVideoUploadUrl(apiBaseUrl())));
+    request.setRawHeader("Authorization", QByteArray("Bearer ") + authToken_.toUtf8());
     activeReply_ = networkManager_->post(request, multiPart);
     multiPart->setParent(activeReply_);
 
@@ -481,6 +493,13 @@ bool UploadPage::validateForm(QString *errorMessage) const
     if (activeReply_) {
         if (errorMessage) {
             *errorMessage = "An upload is already in progress.";
+        }
+        return false;
+    }
+
+    if (authToken_.trimmed().isEmpty()) {
+        if (errorMessage) {
+            *errorMessage = "Sign in before uploading a video.";
         }
         return false;
     }
