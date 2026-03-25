@@ -2,6 +2,7 @@
 
 #include <QByteArray>
 #include <QEvent>
+#include <QSet>
 #include <QStringList>
 #include <QVector>
 #include <QWidget>
@@ -10,6 +11,7 @@ class QGridLayout;
 class QLabel;
 class QNetworkAccessManager;
 class QNetworkReply;
+class QNetworkRequest;
 class QResizeEvent;
 class QScrollArea;
 class QShowEvent;
@@ -27,6 +29,7 @@ class HomePage final : public QWidget
 
 public:
     explicit HomePage(QWidget *parent = nullptr);
+    void setAuthToken(const QString &token);
     void refreshFeed();
 
 signals:
@@ -52,8 +55,11 @@ private:
         QString status;
         QString coverUrl;
         QString playUrl;
+        qint64 likeCount = 0;
+        bool likedByMe = false;
     };
 
+    void applyAuthHeader(QNetworkRequest &request) const;
     void buildUi();
     void connectEventStream();
     void disconnectEventStream();
@@ -63,9 +69,13 @@ private:
     void handleEventStreamReadyRead(QNetworkReply *reply);
     void processEventStreamMessage(const QByteArray &message);
     void requestCardCover(const QString &coverUrl, frontend::components::VideoCard *card);
+    void requestLikeToggle(const QString &videoId, bool shouldLike);
+    void handleLikeToggleReply(QNetworkReply *reply, const QString &videoId);
     void requestVideoDetail(const RemoteVideoItem &item);
     void handleVideoDetailReply(QNetworkReply *reply, RemoteVideoItem fallbackItem);
     void scheduleEventStreamReconnect();
+    frontend::components::VideoCard *findCardByVideoId(const QString &videoId) const;
+    void updateVideoLikeState(const QString &videoId, qint64 likeCount, bool likedByMe);
     void relayoutCards();
     void clearCards();
     void setStatusMessage(const QString &message);
@@ -86,6 +96,8 @@ private:
     QTimer *eventStreamReconnectTimer_ = nullptr;
     QByteArray eventStreamBuffer_;
     QString eventStreamBaseUrl_;
+    QString authToken_;
+    QSet<QString> pendingLikeVideoIds_;
 };
 
 }  // namespace frontend::pages

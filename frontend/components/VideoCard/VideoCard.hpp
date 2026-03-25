@@ -3,6 +3,7 @@
 #include <QPixmap>
 #include <QPushButton>
 #include <QString>
+#include <QtGlobal>
 
 class QLabel;
 class QResizeEvent;
@@ -17,6 +18,8 @@ struct VideoCardData {
     QString duration;
     QString accentStart;
     QString accentEnd;
+    qint64 likeCount = 0;
+    bool likedByMe = false;
 };
 
 class VideoCard final : public QPushButton
@@ -29,6 +32,11 @@ public:
     QString videoId() const;
     void setCardWidth(int width);
     void setPosterPixmap(const QPixmap &pixmap);
+    void setLikeState(qint64 likeCount, bool likedByMe);
+    void setLikeBusy(bool busy);
+
+signals:
+    void likeToggled(const QString &videoId, bool shouldLike);
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -36,6 +44,7 @@ protected:
 private:
     void updatePreviewHeight();
     void updatePosterAppearance();
+    void updateLikeButtonAppearance();
 
     QString videoId_;
     QString accentStart_;
@@ -44,7 +53,12 @@ private:
     QLabel *posterImageLabel_ = nullptr;
     QLabel *titleLabel_ = nullptr;
     QLabel *metaLabel_ = nullptr;
+    QWidget *footerWidget_ = nullptr;
+    QPushButton *likeButton_ = nullptr;
     QPixmap posterPixmap_;
+    qint64 likeCount_ = 0;
+    bool likedByMe_ = false;
+    bool likeBusy_ = false;
 };
 
 }  // namespace frontend::components

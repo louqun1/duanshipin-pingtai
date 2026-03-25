@@ -2,6 +2,7 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/build/frontend/FrontendWidgets_au
   D:/itffmpeg/av_media/online/duanshipin-pingtai/build/frontend/FrontendWidgets_autogen/moc_predefs.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QByteArray \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QEvent \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSet \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QStringList \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QVector \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q17memory.h \

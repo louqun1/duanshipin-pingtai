@@ -105,6 +105,11 @@ QString apiVideoDetailUrl(const QString &baseUrl, const QString &videoId)
     return QString("%1/api/videos/%2").arg(baseUrl, videoId);
 }
 
+QString apiVideoLikeUrl(const QString &baseUrl, const QString &videoId)
+{
+    return QString("%1/api/videos/%2/like").arg(baseUrl, videoId);
+}
+
 bool isConnectionFailure(QNetworkReply::NetworkError error)
 {
     return error == QNetworkReply::ConnectionRefusedError ||
@@ -130,6 +135,26 @@ HomePage::HomePage(QWidget *parent)
     fetchFeed();
 }
 
+void HomePage::setAuthToken(const QString &token)
+{
+    const QString normalized = token.trimmed();
+    if (authToken_ == normalized) {
+        return;
+    }
+
+    authToken_ = normalized;
+    pendingLikeVideoIds_.clear();
+
+    if (feedRequested_) {
+        feedRefreshQueued_ = true;
+        return;
+    }
+
+    if (!feedItems_.isEmpty() || !activeApiBaseUrl_.isEmpty()) {
+        refreshFeed();
+    }
+}
+
 void HomePage::refreshFeed()
 {
     setStatusMessage(QString("Refreshing %1 ...").arg(apiVideosUrl(apiBaseUrls_.value(apiBaseUrlIndex_, apiBaseUrl()))));
@@ -138,6 +163,15 @@ void HomePage::refreshFeed()
         return;
     }
     fetchFeed();
+}
+
+void HomePage::applyAuthHeader(QNetworkRequest &request) const
+{
+    if (authToken_.isEmpty()) {
+        return;
+    }
+
+    request.setRawHeader("Authorization", QByteArray("Bearer ") + authToken_.toUtf8());
 }
 
 bool HomePage::eventFilter(QObject *watched, QEvent *event)
@@ -275,7 +309,9 @@ void HomePage::fetchFeed()
 
     feedRequested_ = true;
     const QString baseUrl = apiBaseUrls_.value(apiBaseUrlIndex_, apiBaseUrl());
-    auto *reply = networkManager_->get(QNetworkRequest(QUrl(apiVideosUrl(baseUrl))));
+    QNetworkRequest request(QUrl(apiVideosUrl(baseUrl)));
+    applyAuthHeader(request);
+    auto *reply = networkManager_->get(request);
     connect(reply, &QNetworkReply::finished, this, [this, reply]() {//这次请求完成后，自动调用 handleFeedReply(reply)
         handleFeedReply(reply);
     });
@@ -294,7 +330,9 @@ void HomePage::handleFeedReply(QNetworkReply *reply)
                 QString("Failed to reach %1: %2. Retrying %3 ...")
                     .arg(apiVideosUrl(attemptedBaseUrl), reply->errorString(), apiVideosUrl(nextBaseUrl)));
 
-            auto *retryReply = networkManager_->get(QNetworkRequest(QUrl(apiVideosUrl(nextBaseUrl))));
+            QNetworkRequest retryRequest(QUrl(apiVideosUrl(nextBaseUrl)));
+            applyAuthHeader(retryRequest);
+            auto *retryReply = networkManager_->get(retryRequest);
             connect(retryReply, &QNetworkReply::finished, this, [this, retryReply]() {
                 handleFeedReply(retryReply);
             });
@@ -343,6 +381,8 @@ void HomePage::handleFeedReply(QNetworkReply *reply)
         item.status = object.value("status").toString();
         item.coverUrl = object.value("coverUrl").toString();
         item.playUrl = object.value("playUrl").toString();
+        item.likeCount = object.value("likeCount").toVariant().toLongLong();
+        item.likedByMe = object.value("likedByMe").toBool();
         item.creator = item.uploaderUsername.isEmpty()
             ? QString("Status %1").arg(item.status)
             : QString("@%1").arg(item.uploaderUsername);
@@ -355,11 +395,16 @@ void HomePage::handleFeedReply(QNetworkReply *reply)
             item.creator,
             item.duration,
             cardAccentStart(index),
-            cardAccentEnd(index)
+            cardAccentEnd(index),
+            item.likeCount,
+            item.likedByMe
         };
 
         auto *card = new frontend::components::VideoCard(cardData, feedContainer_);
         requestCardCover(item.coverUrl, card);
+        connect(card, &frontend::components::VideoCard::likeToggled, this, [this](const QString &videoId, bool shouldLike) {
+            requestLikeToggle(videoId, shouldLike);
+        });
         connect(card, &QPushButton::clicked, this, [this, item]() {
             requestVideoDetail(item);
         });
@@ -481,10 +526,84 @@ void HomePage::requestVideoDetail(const RemoteVideoItem &item)
         : activeApiBaseUrl_;
     setStatusMessage(QString("Loading %1 ...").arg(apiVideoDetailUrl(baseUrl, item.id)));
 
-    auto *reply = networkManager_->get(QNetworkRequest(QUrl(apiVideoDetailUrl(baseUrl, item.id))));
+    QNetworkRequest request(QUrl(apiVideoDetailUrl(baseUrl, item.id)));
+    applyAuthHeader(request);
+    auto *reply = networkManager_->get(request);
     connect(reply, &QNetworkReply::finished, this, [this, reply, item]() {
         handleVideoDetailReply(reply, item);
     });
+}
+
+void HomePage::requestLikeToggle(const QString &videoId, bool shouldLike)
+{
+    if (videoId.trimmed().isEmpty()) {
+        return;
+    }
+    if (pendingLikeVideoIds_.contains(videoId)) {
+        return;
+    }
+    if (authToken_.isEmpty()) {
+        setStatusMessage("Sign in before liking videos.");
+        return;
+    }
+
+    const QString baseUrl = activeApiBaseUrl_.isEmpty()
+        ? apiBaseUrls_.value(apiBaseUrlIndex_, apiBaseUrl())
+        : activeApiBaseUrl_;
+    QNetworkRequest request(QUrl(apiVideoLikeUrl(baseUrl, videoId)));
+    applyAuthHeader(request);
+
+    pendingLikeVideoIds_.insert(videoId);
+    if (auto *card = findCardByVideoId(videoId)) {
+        card->setLikeBusy(true);
+    }
+
+    QNetworkReply *reply = shouldLike
+        ? networkManager_->post(request, QByteArray())
+        : networkManager_->deleteResource(request);
+    connect(reply, &QNetworkReply::finished, this, [this, reply, videoId]() {
+        handleLikeToggleReply(reply, videoId);
+    });
+
+    setStatusMessage(
+        QString("%1 video %2 ...").arg(shouldLike ? "Saving like for" : "Removing like from").arg(videoId));
+}
+
+void HomePage::handleLikeToggleReply(QNetworkReply *reply, const QString &videoId)
+{
+    if (!reply) {
+        return;
+    }
+
+    pendingLikeVideoIds_.remove(videoId);
+    if (auto *card = findCardByVideoId(videoId)) {
+        card->setLikeBusy(false);
+    }
+
+    const QByteArray responseBytes = reply->readAll();
+    reply->deleteLater();
+
+    const QJsonDocument document = QJsonDocument::fromJson(responseBytes);
+    const QJsonObject object = document.isObject() ? document.object() : QJsonObject();
+
+    if (reply->error() != QNetworkReply::NoError) {
+        QString errorMessage = reply->errorString();
+        const QString apiMessage = object.value("error").toString();
+        if (!apiMessage.isEmpty()) {
+            errorMessage = apiMessage;
+        }
+
+        setStatusMessage(QString("Like request failed: %1").arg(errorMessage));
+        return;
+    }
+
+    const qint64 likeCount = object.value("likeCount").toVariant().toLongLong();
+    const bool likedByMe = object.value("likedByMe").toBool();
+    updateVideoLikeState(videoId, likeCount, likedByMe);
+    setStatusMessage(
+        likedByMe
+            ? QString("Liked video %1").arg(videoId)
+            : QString("Removed like from video %1").arg(videoId));
 }
 
 void HomePage::handleVideoDetailReply(QNetworkReply *reply, RemoteVideoItem fallbackItem)
@@ -535,6 +654,32 @@ void HomePage::scheduleEventStreamReconnect()
 
     if (!eventStreamReconnectTimer_->isActive()) {
         eventStreamReconnectTimer_->start();
+    }
+}
+
+frontend::components::VideoCard *HomePage::findCardByVideoId(const QString &videoId) const
+{
+    for (auto *card : cards_) {
+        if (card && card->videoId() == videoId) {
+            return card;
+        }
+    }
+
+    return nullptr;
+}
+
+void HomePage::updateVideoLikeState(const QString &videoId, qint64 likeCount, bool likedByMe)
+{
+    for (auto &item : feedItems_) {
+        if (item.id == videoId) {
+            item.likeCount = likeCount;
+            item.likedByMe = likedByMe;
+            break;
+        }
+    }
+
+    if (auto *card = findCardByVideoId(videoId)) {
+        card->setLikeState(likeCount, likedByMe);
     }
 }
 

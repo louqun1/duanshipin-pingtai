@@ -164,7 +164,7 @@ func (s *apiServer) handleVideoUpdatedNotification(writer http.ResponseWriter, r
 }
 
 func (s *apiServer) publishVideoUpdated(ctx context.Context, videoID int64) error {
-	row, err := s.findVideoByID(ctx, videoID)
+	row, err := s.findVideoByID(ctx, videoID, nil)
 	if err != nil {
 		return err
 	}

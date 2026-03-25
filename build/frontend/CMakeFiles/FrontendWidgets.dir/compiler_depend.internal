@@ -9,6 +9,7 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/build/frontend/FrontendWidgets_au
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPointer
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QRect
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QScopedPointer
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSet
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSize
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSizeF
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString
@@ -729,6 +730,7 @@ frontend/CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/mocs_compilation
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPointer
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QRect
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QScopedPointer
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSet
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSize
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSizeF
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString
@@ -1452,6 +1454,7 @@ frontend/CMakeFiles/FrontendWidgets.dir/components/VideoCard/VideoCard.cpp.obj
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSize
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSizeF
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QtGlobal
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q17memory.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20functional.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20iterator.h
@@ -2322,6 +2325,7 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/HomePage/HomePage.cpp.obj
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QObject
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPointer
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QRect
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSet
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSharedDataPointer
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSize
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSizeF
@@ -2331,6 +2335,7 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/HomePage/HomePage.cpp.obj
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QUrl
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QVariant
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QVector
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QtGlobal
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q17memory.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20functional.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20iterator.h
@@ -3734,6 +3739,7 @@ frontend/CMakeFiles/FrontendWidgets.dir/widgets/MainWindow.cpp.obj
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QObject
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPointer
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QRect
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSet
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSize
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSizeF
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString

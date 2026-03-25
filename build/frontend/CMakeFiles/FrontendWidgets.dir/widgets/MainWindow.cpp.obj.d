@@ -675,6 +675,8 @@ frontend/CMakeFiles/FrontendWidgets.dir/widgets/MainWindow.cpp.obj: \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qabstracteventdispatcher.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qeventloop.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdeadlinetimer.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSet \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qset.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QStringList \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstringlist.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QVector \

@@ -659,6 +659,7 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/VideoPlayerWindo
 D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/components/VideoCard/VideoCard.hpp
  mmc:Q_OBJECT
  mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString
+ mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QtGlobal
  mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q17memory.h
  mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20functional.h
  mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q20iterator.h
@@ -2589,6 +2590,7 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/HomePage/HomePage.
  mmc:Q_OBJECT
  mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QByteArray
  mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QEvent
+ mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSet
  mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QStringList
  mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QVector
  mdp:D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/q17memory.h

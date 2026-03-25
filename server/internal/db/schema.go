@@ -32,6 +32,15 @@ func EnsureSchema(ctx context.Context, database *sql.DB) error {
 			INDEX idx_user_sessions_active_lookup (token_hash, revoked_at, expires_at),
 			CONSTRAINT fk_user_sessions_user_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 		)`,
+		`CREATE TABLE IF NOT EXISTS video_likes (
+			video_id BIGINT NOT NULL,
+			user_id BIGINT NOT NULL,
+			created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			PRIMARY KEY (video_id, user_id),
+			INDEX idx_video_likes_user_id (user_id),
+			CONSTRAINT fk_video_likes_video_id FOREIGN KEY (video_id) REFERENCES videos(id) ON DELETE CASCADE,
+			CONSTRAINT fk_video_likes_user_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+		)`,
 	}
 
 	for _, statement := range statements {

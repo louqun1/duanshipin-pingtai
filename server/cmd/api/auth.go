@@ -251,6 +251,27 @@ func (s *apiServer) requireAuthenticatedUser(ctx context.Context, request *http.
 	return user, nil
 }
 
+func (s *apiServer) optionalAuthenticatedUser(ctx context.Context, request *http.Request) (*authUserRow, error) {
+	token, ok := bearerTokenFromRequest(request)
+	if !ok {
+		return nil, nil
+	}
+
+	user, err := s.findUserByAccessToken(ctx, token)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	if err := s.touchSession(ctx, token); err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
 func (s *apiServer) findUserByUsername(ctx context.Context, username string) (authUserRow, error) {
 	row := s.database.QueryRowContext(
 		ctx,

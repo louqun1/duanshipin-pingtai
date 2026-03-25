@@ -6,6 +6,7 @@ FrontendWidgets_autogen/timestamp: \
 	D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPointer \
 	D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QRect \
 	D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QScopedPointer \
+	D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSet \
 	D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSize \
 	D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSizeF \
 	D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString \

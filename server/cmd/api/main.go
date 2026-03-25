@@ -12,7 +12,6 @@ import (
 	"net/url"
 	"os"
 	"path"
-	"strconv"
 	"strings"
 	"time"
 
@@ -34,6 +33,8 @@ type videoRow struct {
 	DurationMs     sql.NullInt64
 	Width          sql.NullInt64
 	Height         sql.NullInt64
+	LikeCount      int64
+	LikedByMe      int64
 	CreatedAt      time.Time
 }
 
@@ -49,6 +50,8 @@ type videoResponse struct {
 	DurationMs       *int64  `json:"durationMs,omitempty"`
 	Width            *int64  `json:"width,omitempty"`
 	Height           *int64  `json:"height,omitempty"`
+	LikeCount        int64   `json:"likeCount"`
+	LikedByMe        bool    `json:"likedByMe"`
 	CreatedAt        string  `json:"createdAt"`
 }
 
@@ -130,12 +133,35 @@ func (s *apiServer) handleVideos(writer http.ResponseWriter, request *http.Reque
 	ctx, cancel := context.WithTimeout(request.Context(), 5*time.Second)
 	defer cancel()
 
+	var viewerUserID *int64
+	viewer, err := s.optionalAuthenticatedUser(ctx, request)
+	if err != nil {
+		writeServerError(writer, fmt.Errorf("load optional viewer: %w", err))
+		return
+	}
+	if viewer != nil {
+		viewerUserID = &viewer.ID
+	}
+
+	var viewerArg any
+	if viewerUserID != nil {
+		viewerArg = *viewerUserID
+	}
+
 	rows, err := s.database.QueryContext(
 		ctx,
-		`SELECT v.id, v.user_id, u.username, v.title, v.description, v.status, v.cover_object_key, v.play_object_key, v.duration_ms, v.width, v.height, v.created_at
+		`SELECT v.id, v.user_id, u.username, v.title, v.description, v.status, v.cover_object_key, v.play_object_key, v.duration_ms, v.width, v.height,
+		        (SELECT COUNT(*) FROM video_likes likes WHERE likes.video_id = v.id) AS like_count,
+		        CASE
+		            WHEN ? IS NULL THEN 0
+		            ELSE (SELECT COUNT(*) FROM video_likes current_like WHERE current_like.video_id = v.id AND current_like.user_id = ?)
+		        END AS liked_by_me,
+		        v.created_at
 		 FROM videos v
 		 LEFT JOIN users u ON u.id = v.user_id
 		 ORDER BY v.id DESC`,
+		viewerArg,
+		viewerArg,
 	)
 	if err != nil {
 		writeServerError(writer, fmt.Errorf("query videos: %w", err))
@@ -158,6 +184,8 @@ func (s *apiServer) handleVideos(writer http.ResponseWriter, request *http.Reque
 			&row.DurationMs,
 			&row.Width,
 			&row.Height,
+			&row.LikeCount,
+			&row.LikedByMe,
 			&row.CreatedAt,
 		); err != nil {
 			writeServerError(writer, fmt.Errorf("scan video row: %w", err))
@@ -271,19 +299,19 @@ func (s *apiServer) handleVideoUpload(writer http.ResponseWriter, request *http.
 }
 
 func (s *apiServer) handleVideoDetail(writer http.ResponseWriter, request *http.Request) {
+	idPart := strings.TrimPrefix(request.URL.Path, "/api/videos/")
+	if strings.HasSuffix(idPart, "/like") {
+		s.handleVideoLike(writer, request, strings.TrimSuffix(idPart, "/like"))
+		return
+	}
+
 	if request.Method != http.MethodGet {
 		writeMethodNotAllowed(writer)
 		return
 	}
 
-	idPart := strings.TrimPrefix(request.URL.Path, "/api/videos/")
-	if idPart == "" || strings.Contains(idPart, "/") {
-		writeNotFound(writer)
-		return
-	}
-
-	videoID, err := strconv.ParseInt(idPart, 10, 64)
-	if err != nil || videoID <= 0 {
+	videoID, err := parseVideoID(idPart)
+	if err != nil {
 		writeJSON(writer, http.StatusBadRequest, map[string]string{"error": "invalid video id"})
 		return
 	}
@@ -291,7 +319,17 @@ func (s *apiServer) handleVideoDetail(writer http.ResponseWriter, request *http.
 	ctx, cancel := context.WithTimeout(request.Context(), 5*time.Second)
 	defer cancel()
 
-	row, err := s.findVideoByID(ctx, videoID)
+	var viewerUserID *int64
+	viewer, err := s.optionalAuthenticatedUser(ctx, request)
+	if err != nil {
+		writeServerError(writer, fmt.Errorf("load optional viewer: %w", err))
+		return
+	}
+	if viewer != nil {
+		viewerUserID = &viewer.ID
+	}
+
+	row, err := s.findVideoByID(ctx, videoID, viewerUserID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			writeNotFound(writer)
@@ -304,13 +342,26 @@ func (s *apiServer) handleVideoDetail(writer http.ResponseWriter, request *http.
 	writeJSON(writer, http.StatusOK, s.toVideoResponse(row, s.cfg.PublicBaseURL))
 }
 
-func (s *apiServer) findVideoByID(ctx context.Context, videoID int64) (videoRow, error) {
+func (s *apiServer) findVideoByID(ctx context.Context, videoID int64, viewerUserID *int64) (videoRow, error) {
+	var viewerArg any
+	if viewerUserID != nil {
+		viewerArg = *viewerUserID
+	}
+
 	row := s.database.QueryRowContext(
 		ctx,
-		`SELECT v.id, v.user_id, u.username, v.title, v.description, v.status, v.cover_object_key, v.play_object_key, v.duration_ms, v.width, v.height, v.created_at
+		`SELECT v.id, v.user_id, u.username, v.title, v.description, v.status, v.cover_object_key, v.play_object_key, v.duration_ms, v.width, v.height,
+		        (SELECT COUNT(*) FROM video_likes likes WHERE likes.video_id = v.id) AS like_count,
+		        CASE
+		            WHEN ? IS NULL THEN 0
+		            ELSE (SELECT COUNT(*) FROM video_likes current_like WHERE current_like.video_id = v.id AND current_like.user_id = ?)
+		        END AS liked_by_me,
+		        v.created_at
 		 FROM videos v
 		 LEFT JOIN users u ON u.id = v.user_id
 		 WHERE v.id = ?`,
+		viewerArg,
+		viewerArg,
 		videoID,
 	)
 
@@ -327,6 +378,8 @@ func (s *apiServer) findVideoByID(ctx context.Context, videoID int64) (videoRow,
 		&result.DurationMs,
 		&result.Width,
 		&result.Height,
+		&result.LikeCount,
+		&result.LikedByMe,
 		&result.CreatedAt,
 	)
 	return result, err
@@ -337,6 +390,8 @@ func (s *apiServer) toVideoResponse(row videoRow, baseURL string) videoResponse 
 		ID:        row.ID,
 		Title:     row.Title,
 		Status:    row.Status,
+		LikeCount: row.LikeCount,
+		LikedByMe: row.LikedByMe > 0,
 		CreatedAt: row.CreatedAt.Format(time.RFC3339),
 	}
 

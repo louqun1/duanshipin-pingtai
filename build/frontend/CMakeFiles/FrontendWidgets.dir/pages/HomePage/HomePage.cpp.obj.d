@@ -333,6 +333,9 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/HomePage/HomePage.cpp.obj: \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/ctime \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qeventloop.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdeadlinetimer.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSet \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qset.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qhash.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QStringList \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstringlist.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QVector \
@@ -387,7 +390,6 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/HomePage/HomePage.cpp.obj: \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qmap.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qshareddata_impl.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qset.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qhash.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qvarlengtharray.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qalloc.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpalette.h \
@@ -409,6 +411,8 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/HomePage/HomePage.cpp.obj: \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qwidget.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstring.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QtGlobal \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qglobal.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QFrame \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qframe.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QGridLayout \

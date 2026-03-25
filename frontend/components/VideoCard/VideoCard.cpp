@@ -25,6 +25,8 @@ VideoCard::VideoCard(const VideoCardData &data, QWidget *parent)
     , videoId_(data.id)
     , accentStart_(data.accentStart)
     , accentEnd_(data.accentEnd)
+    , likeCount_(qMax<qint64>(0, data.likeCount))
+    , likedByMe_(data.likedByMe)
 {
     setCursor(Qt::PointingHandCursor);
     setFlat(true);
@@ -131,11 +133,32 @@ VideoCard::VideoCard(const VideoCardData &data, QWidget *parent)
     makeTransparentForMouse(titleLabel_);
     layout->addWidget(titleLabel_);
 
-    metaLabel_ = new QLabel(QString("%1  |  Short video").arg(data.creator), this);
+    footerWidget_ = new QWidget(this);
+    auto *footerLayout = new QHBoxLayout(footerWidget_);
+    footerLayout->setContentsMargins(0, 0, 0, 0);
+    footerLayout->setSpacing(12);
+
+    metaLabel_ = new QLabel(QString("%1  |  Short video").arg(data.creator), footerWidget_);
     metaLabel_->setObjectName("videoCardMeta");
     metaLabel_->setWordWrap(true);
     makeTransparentForMouse(metaLabel_);
-    layout->addWidget(metaLabel_);
+    footerLayout->addWidget(metaLabel_, 1);
+
+    likeButton_ = new QPushButton(footerWidget_);
+    likeButton_->setCursor(Qt::PointingHandCursor);
+    likeButton_->setFocusPolicy(Qt::NoFocus);
+    likeButton_->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    footerLayout->addWidget(likeButton_, 0, Qt::AlignRight | Qt::AlignVCenter);
+    connect(likeButton_, &QPushButton::clicked, this, [this]() {
+        if (likeBusy_) {
+            return;
+        }
+
+        emit likeToggled(videoId_, !likedByMe_);
+    });
+
+    layout->addWidget(footerWidget_);
+    updateLikeButtonAppearance();
 
     setCardWidth(248);
 }
@@ -157,6 +180,21 @@ void VideoCard::setPosterPixmap(const QPixmap &pixmap)
     updatePosterAppearance();
 }
 
+void VideoCard::setLikeState(qint64 likeCount, bool likedByMe)
+{
+    likeCount_ = qMax<qint64>(0, likeCount);
+    likedByMe_ = likedByMe;
+    updateLikeButtonAppearance();
+    updatePreviewHeight();
+}
+
+void VideoCard::setLikeBusy(bool busy)
+{
+    likeBusy_ = busy;
+    updateLikeButtonAppearance();
+    updatePreviewHeight();
+}
+
 void VideoCard::resizeEvent(QResizeEvent *event)
 {
     QPushButton::resizeEvent(event);
@@ -167,11 +205,30 @@ void VideoCard::updatePreviewHeight()
 {
     const int previewHeight = qMax(260, (width() * 5) / 4);
     const int textWidth = qMax(120, width() - 28);
+    const int likeButtonWidth = likeButton_ ? qMax(96, likeButton_->sizeHint().width()) : 0;
+    const int footerSpacing = 12;
+    const int metaWidth = qMax(60, textWidth - likeButtonWidth - footerSpacing);
 
     posterWidget_->setFixedHeight(previewHeight);
     titleLabel_->setFixedWidth(textWidth);
-    metaLabel_->setFixedWidth(textWidth);
-    setFixedHeight(previewHeight + titleLabel_->sizeHint().height() + metaLabel_->sizeHint().height() + 52);
+    if (metaLabel_) {
+        metaLabel_->setFixedWidth(metaWidth);
+    }
+    if (likeButton_) {
+        likeButton_->setFixedWidth(likeButtonWidth);
+    }
+    if (footerWidget_) {
+        const int footerHeight = qMax(
+            metaLabel_ ? metaLabel_->sizeHint().height() : 0,
+            likeButton_ ? likeButton_->sizeHint().height() : 0);
+        footerWidget_->setFixedWidth(textWidth);
+        footerWidget_->setFixedHeight(footerHeight);
+    }
+    setFixedHeight(
+        previewHeight +
+        titleLabel_->sizeHint().height() +
+        (footerWidget_ ? footerWidget_->height() : 0) +
+        58);
     updatePosterAppearance();
 }
 
@@ -221,6 +278,52 @@ void VideoCard::updatePosterAppearance()
     painter.drawPixmap(offset, scaled);
 
     posterImageLabel_->setPixmap(rounded);
+}
+
+void VideoCard::updateLikeButtonAppearance()
+{
+    if (!likeButton_) {
+        return;
+    }
+
+    QString label;
+    if (likeBusy_) {
+        label = "Saving...";
+    } else if (likedByMe_) {
+        label = QString("Liked %1").arg(likeCount_);
+    } else {
+        label = QString("Like %1").arg(likeCount_);
+    }
+
+    const QString background = likeBusy_
+        ? "#e2e8f0"
+        : (likedByMe_ ? "#dbeafe" : "#f8fafc");
+    const QString border = likeBusy_
+        ? "#cbd5e1"
+        : (likedByMe_ ? "#60a5fa" : "#cbd5e1");
+    const QString textColor = likeBusy_
+        ? "#475569"
+        : (likedByMe_ ? "#1d4ed8" : "#334155");
+    const QString hoverBackground = likedByMe_ ? "#bfdbfe" : "#eff6ff";
+
+    likeButton_->setText(label);
+    likeButton_->setToolTip(likedByMe_ ? "Remove like" : "Like this video");
+    likeButton_->setEnabled(!likeBusy_);
+    likeButton_->setStyleSheet(
+        QString(
+            "QPushButton {"
+            "  min-width: 96px;"
+            "  padding: 7px 12px;"
+            "  border-radius: 12px;"
+            "  border: 1px solid %1;"
+            "  background: %2;"
+            "  color: %3;"
+            "  font-size: 12px;"
+            "  font-weight: 700;"
+            "}"
+            "QPushButton:hover { background: %4; }"
+            "QPushButton:disabled { color: #64748b; }")
+            .arg(border, background, textColor, hoverBackground));
 }
 
 }  // namespace frontend::components
