@@ -404,6 +404,8 @@ frontend/CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/mocs_compilation
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qwidget.h \
  D:\itffmpeg\av_media\online\duanshipin-pingtai\build\frontend\FrontendWidgets_autogen\N74POBLTFI/moc_HomePage.cpp \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/HomePage/HomePage.hpp \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QByteArray \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qbytearray.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QEvent \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcoreevent.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qbasictimer.h \
@@ -425,8 +427,6 @@ frontend/CMakeFiles/FrontendWidgets.dir/FrontendWidgets_autogen/mocs_compilation
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qtabwidget.h \
  D:\itffmpeg\av_media\online\duanshipin-pingtai\build\frontend\FrontendWidgets_autogen\IMAN36LHMA/moc_VideoOpenGLWidget.cpp \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/VideoOpenGLWidget.hpp \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QByteArray \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qbytearray.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QMatrix3x3 \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qgenericmatrix.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QOpenGLFunctions \

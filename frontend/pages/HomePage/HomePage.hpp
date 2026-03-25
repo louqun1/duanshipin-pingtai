@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QByteArray>
 #include <QEvent>
 #include <QStringList>
 #include <QVector>
@@ -53,12 +54,17 @@ private:
     };
 
     void buildUi();
+    void connectEventStream();
+    void disconnectEventStream();
     void fetchFeed();
     void handleFeedReply(QNetworkReply *reply);
+    void handleEventStreamFinished(QNetworkReply *reply);
+    void handleEventStreamReadyRead(QNetworkReply *reply);
+    void processEventStreamMessage(const QByteArray &message);
     void requestCardCover(const QString &coverUrl, frontend::components::VideoCard *card);
     void requestVideoDetail(const RemoteVideoItem &item);
     void handleVideoDetailReply(QNetworkReply *reply, RemoteVideoItem fallbackItem);
-    void updatePendingRefreshTimer();
+    void scheduleEventStreamReconnect();
     void relayoutCards();
     void clearCards();
     void setStatusMessage(const QString &message);
@@ -74,7 +80,11 @@ private:
     int apiBaseUrlIndex_ = 0;
     QString activeApiBaseUrl_;
     bool feedRequested_ = false;
-    QTimer *pendingRefreshTimer_ = nullptr;
+    bool feedRefreshQueued_ = false;
+    QNetworkReply *eventStreamReply_ = nullptr;
+    QTimer *eventStreamReconnectTimer_ = nullptr;
+    QByteArray eventStreamBuffer_;
+    QString eventStreamBaseUrl_;
 };
 
 }  // namespace frontend::pages

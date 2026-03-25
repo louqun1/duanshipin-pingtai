@@ -2309,6 +2309,7 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/AccountPage/AccountPage.cpp.obj
 
 frontend/CMakeFiles/FrontendWidgets.dir/pages/HomePage/HomePage.cpp.obj
  D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/HomePage/HomePage.cpp
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QByteArray
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QEvent
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QFlags
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QIODevice
@@ -2326,6 +2327,7 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/HomePage/HomePage.cpp.obj
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSizeF
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QStringList
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QTimer
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QUrl
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QVariant
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QVector
@@ -2464,6 +2466,7 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/HomePage/HomePage.cpp.obj
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtenvironmentvariables.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtextstream.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtformat_impl.h
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtimer.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtmetamacros.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtnoop.h
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtpreprocessorsupport.h
@@ -3725,6 +3728,7 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/UploadPage/UploadPage.cpp.obj
 
 frontend/CMakeFiles/FrontendWidgets.dir/widgets/MainWindow.cpp.obj
  D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/MainWindow.cpp
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QByteArray
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QDateTime
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QEvent
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QList

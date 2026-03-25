@@ -26,7 +26,7 @@ namespace frontend::pages {
 
 namespace {
 
-constexpr int kPendingRefreshIntervalMs = 3000;
+constexpr int kEventStreamReconnectDelayMs = 2000;
 
 QString formatDurationMs(qint64 durationMs)
 {
@@ -95,6 +95,11 @@ QString apiVideosUrl(const QString &baseUrl)
     return QString("%1/api/videos").arg(baseUrl);
 }
 
+QString apiEventsUrl(const QString &baseUrl)
+{
+    return QString("%1/api/events").arg(baseUrl);
+}
+
 QString apiVideoDetailUrl(const QString &baseUrl, const QString &videoId)
 {
     return QString("%1/api/videos/%2").arg(baseUrl, videoId);
@@ -113,13 +118,11 @@ HomePage::HomePage(QWidget *parent)
     : QWidget(parent)
 {
     networkManager_ = new QNetworkAccessManager(this);//发送HTTP/HTTPS GET 请求，发送 POST 请求，下载文件，上传数据，处理网络响应等。
-    pendingRefreshTimer_ = new QTimer(this);
-    pendingRefreshTimer_->setInterval(kPendingRefreshIntervalMs);
-    pendingRefreshTimer_->setSingleShot(false);
-    connect(pendingRefreshTimer_, &QTimer::timeout, this, [this]() {
-        if (!feedRequested_) {
-            fetchFeed();
-        }
+    eventStreamReconnectTimer_ = new QTimer(this);
+    eventStreamReconnectTimer_->setInterval(kEventStreamReconnectDelayMs);
+    eventStreamReconnectTimer_->setSingleShot(true);
+    connect(eventStreamReconnectTimer_, &QTimer::timeout, this, [this]() {
+        connectEventStream();
     });
     apiBaseUrls_ = apiBaseUrlCandidates();
     buildUi();
@@ -129,8 +132,11 @@ HomePage::HomePage(QWidget *parent)
 
 void HomePage::refreshFeed()
 {
-    feedRequested_ = false;
     setStatusMessage(QString("Refreshing %1 ...").arg(apiVideosUrl(apiBaseUrls_.value(apiBaseUrlIndex_, apiBaseUrl()))));
+    if (feedRequested_) {
+        feedRefreshQueued_ = true;
+        return;
+    }
     fetchFeed();
 }
 
@@ -207,6 +213,60 @@ void HomePage::buildUi()
     layout->addWidget(feedScrollArea_, 1);
 }
 
+void HomePage::connectEventStream()
+{
+    const QString baseUrl = activeApiBaseUrl_.isEmpty()
+        ? apiBaseUrls_.value(apiBaseUrlIndex_, apiBaseUrl())
+        : activeApiBaseUrl_;
+    if (baseUrl.isEmpty()) {
+        return;
+    }
+
+    if (eventStreamReply_ && eventStreamBaseUrl_ == baseUrl) {
+        return;
+    }
+
+    disconnectEventStream();
+    if (eventStreamReconnectTimer_) {
+        eventStreamReconnectTimer_->stop();
+    }
+
+    eventStreamBaseUrl_ = baseUrl;
+    eventStreamBuffer_.clear();
+
+    QNetworkRequest request(QUrl(apiEventsUrl(baseUrl)));
+    request.setAttribute(QNetworkRequest::RedirectPolicyAttribute, QNetworkRequest::NoLessSafeRedirectPolicy);
+    request.setRawHeader("Accept", "text/event-stream");
+
+    auto *reply = networkManager_->get(request);
+    eventStreamReply_ = reply;
+
+    connect(reply, &QNetworkReply::readyRead, this, [this, reply]() {
+        handleEventStreamReadyRead(reply);
+    });
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        handleEventStreamFinished(reply);
+    });
+}
+
+void HomePage::disconnectEventStream()
+{
+    if (!eventStreamReply_) {
+        eventStreamBuffer_.clear();
+        eventStreamBaseUrl_.clear();
+        return;
+    }
+
+    auto *reply = eventStreamReply_;
+    eventStreamReply_ = nullptr;
+    eventStreamBuffer_.clear();
+    eventStreamBaseUrl_.clear();
+
+    disconnect(reply, nullptr, this, nullptr);
+    reply->abort();
+    reply->deleteLater();
+}
+
 void HomePage::fetchFeed()
 {
     if (feedRequested_) {
@@ -242,18 +302,24 @@ void HomePage::handleFeedReply(QNetworkReply *reply)
         }
 
         feedRequested_ = false;
-        updatePendingRefreshTimer();
         setStatusMessage(
             QString("Failed to load %1: %2. Start server/cmd/api or set FLASHPOINT_API_BASE_URL.")
                 .arg(apiVideosUrl(attemptedBaseUrl), reply->errorString()));
+        if (feedRefreshQueued_) {
+            feedRefreshQueued_ = false;
+            fetchFeed();
+        }
         return;
     }
 
     const auto document = QJsonDocument::fromJson(reply->readAll());
     if (!document.isObject()) {
         feedRequested_ = false;
-        updatePendingRefreshTimer();
         setStatusMessage(QString("Invalid response from %1.").arg(apiVideosUrl(attemptedBaseUrl)));
+        if (feedRefreshQueued_) {
+            feedRefreshQueued_ = false;
+            fetchFeed();
+        }
         return;
     }
 
@@ -297,9 +363,80 @@ void HomePage::handleFeedReply(QNetworkReply *reply)
         cards_.append(card);
     }
 
-    updatePendingRefreshTimer();
+    connectEventStream();
     relayoutCards();
     setStatusMessage(QString("Loaded %1 videos from %2").arg(cards_.size()).arg(apiVideosUrl(activeApiBaseUrl_)));
+    if (feedRefreshQueued_) {
+        feedRefreshQueued_ = false;
+        fetchFeed();
+    }
+}
+
+void HomePage::handleEventStreamReadyRead(QNetworkReply *reply)
+{
+    if (!reply || reply != eventStreamReply_) {
+        return;
+    }
+
+    eventStreamBuffer_.append(reply->readAll());
+
+    int messageBoundary = eventStreamBuffer_.indexOf("\n\n");
+    while (messageBoundary >= 0) {
+        const QByteArray message = eventStreamBuffer_.left(messageBoundary);
+        eventStreamBuffer_.remove(0, messageBoundary + 2);
+        processEventStreamMessage(message);
+        messageBoundary = eventStreamBuffer_.indexOf("\n\n");
+    }
+}
+
+void HomePage::handleEventStreamFinished(QNetworkReply *reply)
+{
+    if (!reply) {
+        return;
+    }
+
+    const bool isActiveReply = (reply == eventStreamReply_);
+    if (isActiveReply) {
+        eventStreamReply_ = nullptr;
+        eventStreamBuffer_.clear();
+    }
+    reply->deleteLater();
+
+    if (isActiveReply) {
+        scheduleEventStreamReconnect();
+    }
+}
+
+void HomePage::processEventStreamMessage(const QByteArray &message)
+{
+    QByteArray eventName;
+    bool hasData = false;
+
+    for (QByteArray line : message.split('\n')) {
+        if (line.endsWith('\r')) {
+            line.chop(1);
+        }
+        if (line.isEmpty() || line.startsWith(':')) {
+            continue;
+        }
+
+        const int separatorIndex = line.indexOf(':');
+        const QByteArray fieldName = separatorIndex >= 0 ? line.left(separatorIndex) : line;
+        QByteArray fieldValue = separatorIndex >= 0 ? line.mid(separatorIndex + 1) : QByteArray();
+        if (fieldValue.startsWith(' ')) {
+            fieldValue.remove(0, 1);
+        }
+
+        if (fieldName == "event") {
+            eventName = fieldValue;
+        } else if (fieldName == "data") {
+            hasData = true;
+        }
+    }
+
+    if (eventName == "video.updated" && hasData) {
+        refreshFeed();
+    }
 }
 
 void HomePage::requestCardCover(const QString &coverUrl, frontend::components::VideoCard *card)
@@ -387,28 +524,15 @@ void HomePage::handleVideoDetailReply(QNetworkReply *reply, RemoteVideoItem fall
     setStatusMessage(QString("Opening %1").arg(title));
 }
 
-void HomePage::updatePendingRefreshTimer()
+void HomePage::scheduleEventStreamReconnect()
 {
-    if (!pendingRefreshTimer_) {
+    if (!eventStreamReconnectTimer_ || activeApiBaseUrl_.isEmpty()) {
         return;
     }
 
-    bool hasPendingItems = false;
-    for (const auto &item : feedItems_) {
-        if (item.status == "queued" || item.status == "processing") {
-            hasPendingItems = true;
-            break;
-        }
+    if (!eventStreamReconnectTimer_->isActive()) {
+        eventStreamReconnectTimer_->start();
     }
-
-    if (hasPendingItems) {
-        if (!pendingRefreshTimer_->isActive()) {
-            pendingRefreshTimer_->start();
-        }
-        return;
-    }
-
-    pendingRefreshTimer_->stop();
 }
 
 void HomePage::relayoutCards()

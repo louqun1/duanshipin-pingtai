@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"database/sql"
 	"encoding/json"
@@ -8,6 +9,8 @@ import (
 	"fmt"
 	"log"
 	"mime"
+	"net"
+	"net/http"
 	"os"
 	"os/signal"
 	"os/exec"
@@ -45,8 +48,12 @@ type ffprobeResult struct {
 	} `json:"format"`
 }
 
+type videoUpdatedNotification struct {
+	VideoID int64 `json:"videoId"`
+}
+
 const (
-	idlePollInterval  = 3 * time.Second
+	idlePollInterval   = 3 * time.Second
 	errorRetryInterval = 5 * time.Second
 )
 
@@ -111,14 +118,23 @@ func main() {
 
 		idleLogged = false
 		log.Printf("worker picked job: job_id=%d video_id=%d", job.ID, job.VideoID)
+		if err := notifyVideoUpdated(ctx, cfg, job.VideoID); err != nil {
+			log.Printf("notify video processing event: %v", err)
+		}
 
 		if err := processJob(ctx, database, minioStorage, *job); err != nil {
 			_ = markJobFailed(ctx, database, job.ID, err.Error())
 			_ = markVideoFailed(ctx, database, job.VideoID, err.Error())
+			if notifyErr := notifyVideoUpdated(ctx, cfg, job.VideoID); notifyErr != nil {
+				log.Printf("notify video failure event: %v", notifyErr)
+			}
 			log.Printf("process job %d failed: %v", job.ID, err)
 			continue
 		}
 
+		if err := notifyVideoUpdated(ctx, cfg, job.VideoID); err != nil {
+			log.Printf("notify video ready event: %v", err)
+		}
 		log.Printf("worker finished: job_id=%d video_id=%d", job.ID, job.VideoID)
 	}
 }
@@ -434,4 +450,65 @@ func waitForNextIteration(ctx context.Context, interval time.Duration) bool {
 	case <-timer.C:
 		return true
 	}
+}
+
+func notifyVideoUpdated(ctx context.Context, cfg config.Config, videoID int64) error {
+	if videoID <= 0 {
+		return fmt.Errorf("invalid video id %d", videoID)
+	}
+
+	payload, err := json.Marshal(videoUpdatedNotification{VideoID: videoID})
+	if err != nil {
+		return fmt.Errorf("marshal video notification: %w", err)
+	}
+
+	requestCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	request, err := http.NewRequestWithContext(
+		requestCtx,
+		http.MethodPost,
+		internalVideoUpdatedNotificationURL(cfg.HTTPAddr),
+		bytes.NewReader(payload),
+	)
+	if err != nil {
+		return fmt.Errorf("create notify request: %w", err)
+	}
+	request.Header.Set("Content-Type", "application/json")
+
+	response, err := http.DefaultClient.Do(request)
+	if err != nil {
+		return fmt.Errorf("post notify request: %w", err)
+	}
+	defer response.Body.Close()
+
+	if response.StatusCode < http.StatusOK || response.StatusCode >= http.StatusMultipleChoices {
+		return fmt.Errorf("notify api returned %s", response.Status)
+	}
+
+	return nil
+}
+
+func internalVideoUpdatedNotificationURL(httpAddr string) string {
+	return apiBaseURLFromHTTPAddr(httpAddr) + "/internal/events/video-updated"
+}
+
+func apiBaseURLFromHTTPAddr(httpAddr string) string {
+	trimmed := strings.TrimSpace(httpAddr)
+	if trimmed == "" {
+		return "http://127.0.0.1:8080"
+	}
+	if strings.HasPrefix(trimmed, ":") {
+		return "http://127.0.0.1" + trimmed
+	}
+
+	host, port, err := net.SplitHostPort(trimmed)
+	if err == nil {
+		if host == "" || host == "0.0.0.0" || host == "::" {
+			host = "127.0.0.1"
+		}
+		return "http://" + net.JoinHostPort(host, port)
+	}
+
+	return "http://" + trimmed
 }

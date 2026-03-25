@@ -52,6 +52,7 @@ type apiServer struct {
 	cfg          config.Config
 	database     *sql.DB
 	mediaStorage *storage.MinIOStorage
+	events       *eventBroker
 }
 
 func main() {
@@ -82,12 +83,15 @@ func main() {
 		cfg:          cfg,
 		database:     database,
 		mediaStorage: mediaStorage,
+		events:       newEventBroker(),
 	}
 
 	mux := http.NewServeMux()
+	mux.HandleFunc("/api/events", server.handleEvents)
 	mux.HandleFunc("/api/videos", server.handleVideos)
 	mux.HandleFunc("/api/videos/upload", server.handleVideoUpload)
 	mux.HandleFunc("/api/videos/", server.handleVideoDetail)
+	mux.HandleFunc("/internal/events/video-updated", server.handleVideoUpdatedNotification)
 	mux.HandleFunc("/vod/", server.handleVODObject)
 	mux.HandleFunc("/image/", server.handleImageObject)
 	mux.HandleFunc("/healthz", handleHealthz)
@@ -228,6 +232,9 @@ func (s *apiServer) handleVideoUpload(writer http.ResponseWriter, request *http.
 	if err != nil {
 		writeServerError(writer, fmt.Errorf("ingest uploaded file: %w", err))
 		return
+	}
+	if err := s.publishVideoUpdated(ctx, result.VideoID); err != nil && !errors.Is(err, sql.ErrNoRows) {
+		log.Printf("publish upload event: %v", err)
 	}
 
 	writeJSON(writer, http.StatusCreated, map[string]any{

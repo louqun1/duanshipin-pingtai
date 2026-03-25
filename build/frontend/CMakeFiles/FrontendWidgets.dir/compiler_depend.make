@@ -2303,6 +2303,7 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/AccountPage/AccountPage.cpp.obj: D
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/wchar.h
 
 frontend/CMakeFiles/FrontendWidgets.dir/pages/HomePage/HomePage.cpp.obj: D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/HomePage/HomePage.cpp \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QByteArray \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QEvent \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QFlags \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QIODevice \
@@ -2320,6 +2321,7 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/HomePage/HomePage.cpp.obj: D:/itff
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSizeF \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QString \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QStringList \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QTimer \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QUrl \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QVariant \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QVector \
@@ -2458,6 +2460,7 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/HomePage/HomePage.cpp.obj: D:/itff
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtenvironmentvariables.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtextstream.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtformat_impl.h \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtimer.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtmetamacros.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtnoop.h \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qtpreprocessorsupport.h \
@@ -3716,6 +3719,7 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/UploadPage/UploadPage.cpp.obj: D:/
   D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/wctype.h
 
 frontend/CMakeFiles/FrontendWidgets.dir/widgets/MainWindow.cpp.obj: D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/MainWindow.cpp \
+  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QByteArray \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QDateTime \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QEvent \
   D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QList \
@@ -7241,6 +7245,8 @@ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QMetaObject:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QMetaType:
 
+D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QTimer:
+
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qfile.h:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcalendar.h:
@@ -7348,8 +7354,6 @@ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/service/auth/AuthService.
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QPropertyAnimation:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSignalBlocker:
-
-D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QTimer:
 
 D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qeasingcurve.h:
 
