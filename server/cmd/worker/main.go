@@ -94,7 +94,7 @@ func main() {
 		default:
 		}
 
-		job, err := claimPendingJob(ctx, database)
+		job, err := claimPendingJob(ctx, database)//查询并锁定一个待处理的转码任务
 		if err != nil {
 			log.Printf("claim pending job: %v", err)
 			if !waitForNextIteration(ctx, errorRetryInterval) {
@@ -104,7 +104,7 @@ func main() {
 			continue
 		}
 
-		if job == nil {
+		if job == nil {//没有待处理的转码任务
 			if !idleLogged {
 				log.Println("no pending transcode job found; waiting for new uploads")
 				idleLogged = true
@@ -118,52 +118,54 @@ func main() {
 
 		idleLogged = false
 		log.Printf("worker picked job: job_id=%d video_id=%d", job.ID, job.VideoID)
-		if err := notifyVideoUpdated(ctx, cfg, job.VideoID); err != nil {
+		if err := notifyVideoUpdated(ctx, cfg, job.VideoID); err != nil {//如果通知视频正在处理事件失败，记录日志但继续处理任务
 			log.Printf("notify video processing event: %v", err)
 		}
 
-		if err := processJob(ctx, database, minioStorage, *job); err != nil {
+		if err := processJob(ctx, database, minioStorage, *job); err != nil {//执行下载、探测、转码、封面生成、产物上传、状态落库
 			_ = markJobFailed(ctx, database, job.ID, err.Error())
 			_ = markVideoFailed(ctx, database, job.VideoID, err.Error())
-			if notifyErr := notifyVideoUpdated(ctx, cfg, job.VideoID); notifyErr != nil {
+			if notifyErr := notifyVideoUpdated(ctx, cfg, job.VideoID); notifyErr != nil {//如果通知视频失败事件失败，记录日志但继续处理任务，通知 API 发 SSE
 				log.Printf("notify video failure event: %v", notifyErr)
 			}
 			log.Printf("process job %d failed: %v", job.ID, err)
 			continue
 		}
 
-		if err := notifyVideoUpdated(ctx, cfg, job.VideoID); err != nil {
+		if err := notifyVideoUpdated(ctx, cfg, job.VideoID); err != nil {//如果通知视频准备就绪事件失败，记录日志但继续处理任务，通知 API 发 SSE
 			log.Printf("notify video ready event: %v", err)
 		}
-		log.Printf("worker finished: job_id=%d video_id=%d", job.ID, job.VideoID)
+		log.Printf("worker finished: job_id=%d video_id=%d", job.ID, job.VideoID)//记录转码任务完成日志
 	}
 }
 
 func processJob(ctx context.Context, database *sql.DB, minioStorage *storage.MinIOStorage, job transcodeJob) error {
+	//解析任务负载，准备工作目录，从 MinIO 下载原始视频文件，使用 ffprobe 获取视频元信息，使用 ffmpeg 转码为 HLS 格式并生成封面图，上传转码后的视频和封面图到 MinIO，更新数据库中的视频状态和相关信息，最后标记转码任务成功。
 	var payload jobPayload
 	if err := json.Unmarshal([]byte(job.PayloadJSON), &payload); err != nil {
 		return fmt.Errorf("parse payload json: %w", err)
 	}
 
-	tmpDir, err := os.MkdirTemp("", fmt.Sprintf("vod-worker-%d-", job.ID))
+	tmpDir, err := os.MkdirTemp("", fmt.Sprintf("vod-worker-%d-", job.ID))//创建临时目录用于存储处理过程中的文件
 	if err != nil {
 		return fmt.Errorf("create temp dir: %w", err)
 	}
-	defer os.RemoveAll(tmpDir)
+	defer os.RemoveAll(tmpDir)//处理完成后删除临时目录
 
-	inputPath := filepath.Join(tmpDir, "input"+filepath.Ext(payload.SourceObjectKey))
+	inputPath := filepath.Join(tmpDir, "input"+filepath.Ext(payload.SourceObjectKey))//赋值输入文件路径为临时目录下的 input 文件，保持原始扩展名
 	hlsDir := filepath.Join(tmpDir, "hls")
 	coverPath := filepath.Join(tmpDir, "cover.jpg")
 
-	if err := os.MkdirAll(hlsDir, 0o755); err != nil {
+	if err := os.MkdirAll(hlsDir, 0o755); err != nil {//
 		return fmt.Errorf("create hls dir: %w", err)
 	}
 
 	if err := minioStorage.DownloadFile(ctx, payload.SourceBucket, payload.SourceObjectKey, inputPath); err != nil {
+		//如果下载原始视频文件失败，返回错误并在外层标记转码任务和视频状态为失败
 		return err
 	}
 
-	meta, err := probeVideo(ctx, inputPath)
+	meta, err := probeVideo(ctx, inputPath)//使用 ffprobe 获取视频元信息
 	if err != nil {
 		return err
 	}
@@ -196,6 +198,7 @@ func processJob(ctx context.Context, database *sql.DB, minioStorage *storage.Min
 	return nil
 }
 
+// 查询并锁定一个待处理的转码任务
 func claimPendingJob(ctx context.Context, database *sql.DB) (*transcodeJob, error) {
 	tx, err := database.BeginTx(ctx, nil)
 	if err != nil {

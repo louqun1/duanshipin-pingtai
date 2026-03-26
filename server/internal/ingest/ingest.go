@@ -43,11 +43,11 @@ func IngestLocalFile(
 		return Result{}, fmt.Errorf("resolve file path: %w", err)
 	}
 
-	fileInfo, err := os.Stat(absolutePath)
+	fileInfo, err := os.Stat(absolutePath)//获取文件信息，如果失败，返回错误
 	if err != nil {
 		return Result{}, fmt.Errorf("stat file: %w", err)
 	}
-	if fileInfo.IsDir() {
+	if fileInfo.IsDir() {//如果文件路径指向一个目录，返回错误
 		return Result{}, fmt.Errorf("file path points to a directory")
 	}
 
@@ -59,7 +59,7 @@ func IngestLocalFile(
 
 	contentType := detectContentType(safeFilename, absolutePath)
 
-	videoID, err := insertVideo(
+	videoID, err := insertVideo(//mysql插入视频记录，获取视频ID，如果失败，返回错误
 		ctx,
 		database,
 		uploaderUserID,
@@ -73,11 +73,13 @@ func IngestLocalFile(
 	}
 
 	objectKey := buildSourceObjectKey(videoID, safeFilename)
+	//上传文件到MinIO，如果失败，更新视频状态为失败并返回错误
 	if err := minioStorage.UploadRawFile(ctx, objectKey, absolutePath, contentType); err != nil {
 		_ = markVideoFailed(ctx, database, videoID, err.Error())
 		return Result{}, fmt.Errorf("upload raw file: %w", err)
 	}
 
+	//上传成功后，更新视频记录的source_object_key，id字段，如果失败，更新视频状态为失败并返回错误
 	if err := updateVideoSourceObjectKey(ctx, database, videoID, objectKey); err != nil {
 		_ = markVideoFailed(ctx, database, videoID, err.Error())
 		return Result{}, fmt.Errorf("update video source object key: %w", err)

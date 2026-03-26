@@ -63,22 +63,24 @@ type apiServer struct {
 }
 
 func main() {
-	cfg := config.Load()
+	//1.API 服务器的启动流程：
+	cfg := config.Load()//读取配置
 
-	database, err := db.OpenMySQL(cfg.MySQLDSN)
+	database, err := db.OpenMySQL(cfg.MySQLDSN)//加载数据库
 	if err != nil {
 		log.Fatalf("connect mysql: %v", err)
 	}
 	defer database.Close()
 	ctx := context.Background()
-	if err := db.EnsureSchema(ctx, database); err != nil {
+	if err := db.EnsureSchema(ctx, database); err != nil {//检查并创建Schema (表信息等)
 		log.Fatalf("ensure mysql schema: %v", err)
 	}
 
-	mediaStorage, err := storage.NewMinIOStorage(cfg)
+	mediaStorage, err := storage.NewMinIOStorage(cfg)	//连接 MinIO
 	if err != nil {
 		log.Fatalf("connect minio: %v", err)
 	}
+	//检查bucket是否存在
 	if err := mediaStorage.EnsureRawBucket(ctx); err != nil {
 		log.Fatalf("check raw bucket: %v", err)
 	}
@@ -89,6 +91,7 @@ func main() {
 		log.Fatalf("check image bucket: %v", err)
 	}
 
+	//注册 HTTP 路由：
 	server := &apiServer{
 		cfg:          cfg,
 		database:     database,
@@ -97,7 +100,7 @@ func main() {
 	}
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/api/auth/register", server.handleRegister)
+	mux.NewServeMux("/api/auth/register", server.handleRegister)
 	mux.HandleFunc("/api/auth/login", server.handleLogin)
 	mux.HandleFunc("/api/auth/logout", server.handleLogout)
 	mux.HandleFunc("/api/me", server.handleMe)
@@ -108,7 +111,7 @@ func main() {
 	mux.HandleFunc("/internal/events/video-updated", server.handleVideoUpdatedNotification)
 	mux.HandleFunc("/vod/", server.handleVODObject)
 	mux.HandleFunc("/image/", server.handleImageObject)
-	mux.HandleFunc("/healthz", handleHealthz)
+	mux.HandleFunc("/healthz", handleHealthz)//健康检查接口
 
 	log.Printf("api listening on %s", cfg.HTTPAddr)
 	if err := http.ListenAndServe(cfg.HTTPAddr, mux); err != nil {
