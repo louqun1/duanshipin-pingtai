@@ -61,6 +61,30 @@
 },
 {
   "directory": "D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend",
+  "command": "D:\\itffmpeg\\x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1\\mingw64\\bin\\g++.exe -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DWINVER=0x0A00 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN32_WINNT=0x0A00 -D_WIN64 @CMakeFiles/ServoBackend.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\ServoBackend.dir\\liveplayer\\protocol\\FlvDemuxer.cpp.obj -c D:\\itffmpeg\\av_media\\online\\duanshipin-pingtai\\backend\\liveplayer\\protocol\\FlvDemuxer.cpp",
+  "file": "D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/protocol/FlvDemuxer.cpp",
+  "output": "backend/CMakeFiles/ServoBackend.dir/liveplayer/protocol/FlvDemuxer.cpp.obj"
+},
+{
+  "directory": "D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend",
+  "command": "D:\\itffmpeg\\x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1\\mingw64\\bin\\g++.exe -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DWINVER=0x0A00 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN32_WINNT=0x0A00 -D_WIN64 @CMakeFiles/ServoBackend.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\ServoBackend.dir\\liveplayer\\protocol\\HttpFlvStreamReader.cpp.obj -c D:\\itffmpeg\\av_media\\online\\duanshipin-pingtai\\backend\\liveplayer\\protocol\\HttpFlvStreamReader.cpp",
+  "file": "D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/protocol/HttpFlvStreamReader.cpp",
+  "output": "backend/CMakeFiles/ServoBackend.dir/liveplayer/protocol/HttpFlvStreamReader.cpp.obj"
+},
+{
+  "directory": "D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend",
+  "command": "D:\\itffmpeg\\x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1\\mingw64\\bin\\g++.exe -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DWINVER=0x0A00 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN32_WINNT=0x0A00 -D_WIN64 @CMakeFiles/ServoBackend.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\ServoBackend.dir\\liveplayer\\session\\LivePlayerSession.cpp.obj -c D:\\itffmpeg\\av_media\\online\\duanshipin-pingtai\\backend\\liveplayer\\session\\LivePlayerSession.cpp",
+  "file": "D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/session/LivePlayerSession.cpp",
+  "output": "backend/CMakeFiles/ServoBackend.dir/liveplayer/session/LivePlayerSession.cpp.obj"
+},
+{
+  "directory": "D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend",
+  "command": "D:\\itffmpeg\\x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1\\mingw64\\bin\\g++.exe -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DWINVER=0x0A00 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN32_WINNT=0x0A00 -D_WIN64 @CMakeFiles/ServoBackend.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\ServoBackend.dir\\liveplayer\\service\\LivePlayerController.cpp.obj -c D:\\itffmpeg\\av_media\\online\\duanshipin-pingtai\\backend\\liveplayer\\service\\LivePlayerController.cpp",
+  "file": "D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/service/LivePlayerController.cpp",
+  "output": "backend/CMakeFiles/ServoBackend.dir/liveplayer/service/LivePlayerController.cpp.obj"
+},
+{
+  "directory": "D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend",
   "command": "D:\\itffmpeg\\x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1\\mingw64\\bin\\g++.exe -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DWINVER=0x0A00 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN32_WINNT=0x0A00 -D_WIN64 @CMakeFiles/ServoBackend.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\ServoBackend.dir\\playercontroller\\service\\PlayerController.cpp.obj -c D:\\itffmpeg\\av_media\\online\\duanshipin-pingtai\\backend\\playercontroller\\service\\PlayerController.cpp",
   "file": "D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playercontroller/service/PlayerController.cpp",
   "output": "backend/CMakeFiles/ServoBackend.dir/playercontroller/service/PlayerController.cpp.obj"

@@ -14,6 +14,10 @@ namespace backend::playercontroller::service {
 class PlayerController;
 }
 
+namespace backend::liveplayer::service {
+class LivePlayerController;
+}
+
 class AppBootstrap
 {
 public:
@@ -27,6 +31,7 @@ public:
 
 private:
     std::unique_ptr<backend::controller::auth::AuthController> authController_;
+    std::unique_ptr<backend::liveplayer::service::LivePlayerController> livePlayerController_;
     std::unique_ptr<backend::playercontroller::service::PlayerController> playerController_;
     std::unique_ptr<MainWindow> mainWindow_;
 };

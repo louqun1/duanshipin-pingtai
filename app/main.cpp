@@ -52,7 +52,8 @@ int main(int argc, char *argv[])
         AppBootstrap bootstrap;
         bootstrap.mainWindow()->show();
 
-        const int exitCode = app.exec();
+        // 每当 socket 上又来了新数据，Qt 就会反复触发 HttpFlvStreamReader.cpp (line 86) handleReadyRead()
+        const int exitCode = app.exec();//启动了事件循环，只要程序没退出，Qt 就会一直监听网络事件
         spdlog::shutdown();
         return exitCode;
     } catch (const std::exception &exception) {

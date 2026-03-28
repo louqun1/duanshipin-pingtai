@@ -58,6 +58,36 @@
 			null
 		],
 		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/protocol/FlvDemuxer.hpp",
+			"MU",
+			"KJLGHSVEES/moc_FlvDemuxer.cpp",
+			null
+		],
+		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/protocol/FlvTypes.hpp",
+			"MU",
+			"KJLGHSVEES/moc_FlvTypes.cpp",
+			null
+		],
+		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/protocol/HttpFlvStreamReader.hpp",
+			"MU",
+			"KJLGHSVEES/moc_HttpFlvStreamReader.cpp",
+			null
+		],
+		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/service/LivePlayerController.hpp",
+			"MU",
+			"RYFNVWVKBY/moc_LivePlayerController.cpp",
+			null
+		],
+		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/session/LivePlayerSession.hpp",
+			"MU",
+			"5AOUNRLQIO/moc_LivePlayerSession.cpp",
+			null
+		],
+		[
 			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playerEngine/FFMessage.hpp",
 			"MU",
 			"WZTJOAIVCX/moc_FFMessage.cpp",
@@ -219,6 +249,26 @@
 		],
 		[
 			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/infrastructure/database/SQLiteUserRepository.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/protocol/FlvDemuxer.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/protocol/HttpFlvStreamReader.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/service/LivePlayerController.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/session/LivePlayerSession.cpp",
 			"MU",
 			null
 		],

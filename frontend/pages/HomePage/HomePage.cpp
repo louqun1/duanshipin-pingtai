@@ -275,6 +275,7 @@ void HomePage::connectEventStream()
     auto *reply = networkManager_->get(request);
     eventStreamReply_ = reply;
 
+    //监听到网络上有新数据，就会触发
     connect(reply, &QNetworkReply::readyRead, this, [this, reply]() {
         handleEventStreamReadyRead(reply);
     });

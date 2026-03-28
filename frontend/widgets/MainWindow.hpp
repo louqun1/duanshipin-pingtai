@@ -17,6 +17,10 @@ namespace backend::playercontroller::service {
 class PlayerController;
 }
 
+namespace backend::liveplayer::service {
+class LivePlayerController;
+}
+
 namespace frontend::pages {
 class AccountPage;
 class HomePage;
@@ -31,6 +35,7 @@ class MainWindow final : public QMainWindow
 public:
     explicit MainWindow(
         backend::controller::auth::AuthController &authController,
+        backend::liveplayer::service::LivePlayerController &livePlayerController,
         backend::playercontroller::service::PlayerController &playerController,
         QWidget *parent = nullptr);
     ~MainWindow() override = default;
@@ -62,6 +67,7 @@ private:
     QButtonGroup *navigationGroup_ = nullptr;
     QStackedWidget *pageStack_ = nullptr;
     backend::controller::auth::AuthController &authController_;
+    backend::liveplayer::service::LivePlayerController &livePlayerController_;
     backend::playercontroller::service::PlayerController &playerController_;
     QString currentUsername_;
     QString currentEmail_;

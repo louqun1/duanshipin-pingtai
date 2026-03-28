@@ -301,6 +301,102 @@ infrastructure/database/SQLiteUserRepository.cpp.s:
 	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/infrastructure/database/SQLiteUserRepository.cpp.s
 .PHONY : infrastructure/database/SQLiteUserRepository.cpp.s
 
+liveplayer/protocol/FlvDemuxer.obj: liveplayer/protocol/FlvDemuxer.cpp.obj
+.PHONY : liveplayer/protocol/FlvDemuxer.obj
+
+# target to build an object file
+liveplayer/protocol/FlvDemuxer.cpp.obj:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/liveplayer/protocol/FlvDemuxer.cpp.obj
+.PHONY : liveplayer/protocol/FlvDemuxer.cpp.obj
+
+liveplayer/protocol/FlvDemuxer.i: liveplayer/protocol/FlvDemuxer.cpp.i
+.PHONY : liveplayer/protocol/FlvDemuxer.i
+
+# target to preprocess a source file
+liveplayer/protocol/FlvDemuxer.cpp.i:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/liveplayer/protocol/FlvDemuxer.cpp.i
+.PHONY : liveplayer/protocol/FlvDemuxer.cpp.i
+
+liveplayer/protocol/FlvDemuxer.s: liveplayer/protocol/FlvDemuxer.cpp.s
+.PHONY : liveplayer/protocol/FlvDemuxer.s
+
+# target to generate assembly for a file
+liveplayer/protocol/FlvDemuxer.cpp.s:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/liveplayer/protocol/FlvDemuxer.cpp.s
+.PHONY : liveplayer/protocol/FlvDemuxer.cpp.s
+
+liveplayer/protocol/HttpFlvStreamReader.obj: liveplayer/protocol/HttpFlvStreamReader.cpp.obj
+.PHONY : liveplayer/protocol/HttpFlvStreamReader.obj
+
+# target to build an object file
+liveplayer/protocol/HttpFlvStreamReader.cpp.obj:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/liveplayer/protocol/HttpFlvStreamReader.cpp.obj
+.PHONY : liveplayer/protocol/HttpFlvStreamReader.cpp.obj
+
+liveplayer/protocol/HttpFlvStreamReader.i: liveplayer/protocol/HttpFlvStreamReader.cpp.i
+.PHONY : liveplayer/protocol/HttpFlvStreamReader.i
+
+# target to preprocess a source file
+liveplayer/protocol/HttpFlvStreamReader.cpp.i:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/liveplayer/protocol/HttpFlvStreamReader.cpp.i
+.PHONY : liveplayer/protocol/HttpFlvStreamReader.cpp.i
+
+liveplayer/protocol/HttpFlvStreamReader.s: liveplayer/protocol/HttpFlvStreamReader.cpp.s
+.PHONY : liveplayer/protocol/HttpFlvStreamReader.s
+
+# target to generate assembly for a file
+liveplayer/protocol/HttpFlvStreamReader.cpp.s:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/liveplayer/protocol/HttpFlvStreamReader.cpp.s
+.PHONY : liveplayer/protocol/HttpFlvStreamReader.cpp.s
+
+liveplayer/service/LivePlayerController.obj: liveplayer/service/LivePlayerController.cpp.obj
+.PHONY : liveplayer/service/LivePlayerController.obj
+
+# target to build an object file
+liveplayer/service/LivePlayerController.cpp.obj:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/liveplayer/service/LivePlayerController.cpp.obj
+.PHONY : liveplayer/service/LivePlayerController.cpp.obj
+
+liveplayer/service/LivePlayerController.i: liveplayer/service/LivePlayerController.cpp.i
+.PHONY : liveplayer/service/LivePlayerController.i
+
+# target to preprocess a source file
+liveplayer/service/LivePlayerController.cpp.i:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/liveplayer/service/LivePlayerController.cpp.i
+.PHONY : liveplayer/service/LivePlayerController.cpp.i
+
+liveplayer/service/LivePlayerController.s: liveplayer/service/LivePlayerController.cpp.s
+.PHONY : liveplayer/service/LivePlayerController.s
+
+# target to generate assembly for a file
+liveplayer/service/LivePlayerController.cpp.s:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/liveplayer/service/LivePlayerController.cpp.s
+.PHONY : liveplayer/service/LivePlayerController.cpp.s
+
+liveplayer/session/LivePlayerSession.obj: liveplayer/session/LivePlayerSession.cpp.obj
+.PHONY : liveplayer/session/LivePlayerSession.obj
+
+# target to build an object file
+liveplayer/session/LivePlayerSession.cpp.obj:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/liveplayer/session/LivePlayerSession.cpp.obj
+.PHONY : liveplayer/session/LivePlayerSession.cpp.obj
+
+liveplayer/session/LivePlayerSession.i: liveplayer/session/LivePlayerSession.cpp.i
+.PHONY : liveplayer/session/LivePlayerSession.i
+
+# target to preprocess a source file
+liveplayer/session/LivePlayerSession.cpp.i:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/liveplayer/session/LivePlayerSession.cpp.i
+.PHONY : liveplayer/session/LivePlayerSession.cpp.i
+
+liveplayer/session/LivePlayerSession.s: liveplayer/session/LivePlayerSession.cpp.s
+.PHONY : liveplayer/session/LivePlayerSession.s
+
+# target to generate assembly for a file
+liveplayer/session/LivePlayerSession.cpp.s:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/liveplayer/session/LivePlayerSession.cpp.s
+.PHONY : liveplayer/session/LivePlayerSession.cpp.s
+
 playerEngine/FFMessageQueue.obj: playerEngine/FFMessageQueue.cpp.obj
 .PHONY : playerEngine/FFMessageQueue.obj
 
@@ -474,6 +570,18 @@ help:
 	@echo ... infrastructure/database/SQLiteUserRepository.obj
 	@echo ... infrastructure/database/SQLiteUserRepository.i
 	@echo ... infrastructure/database/SQLiteUserRepository.s
+	@echo ... liveplayer/protocol/FlvDemuxer.obj
+	@echo ... liveplayer/protocol/FlvDemuxer.i
+	@echo ... liveplayer/protocol/FlvDemuxer.s
+	@echo ... liveplayer/protocol/HttpFlvStreamReader.obj
+	@echo ... liveplayer/protocol/HttpFlvStreamReader.i
+	@echo ... liveplayer/protocol/HttpFlvStreamReader.s
+	@echo ... liveplayer/service/LivePlayerController.obj
+	@echo ... liveplayer/service/LivePlayerController.i
+	@echo ... liveplayer/service/LivePlayerController.s
+	@echo ... liveplayer/session/LivePlayerSession.obj
+	@echo ... liveplayer/session/LivePlayerSession.i
+	@echo ... liveplayer/session/LivePlayerSession.s
 	@echo ... playerEngine/FFMessageQueue.obj
 	@echo ... playerEngine/FFMessageQueue.i
 	@echo ... playerEngine/FFMessageQueue.s

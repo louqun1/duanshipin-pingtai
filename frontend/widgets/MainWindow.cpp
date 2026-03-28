@@ -1,6 +1,7 @@
 #include "widgets/MainWindow.hpp"
 
 #include "controller/auth/AuthController.hpp"
+#include "liveplayer/service/LivePlayerController.hpp"
 #include "playercontroller/service/PlayerController.hpp"
 #include "pages/AccountPage/AccountPage.hpp"
 #include "pages/HomePage/HomePage.hpp"
@@ -20,10 +21,12 @@
 
 MainWindow::MainWindow(
     backend::controller::auth::AuthController &authController,
+    backend::liveplayer::service::LivePlayerController &livePlayerController,
     backend::playercontroller::service::PlayerController &playerController,
     QWidget *parent)
     : QMainWindow(parent)
     , authController_(authController)
+    , livePlayerController_(livePlayerController)
     , playerController_(playerController)
 {
     buildUi();
@@ -49,7 +52,7 @@ void MainWindow::buildUi()
     pageStack_->setObjectName("pageStack");
 
     homePage_ = new frontend::pages::HomePage(pageStack_);
-    streamPage_ = new frontend::pages::StreamPage(pageStack_);
+    streamPage_ = new frontend::pages::StreamPage(livePlayerController_, pageStack_);
     uploadPage_ = new frontend::pages::UploadPage(pageStack_);
     accountPage_ = new frontend::pages::AccountPage(pageStack_);
 
