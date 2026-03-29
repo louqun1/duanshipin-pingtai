@@ -1,9 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"D:/itffmpeg/av_media/online/duanshipin-pingtai/build/cmake_install.cmake",
-		"D:/itffmpeg/av_media/online/duanshipin-pingtai/build/backend/cmake_install.cmake",
-		"D:/itffmpeg/av_media/online/duanshipin-pingtai/build/frontend/cmake_install.cmake"
-	],
-	"Parallel" : false
-}
