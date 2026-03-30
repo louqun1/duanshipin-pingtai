@@ -2,7 +2,7 @@ backend/CMakeFiles/ServoBackend.dir/liveplayer/service/LivePlayerController.cpp.
  D:\itffmpeg\av_media\online\duanshipin-pingtai\backend\liveplayer\service\LivePlayerController.cpp \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/service/LivePlayerController.hpp \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/session/LivePlayerSession.hpp \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/protocol/FlvDemuxer.hpp \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/decode/FlvVideoDecoder.hpp \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/protocol/FlvTypes.hpp \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QByteArray \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qbytearray.h \
@@ -295,6 +295,50 @@ backend/CMakeFiles/ServoBackend.dir/liveplayer/service/LivePlayerController.cpp.
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstring.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstringconverter.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstringconverter_base.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/avcodec.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/samplefmt.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/attributes.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/avutil.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/common.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/inttypes.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/math.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/attributes.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/macros.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/avconfig.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/mem.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/avutil.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/version.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/error.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/rational.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/mathematics.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/intfloat.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/log.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/pixfmt.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/buffer.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/dict.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/frame.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/buffer.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/channel_layout.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/dict.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/samplefmt.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/log.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/pixfmt.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/rational.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/codec.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/hwcontext.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/frame.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/codec_id.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/version_major.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/version_major.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/codec_desc.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/codec_id.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/codec_par.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/channel_layout.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/defs.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/packet.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/version.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/version.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/protocol/FlvDemuxer.hpp \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/deque \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_deque.h \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/deque.tcc \

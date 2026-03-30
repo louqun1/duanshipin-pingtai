@@ -301,6 +301,30 @@ infrastructure/database/SQLiteUserRepository.cpp.s:
 	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/infrastructure/database/SQLiteUserRepository.cpp.s
 .PHONY : infrastructure/database/SQLiteUserRepository.cpp.s
 
+liveplayer/decode/FlvVideoDecoder.obj: liveplayer/decode/FlvVideoDecoder.cpp.obj
+.PHONY : liveplayer/decode/FlvVideoDecoder.obj
+
+# target to build an object file
+liveplayer/decode/FlvVideoDecoder.cpp.obj:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/liveplayer/decode/FlvVideoDecoder.cpp.obj
+.PHONY : liveplayer/decode/FlvVideoDecoder.cpp.obj
+
+liveplayer/decode/FlvVideoDecoder.i: liveplayer/decode/FlvVideoDecoder.cpp.i
+.PHONY : liveplayer/decode/FlvVideoDecoder.i
+
+# target to preprocess a source file
+liveplayer/decode/FlvVideoDecoder.cpp.i:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/liveplayer/decode/FlvVideoDecoder.cpp.i
+.PHONY : liveplayer/decode/FlvVideoDecoder.cpp.i
+
+liveplayer/decode/FlvVideoDecoder.s: liveplayer/decode/FlvVideoDecoder.cpp.s
+.PHONY : liveplayer/decode/FlvVideoDecoder.s
+
+# target to generate assembly for a file
+liveplayer/decode/FlvVideoDecoder.cpp.s:
+	cd /d D:\itffmpeg\av_media\online\duanshipin-pingtai\build && $(MAKE) $(MAKESILENT) -f backend\CMakeFiles\ServoBackend.dir\build.make backend/CMakeFiles/ServoBackend.dir/liveplayer/decode/FlvVideoDecoder.cpp.s
+.PHONY : liveplayer/decode/FlvVideoDecoder.cpp.s
+
 liveplayer/protocol/FlvDemuxer.obj: liveplayer/protocol/FlvDemuxer.cpp.obj
 .PHONY : liveplayer/protocol/FlvDemuxer.obj
 
@@ -570,6 +594,9 @@ help:
 	@echo ... infrastructure/database/SQLiteUserRepository.obj
 	@echo ... infrastructure/database/SQLiteUserRepository.i
 	@echo ... infrastructure/database/SQLiteUserRepository.s
+	@echo ... liveplayer/decode/FlvVideoDecoder.obj
+	@echo ... liveplayer/decode/FlvVideoDecoder.i
+	@echo ... liveplayer/decode/FlvVideoDecoder.s
 	@echo ... liveplayer/protocol/FlvDemuxer.obj
 	@echo ... liveplayer/protocol/FlvDemuxer.i
 	@echo ... liveplayer/protocol/FlvDemuxer.s

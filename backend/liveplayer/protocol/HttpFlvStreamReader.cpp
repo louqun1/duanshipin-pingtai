@@ -34,11 +34,11 @@ void HttpFlvStreamReader::open(const QUrl &url)
     emit logMessage(QString("HTTP-FLV GET %1").arg(url.toString()));
 
     connect(activeReply_, &QNetworkReply::metaDataChanged,
-            this, &HttpFlvStreamReader::handleMetaDataChanged);//服务端有响应
+            this, &HttpFlvStreamReader::handleMetaDataChanged);
     connect(activeReply_, &QIODevice::readyRead,
-            this, &HttpFlvStreamReader::handleReadyRead);//服务端有数据可读
+            this, &HttpFlvStreamReader::handleReadyRead);
     connect(activeReply_, &QNetworkReply::finished,
-            this, &HttpFlvStreamReader::handleFinished);//服务端关闭连接或者发生错误
+            this, &HttpFlvStreamReader::handleFinished);
     connect(activeReply_, &QNetworkReply::errorOccurred,
             this, [this](QNetworkReply::NetworkError) {
                 if (!activeReply_) {
@@ -48,7 +48,7 @@ void HttpFlvStreamReader::open(const QUrl &url)
                 emit errorOccurred(activeReply_->errorString());
             });
 
-    // TODO: add timeout / retry policy after the basic one-shot reading path is stable.
+    // TODO(user): add timeout / retry policy after the one-shot learning path is stable.
 }
 
 void HttpFlvStreamReader::close()
@@ -69,7 +69,7 @@ bool HttpFlvStreamReader::isActive() const
     return !activeReply_.isNull();
 }
 
-void HttpFlvStreamReader::handleMetaDataChanged()//服务端有响应就会触发这个槽函数，里面会读取响应头里的状态码和内容类型，并通过 connected 信号通知上层
+void HttpFlvStreamReader::handleMetaDataChanged()
 {
     if (!activeReply_ || headersObserved_) {
         return;

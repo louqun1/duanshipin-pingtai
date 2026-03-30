@@ -3,7 +3,7 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/StreamPage/StreamPage.cpp.obj: \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/StreamPage/StreamPage.hpp \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/service/LivePlayerController.hpp \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/session/LivePlayerSession.hpp \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/protocol/FlvDemuxer.hpp \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/decode/FlvVideoDecoder.hpp \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/protocol/FlvTypes.hpp \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QByteArray \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qbytearray.h \
@@ -296,6 +296,50 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/StreamPage/StreamPage.cpp.obj: \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstring.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstringconverter.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qstringconverter_base.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/avcodec.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/samplefmt.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/attributes.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/avutil.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/common.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/inttypes.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/math.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/attributes.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/macros.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/avconfig.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/mem.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/avutil.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/version.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/error.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/rational.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/mathematics.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/intfloat.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/log.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/pixfmt.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/buffer.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/dict.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/frame.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/buffer.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/channel_layout.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/dict.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/samplefmt.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/log.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/pixfmt.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/rational.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/codec.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/hwcontext.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/frame.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/codec_id.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/version_major.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/version_major.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/codec_desc.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/codec_id.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/codec_par.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/channel_layout.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/defs.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/packet.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/version.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/version.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/protocol/FlvDemuxer.hpp \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/deque \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_deque.h \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/deque.tcc \
@@ -405,6 +449,40 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/StreamPage/StreamPage.cpp.obj: \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qsizepolicy.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qcursor.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qbitmap.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/widgets/VideoOpenGLWidget.hpp \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QMatrix3x3 \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qgenericmatrix.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QOpenGLFunctions \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qopenglfunctions.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qopengl.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/GL/gl.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qopenglext.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qopenglcontext.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qnativeinterface.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QSurfaceFormat \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qsurfaceformat.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qopenglcontext_platform.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtOpenGL/QOpenGLShaderProgram \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtOpenGL/qopenglshaderprogram.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtOpenGL/qtopenglglobal.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtOpenGL/qtopenglexports.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qvector2d.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qvectornd.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qvector3d.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qvector4d.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qmatrix4x4.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qgenericmatrix.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtOpenGL/QOpenGLTexture \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtOpenGL/qopengltexture.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QScopedPointer \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qscopedpointer.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtOpenGLWidgets/QOpenGLWidget \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtOpenGLWidgets/qopenglwidget.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtOpenGLWidgets/qtopenglwidgetsglobal.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtOpenGLWidgets/qtopenglwidgetsexports.h \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QWidget \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QVector3D \
+ D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qvectornd.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QFrame \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qframe.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qwidget.h \
@@ -440,8 +518,6 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/StreamPage/StreamPage.cpp.obj: \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qeventloop.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qdeadlinetimer.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qeventpoint.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qvector2d.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qvectornd.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qpointingdevice.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qinputdevice.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qscreen.h \
@@ -455,7 +531,6 @@ frontend/CMakeFiles/FrontendWidgets.dir/pages/StreamPage/StreamPage.cpp.obj: \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QSizeF \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/QTransform \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qtransform.h \
- D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qnativeinterface.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qscreen_platform.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtGui/qguiapplication.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qcoreapplication.h \

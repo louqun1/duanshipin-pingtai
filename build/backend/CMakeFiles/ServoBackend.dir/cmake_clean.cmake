@@ -11,6 +11,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/ServoBackend.dir/infrastructure/database/SQLiteSessionRepository.cpp.obj.d"
   "CMakeFiles/ServoBackend.dir/infrastructure/database/SQLiteUserRepository.cpp.obj"
   "CMakeFiles/ServoBackend.dir/infrastructure/database/SQLiteUserRepository.cpp.obj.d"
+  "CMakeFiles/ServoBackend.dir/liveplayer/decode/FlvVideoDecoder.cpp.obj"
+  "CMakeFiles/ServoBackend.dir/liveplayer/decode/FlvVideoDecoder.cpp.obj.d"
   "CMakeFiles/ServoBackend.dir/liveplayer/protocol/FlvDemuxer.cpp.obj"
   "CMakeFiles/ServoBackend.dir/liveplayer/protocol/FlvDemuxer.cpp.obj.d"
   "CMakeFiles/ServoBackend.dir/liveplayer/protocol/HttpFlvStreamReader.cpp.obj"

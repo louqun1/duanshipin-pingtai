@@ -9,6 +9,7 @@ class QLabel;
 class QLineEdit;
 class QPlainTextEdit;
 class QPushButton;
+class VideoOpenGLWidget;
 
 namespace frontend::pages {
 
@@ -32,6 +33,7 @@ private:
 
     backend::liveplayer::service::LivePlayerController &livePlayerController_;
     QFrame *videoViewport_ = nullptr;
+    VideoOpenGLWidget *liveVideoSurface_ = nullptr;
     QLineEdit *streamUrlEdit_ = nullptr;
     QPushButton *startButton_ = nullptr;
     QPushButton *stopButton_ = nullptr;

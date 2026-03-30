@@ -397,12 +397,56 @@ frontend/CMakeFiles/FrontendWidgets.dir/widgets/MainWindow.cpp.obj: \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qobject.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/service/LivePlayerController.hpp \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/session/LivePlayerSession.hpp \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/protocol/FlvDemuxer.hpp \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/decode/FlvVideoDecoder.hpp \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/protocol/FlvTypes.hpp \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QByteArray \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qbytearray.h \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/QtGlobal \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtCore/qglobal.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/avcodec.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/samplefmt.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/attributes.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/avutil.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/common.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/inttypes.h \
+ D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/math.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/attributes.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/macros.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/avconfig.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/mem.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/avutil.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/version.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/error.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/rational.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/mathematics.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/intfloat.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/log.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/pixfmt.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/buffer.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/dict.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/frame.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/buffer.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/channel_layout.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/dict.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/samplefmt.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/log.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/pixfmt.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/rational.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/codec.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/hwcontext.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/frame.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/codec_id.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/version_major.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/version_major.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/codec_desc.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/codec_id.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/codec_par.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/channel_layout.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/defs.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/packet.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/version.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/version.h \
+ D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/protocol/FlvDemuxer.hpp \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/deque \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/stl_deque.h \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/bits/deque.tcc \
@@ -420,51 +464,16 @@ frontend/CMakeFiles/FrontendWidgets.dir/widgets/MainWindow.cpp.obj: \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playerEngine/FFMessageQueue.hpp \
  D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/condition_variable \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playerEngine/ff_ffplay_def.hpp \
- D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/x86_64-w64-mingw32/include/inttypes.h \
- D:/itffmpeg/x86_64-15.2.0-release-posix-seh-ucrt-rt_v13-rev1/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/c++/math.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/avfft.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavdevice/avdevice.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavdevice/version_major.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavdevice/version.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/version.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/macros.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/avconfig.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/log.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/attributes.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/version.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/opt.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/rational.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/avutil.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/common.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/mem.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/error.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/mathematics.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/intfloat.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/log.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/pixfmt.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/channel_layout.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/dict.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/samplefmt.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/dict.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavformat/avformat.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/codec.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/avutil.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/hwcontext.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/buffer.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/frame.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/pixfmt.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/rational.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/samplefmt.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/codec_id.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/version_major.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/version_major.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/codec_par.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/channel_layout.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/codec_id.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/defs.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/packet.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/attributes.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/buffer.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavformat/avio.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavformat/version_major.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavformat/version.h \
@@ -479,7 +488,6 @@ frontend/CMakeFiles/FrontendWidgets.dir/widgets/MainWindow.cpp.obj: \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/pixdesc.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/time.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libswresample/swresample.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavutil/frame.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libswresample/version_major.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libswresample/version.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libswresample/version_major.h \
@@ -662,13 +670,6 @@ frontend/CMakeFiles/FrontendWidgets.dir/widgets/MainWindow.cpp.obj: \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/SDL2/SDL_misc.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/SDL2/SDL_thread.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/playerEngine/IjksdlTimer.hpp \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/avcodec.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/codec.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/codec_desc.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/codec_par.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/defs.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/packet.h \
- D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/include/ffmpeg6.0/include/libavcodec/version.h \
  D:/itffmpeg/av_media/online/duanshipin-pingtai/frontend/pages/AccountPage/AccountPage.hpp \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/QWidget \
  D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/include/QtWidgets/qwidget.h \

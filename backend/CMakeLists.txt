@@ -16,6 +16,8 @@ add_library(ServoBackend STATIC
     service/auth/AuthService.cpp
     controller/auth/AuthController.hpp
     controller/auth/AuthController.cpp
+    liveplayer/decode/FlvVideoDecoder.hpp
+    liveplayer/decode/FlvVideoDecoder.cpp
     liveplayer/protocol/FlvTypes.hpp
     liveplayer/protocol/FlvDemuxer.hpp
     liveplayer/protocol/FlvDemuxer.cpp

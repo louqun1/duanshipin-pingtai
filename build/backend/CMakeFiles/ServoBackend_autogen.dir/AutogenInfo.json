@@ -58,6 +58,12 @@
 			null
 		],
 		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/decode/FlvVideoDecoder.hpp",
+			"MU",
+			"4XSHIWWLE7/moc_FlvVideoDecoder.cpp",
+			null
+		],
+		[
 			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/protocol/FlvDemuxer.hpp",
 			"MU",
 			"KJLGHSVEES/moc_FlvDemuxer.cpp",
@@ -249,6 +255,11 @@
 		],
 		[
 			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/infrastructure/database/SQLiteUserRepository.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/decode/FlvVideoDecoder.cpp",
 			"MU",
 			null
 		],

@@ -226,6 +226,8 @@ ServoBackend_autogen/timestamp: \
 	D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/infrastructure/database/SQLiteSessionRepository.hpp \
 	D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/infrastructure/database/SQLiteUserRepository.cpp \
 	D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/infrastructure/database/SQLiteUserRepository.hpp \
+	D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/decode/FlvVideoDecoder.cpp \
+	D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/decode/FlvVideoDecoder.hpp \
 	D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/protocol/FlvDemuxer.cpp \
 	D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/protocol/FlvDemuxer.hpp \
 	D:/itffmpeg/av_media/online/duanshipin-pingtai/backend/liveplayer/protocol/FlvTypes.hpp \

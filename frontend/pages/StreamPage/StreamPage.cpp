@@ -1,6 +1,7 @@
 #include "pages/StreamPage/StreamPage.hpp"
 
 #include "liveplayer/service/LivePlayerController.hpp"
+#include "widgets/VideoOpenGLWidget.hpp"
 
 #include <QFrame>
 #include <QHBoxLayout>
@@ -23,10 +24,10 @@ StreamPage::StreamPage(
 {
     buildUi();
     connectController();
-    livePlayerController_.attachVideoSurface(videoViewport_);
-    updateState(PlaybackState::Idle, "Live player skeleton is ready.");
+    livePlayerController_.attachVideoSurface(liveVideoSurface_);
+    updateState(PlaybackState::Idle, "Live HTTP-FLV learning pipeline is ready.");
     updateStats(0, 0, 0, 0);
-    appendLog("The current milestone already covers HTTP-FLV reading, FLV header parsing, and tag-level demux diagnostics.");
+    appendLog("Current milestone: HTTP chunk -> FLV tag -> H.264(ffmpeg) -> VideoOpenGLWidget. Audio stays TODO(user).");
 }
 
 void StreamPage::buildUi()
@@ -40,7 +41,7 @@ void StreamPage::buildUi()
     layout->addWidget(title);
 
     auto *summary = new QLabel(
-        "This page is now wired to a minimal HTTP-FLV learning skeleton. The service side can stay on RTMP ingest + HTTP-FLV output, while you focus on the player path here.",
+        "This page now uses the manual HTTP-FLV learning chain for live watch: Qt reads chunks, FlvDemuxer parses tags, then FFmpeg decodes H.264 video tags. AAC/audio output and A/V sync are intentionally left for the next milestone.",
         this);
     summary->setWordWrap(true);
     summary->setStyleSheet("font-size: 14px; color: #475569;");
@@ -65,7 +66,7 @@ void StreamPage::buildUi()
     previewLayout->addWidget(previewTitle);
 
     auto *previewHint = new QLabel(
-        "Decoded live frames will eventually land on this surface. Right now the backend skeleton stops at HTTP-FLV reading and FLV parsing hooks.",
+        "The live viewport is fed by your own chunk/tag path. This first milestone only wires video decode/render so you can study the data flow end to end.",
         previewPanel);
     previewHint->setWordWrap(true);
     previewHint->setStyleSheet("font-size: 14px; color: rgba(248, 250, 252, 0.82);");
@@ -86,13 +87,19 @@ void StreamPage::buildUi()
     viewportTitle->setStyleSheet("font-size: 22px; font-weight: 700; color: #e2e8f0;");
     viewportLayout->addWidget(viewportTitle);
 
+    liveVideoSurface_ = new VideoOpenGLWidget(videoViewport_);
+    liveVideoSurface_->setMinimumHeight(240);
+    liveVideoSurface_->setStyleSheet(
+        "background: rgba(2, 6, 23, 0.96);"
+        "border-radius: 14px;");
+    viewportLayout->addWidget(liveVideoSurface_, 1);
+
     hintValueLabel_ = new QLabel(
-        "HTTP-FLV reading and FLV tag parsing are wired. The next step is to hand video tags to your decoder and render frames here.",
+        "Data flow: QNetworkReply chunk -> FlvDemuxer tag -> AVC sequence header -> avcodec_send_packet/receive_frame -> this surface.",
         videoViewport_);
     hintValueLabel_->setWordWrap(true);
     hintValueLabel_->setStyleSheet("font-size: 13px; color: rgba(226, 232, 240, 0.8);");
     viewportLayout->addWidget(hintValueLabel_);
-    viewportLayout->addStretch();
 
     previewLayout->addWidget(videoViewport_, 1);
     contentLayout->addWidget(previewPanel, 2);
@@ -180,14 +187,14 @@ void StreamPage::buildUi()
     sideLayout->addWidget(statsValueLabel_);
 
     auto *panelBody = new QLabel(
-        "Keep the first loop small: OBS or FFmpeg pushes RTMP to a live server, the client reads HTTP-FLV, parses FLV tags, then hands samples into your live decoder path.",
+        "This delivery stays intentionally small: verify HTTP-FLV, observe tag counts, decode H.264 video with FFmpeg, then render. AAC, audio output, queues, and A/V sync are left as TODO(user).",
         sidePanel);
     panelBody->setWordWrap(true);
     panelBody->setStyleSheet("font-size: 14px; color: #334155;");
     sideLayout->addWidget(panelBody);
 
     auto *checklist = new QLabel(
-        "Current code path\n1. HTTP GET stream\n2. Validate FLV header\n3. Parse tag header and payload\n4. Split script, audio, and video tags\n5. Prepare decoder handoff",
+        "Current code path\n1. HTTP GET stream\n2. QByteArray chunk\n3. FLV header + tag parsing\n4. H.264 sequence header / NALU tag -> FFmpeg decoder\n5. AVFrame -> VideoOpenGLWidget",
         sidePanel);
     checklist->setWordWrap(true);
     checklist->setStyleSheet(
@@ -306,12 +313,18 @@ void StreamPage::updateState(PlaybackState state, const QString &message)
 
     if (state == PlaybackState::Playing) {
         hintValueLabel_->setText(
-            "Media tags are already flowing into LivePlayerSession. Wire them into your decoder queues, then render the decoded frames on this surface.");
+            "Your own chunk/tag + FFmpeg H.264 path has produced decoded video frames. TODO(user): add AAC decode, audio output, and A/V sync.");
     }
 }
 
 void StreamPage::updateStats(qint64 bytesReceived, int audioTagCount, int videoTagCount, int scriptTagCount)
 {
+    if (bytesReceived == 0 && audioTagCount == 0 && videoTagCount == 0 && scriptTagCount == 0) {
+        statsValueLabel_->setText(
+            "Waiting for first HTTP chunk/tag.\nThis milestone counts bytes and FLV tags again.\nVideo decode is wired; audio is still TODO(user).");
+        return;
+    }
+
     statsValueLabel_->setText(
         QString("Bytes received: %1\nScript tags: %2\nAudio tags: %3\nVideo tags: %4")
             .arg(bytesReceived)
