@@ -62,7 +62,12 @@ private:
     void stopRenderTimer();
     void clearQueuedVideoFramesAndClock();
     qint64 sessionElapsedMs() const;
-    qint64 currentTargetVideoPtsMs() const;
+    bool playbackClockStarted() const;
+    qint64 currentTargetVideoPtsMs();
+    void maybeStartBufferedPlayback();
+    void trimQueuedVideoFramesForPlaybackWindow(qint64 referenceTargetPtsMs, const char *reason);
+    qint64 maybeReanchorPlaybackClock(qint64 targetPtsMs);
+    void logPlaybackSnapshot(const char *reason, qint64 targetPtsMs, bool force);
     void onRenderTick();
     void dropLateQueuedVideoFrames(qint64 targetPtsMs);
     void tryRenderNextQueuedVideoFrame(qint64 targetPtsMs);
@@ -104,13 +109,20 @@ private:
     bool videoSequenceHeaderObserved_ = false;
     bool firstVideoFrameQueued_ = false;
     bool firstVideoFrameSubmittedToRender_ = false;
+    bool playbackStarted_ = false;
     bool audioDecodeTodoLogged_ = false;
     quint64 videoDecodeGeneration_ = 0;
     std::chrono::steady_clock::time_point sessionOpenStartedAt_{};
     std::chrono::steady_clock::time_point playbackStartWallClock_{};
     VideoFrameQueue videoFrameQueue_;
     QTimer *renderTimer_ = nullptr;
+    qint64 firstObservedVideoPtsMs_ = -1;
     qint64 firstQueuedVideoPtsMs_ = -1;
+    int consecutiveRenderWaitCount_ = 0;
+    int consecutiveQueueOverflowCount_ = 0;
+    qint64 lastPlaybackSnapshotLogWallClockMs_ = 0;
+    qint64 lastClockPendingLogWallClockMs_ = 0;
+    qint64 lastPlaybackReanchorWallClockMs_ = 0;
     SwsContext *videoScaleContext_ = nullptr;
 };
 

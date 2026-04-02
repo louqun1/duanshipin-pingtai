@@ -4,7 +4,6 @@
 
 #include <deque>
 #include <memory>
-#include <optional>
 #include <utility>
 
 struct AVFrame;
@@ -44,16 +43,9 @@ public:
         return static_cast<int>(queue_.size());
     }
 
-    std::optional<QueuedVideoFrame> enqueue(QueuedVideoFrame frame)
+    void enqueue(QueuedVideoFrame frame)
     {
         queue_.push_back(std::move(frame));
-        if (static_cast<int>(queue_.size()) <= maxDepth_) {
-            return std::nullopt;
-        }
-
-        QueuedVideoFrame droppedFrame = std::move(queue_.front());
-        queue_.pop_front();
-        return droppedFrame;
     }
 
     const QueuedVideoFrame &front() const
@@ -61,9 +53,33 @@ public:
         return queue_.front();
     }
 
+    const QueuedVideoFrame &back() const
+    {
+        return queue_.back();
+    }
+
     void popFront()
     {
         queue_.pop_front();
+    }
+
+    void popBack()
+    {
+        queue_.pop_back();
+    }
+
+    int maxDepth() const
+    {
+        return maxDepth_;
+    }
+
+    qint64 bufferedDurationMs() const
+    {
+        if (queue_.size() < 2) {
+            return 0;
+        }
+
+        return queue_.back().ptsMs - queue_.front().ptsMs;
     }
 
 private:

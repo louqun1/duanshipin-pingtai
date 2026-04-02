@@ -163,6 +163,16 @@ bool isFullRangeSource(AVPixelFormat sourceFormat, AVColorRange colorRange)
 
 constexpr int kRenderTickIntervalMs = 10;
 constexpr qint64 kLateVideoFrameDropThresholdMs = 80;
+constexpr int kStartupMinBufferedFrameDepth = 5;
+constexpr qint64 kStartupMinBufferedDurationMs = 200;
+constexpr qint64 kFutureQueueRetentionWindowMs = 220;
+constexpr qint64 kFutureQueueLeadThresholdMs = 160;
+constexpr qint64 kReanchorFutureLeadMs = 80;
+constexpr int kReanchorWaitThreshold = 8;
+constexpr int kReanchorOverflowThreshold = 3;
+constexpr qint64 kReanchorCooldownMs = 400;
+constexpr qint64 kPlaybackSnapshotLogIntervalMs = 200;
+constexpr int kRenderWaitLogEvery = 5;
 
 qint64 steadyNowMs()
 {
@@ -383,7 +393,14 @@ void LivePlayerSession::clearQueuedVideoFramesAndClock()
     videoFrameQueue_.clear();
     firstVideoFrameQueued_ = false;
     firstVideoFrameSubmittedToRender_ = false;
+    playbackStarted_ = false;
+    firstObservedVideoPtsMs_ = -1;
     firstQueuedVideoPtsMs_ = -1;
+    consecutiveRenderWaitCount_ = 0;
+    consecutiveQueueOverflowCount_ = 0;
+    lastPlaybackSnapshotLogWallClockMs_ = 0;
+    lastClockPendingLogWallClockMs_ = 0;
+    lastPlaybackReanchorWallClockMs_ = 0;
     playbackStartWallClock_ = std::chrono::steady_clock::time_point{};
 }
 
@@ -398,9 +415,27 @@ qint64 LivePlayerSession::sessionElapsedMs() const
         .count();
 }
 
-qint64 LivePlayerSession::currentTargetVideoPtsMs() const
+bool LivePlayerSession::playbackClockStarted() const
 {
-    if (firstQueuedVideoPtsMs_ < 0 || playbackStartWallClock_.time_since_epoch().count() == 0) {
+    return playbackStarted_ &&
+        firstQueuedVideoPtsMs_ >= 0 &&
+        playbackStartWallClock_.time_since_epoch().count() != 0;
+}
+
+qint64 LivePlayerSession::currentTargetVideoPtsMs()
+{
+    if (!playbackClockStarted()) {
+        const qint64 nowMs = steadyNowMs();
+        if (!videoFrameQueue_.empty() &&
+            nowMs - lastClockPendingLogWallClockMs_ >= kPlaybackSnapshotLogIntervalMs) {
+            lastClockPendingLogWallClockMs_ = nowMs;
+            logging::debug("[playback_clock] [gen={}] target_unavailable playbackStarted={} anchorPts={} depth={} bufferedMs={}",
+                           videoDecodeGeneration_,
+                           playbackStarted_,
+                           firstQueuedVideoPtsMs_,
+                           videoFrameQueue_.size(),
+                           videoFrameQueue_.bufferedDurationMs());
+        }
         return -1;
     }
 
@@ -410,28 +445,241 @@ qint64 LivePlayerSession::currentTargetVideoPtsMs() const
     return firstQueuedVideoPtsMs_ + elapsedMs;
 }
 
-void LivePlayerSession::onRenderTick()
+void LivePlayerSession::logPlaybackSnapshot(const char *reason, qint64 targetPtsMs, bool force)
 {
+    const qint64 nowMs = steadyNowMs();
+    if (!force && nowMs - lastPlaybackSnapshotLogWallClockMs_ < kPlaybackSnapshotLogIntervalMs) {
+        return;
+    }
+
+    lastPlaybackSnapshotLogWallClockMs_ = nowMs;
+    const qint64 frontPtsMs = videoFrameQueue_.empty() ? -1 : videoFrameQueue_.front().ptsMs;
+    const qint64 backPtsMs = videoFrameQueue_.empty() ? -1 : videoFrameQueue_.back().ptsMs;
+    const qint64 bufferedDurationMs = videoFrameQueue_.empty() ? 0 : videoFrameQueue_.bufferedDurationMs();
+
+    logging::debug("[playback] [gen={}] snapshot reason={} targetPts={} frontPts={} backPts={} depth={} bufferedMs={} waitStreak={} overflowStreak={} playbackStarted={}",
+                   videoDecodeGeneration_,
+                   reason ? reason : "unknown",
+                   targetPtsMs,
+                   frontPtsMs,
+                   backPtsMs,
+                   videoFrameQueue_.size(),
+                   bufferedDurationMs,
+                   consecutiveRenderWaitCount_,
+                   consecutiveQueueOverflowCount_,
+                   playbackStarted_);
+}
+
+void LivePlayerSession::maybeStartBufferedPlayback()
+{
+    if (playbackStarted_ || videoFrameQueue_.empty()) {
+        return;
+    }
+
+    const int depth = videoFrameQueue_.size();
+    const qint64 bufferedDurationMs = videoFrameQueue_.bufferedDurationMs();
+    if (depth < kStartupMinBufferedFrameDepth &&
+        bufferedDurationMs < kStartupMinBufferedDurationMs) {
+        logging::debug("[playback] [gen={}] startup_buffering depth={} bufferedMs={} minDepth={} minBufferedMs={} firstObservedPts={}",
+                       videoDecodeGeneration_,
+                       depth,
+                       bufferedDurationMs,
+                       kStartupMinBufferedFrameDepth,
+                       kStartupMinBufferedDurationMs,
+                       firstObservedVideoPtsMs_);
+        logPlaybackSnapshot("startup_buffering", -1, false);
+        return;
+    }
+
+    firstQueuedVideoPtsMs_ = videoFrameQueue_.front().ptsMs;
+    playbackStartWallClock_ = std::chrono::steady_clock::now();
+    playbackStarted_ = true;
+
+    const qint64 anchorWallClockMs = steadyNowMs();
+    appendInfoLog(
+        QString("Startup buffering finished. Live video playback started with anchorPts=%1, depth=%2, buffered=%3 ms.")
+            .arg(firstQueuedVideoPtsMs_)
+            .arg(depth)
+            .arg(bufferedDurationMs));
+    setState(SessionState::Playing,
+             QString("Startup buffer ready (depth=%1, buffered=%2 ms). Timer-driven pure-video playback started. TODO(user): add AAC decode, audio output, and A/V sync.")
+                 .arg(depth)
+                 .arg(bufferedDurationMs));
+    logging::info("[playback] [gen={}] startup_playback_started anchorPts={} anchorWallClockMs={} depth={} bufferedMs={} firstObservedPts={} frontPts={} backPts={}",
+                  videoDecodeGeneration_,
+                  firstQueuedVideoPtsMs_,
+                  anchorWallClockMs,
+                  depth,
+                  bufferedDurationMs,
+                  firstObservedVideoPtsMs_,
+                  videoFrameQueue_.front().ptsMs,
+                  videoFrameQueue_.back().ptsMs);
+    logPlaybackSnapshot("startup_playback_started", firstQueuedVideoPtsMs_, true);
+}
+
+void LivePlayerSession::trimQueuedVideoFramesForPlaybackWindow(qint64 referenceTargetPtsMs, const char *reason)
+{//根据当前播放时间点（referenceTargetPtsMs）和预设的时间窗口，丢弃过早或过晚的帧，以保持视频播放的流畅性和同步性。
     if (videoFrameQueue_.empty()) {
         return;
     }
 
-    const qint64 targetPtsMs = currentTargetVideoPtsMs();
-    if (targetPtsMs < 0) {
+    if (referenceTargetPtsMs < 0) {
+        referenceTargetPtsMs = videoFrameQueue_.front().ptsMs;
+    }
+
+    const qint64 minRetainPtsMs = referenceTargetPtsMs - kLateVideoFrameDropThresholdMs;
+    const qint64 maxRetainPtsMs = referenceTargetPtsMs + kFutureQueueRetentionWindowMs;
+    int droppedTooOldCount = 0;
+    int droppedTooFutureCount = 0;
+    qint64 firstDroppedPtsMs = -1;
+    qint64 lastDroppedPtsMs = -1;
+
+    auto noteDropped = [&](qint64 ptsMs) {
+        if (firstDroppedPtsMs < 0) {
+            firstDroppedPtsMs = ptsMs;
+        }
+        lastDroppedPtsMs = ptsMs;
+    };
+
+    while (videoFrameQueue_.size() > 1) {
+        const QueuedVideoFrame &queuedFrame = videoFrameQueue_.front();
+        if (queuedFrame.ptsMs >= minRetainPtsMs) {
+            break;
+        }
+
+        noteDropped(queuedFrame.ptsMs);
+        ++droppedTooOldCount;
+        videoFrameQueue_.popFront();
+    }
+
+    while (videoFrameQueue_.size() > videoFrameQueue_.maxDepth()) {
+        if (videoFrameQueue_.size() <= 1) {
+            break;
+        }
+
+        const QueuedVideoFrame &futureFrame = videoFrameQueue_.back();
+        noteDropped(futureFrame.ptsMs);
+        ++droppedTooFutureCount;
+        videoFrameQueue_.popBack();
+    }
+
+    if (playbackStarted_) {
+        while (videoFrameQueue_.size() > 1 &&
+               videoFrameQueue_.back().ptsMs > maxRetainPtsMs &&
+               videoFrameQueue_.bufferedDurationMs() > kFutureQueueRetentionWindowMs) {
+            const QueuedVideoFrame &futureFrame = videoFrameQueue_.back();
+            noteDropped(futureFrame.ptsMs);
+            ++droppedTooFutureCount;
+            videoFrameQueue_.popBack();
+        }
+    }
+
+    if (droppedTooOldCount == 0 && droppedTooFutureCount == 0) {
+        consecutiveQueueOverflowCount_ = 0;
         return;
     }
 
-    logging::debug("[render] [gen={}] targetPts={} depth={}",
-                   videoDecodeGeneration_,
-                   targetPtsMs,
-                   videoFrameQueue_.size());
+    ++consecutiveQueueOverflowCount_;
+    logging::debug("[frame_queue] [gen={}] trim reason={} refTargetPts={} keepWindow=[{},{}] droppedTooOld={} droppedTooFuture={} firstDroppedPts={} lastDroppedPts={} depth={} bufferedMs={} overflowStreak={}",
+                   videoDecodeGeneration_,//trime reason 的打印是为了帮助开发者理解为什么在当前时刻需要丢弃某些帧，以及这些帧的时间戳分布情况。这对于调试和优化播放体验非常有用，尤其是在处理直播流时，帧的及时性和顺序性对用户体验至关重要。
+                   reason ? reason : "unknown", //triming reasion 修剪原因
+                   referenceTargetPtsMs,
+                   minRetainPtsMs,
+                   maxRetainPtsMs,
+                   droppedTooOldCount,
+                   droppedTooFutureCount,
+                   firstDroppedPtsMs,
+                   lastDroppedPtsMs,
+                   videoFrameQueue_.size(),
+                   videoFrameQueue_.bufferedDurationMs(),
+                   consecutiveQueueOverflowCount_);
+    logPlaybackSnapshot("frame_queue_trim", referenceTargetPtsMs, true);
+}
 
+qint64 LivePlayerSession::maybeReanchorPlaybackClock(qint64 targetPtsMs)
+{
+    if (!playbackClockStarted() || videoFrameQueue_.empty()) {
+        return targetPtsMs;
+    }
+
+    const qint64 nowMs = steadyNowMs();
+    if (lastPlaybackReanchorWallClockMs_ > 0 &&
+        nowMs - lastPlaybackReanchorWallClockMs_ < kReanchorCooldownMs) {
+        return targetPtsMs;
+    }
+
+    const qint64 frontLeadMs = videoFrameQueue_.front().ptsMs - targetPtsMs;
+    const qint64 backLeadMs = videoFrameQueue_.back().ptsMs - targetPtsMs;
+    if (frontLeadMs < kFutureQueueLeadThresholdMs ||
+        backLeadMs < kFutureQueueRetentionWindowMs ||
+        consecutiveRenderWaitCount_ < kReanchorWaitThreshold ||
+        consecutiveQueueOverflowCount_ < kReanchorOverflowThreshold) {
+        return targetPtsMs;
+    }
+
+    const qint64 previousAnchorPtsMs = firstQueuedVideoPtsMs_;
+    const qint64 newTargetPtsMs = videoFrameQueue_.front().ptsMs - kReanchorFutureLeadMs;
+    firstQueuedVideoPtsMs_ = newTargetPtsMs;
+    playbackStartWallClock_ = std::chrono::steady_clock::now();
+    lastPlaybackReanchorWallClockMs_ = nowMs;
+
+    appendWarnLog(
+        QString("Playback clock re-anchored after repeated early-frame waits. target %1 -> %2, front=%3, back=%4.")
+            .arg(targetPtsMs)
+            .arg(newTargetPtsMs)
+            .arg(videoFrameQueue_.front().ptsMs)
+            .arg(videoFrameQueue_.back().ptsMs));
+    logging::warn("[playback] [gen={}] reanchor oldTargetPts={} newTargetPts={} oldAnchorPts={} anchorWallClockMs={} frontPts={} backPts={} frontLeadMs={} backLeadMs={} waitStreak={} overflowStreak={} futureLeadMs={}",
+                  videoDecodeGeneration_,
+                  targetPtsMs,
+                  newTargetPtsMs,
+                  previousAnchorPtsMs,
+                  nowMs,
+                  videoFrameQueue_.front().ptsMs,
+                  videoFrameQueue_.back().ptsMs,
+                  frontLeadMs,
+                  backLeadMs,
+                  consecutiveRenderWaitCount_,
+                  consecutiveQueueOverflowCount_,
+                  kReanchorFutureLeadMs);
+    trimQueuedVideoFramesForPlaybackWindow(newTargetPtsMs, "reanchor");
+    logPlaybackSnapshot("playback_reanchor", newTargetPtsMs, true);
+    consecutiveRenderWaitCount_ = 0;
+    return newTargetPtsMs;
+}
+
+void LivePlayerSession::onRenderTick()
+{
+    if (videoFrameQueue_.empty()) {
+        consecutiveRenderWaitCount_ = 0;
+        return;
+    }
+
+    qint64 targetPtsMs = currentTargetVideoPtsMs();
+    if (targetPtsMs < 0) {
+        logPlaybackSnapshot("render_tick_wait_startup", targetPtsMs, false);
+        return;
+    }
+
+    logPlaybackSnapshot("render_tick", targetPtsMs, false);
     dropLateQueuedVideoFrames(targetPtsMs);
+    targetPtsMs = maybeReanchorPlaybackClock(targetPtsMs);
     tryRenderNextQueuedVideoFrame(targetPtsMs);
 }
 
 void LivePlayerSession::dropLateQueuedVideoFrames(qint64 targetPtsMs)
 {
+    int droppedLateCount = 0;
+    qint64 firstDroppedPtsMs = -1;
+    qint64 lastDroppedPtsMs = -1;
+
+    auto noteLateDropped = [&](qint64 ptsMs) {
+        if (firstDroppedPtsMs < 0) {
+            firstDroppedPtsMs = ptsMs;
+        }
+        lastDroppedPtsMs = ptsMs;
+    };
+
     while (!videoFrameQueue_.empty()) {
         const QueuedVideoFrame &queuedFrame = videoFrameQueue_.front();
         if (queuedFrame.generation != videoDecodeGeneration_) {
@@ -455,22 +703,33 @@ void LivePlayerSession::dropLateQueuedVideoFrames(qint64 targetPtsMs)
         }
 
         if (videoFrameQueue_.size() <= 1) {
-            return;
+            break;
         }
 
         const qint64 lateMs = targetPtsMs - queuedFrame.ptsMs;
         if (lateMs <= kLateVideoFrameDropThresholdMs) {
-            return;
+            break;
         }
 
-        logging::debug("[render] [gen={}] drop stale frame pts={} targetPts={} lateMs={} depth={}",
-                       videoDecodeGeneration_,
-                       queuedFrame.ptsMs,
-                       targetPtsMs,
-                       lateMs,
-                       videoFrameQueue_.size());
+        noteLateDropped(queuedFrame.ptsMs);
+        ++droppedLateCount;
         videoFrameQueue_.popFront();
     }
+
+    if (droppedLateCount <= 0) {
+        return;
+    }
+
+    consecutiveRenderWaitCount_ = 0;
+    logging::debug("[render] [gen={}] drop_late count={} firstDroppedPts={} lastDroppedPts={} targetPts={} depth={} bufferedMs={}",
+                   videoDecodeGeneration_,
+                   droppedLateCount,
+                   firstDroppedPtsMs,
+                   lastDroppedPtsMs,
+                   targetPtsMs,
+                   videoFrameQueue_.size(),
+                   videoFrameQueue_.empty() ? 0 : videoFrameQueue_.bufferedDurationMs());
+    logPlaybackSnapshot("render_drop_late", targetPtsMs, true);
 }
 
 void LivePlayerSession::tryRenderNextQueuedVideoFrame(qint64 targetPtsMs)
@@ -501,21 +760,33 @@ void LivePlayerSession::tryRenderNextQueuedVideoFrame(qint64 targetPtsMs)
     }
 
     if (queuedFrame.ptsMs > targetPtsMs) {
-        logging::debug("[render] [gen={}] wait frame pts={} targetPts={} earlyMs={} depth={}",
-                       videoDecodeGeneration_,
-                       queuedFrame.ptsMs,
-                       targetPtsMs,
-                       queuedFrame.ptsMs - targetPtsMs,
-                       videoFrameQueue_.size());
+        ++consecutiveRenderWaitCount_;
+        if (consecutiveRenderWaitCount_ == 1 ||
+            consecutiveRenderWaitCount_ % kRenderWaitLogEvery == 0) {
+            logging::debug("[render] [gen={}] wait_frame pts={} targetPts={} earlyMs={} depth={} bufferedMs={} waitStreak={} overflowStreak={} playbackStarted={}",
+                           videoDecodeGeneration_,
+                           queuedFrame.ptsMs,
+                           targetPtsMs,
+                           queuedFrame.ptsMs - targetPtsMs,
+                           videoFrameQueue_.size(),
+                           videoFrameQueue_.bufferedDurationMs(),
+                           consecutiveRenderWaitCount_,
+                           consecutiveQueueOverflowCount_,
+                           playbackStarted_);
+            logPlaybackSnapshot("render_wait", targetPtsMs, true);
+        }
         return;
     }
 
-    logging::debug("[render] [gen={}] show frame pts={} targetPts={} lateMs={} depth={}",
+    consecutiveRenderWaitCount_ = 0;
+    logging::debug("[render] [gen={}] show_frame pts={} targetPts={} lateMs={} depth={} bufferedMs={} overflowStreak={}",
                    videoDecodeGeneration_,
                    queuedFrame.ptsMs,
                    targetPtsMs,
                    targetPtsMs - queuedFrame.ptsMs,
-                   videoFrameQueue_.size());
+                   videoFrameQueue_.size(),
+                   videoFrameQueue_.bufferedDurationMs(),
+                   consecutiveQueueOverflowCount_);
     if (!firstVideoFrameSubmittedToRender_) {
         firstVideoFrameSubmittedToRender_ = true;
         appendInfoLog("Timer-driven live render submitted its first video frame.");
@@ -689,7 +960,15 @@ void LivePlayerSession::resetCounters()
     videoSequenceHeaderObserved_ = false;
     firstVideoFrameQueued_ = false;
     firstVideoFrameSubmittedToRender_ = false;
+    playbackStarted_ = false;
     audioDecodeTodoLogged_ = false;
+    firstObservedVideoPtsMs_ = -1;
+    firstQueuedVideoPtsMs_ = -1;
+    consecutiveRenderWaitCount_ = 0;
+    consecutiveQueueOverflowCount_ = 0;
+    lastPlaybackSnapshotLogWallClockMs_ = 0;
+    lastClockPendingLogWallClockMs_ = 0;
+    lastPlaybackReanchorWallClockMs_ = 0;
     emit statsChanged(bytesReceived_, audioTagCount_, videoTagCount_, scriptTagCount_);
 }
 
@@ -853,38 +1132,42 @@ void LivePlayerSession::handleWorkerDecodedVideoFrame(
         return;
     }
 
+    if (!firstVideoFrameQueued_) {
+        firstVideoFrameQueued_ = true;
+        firstObservedVideoPtsMs_ = ptsMs;
+        appendInfoLog(
+            QString("First decoded video frame seen at pts=%1 ms. Enter startup buffering before anchoring the playback clock.")
+                .arg(ptsMs));
+        logging::info("[playback] [gen={}] startup_first_frame_seen pts={} elapsed={}ms",
+                      generation,
+                      ptsMs,
+                      sessionElapsedMs());
+    }
+
     const qint64 enqueueWallClockMs = steadyNowMs();
-    auto droppedFrame = videoFrameQueue_.enqueue(QueuedVideoFrame{
+    videoFrameQueue_.enqueue(QueuedVideoFrame{
         frame,
         ptsMs,
         enqueueWallClockMs,
         generation,
     });
-    if (droppedFrame.has_value()) {
-        logging::debug("[frame_queue] [gen={}] drop oldest on overflow pts={} depth={}",
-                       generation,
-                       droppedFrame->ptsMs,
-                       videoFrameQueue_.size());
-    }
 
-    logging::debug("[frame_queue] [gen={}] enqueue pts={} depth={} elapsed={}ms",
+    const qint64 referenceTargetPtsMs = playbackClockStarted()
+        ? currentTargetVideoPtsMs()
+        : videoFrameQueue_.front().ptsMs;
+    trimQueuedVideoFramesForPlaybackWindow(referenceTargetPtsMs, "enqueue");
+
+    logging::debug("[frame_queue] [gen={}] enqueue pts={} depth={} frontPts={} backPts={} bufferedMs={} playbackStarted={} elapsed={}ms",
                    generation,
                    ptsMs,
                    videoFrameQueue_.size(),
+                   videoFrameQueue_.front().ptsMs,
+                   videoFrameQueue_.back().ptsMs,
+                   videoFrameQueue_.bufferedDurationMs(),
+                   playbackStarted_,
                    sessionElapsedMs());
-
-    if (!firstVideoFrameQueued_) {
-        firstVideoFrameQueued_ = true;
-        firstQueuedVideoPtsMs_ = ptsMs;
-        playbackStartWallClock_ = std::chrono::steady_clock::now();
-        setState(SessionState::Playing,
-                 "First decoded video frame entered VideoFrameQueue. Timer-driven render now drives pure-video playback. TODO(user): add AAC decode, audio output, and A/V sync.");
-        appendInfoLog("Manual live video path queued its first decoded frame for timer-driven render.");
-        logging::info("[session] [gen={}] first frame queued pts={} elapsed={}ms",
-                      generation,
-                      ptsMs,
-                      sessionElapsedMs());
-    }
+    logPlaybackSnapshot("frame_queue_enqueue", referenceTargetPtsMs, false);
+    maybeStartBufferedPlayback();
 }
 
 void LivePlayerSession::handleDecodedVideoFrame(const AVFrame *frame)
