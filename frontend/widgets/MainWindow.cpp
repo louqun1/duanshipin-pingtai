@@ -13,11 +13,47 @@
 #include <QFrame>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QMetaObject>
 #include <QPushButton>
 #include <QStackedWidget>
+#include <QShowEvent>
 #include <QVBoxLayout>
 #include <QWidget>
 #include <QtGlobal>
+#include <spdlog/spdlog.h>
+
+namespace {
+
+QString sizeText(const QSize &size)
+{
+    return QString("%1x%2").arg(size.width()).arg(size.height());
+}
+
+class CurrentPageStackedWidget final : public QStackedWidget
+{
+public:
+    using QStackedWidget::QStackedWidget;
+
+    QSize sizeHint() const override
+    {
+        if (const QWidget *page = currentWidget()) {
+            return page->sizeHint();
+        }
+
+        return QStackedWidget::sizeHint();
+    }
+
+    QSize minimumSizeHint() const override
+    {
+        if (const QWidget *page = currentWidget()) {
+            return page->minimumSizeHint();
+        }
+
+        return QStackedWidget::minimumSizeHint();
+    }
+};
+
+}
 
 MainWindow::MainWindow(
     backend::controller::auth::AuthController &authController,
@@ -30,6 +66,7 @@ MainWindow::MainWindow(
     , playerController_(playerController)
 {
     buildUi();
+    dumpStartupWindowMetrics("after_build_ui");
     connectNavigation();
     connectPlaybackFlow();
     connectAccountFlow();
@@ -39,7 +76,7 @@ MainWindow::MainWindow(
 void MainWindow::buildUi()
 {
     setWindowTitle("Flashpoint Short Videos");
-    resize(1280, 820);
+    resize(1280, 600);
 
     auto *central = new QWidget(this);
     auto *layout = new QHBoxLayout(central);
@@ -48,7 +85,7 @@ void MainWindow::buildUi()
 
     layout->addWidget(createNavigation());
 
-    pageStack_ = new QStackedWidget(central);
+    pageStack_ = new CurrentPageStackedWidget(central);
     pageStack_->setObjectName("pageStack");
 
     homePage_ = new frontend::pages::HomePage(pageStack_);
@@ -87,6 +124,20 @@ void MainWindow::buildUi()
         "  background: #2563eb;"
         "}"
         "#pageStack { background: #f4f7fb; }");
+}
+
+void MainWindow::showEvent(QShowEvent *event)
+{
+    QMainWindow::showEvent(event);
+
+    if (startupMetricsLoggedAfterShow_) {
+        return;
+    }
+
+    startupMetricsLoggedAfterShow_ = true;
+    QMetaObject::invokeMethod(this, [this]() {
+        dumpStartupWindowMetrics("after_first_show");
+    }, Qt::QueuedConnection);
 }
 
 QWidget *MainWindow::createNavigation()
@@ -228,6 +279,46 @@ void MainWindow::switchToPage(int pageIndex)
     if (auto *button = navigationGroup_->button(safeIndex)) {
         button->setChecked(true);
     }
+}
+
+void MainWindow::dumpStartupWindowMetrics(const char *stage) const
+{
+    const QWidget *currentPage = pageStack_ ? pageStack_->currentWidget() : nullptr;
+    const QWidget *central = centralWidget();
+
+    const QByteArray stageUtf8 = QByteArray(stage ? stage : "unknown");
+    const QByteArray windowSize = sizeText(size()).toUtf8();
+    const QByteArray windowMinSize = sizeText(minimumSize()).toUtf8();
+    const QByteArray windowMinHint = sizeText(minimumSizeHint()).toUtf8();
+    const QByteArray windowHint = sizeText(sizeHint()).toUtf8();
+    const QByteArray centralMinSize = central ? sizeText(central->minimumSize()).toUtf8() : QByteArray("-");
+    const QByteArray centralMinHint = central ? sizeText(central->minimumSizeHint()).toUtf8() : QByteArray("-");
+    const QByteArray pageStackMinSize = pageStack_ ? sizeText(pageStack_->minimumSize()).toUtf8() : QByteArray("-");
+    const QByteArray pageStackMinHint = pageStack_ ? sizeText(pageStack_->minimumSizeHint()).toUtf8() : QByteArray("-");
+    const QByteArray currentPageName = currentPage
+        ? QByteArray(currentPage->metaObject()->className())
+        : QByteArray("-");
+    const QByteArray currentPageMinSize = currentPage ? sizeText(currentPage->minimumSize()).toUtf8() : QByteArray("-");
+    const QByteArray currentPageMinHint = currentPage ? sizeText(currentPage->minimumSizeHint()).toUtf8() : QByteArray("-");
+    const QByteArray currentPageHint = currentPage ? sizeText(currentPage->sizeHint()).toUtf8() : QByteArray("-");
+
+    spdlog::info(
+        "[ui/mainwindow] stage={} window_size={} window_min={} window_min_hint={} window_hint={} "
+        "central_min={} central_min_hint={} page_stack_min={} page_stack_min_hint={} "
+        "current_page={} current_page_min={} current_page_min_hint={} current_page_hint={}",
+        stageUtf8.constData(),
+        windowSize.constData(),
+        windowMinSize.constData(),
+        windowMinHint.constData(),
+        windowHint.constData(),
+        centralMinSize.constData(),
+        centralMinHint.constData(),
+        pageStackMinSize.constData(),
+        pageStackMinHint.constData(),
+        currentPageName.constData(),
+        currentPageMinSize.constData(),
+        currentPageMinHint.constData(),
+        currentPageHint.constData());
 }
 
 void MainWindow::updateAuthenticatedAccount(

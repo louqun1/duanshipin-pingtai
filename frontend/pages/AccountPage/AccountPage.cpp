@@ -5,6 +5,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QScrollArea>
 #include <QStackedWidget>
 #include <QVBoxLayout>
 
@@ -33,7 +34,20 @@ namespace frontend::pages
     AccountPage::AccountPage(QWidget *parent)
         : QWidget(parent)
     {
-        auto *layout = new QVBoxLayout(this);
+        auto *rootLayout = new QVBoxLayout(this);
+        rootLayout->setContentsMargins(0, 0, 0, 0);
+        rootLayout->setSpacing(0);
+
+        auto *scrollArea = new QScrollArea(this);
+        scrollArea->setWidgetResizable(true);
+        scrollArea->setFrameShape(QFrame::NoFrame);
+        scrollArea->setStyleSheet("background: transparent; border: none;");
+        rootLayout->addWidget(scrollArea);
+
+        auto *content = new QWidget(scrollArea);
+        scrollArea->setWidget(content);
+
+        auto *layout = new QVBoxLayout(content);
         layout->setContentsMargins(40, 36, 40, 36);
         layout->setSpacing(18);
 

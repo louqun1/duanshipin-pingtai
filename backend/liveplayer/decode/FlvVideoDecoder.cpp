@@ -147,8 +147,8 @@ bool FlvVideoDecoder::handleAvcNaluTag(const protocol::FlvTag &tag, VideoDecodeR
     const int compositionTimeMs = readSignedInt24BE(tag.payload.constData() + 2);
     const qint64 ptsMs = dtsMs + compositionTimeMs;
 
-    // TODO(user): if you want to study live jitter and reordering, add a real packet queue
-    // between tag parsing and avcodec_send_packet instead of decoding inline in the session thread.
+    // TODO(user): stage 1 already moved video decode behind a tag queue + worker thread.
+    // If you want to study live jitter and reordering next, add a real packet/frame queue here.
     return submitVideoPacket(reinterpret_cast<const uint8_t *>(naluPayload.constData()),
                              naluPayload.size(),
                              dtsMs,

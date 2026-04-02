@@ -1,6 +1,7 @@
 #include <QApplication>
 
 #include "bootstrap/AppBootstrap.hpp"
+#include "liveplayer/logging/LiveWatchLogger.hpp"
 #include "spdlog/logger.h"
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
@@ -36,6 +37,8 @@ void initialize_logging()
     spdlog::set_level(spdlog::level::info);
     spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%^%l%$] [thread %t] %v");
     spdlog::info("Logging initialized, file={}", logFilePath);
+
+    backend::liveplayer::logging::initializeLiveWatchLogger();
 }
 
 }  // namespace

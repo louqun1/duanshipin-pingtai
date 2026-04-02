@@ -56,6 +56,11 @@ bool FlvDemuxer::pushBytes(const QByteArray &chunk, FlvFeedReport &report)
     }
 
     while (buffer_.size() >= 15) {
+        /**
+         * @brief 将缓冲区数据转换为无符号字符指针
+         * @details 标签头部至少需要11字节，加上后续的PreviousTagSize字段4字节，共15字节
+         * @note 这是FLV格式解析中的数据类型转换，确保后续能够按字节逐位读取和解析FLV标签数据
+         */
         const auto *data = reinterpret_cast<const uchar *>(buffer_.constData());
         const quint8 rawTagType = data[0];
         const quint32 dataLength = readUint24BE(data + 1);
@@ -165,7 +170,7 @@ bool FlvDemuxer::parseFlvHeader(FlvFeedReport &report)
 
     headerValidated_ = true;
     report.headerValidated = true;
-    buffer_.remove(0, static_cast<int>(bytesNeeded));
+    buffer_.remove(0, static_cast<int>(bytesNeeded));//解析完FLV头部后，移除头部数据和第一个PreviousTagSize字段，为后续标签解析做好准备。
     return true;
 }
 

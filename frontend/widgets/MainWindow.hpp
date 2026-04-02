@@ -5,6 +5,7 @@
 
 class QButtonGroup;
 class QPushButton;
+class QShowEvent;
 class QStackedWidget;
 class QWidget;
 class VideoPlayerWindow;
@@ -58,11 +59,15 @@ private:
     void connectPlaybackFlow();
     void connectAccountFlow();
     void switchToPage(int pageIndex);
+    void dumpStartupWindowMetrics(const char *stage) const;
     void updateAuthenticatedAccount(
         const QString &username,
         const QString &email,
         const QString &message,
         bool switchToAccount);
+
+protected:
+    void showEvent(QShowEvent *event) override;
 
     QButtonGroup *navigationGroup_ = nullptr;
     QStackedWidget *pageStack_ = nullptr;
@@ -77,4 +82,5 @@ private:
     frontend::pages::StreamPage *streamPage_ = nullptr;
     frontend::pages::UploadPage *uploadPage_ = nullptr;
     frontend::pages::AccountPage *accountPage_ = nullptr;
+    bool startupMetricsLoggedAfterShow_ = false;
 };

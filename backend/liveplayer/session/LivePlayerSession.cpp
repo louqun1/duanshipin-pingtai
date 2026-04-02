@@ -1,10 +1,13 @@
 #include "liveplayer/session/LivePlayerSession.hpp"
 
+#include "liveplayer/logging/LiveWatchLogger.hpp"
+#include "liveplayer/session/LiveVideoDecodeWorker.hpp"
 #include "liveplayer/protocol/FlvTypes.hpp"
 #include "liveplayer/protocol/HttpFlvStreamReader.hpp"
 
 #include <QByteArray>
 #include <QMetaObject>
+#include <QTimer>
 #include <QUrl>
 #include <QWidget>
 #include <spdlog/spdlog.h>
@@ -158,12 +161,26 @@ bool isFullRangeSource(AVPixelFormat sourceFormat, AVColorRange colorRange)
     }
 }
 
+constexpr int kRenderTickIntervalMs = 10;
+constexpr qint64 kLateVideoFrameDropThresholdMs = 80;
+
+qint64 steadyNowMs()
+{
+    return std::chrono::duration_cast<std::chrono::milliseconds>(
+               std::chrono::steady_clock::now().time_since_epoch())
+        .count();
+}
+
 }  // namespace
 
 LivePlayerSession::LivePlayerSession(QObject *parent)
     : QObject(parent)
     , reader_(new protocol::HttpFlvStreamReader(this))
+    , renderTimer_(new QTimer(this))
 {
+    renderTimer_->setTimerType(Qt::PreciseTimer);
+    renderTimer_->setInterval(kRenderTickIntervalMs);
+    connect(renderTimer_, &QTimer::timeout, this, &LivePlayerSession::onRenderTick);
     connect(reader_, &protocol::HttpFlvStreamReader::connected,
             this, &LivePlayerSession::handleReaderConnected);
     connect(reader_, &protocol::HttpFlvStreamReader::dataChunkReceived,
@@ -176,14 +193,6 @@ LivePlayerSession::LivePlayerSession(QObject *parent)
             this, [this](const QString &message) {
                 appendInfoLog(message);
             });
-
-    videoDecoder_.setLogCallback([this](const QString &message) {
-        appendInfoLog(message);
-    });
-    videoDecoder_.setFrameCallback([this](const AVFrame *frame, qint64 ptsMs) {
-        Q_UNUSED(ptsMs);
-        handleDecodedVideoFrame(frame);
-    });
 }
 
 LivePlayerSession::~LivePlayerSession()
@@ -208,9 +217,20 @@ void LivePlayerSession::open(const QString &url)
         return;
     }
 
+    const QString previousUrl = currentUrl_;
+    const SessionState previousState = state_;
     resetPlaybackResources(false);
     resetCounters();
     currentUrl_ = trimmedUrl;
+    sessionOpenStartedAt_ = std::chrono::steady_clock::now();
+    const QByteArray currentUrlUtf8 = currentUrl_.toUtf8();
+    const QByteArray previousUrlUtf8 = previousUrl.toUtf8();
+    logging::info("[session] [gen={}] open begin url={} previous_state={} previous_url={}",
+                  videoDecodeGeneration_,
+                  currentUrlUtf8.constData(),
+                  sessionStateName(previousState),
+                  previousUrlUtf8.constData());
+    startVideoDecodeWorker();
 
     if (videoSurface_) {
         QMetaObject::invokeMethod(videoSurface_.data(), "clearFrame", Qt::QueuedConnection);
@@ -219,13 +239,16 @@ void LivePlayerSession::open(const QString &url)
     setState(SessionState::Connecting, QString("Opening %1").arg(currentUrl_));
     appendInfoLog("Data flow 1/3: QNetworkReply::readyRead -> QByteArray chunk.");
     appendInfoLog("Data flow 2/3: FlvDemuxer::pushBytes -> FLV tag header + payload.");
-    appendInfoLog("Data flow 3/3: AVC video tag -> FFmpeg avcodec_send_packet/receive_frame -> VideoOpenGLWidget.");
-    appendInfoLog("Current milestone only wires manual H.264 video decode/render. AAC, audio output, queues, and A/V sync stay as TODO(user).");
+    appendInfoLog("Data flow 3/3: video tag -> VideoTagQueue -> LiveVideoDecodeWorker -> VideoFrameQueue -> render tick -> VideoOpenGLWidget.");
+    appendInfoLog("Current milestone only adds the minimal pure-video frame queue, playback clock, QTimer render tick, and stale-frame drop. AAC, audio output, packet queue, and A/V sync stay as TODO(user).");
+    startRenderTimer();
     reader_->open(QUrl(currentUrl_));
 }
 
 void LivePlayerSession::stop()
 {
+    const QByteArray currentUrlUtf8 = currentUrl_.toUtf8();
+    logging::info("[session] [gen={}] stop requested current_url={}", videoDecodeGeneration_, currentUrlUtf8.constData());
     resetPlaybackResources(false);
     resetCounters();
     currentUrl_.clear();
@@ -267,9 +290,16 @@ void LivePlayerSession::handleReaderDataChunk(const QByteArray &chunk)
             : demuxer_.lastError();
         setState(SessionState::Error, errorMessage);
         appendErrorLog("Demuxer reported a fatal parse error. Check FLV tag boundaries and previous tag size.");
+        logging::error("[session] [gen={}] demux fatal error after bytes_received={} message={}",
+                       videoDecodeGeneration_,
+                       bytesReceived_,
+                       errorMessage.toUtf8().constData());
         if (reader_->isActive()) {
             reader_->close();
         }
+        clearQueuedVideoFramesAndClock();
+        invalidateVideoDecodeGeneration("demux fatal error");
+        stopVideoDecodeWorker();
         return;
     }
 
@@ -286,6 +316,10 @@ void LivePlayerSession::handleReaderDataChunk(const QByteArray &chunk)
         if (reader_->isActive()) {
             reader_->close();
         }
+        logging::error("[session] [gen={}] drainParsedTags failed, begin fatal cleanup", videoDecodeGeneration_);
+        clearQueuedVideoFramesAndClock();
+        invalidateVideoDecodeGeneration("drainParsedTags fatal cleanup");
+        stopVideoDecodeWorker();
         return;
     }
 
@@ -296,6 +330,15 @@ void LivePlayerSession::handleReaderError(const QString &message)
 {
     setState(SessionState::Error, QString("HTTP-FLV read failed: %1").arg(message));
     appendErrorLog(QString("Network layer reported an error: %1").arg(message));
+    logging::error("[session] [gen={}] reader error, begin cleanup message={}",
+                   videoDecodeGeneration_,
+                   message.toUtf8().constData());
+    if (reader_ && reader_->isActive()) {
+        reader_->close();
+    }
+    clearQueuedVideoFramesAndClock();
+    invalidateVideoDecodeGeneration("reader error");
+    stopVideoDecodeWorker();
 }
 
 void LivePlayerSession::handleReaderFinished()
@@ -306,16 +349,201 @@ void LivePlayerSession::handleReaderFinished()
 
     setState(SessionState::Stopped, "Live stream finished.");
     appendInfoLog("HTTP-FLV reader finished.");
+    logging::info("[session] [gen={}] reader finished, begin cleanup", videoDecodeGeneration_);
+    clearQueuedVideoFramesAndClock();
+    invalidateVideoDecodeGeneration("reader finished");
+    stopVideoDecodeWorker();
+}
+
+void LivePlayerSession::startRenderTimer()
+{
+    if (!renderTimer_ || renderTimer_->isActive()) {
+        return;
+    }
+
+    renderTimer_->start();
+    logging::info("[session] [gen={}] render timer started interval={}ms",
+                  videoDecodeGeneration_,
+                  kRenderTickIntervalMs);
+}
+
+void LivePlayerSession::stopRenderTimer()
+{
+    if (!renderTimer_ || !renderTimer_->isActive()) {
+        return;
+    }
+
+    renderTimer_->stop();
+    logging::info("[session] [gen={}] render timer stopped", videoDecodeGeneration_);
+}
+
+void LivePlayerSession::clearQueuedVideoFramesAndClock()
+{
+    stopRenderTimer();
+    videoFrameQueue_.clear();
+    firstVideoFrameQueued_ = false;
+    firstVideoFrameSubmittedToRender_ = false;
+    firstQueuedVideoPtsMs_ = -1;
+    playbackStartWallClock_ = std::chrono::steady_clock::time_point{};
+}
+
+qint64 LivePlayerSession::sessionElapsedMs() const
+{
+    if (sessionOpenStartedAt_.time_since_epoch().count() == 0) {
+        return 0;
+    }
+
+    return std::chrono::duration_cast<std::chrono::milliseconds>(
+               std::chrono::steady_clock::now() - sessionOpenStartedAt_)
+        .count();
+}
+
+qint64 LivePlayerSession::currentTargetVideoPtsMs() const
+{
+    if (firstQueuedVideoPtsMs_ < 0 || playbackStartWallClock_.time_since_epoch().count() == 0) {
+        return -1;
+    }
+
+    const qint64 elapsedMs = std::chrono::duration_cast<std::chrono::milliseconds>(
+                                 std::chrono::steady_clock::now() - playbackStartWallClock_)
+                                 .count();
+    return firstQueuedVideoPtsMs_ + elapsedMs;
+}
+
+void LivePlayerSession::onRenderTick()
+{
+    if (videoFrameQueue_.empty()) {
+        return;
+    }
+
+    const qint64 targetPtsMs = currentTargetVideoPtsMs();
+    if (targetPtsMs < 0) {
+        return;
+    }
+
+    logging::debug("[render] [gen={}] targetPts={} depth={}",
+                   videoDecodeGeneration_,
+                   targetPtsMs,
+                   videoFrameQueue_.size());
+
+    dropLateQueuedVideoFrames(targetPtsMs);
+    tryRenderNextQueuedVideoFrame(targetPtsMs);
+}
+
+void LivePlayerSession::dropLateQueuedVideoFrames(qint64 targetPtsMs)
+{
+    while (!videoFrameQueue_.empty()) {
+        const QueuedVideoFrame &queuedFrame = videoFrameQueue_.front();
+        if (queuedFrame.generation != videoDecodeGeneration_) {
+            logging::debug("[render] [gen={}] drop stale generation frame frame_gen={} current_gen={} pts={} depth={}",
+                           videoDecodeGeneration_,
+                           queuedFrame.generation,
+                           videoDecodeGeneration_,
+                           queuedFrame.ptsMs,
+                           videoFrameQueue_.size());
+            videoFrameQueue_.popFront();
+            continue;
+        }
+
+        if (queuedFrame.ptsMs < 0) {
+            logging::debug("[render] [gen={}] drop invalid pts frame pts={} depth={}",
+                           videoDecodeGeneration_,
+                           queuedFrame.ptsMs,
+                           videoFrameQueue_.size());
+            videoFrameQueue_.popFront();
+            continue;
+        }
+
+        if (videoFrameQueue_.size() <= 1) {
+            return;
+        }
+
+        const qint64 lateMs = targetPtsMs - queuedFrame.ptsMs;
+        if (lateMs <= kLateVideoFrameDropThresholdMs) {
+            return;
+        }
+
+        logging::debug("[render] [gen={}] drop stale frame pts={} targetPts={} lateMs={} depth={}",
+                       videoDecodeGeneration_,
+                       queuedFrame.ptsMs,
+                       targetPtsMs,
+                       lateMs,
+                       videoFrameQueue_.size());
+        videoFrameQueue_.popFront();
+    }
+}
+
+void LivePlayerSession::tryRenderNextQueuedVideoFrame(qint64 targetPtsMs)
+{
+    if (videoFrameQueue_.empty()) {
+        return;
+    }
+
+    const QueuedVideoFrame &queuedFrame = videoFrameQueue_.front();
+    if (queuedFrame.generation != videoDecodeGeneration_) {
+        logging::debug("[render] [gen={}] drop stale generation frame frame_gen={} current_gen={} pts={} depth={}",
+                       videoDecodeGeneration_,
+                       queuedFrame.generation,
+                       videoDecodeGeneration_,
+                       queuedFrame.ptsMs,
+                       videoFrameQueue_.size());
+        videoFrameQueue_.popFront();
+        return;
+    }
+
+    if (queuedFrame.ptsMs < 0) {
+        logging::debug("[render] [gen={}] drop invalid pts frame pts={} depth={}",
+                       videoDecodeGeneration_,
+                       queuedFrame.ptsMs,
+                       videoFrameQueue_.size());
+        videoFrameQueue_.popFront();
+        return;
+    }
+
+    if (queuedFrame.ptsMs > targetPtsMs) {
+        logging::debug("[render] [gen={}] wait frame pts={} targetPts={} earlyMs={} depth={}",
+                       videoDecodeGeneration_,
+                       queuedFrame.ptsMs,
+                       targetPtsMs,
+                       queuedFrame.ptsMs - targetPtsMs,
+                       videoFrameQueue_.size());
+        return;
+    }
+
+    logging::debug("[render] [gen={}] show frame pts={} targetPts={} lateMs={} depth={}",
+                   videoDecodeGeneration_,
+                   queuedFrame.ptsMs,
+                   targetPtsMs,
+                   targetPtsMs - queuedFrame.ptsMs,
+                   videoFrameQueue_.size());
+    if (!firstVideoFrameSubmittedToRender_) {
+        firstVideoFrameSubmittedToRender_ = true;
+        appendInfoLog("Timer-driven live render submitted its first video frame.");
+        logging::info("[session] [gen={}] first frame submitted to render pts={} elapsed={}ms",
+                      videoDecodeGeneration_,
+                      queuedFrame.ptsMs,
+                      sessionElapsedMs());
+    }
+
+    handleDecodedVideoFrame(queuedFrame.frame.get());
+    videoFrameQueue_.popFront();
 }
 
 void LivePlayerSession::resetPlaybackResources(bool clearState)
 {
+    logging::info("[session] [gen={}] resetPlaybackResources begin clear_state={} reader_active={} worker_present={}",
+                  videoDecodeGeneration_,
+                  clearState,
+                  reader_ && reader_->isActive(),
+                  static_cast<bool>(videoDecodeWorker_));
     if (reader_ && reader_->isActive()) {
         reader_->close();
     }
 
+    clearQueuedVideoFramesAndClock();
+    invalidateVideoDecodeGeneration(clearState ? "session destroy/reset clear state" : "session reset for stop/open");
+    stopVideoDecodeWorker();
     demuxer_.reset();
-    videoDecoder_.reset();
     resetVideoConverter();
 
     if (videoSurface_) {
@@ -326,6 +554,90 @@ void LivePlayerSession::resetPlaybackResources(bool clearState)
         currentUrl_.clear();
         state_ = SessionState::Idle;
     }
+}
+
+void LivePlayerSession::startVideoDecodeWorker()
+{
+    stopVideoDecodeWorker();
+
+    videoDecodeWorker_ = std::make_unique<LiveVideoDecodeWorker>(videoDecodeGeneration_);
+    logging::info("[session] [gen={}] startVideoDecodeWorker create worker", videoDecodeGeneration_);
+    videoDecodeWorker_->setLogCallback([this](const QString &message, quint64 generation) {
+        QMetaObject::invokeMethod(this,
+                                  [this, message, generation]() {
+                                      appendWorkerLog(message, generation);
+                                  },
+                                  Qt::QueuedConnection);
+    });
+    videoDecodeWorker_->setErrorCallback([this](const QString &message, quint64 generation) {
+        QMetaObject::invokeMethod(this,
+                                  [this, message, generation]() {
+                                      handleWorkerDecodeError(message, generation);
+                                  },
+                                  Qt::QueuedConnection);
+    });
+    videoDecodeWorker_->setFrameReadyCallback([this](const LiveVideoDecodeWorker::FramePtr &frame,
+                                                     qint64 ptsMs,
+                                                     quint64 generation) {
+        QMetaObject::invokeMethod(this,
+                                  [this, frame, ptsMs, generation]() {
+                                      handleWorkerDecodedVideoFrame(frame, ptsMs, generation);
+                                  },
+                                  Qt::QueuedConnection);
+    });
+    videoDecodeWorker_->start();
+
+    appendInfoLog("Video decode worker started. The session thread now only demuxes and enqueues video tags.");
+}
+
+void LivePlayerSession::stopVideoDecodeWorker()
+{
+    if (!videoDecodeWorker_) {
+        logging::debug("[session] [gen={}] stopVideoDecodeWorker skipped because worker is null", videoDecodeGeneration_);
+        return;
+    }
+
+    logging::info("[session] [gen={}] stopVideoDecodeWorker begin", videoDecodeGeneration_);
+    videoDecodeWorker_->stop();
+    videoDecodeWorker_.reset();
+    logging::info("[session] [gen={}] stopVideoDecodeWorker finished", videoDecodeGeneration_);
+}
+
+void LivePlayerSession::invalidateVideoDecodeGeneration(const char *reason)
+{
+    const quint64 previousGeneration = videoDecodeGeneration_;
+    ++videoDecodeGeneration_;
+    logging::info("[session] generation switch {} -> {} reason={}",
+                  previousGeneration,
+                  videoDecodeGeneration_,
+                  reason ? reason : "unknown");
+}
+
+bool LivePlayerSession::enqueueVideoTag(const protocol::FlvTag &tag)
+{
+    if (!videoDecodeWorker_) {
+        appendErrorLog("Video decode worker is not available. The session cannot consume video tags asynchronously.");
+        logging::error("[session] [gen={}] enqueueVideoTag failed because worker is null tag_ts={}ms",
+                       videoDecodeGeneration_,
+                       tag.timestampMs);
+        return false;
+    }
+
+    logging::debug("[session] [gen={}] enqueueVideoTag tag_ts={}ms payload={} codec={} keyframe={}",
+                   videoDecodeGeneration_,
+                   tag.timestampMs,
+                   tag.payload.size(),
+                   tag.videoCodecId,
+                   tag.isKeyframe);
+    if (!videoDecodeWorker_->enqueueTag(tag)) {
+        appendErrorLog("Video tag queue rejected a video tag. The decode worker is stopping or already stopped.");
+        logging::warn("[session] [gen={}] enqueueVideoTag rejected by worker tag_ts={}ms",
+                      videoDecodeGeneration_,
+                      tag.timestampMs);
+        return false;
+    }
+
+    return true;
 }
 
 void LivePlayerSession::appendInfoLog(const QString &message)
@@ -349,6 +661,20 @@ void LivePlayerSession::appendErrorLog(const QString &message)
     emit logMessage(message);
 }
 
+void LivePlayerSession::appendWorkerLog(const QString &message, quint64 generation)
+{
+    if (generation != videoDecodeGeneration_) {
+        logging::debug("[session] [gen={}] drop stale worker log from gen={} message={}",
+                       videoDecodeGeneration_,
+                       generation,
+                       message.toUtf8().constData());
+        return;
+    }
+
+    logging::debug("[session] [gen={}] accept worker log: {}", generation, message.toUtf8().constData());
+    appendInfoLog(message);
+}
+
 void LivePlayerSession::resetCounters()
 {
     bytesReceived_ = 0;
@@ -361,7 +687,8 @@ void LivePlayerSession::resetCounters()
     firstScriptTagObserved_ = false;
     audioSequenceHeaderObserved_ = false;
     videoSequenceHeaderObserved_ = false;
-    firstVideoFrameDecoded_ = false;
+    firstVideoFrameQueued_ = false;
+    firstVideoFrameSubmittedToRender_ = false;
     audioDecodeTodoLogged_ = false;
     emit statsChanged(bytesReceived_, audioTagCount_, videoTagCount_, scriptTagCount_);
 }
@@ -376,6 +703,10 @@ void LivePlayerSession::setState(SessionState state, const QString &message)
     } else {
         spdlog::info("[live/session] state={} message={}", sessionStateName(state_), utf8Message.constData());
     }
+    logging::info("[session] [gen={}] state={} message={}",
+                  videoDecodeGeneration_,
+                  sessionStateName(state_),
+                  message.toUtf8().constData());
 
     emit stateChanged(state_, message);
 }
@@ -441,21 +772,17 @@ bool LivePlayerSession::drainParsedTags()
                         .arg(tag.timestampMs));
             }
 
-            decode::VideoDecodeReport report;
-            if (!videoDecoder_.pushTag(tag, report)) {
-                const QString errorMessage = videoDecoder_.lastError().isEmpty()
-                    ? QString("FFmpeg video decode failed after receiving %1 video tags.").arg(videoTagCount_)
-                    : videoDecoder_.lastError();
-                setState(SessionState::Error, errorMessage);
-                appendErrorLog("Video decoder bridge reported a fatal error.");
+            // Stage 1 threading only adds an async boundary here:
+            // the session thread demuxes tags, and the decode worker thread owns FFmpeg video decode.
+            if (!enqueueVideoTag(tag)) {
+                setState(SessionState::Error,
+                         QString("Failed to enqueue video tag after receiving %1 video tags.").arg(videoTagCount_));
+                appendErrorLog("Video decode worker rejected a video tag.");
+                logging::error("[session] [gen={}] failed to enqueue video tag_count={} tag_ts={}ms",
+                               videoDecodeGeneration_,
+                               videoTagCount_,
+                               tag.timestampMs);
                 return false;
-            }
-
-            if (report.frameDecoded && !firstVideoFrameDecoded_) {
-                firstVideoFrameDecoded_ = true;
-                setState(SessionState::Playing,
-                         "First H.264 frame decoded through your chunk/tag + FFmpeg path. TODO(user): add AAC decode, audio output, and A/V sync.");
-                appendInfoLog("Manual live video path reached the first decoded frame.");
             }
             break;
         }
@@ -471,6 +798,93 @@ bool LivePlayerSession::drainParsedTags()
     }
 
     return true;
+}
+
+void LivePlayerSession::handleWorkerDecodeError(const QString &message, quint64 generation)
+{
+    if (generation != videoDecodeGeneration_) {
+        logging::debug("[session] [gen={}] drop stale worker error from gen={} message={}",
+                       videoDecodeGeneration_,
+                       generation,
+                       message.toUtf8().constData());
+        return;
+    }
+
+    setState(SessionState::Error, message);
+    appendErrorLog("Video decode worker reported a fatal error.");
+    logging::error("[session] [gen={}] worker fatal error accepted message={}",
+                   generation,
+                   message.toUtf8().constData());
+
+    if (reader_ && reader_->isActive()) {
+        reader_->close();
+    }
+
+    clearQueuedVideoFramesAndClock();
+    invalidateVideoDecodeGeneration("worker fatal error");
+    stopVideoDecodeWorker();
+}
+
+void LivePlayerSession::handleWorkerDecodedVideoFrame(
+    const std::shared_ptr<AVFrame> &frame,
+    qint64 ptsMs,
+    quint64 generation)
+{
+    if (generation != videoDecodeGeneration_ || !frame) {
+        if (frame) {
+            logging::debug("[session] [gen={}] drop stale worker frame from gen={} pts={}ms",
+                           videoDecodeGeneration_,
+                           generation,
+                           ptsMs);
+        }
+        return;
+    }
+
+    logging::debug("[session] [gen={}] receive worker frame pts={}ms width={} height={}",
+                   generation,
+                   ptsMs,
+                   frame->width,
+                   frame->height);
+    if (ptsMs < 0) {
+        logging::debug("[frame_queue] [gen={}] drop invalid pts frame pts={} elapsed={}ms",
+                       generation,
+                       ptsMs,
+                       sessionElapsedMs());
+        return;
+    }
+
+    const qint64 enqueueWallClockMs = steadyNowMs();
+    auto droppedFrame = videoFrameQueue_.enqueue(QueuedVideoFrame{
+        frame,
+        ptsMs,
+        enqueueWallClockMs,
+        generation,
+    });
+    if (droppedFrame.has_value()) {
+        logging::debug("[frame_queue] [gen={}] drop oldest on overflow pts={} depth={}",
+                       generation,
+                       droppedFrame->ptsMs,
+                       videoFrameQueue_.size());
+    }
+
+    logging::debug("[frame_queue] [gen={}] enqueue pts={} depth={} elapsed={}ms",
+                   generation,
+                   ptsMs,
+                   videoFrameQueue_.size(),
+                   sessionElapsedMs());
+
+    if (!firstVideoFrameQueued_) {
+        firstVideoFrameQueued_ = true;
+        firstQueuedVideoPtsMs_ = ptsMs;
+        playbackStartWallClock_ = std::chrono::steady_clock::now();
+        setState(SessionState::Playing,
+                 "First decoded video frame entered VideoFrameQueue. Timer-driven render now drives pure-video playback. TODO(user): add AAC decode, audio output, and A/V sync.");
+        appendInfoLog("Manual live video path queued its first decoded frame for timer-driven render.");
+        logging::info("[session] [gen={}] first frame queued pts={} elapsed={}ms",
+                      generation,
+                      ptsMs,
+                      sessionElapsedMs());
+    }
 }
 
 void LivePlayerSession::handleDecodedVideoFrame(const AVFrame *frame)
@@ -556,9 +970,11 @@ void LivePlayerSession::handleDecodedVideoFrame(const AVFrame *frame)
         return;
     }
 
+    // Use Qt::AutoConnection here so the common same-thread path stays direct,
+    // while a future cross-thread surface handoff is still protected.
     QMetaObject::invokeMethod(videoSurface_.data(),
                               "presentFrame",
-                              Qt::QueuedConnection,
+                              Qt::AutoConnection,
                               Q_ARG(int, frameWidth),
                               Q_ARG(int, frameHeight),
                               Q_ARG(QByteArray, planeY),

@@ -41,7 +41,7 @@ namespace backend::liveplayer::service
         connect(session_, &backend::liveplayer::session::LivePlayerSession::logMessage,
                 this, &LivePlayerController::sessionLogAppended);
         connect(session_, &backend::liveplayer::session::LivePlayerSession::statsChanged,
-                this, &LivePlayerController::streamStatsChanged);
+                this, &LivePlayerController::streamStatsChanged);// 直接转发session的日志和统计信号，供上层UI展示
     }
 
     LivePlayerController::PlaybackState LivePlayerController::playbackState() const

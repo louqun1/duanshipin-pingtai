@@ -52,7 +52,9 @@ void StreamPage::buildUi()
     contentLayout->setSpacing(20);
 
     auto *previewPanel = new QFrame(this);
-    previewPanel->setMinimumSize(640, 420);
+    // Let the main window honor smaller initial widths. We only keep the vertical
+    // floor here, and let the horizontal size be controlled by the layout stretch.
+    previewPanel->setMinimumHeight(360);
     previewPanel->setStyleSheet(
         "background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #111827, stop:1 #0f766e);"
         "border-radius: 26px;");
@@ -73,7 +75,7 @@ void StreamPage::buildUi()
     previewLayout->addWidget(previewHint);
 
     videoViewport_ = new QFrame(previewPanel);
-    videoViewport_->setMinimumHeight(260);
+    videoViewport_->setMinimumHeight(220);
     videoViewport_->setStyleSheet(
         "background: rgba(15, 23, 42, 0.88);"
         "border: 1px solid rgba(226, 232, 240, 0.18);"
@@ -88,7 +90,7 @@ void StreamPage::buildUi()
     viewportLayout->addWidget(viewportTitle);
 
     liveVideoSurface_ = new VideoOpenGLWidget(videoViewport_);
-    liveVideoSurface_->setMinimumHeight(240);
+    liveVideoSurface_->setMinimumHeight(200);
     liveVideoSurface_->setStyleSheet(
         "background: rgba(2, 6, 23, 0.96);"
         "border-radius: 14px;");
@@ -105,7 +107,7 @@ void StreamPage::buildUi()
     contentLayout->addWidget(previewPanel, 2);
 
     auto *sidePanel = new QFrame(this);
-    sidePanel->setMinimumWidth(320);
+    sidePanel->setMinimumWidth(260);
     sidePanel->setStyleSheet(
         "background: #ffffff;"
         "border: 1px solid #dbe4f0;"
@@ -129,13 +131,14 @@ void StreamPage::buildUi()
     streamLabel->setStyleSheet("font-size: 12px; font-weight: 700; color: #0f172a;");
     sideLayout->addWidget(streamLabel);
 
-    streamUrlEdit_ = new QLineEdit("http://192.168.99.128:8080/live/room1.flv", sidePanel);
-    streamUrlEdit_->setPlaceholderText("http://192.168.99.128:8080/live/room1.flv");
+    streamUrlEdit_ = new QLineEdit("http://192.168.99.128:18080/live/livestream.flv", sidePanel);
+    streamUrlEdit_->setPlaceholderText("http://192.168.99.128:18080/live/livestream.flv");
     streamUrlEdit_->setStyleSheet(
         "padding: 10px 12px;"
         "border: 1px solid #cbd5e1;"
         "border-radius: 12px;"
-        "background: #f8fafc;");
+        "background: #f8fafc;"
+        "color: #333333;");
     sideLayout->addWidget(streamUrlEdit_);
 
     auto *buttonRow = new QHBoxLayout();
@@ -232,7 +235,7 @@ void StreamPage::buildUi()
         "padding: 12px;"
         "background: #0f172a;"
         "color: #e2e8f0;");
-    logOutput_->setMinimumHeight(180);
+    logOutput_->setMinimumHeight(140);
     logLayout->addWidget(logOutput_);
 
     layout->addWidget(logPanel);

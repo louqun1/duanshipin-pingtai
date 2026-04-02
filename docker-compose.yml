@@ -1,0 +1,47 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: vod-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root123456
+      MYSQL_DATABASE: vod_platform
+      MYSQL_USER: vod_user
+      MYSQL_PASSWORD: vod_pass_123
+      TZ: Asia/Shanghai
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    ports:
+      - "3307:3306"
+
+  redis:
+    image: redis:7
+    container_name: vod-redis
+    restart: unless-stopped
+    ports:
+      - "6380:6379"
+
+  minio:
+    image: minio/minio:latest
+    container_name: vod-minio
+    restart: unless-stopped
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin123
+      TZ: Asia/Shanghai
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - ./data/minio:/data
+
+  srs:
+    image: ossrs/srs:5
+    container_name: vod-srs
+    restart: unless-stopped
+    command: ./objs/srs -c conf/http.flv.live.conf
+    ports:
+      - "1935:1935"
+      - "1985:1985"
+      - "18080:8080"

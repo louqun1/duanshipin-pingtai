@@ -18,6 +18,7 @@
 #include <QNetworkRequest>
 #include <QProgressBar>
 #include <QPushButton>
+#include <QScrollArea>
 #include <QTextEdit>
 #include <QUrl>
 #include <QVBoxLayout>
@@ -68,7 +69,20 @@ void UploadPage::setAuthToken(const QString &token)
 
 void UploadPage::buildUi()
 {
-    auto *layout = new QVBoxLayout(this);
+    auto *rootLayout = new QVBoxLayout(this);
+    rootLayout->setContentsMargins(0, 0, 0, 0);
+    rootLayout->setSpacing(0);
+
+    auto *scrollArea = new QScrollArea(this);
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setFrameShape(QFrame::NoFrame);
+    scrollArea->setStyleSheet("background: transparent; border: none;");
+    rootLayout->addWidget(scrollArea);
+
+    auto *content = new QWidget(scrollArea);
+    scrollArea->setWidget(content);
+
+    auto *layout = new QVBoxLayout(content);
     layout->setContentsMargins(32, 28, 32, 28);
     layout->setSpacing(20);
 
@@ -171,7 +185,7 @@ void UploadPage::buildUi()
 
     descriptionEdit_ = new QTextEdit(formPanel);
     descriptionEdit_->setPlaceholderText("Optional description shown in the API response and future detail views");
-    descriptionEdit_->setMinimumHeight(120);
+    descriptionEdit_->setMinimumHeight(96);
     descriptionEdit_->setStyleSheet(
         "QTextEdit {"
         "  color: #0f172a;"
@@ -240,7 +254,7 @@ void UploadPage::buildUi()
     contentLayout->addWidget(formPanel, 3);
 
     auto *notesPanel = new QFrame(this);
-    notesPanel->setMinimumWidth(320);
+    notesPanel->setMinimumWidth(260);
     notesPanel->setStyleSheet(
         "background: #ffffff;"
         "border: 1px solid #dbe4f0;"

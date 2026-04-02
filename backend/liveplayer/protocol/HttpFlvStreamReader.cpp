@@ -29,15 +29,15 @@ void HttpFlvStreamReader::open(const QUrl &url)
     request.setRawHeader("Accept", "*/*");
 
     headersObserved_ = false;
-    activeReply_ = networkManager_->get(request);
+    activeReply_ = networkManager_->get(request);//请求发出后会触发QNetworkReply的metaDataChanged、readyRead、finished、errorOccurred等信号，分别对应HTTP响应头到达、数据块到达、请求完成和请求错误事件。
 
     emit logMessage(QString("HTTP-FLV GET %1").arg(url.toString()));
 
-    connect(activeReply_, &QNetworkReply::metaDataChanged,
+    connect(activeReply_, &QNetworkReply::metaDataChanged,//HTTP响应头到达事件，表示服务器已经发送了响应头，客户端可以通过QNetworkReply的header()函数获取响应头信息，如Content-Type、Content-Length等。
             this, &HttpFlvStreamReader::handleMetaDataChanged);
-    connect(activeReply_, &QIODevice::readyRead,
+    connect(activeReply_, &QIODevice::readyRead,//数据块到达事件，表示服务器已经发送了一部分响应体数据，客户端可以通过QNetworkReply的read()或readAll()函数读取这些数据块。
             this, &HttpFlvStreamReader::handleReadyRead);
-    connect(activeReply_, &QNetworkReply::finished,
+    connect(activeReply_, &QNetworkReply::finished,//请求完成事件，表示服务器已经完成了响应的发送，客户端可以通过QNetworkReply的isFinished()函数检查请求是否完成，并进行相应的处理，如关闭连接、释放资源等。
             this, &HttpFlvStreamReader::handleFinished);
     connect(activeReply_, &QNetworkReply::errorOccurred,
             this, [this](QNetworkReply::NetworkError) {

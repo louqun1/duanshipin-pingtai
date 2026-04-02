@@ -18,11 +18,16 @@ add_library(ServoBackend STATIC
     controller/auth/AuthController.cpp
     liveplayer/decode/FlvVideoDecoder.hpp
     liveplayer/decode/FlvVideoDecoder.cpp
+    liveplayer/logging/LiveWatchLogger.hpp
+    liveplayer/logging/LiveWatchLogger.cpp
     liveplayer/protocol/FlvTypes.hpp
     liveplayer/protocol/FlvDemuxer.hpp
     liveplayer/protocol/FlvDemuxer.cpp
     liveplayer/protocol/HttpFlvStreamReader.hpp
     liveplayer/protocol/HttpFlvStreamReader.cpp
+    liveplayer/session/LiveVideoDecodeWorker.hpp
+    liveplayer/session/LiveVideoDecodeWorker.cpp
+    liveplayer/session/VideoFrameQueue.hpp
     liveplayer/session/LivePlayerSession.hpp
     liveplayer/session/LivePlayerSession.cpp
     liveplayer/service/LivePlayerController.hpp

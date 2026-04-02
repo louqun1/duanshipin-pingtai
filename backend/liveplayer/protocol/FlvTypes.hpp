@@ -29,11 +29,11 @@ struct FlvTag {
 };
 
 struct FlvFeedReport {
-    bool headerValidated = false;
-    int audioTags = 0;
-    int videoTags = 0;
-    int scriptTags = 0;
-    int parsedTagCount = 0;
+    bool headerValidated = false;//是否已经成功解析了FLV文件头，只有在headerValidated为true时，才会继续解析后续的FLV标签数据。
+    int audioTags = 0;//已经成功解析的音频标签数量。
+    int videoTags = 0;//已经成功解析的视频标签数量。
+    int scriptTags = 0;//已经成功解析的脚本标签数量。
+    int parsedTagCount = 0;//本次数据块中成功解析的标签总数量，包括音频、视频和脚本标签。
 };
 
 }  // namespace backend::liveplayer::protocol
