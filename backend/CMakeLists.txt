@@ -1,4 +1,8 @@
 add_library(ServoBackend STATIC
+    liveplayer/audio/SdlAudioOutput.hpp
+    liveplayer/audio/SdlAudioOutput.cpp
+    liveplayer/decode/FlvAudioDecoder.hpp
+    liveplayer/decode/FlvAudioDecoder.cpp
     domain/user/User.hpp
     domain/session/Session.hpp
     repository/user/UserRepository.hpp
@@ -25,6 +29,8 @@ add_library(ServoBackend STATIC
     liveplayer/protocol/FlvDemuxer.cpp
     liveplayer/protocol/HttpFlvStreamReader.hpp
     liveplayer/protocol/HttpFlvStreamReader.cpp
+    liveplayer/session/LiveAudioDecodeWorker.hpp
+    liveplayer/session/LiveAudioDecodeWorker.cpp
     liveplayer/session/LiveVideoDecodeWorker.hpp
     liveplayer/session/LiveVideoDecodeWorker.cpp
     liveplayer/session/VideoFrameQueue.hpp

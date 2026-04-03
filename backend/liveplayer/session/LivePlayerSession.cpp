@@ -1,6 +1,8 @@
 #include "liveplayer/session/LivePlayerSession.hpp"
 
+#include "liveplayer/audio/SdlAudioOutput.hpp"
 #include "liveplayer/logging/LiveWatchLogger.hpp"
+#include "liveplayer/session/LiveAudioDecodeWorker.hpp"
 #include "liveplayer/session/LiveVideoDecodeWorker.hpp"
 #include "liveplayer/protocol/FlvTypes.hpp"
 #include "liveplayer/protocol/HttpFlvStreamReader.hpp"
@@ -164,12 +166,16 @@ bool isFullRangeSource(AVPixelFormat sourceFormat, AVColorRange colorRange)
 constexpr int kRenderTickIntervalMs = 10;
 constexpr qint64 kLateVideoFrameDropThresholdMs = 80;
 constexpr int kStartupMinBufferedFrameDepth = 5;
-constexpr qint64 kStartupMinBufferedDurationMs = 200;
-constexpr qint64 kFutureQueueRetentionWindowMs = 220;
+constexpr qint64 kStartupMinBufferedDurationMs = 300;
+constexpr qint64 kStartupMinBufferedDurationWithMinDepthMs = 200;
+constexpr qint64 kFutureQueueRetentionWindowMs = 320;
 constexpr qint64 kFutureQueueLeadThresholdMs = 160;
 constexpr qint64 kReanchorFutureLeadMs = 80;
 constexpr int kReanchorWaitThreshold = 8;
 constexpr int kReanchorOverflowThreshold = 3;
+constexpr qint64 kReanchorFastPathFrontLeadMs = 300;
+constexpr qint64 kReanchorFastPathBackLeadMs = 300;
+constexpr int kReanchorFastPathWaitThreshold = 2;
 constexpr qint64 kReanchorCooldownMs = 400;
 constexpr qint64 kPlaybackSnapshotLogIntervalMs = 200;
 constexpr int kRenderWaitLogEvery = 5;
@@ -186,6 +192,7 @@ qint64 steadyNowMs()
 LivePlayerSession::LivePlayerSession(QObject *parent)
     : QObject(parent)
     , reader_(new protocol::HttpFlvStreamReader(this))
+    , audioOutput_(std::make_unique<audio::SdlAudioOutput>())
     , renderTimer_(new QTimer(this))
 {
     renderTimer_->setTimerType(Qt::PreciseTimer);
@@ -203,6 +210,17 @@ LivePlayerSession::LivePlayerSession(QObject *parent)
             this, [this](const QString &message) {
                 appendInfoLog(message);
             });
+    audioOutput_->setLogCallback([this](const QString &message, bool warning) {
+        QMetaObject::invokeMethod(this,
+                                  [this, message, warning]() {
+                                      if (warning) {
+                                          appendWarnLog(message);
+                                      } else {
+                                          appendInfoLog(message);
+                                      }
+                                  },
+                                  Qt::QueuedConnection);
+    });
 }
 
 LivePlayerSession::~LivePlayerSession()
@@ -240,6 +258,7 @@ void LivePlayerSession::open(const QString &url)
                   currentUrlUtf8.constData(),
                   sessionStateName(previousState),
                   previousUrlUtf8.constData());
+    startAudioDecodeWorker();
     startVideoDecodeWorker();
 
     if (videoSurface_) {
@@ -247,10 +266,11 @@ void LivePlayerSession::open(const QString &url)
     }
 
     setState(SessionState::Connecting, QString("Opening %1").arg(currentUrl_));
-    appendInfoLog("Data flow 1/3: QNetworkReply::readyRead -> QByteArray chunk.");
-    appendInfoLog("Data flow 2/3: FlvDemuxer::pushBytes -> FLV tag header + payload.");
-    appendInfoLog("Data flow 3/3: video tag -> VideoTagQueue -> LiveVideoDecodeWorker -> VideoFrameQueue -> render tick -> VideoOpenGLWidget.");
-    appendInfoLog("Current milestone only adds the minimal pure-video frame queue, playback clock, QTimer render tick, and stale-frame drop. AAC, audio output, packet queue, and A/V sync stay as TODO(user).");
+    appendInfoLog("Data flow 1/4: QNetworkReply::readyRead -> QByteArray chunk.");
+    appendInfoLog("Data flow 2/4: FlvDemuxer::pushBytes -> FLV tag header + payload.");
+    appendInfoLog("Data flow 3/4: audio tag -> AudioTagQueue -> LiveAudioDecodeWorker -> AAC decode -> PCM queue -> SDL audio callback.");
+    appendInfoLog("Data flow 4/4: video tag -> VideoTagQueue -> LiveVideoDecodeWorker -> VideoFrameQueue -> render tick -> VideoOpenGLWidget.");
+    appendInfoLog("Current milestone keeps the existing render tick and video frame queue. Audio now decodes and plays independently first, and video can follow audio clock when it becomes valid.");
     startRenderTimer();
     reader_->open(QUrl(currentUrl_));
 }
@@ -309,6 +329,7 @@ void LivePlayerSession::handleReaderDataChunk(const QByteArray &chunk)
         }
         clearQueuedVideoFramesAndClock();
         invalidateVideoDecodeGeneration("demux fatal error");
+        resetAudioPlaybackChain();
         stopVideoDecodeWorker();
         return;
     }
@@ -329,6 +350,7 @@ void LivePlayerSession::handleReaderDataChunk(const QByteArray &chunk)
         logging::error("[session] [gen={}] drainParsedTags failed, begin fatal cleanup", videoDecodeGeneration_);
         clearQueuedVideoFramesAndClock();
         invalidateVideoDecodeGeneration("drainParsedTags fatal cleanup");
+        resetAudioPlaybackChain();
         stopVideoDecodeWorker();
         return;
     }
@@ -348,6 +370,7 @@ void LivePlayerSession::handleReaderError(const QString &message)
     }
     clearQueuedVideoFramesAndClock();
     invalidateVideoDecodeGeneration("reader error");
+    resetAudioPlaybackChain();
     stopVideoDecodeWorker();
 }
 
@@ -362,6 +385,7 @@ void LivePlayerSession::handleReaderFinished()
     logging::info("[session] [gen={}] reader finished, begin cleanup", videoDecodeGeneration_);
     clearQueuedVideoFramesAndClock();
     invalidateVideoDecodeGeneration("reader finished");
+    resetAudioPlaybackChain();
     stopVideoDecodeWorker();
 }
 
@@ -396,12 +420,23 @@ void LivePlayerSession::clearQueuedVideoFramesAndClock()
     playbackStarted_ = false;
     firstObservedVideoPtsMs_ = -1;
     firstQueuedVideoPtsMs_ = -1;
+    lastRenderedVideoPtsMs_ = -1;
     consecutiveRenderWaitCount_ = 0;
     consecutiveQueueOverflowCount_ = 0;
     lastPlaybackSnapshotLogWallClockMs_ = 0;
     lastClockPendingLogWallClockMs_ = 0;
     lastPlaybackReanchorWallClockMs_ = 0;
+    lastAvDriftLogWallClockMs_ = 0;
+    audioClockMasterActiveLogged_ = false;
     playbackStartWallClock_ = std::chrono::steady_clock::time_point{};
+}
+
+void LivePlayerSession::resetAudioPlaybackChain()
+{
+    stopAudioDecodeWorker();
+    if (audioOutput_) {
+        audioOutput_->stop();
+    }
 }
 
 qint64 LivePlayerSession::sessionElapsedMs() const
@@ -422,8 +457,22 @@ bool LivePlayerSession::playbackClockStarted() const
         playbackStartWallClock_.time_since_epoch().count() != 0;
 }
 
-qint64 LivePlayerSession::currentTargetVideoPtsMs()
+qint64 LivePlayerSession::currentAudioClockPtsMs() const
 {
+    if (!audioOutput_) {
+        return -1;
+    }
+
+    const auto snapshot = audioOutput_->clockSnapshot();
+    return snapshot.valid ? snapshot.ptsMs : -1;
+}
+
+qint64 LivePlayerSession::currentTargetVideoPtsMs(qint64 audioClockPtsMs)
+{
+    if (playbackStarted_ && audioClockPtsMs >= 0) {
+        return audioClockPtsMs;
+    }
+
     if (!playbackClockStarted()) {
         const qint64 nowMs = steadyNowMs();
         if (!videoFrameQueue_.empty() &&
@@ -478,13 +527,16 @@ void LivePlayerSession::maybeStartBufferedPlayback()
 
     const int depth = videoFrameQueue_.size();
     const qint64 bufferedDurationMs = videoFrameQueue_.bufferedDurationMs();
-    if (depth < kStartupMinBufferedFrameDepth &&
-        bufferedDurationMs < kStartupMinBufferedDurationMs) {
-        logging::debug("[playback] [gen={}] startup_buffering depth={} bufferedMs={} minDepth={} minBufferedMs={} firstObservedPts={}",
+    const bool readyByDuration = bufferedDurationMs >= kStartupMinBufferedDurationMs;
+    const bool readyByDepthWindow = depth >= kStartupMinBufferedFrameDepth &&
+        bufferedDurationMs >= kStartupMinBufferedDurationWithMinDepthMs;
+    if (!readyByDuration && !readyByDepthWindow) {
+        logging::debug("[playback] [gen={}] startup_buffering depth={} bufferedMs={} minDepth={} minDepthBufferedMs={} minBufferedMs={} firstObservedPts={}",
                        videoDecodeGeneration_,
                        depth,
                        bufferedDurationMs,
                        kStartupMinBufferedFrameDepth,
+                       kStartupMinBufferedDurationWithMinDepthMs,
                        kStartupMinBufferedDurationMs,
                        firstObservedVideoPtsMs_);
         logPlaybackSnapshot("startup_buffering", -1, false);
@@ -502,15 +554,17 @@ void LivePlayerSession::maybeStartBufferedPlayback()
             .arg(depth)
             .arg(bufferedDurationMs));
     setState(SessionState::Playing,
-             QString("Startup buffer ready (depth=%1, buffered=%2 ms). Timer-driven pure-video playback started. TODO(user): add AAC decode, audio output, and A/V sync.")
+             QString("Startup buffer ready (depth=%1, buffered=%2 ms). Render tick keeps driving video; target pts will follow audio clock when audio starts playing.")
                  .arg(depth)
                  .arg(bufferedDurationMs));
-    logging::info("[playback] [gen={}] startup_playback_started anchorPts={} anchorWallClockMs={} depth={} bufferedMs={} firstObservedPts={} frontPts={} backPts={}",
+    logging::info("[playback] [gen={}] startup_playback_started anchorPts={} anchorWallClockMs={} depth={} bufferedMs={} readyByDuration={} readyByDepthWindow={} firstObservedPts={} frontPts={} backPts={}",
                   videoDecodeGeneration_,
                   firstQueuedVideoPtsMs_,
                   anchorWallClockMs,
                   depth,
                   bufferedDurationMs,
+                  readyByDuration,
+                  readyByDepthWindow,
                   firstObservedVideoPtsMs_,
                   videoFrameQueue_.front().ptsMs,
                   videoFrameQueue_.back().ptsMs);
@@ -527,12 +581,22 @@ void LivePlayerSession::trimQueuedVideoFramesForPlaybackWindow(qint64 referenceT
         referenceTargetPtsMs = videoFrameQueue_.front().ptsMs;
     }
 
+    const auto audioClockSnapshot = audioOutput_
+        ? audioOutput_->clockSnapshot()
+        : audio::SdlAudioOutput::ClockSnapshot{};
+    const qint64 frontPtsBeforeTrimMs = videoFrameQueue_.front().ptsMs;
+    const qint64 backPtsBeforeTrimMs = videoFrameQueue_.back().ptsMs;
+    const int depthBeforeTrim = videoFrameQueue_.size();
+    const qint64 bufferedBeforeTrimMs = videoFrameQueue_.bufferedDurationMs();
     const qint64 minRetainPtsMs = referenceTargetPtsMs - kLateVideoFrameDropThresholdMs;
     const qint64 maxRetainPtsMs = referenceTargetPtsMs + kFutureQueueRetentionWindowMs;
+    const qint64 nonNegativeMinRetainPtsMs = minRetainPtsMs < 0 ? 0 : minRetainPtsMs;
     int droppedTooOldCount = 0;
     int droppedTooFutureCount = 0;
     qint64 firstDroppedPtsMs = -1;
     qint64 lastDroppedPtsMs = -1;
+    bool trimmedByDepthLimit = false;
+    bool trimmedByFutureWindow = false;
 
     auto noteDropped = [&](qint64 ptsMs) {
         if (firstDroppedPtsMs < 0) {
@@ -560,6 +624,7 @@ void LivePlayerSession::trimQueuedVideoFramesForPlaybackWindow(qint64 referenceT
         const QueuedVideoFrame &futureFrame = videoFrameQueue_.back();
         noteDropped(futureFrame.ptsMs);
         ++droppedTooFutureCount;
+        trimmedByDepthLimit = true;
         videoFrameQueue_.popBack();
     }
 
@@ -570,6 +635,7 @@ void LivePlayerSession::trimQueuedVideoFramesForPlaybackWindow(qint64 referenceT
             const QueuedVideoFrame &futureFrame = videoFrameQueue_.back();
             noteDropped(futureFrame.ptsMs);
             ++droppedTooFutureCount;
+            trimmedByFutureWindow = true;
             videoFrameQueue_.popBack();
         }
     }
@@ -580,6 +646,55 @@ void LivePlayerSession::trimQueuedVideoFramesForPlaybackWindow(qint64 referenceT
     }
 
     ++consecutiveQueueOverflowCount_;
+    const qint64 frontPtsAfterTrimMs = videoFrameQueue_.empty() ? -1 : videoFrameQueue_.front().ptsMs;
+    const qint64 backPtsAfterTrimMs = videoFrameQueue_.empty() ? -1 : videoFrameQueue_.back().ptsMs;
+    const int depthAfterTrim = videoFrameQueue_.size();
+    const qint64 bufferedAfterTrimMs = videoFrameQueue_.empty() ? 0 : videoFrameQueue_.bufferedDurationMs();
+    const qint64 firstDroppedLeadVsTargetMs = firstDroppedPtsMs >= 0
+        ? firstDroppedPtsMs - referenceTargetPtsMs
+        : -1;
+    const qint64 lastDroppedLeadVsTargetMs = lastDroppedPtsMs >= 0
+        ? lastDroppedPtsMs - referenceTargetPtsMs
+        : -1;
+    const qint64 firstDroppedLeadVsAudioMs = (firstDroppedPtsMs >= 0 && audioClockSnapshot.valid)
+        ? firstDroppedPtsMs - audioClockSnapshot.ptsMs
+        : -1;
+    const qint64 lastDroppedLeadVsAudioMs = (lastDroppedPtsMs >= 0 && audioClockSnapshot.valid)
+        ? lastDroppedPtsMs - audioClockSnapshot.ptsMs
+        : -1;
+    logging::debug("[frame_queue] [gen={}] trim_detail trigger={} cause=too_old:{} depth_limit:{} future_window:{} refTargetPts={} audioClockPts={} frontPtsBefore={} backPtsBefore={} frontPtsAfter={} backPtsAfter={} frontLeadVsTargetMs={} backLeadVsTargetMs={} frontLeadVsAudioMs={} backLeadVsAudioMs={} keepWindowRaw=[{},{}] keepWindowNonNegative=[{},{}] droppedTooOld={} droppedTooFuture={} firstDroppedPts={} lastDroppedPts={} firstDroppedLeadVsTargetMs={} lastDroppedLeadVsTargetMs={} firstDroppedLeadVsAudioMs={} lastDroppedLeadVsAudioMs={} depthBefore={} depthAfter={} bufferedBeforeMs={} bufferedAfterMs={} overflowStreak={}",
+                   videoDecodeGeneration_,
+                   reason ? reason : "unknown",
+                   droppedTooOldCount > 0,
+                   trimmedByDepthLimit,
+                   trimmedByFutureWindow,
+                   referenceTargetPtsMs,
+                   audioClockSnapshot.valid ? audioClockSnapshot.ptsMs : -1,
+                   frontPtsBeforeTrimMs,
+                   backPtsBeforeTrimMs,
+                   frontPtsAfterTrimMs,
+                   backPtsAfterTrimMs,
+                   frontPtsBeforeTrimMs - referenceTargetPtsMs,
+                   backPtsBeforeTrimMs - referenceTargetPtsMs,
+                   audioClockSnapshot.valid ? frontPtsBeforeTrimMs - audioClockSnapshot.ptsMs : -1,
+                   audioClockSnapshot.valid ? backPtsBeforeTrimMs - audioClockSnapshot.ptsMs : -1,
+                   minRetainPtsMs,
+                   maxRetainPtsMs,
+                   nonNegativeMinRetainPtsMs,
+                   maxRetainPtsMs,
+                   droppedTooOldCount,
+                   droppedTooFutureCount,
+                   firstDroppedPtsMs,
+                   lastDroppedPtsMs,
+                   firstDroppedLeadVsTargetMs,
+                   lastDroppedLeadVsTargetMs,
+                   firstDroppedLeadVsAudioMs,
+                   lastDroppedLeadVsAudioMs,
+                   depthBeforeTrim,
+                   depthAfterTrim,
+                   bufferedBeforeTrimMs,
+                   bufferedAfterTrimMs,
+                   consecutiveQueueOverflowCount_);
     logging::debug("[frame_queue] [gen={}] trim reason={} refTargetPts={} keepWindow=[{},{}] droppedTooOld={} droppedTooFuture={} firstDroppedPts={} lastDroppedPts={} depth={} bufferedMs={} overflowStreak={}",
                    videoDecodeGeneration_,//trime reason 的打印是为了帮助开发者理解为什么在当前时刻需要丢弃某些帧，以及这些帧的时间戳分布情况。这对于调试和优化播放体验非常有用，尤其是在处理直播流时，帧的及时性和顺序性对用户体验至关重要。
                    reason ? reason : "unknown", //triming reasion 修剪原因
@@ -607,16 +722,24 @@ qint64 LivePlayerSession::maybeReanchorPlaybackClock(qint64 targetPtsMs)
         nowMs - lastPlaybackReanchorWallClockMs_ < kReanchorCooldownMs) {
         return targetPtsMs;
     }
-
-    const qint64 frontLeadMs = videoFrameQueue_.front().ptsMs - targetPtsMs;
+    //frontLeadMs是队列中最早帧的时间戳与当前播放时间点之间的差距，backLeadMs是队列中最晚帧的时间戳与当前播放时间点之间的差距。这些差距可以帮助判断当前播放时间点是否过早（frontLeadMs过小）或过晚（backLeadMs过小），以及是否需要重新调整播放时钟（re-anchor）以保持视频播放的流畅性和同步性。
+    const qint64 frontLeadMs = videoFrameQueue_.front().ptsMs - targetPtsMs;//frontLeadMs 和 backLeadMs 的计算是为了评估当前播放时间点与队列中最早和最晚帧的时间戳之间的差距。这些差距可以帮助判断是否需要重新调整播放时钟（re-anchor），以保持视频播放的流畅性和同步性。
     const qint64 backLeadMs = videoFrameQueue_.back().ptsMs - targetPtsMs;
-    if (frontLeadMs < kFutureQueueLeadThresholdMs ||
-        backLeadMs < kFutureQueueRetentionWindowMs ||
-        consecutiveRenderWaitCount_ < kReanchorWaitThreshold ||
-        consecutiveQueueOverflowCount_ < kReanchorOverflowThreshold) {
+    const bool normalReanchorReady =
+        frontLeadMs >= kFutureQueueLeadThresholdMs &&
+        backLeadMs >= kFutureQueueRetentionWindowMs &&
+        consecutiveRenderWaitCount_ >= kReanchorWaitThreshold &&
+        consecutiveQueueOverflowCount_ >= kReanchorOverflowThreshold;
+    const bool fastPathReanchorReady =
+        frontLeadMs >= kReanchorFastPathFrontLeadMs &&
+        backLeadMs >= kReanchorFastPathBackLeadMs &&
+        consecutiveRenderWaitCount_ >= kReanchorFastPathWaitThreshold &&
+        videoFrameQueue_.size() >= kStartupMinBufferedFrameDepth;
+    if (!normalReanchorReady && !fastPathReanchorReady) {
         return targetPtsMs;
     }
 
+    const char *reanchorReason = fastPathReanchorReady ? "fast_path" : "wait_overflow";
     const qint64 previousAnchorPtsMs = firstQueuedVideoPtsMs_;
     const qint64 newTargetPtsMs = videoFrameQueue_.front().ptsMs - kReanchorFutureLeadMs;
     firstQueuedVideoPtsMs_ = newTargetPtsMs;
@@ -624,13 +747,15 @@ qint64 LivePlayerSession::maybeReanchorPlaybackClock(qint64 targetPtsMs)
     lastPlaybackReanchorWallClockMs_ = nowMs;
 
     appendWarnLog(
-        QString("Playback clock re-anchored after repeated early-frame waits. target %1 -> %2, front=%3, back=%4.")
+        QString("Playback clock re-anchored (%1). target %2 -> %3, front=%4, back=%5.")
+            .arg(reanchorReason)
             .arg(targetPtsMs)
             .arg(newTargetPtsMs)
             .arg(videoFrameQueue_.front().ptsMs)
             .arg(videoFrameQueue_.back().ptsMs));
-    logging::warn("[playback] [gen={}] reanchor oldTargetPts={} newTargetPts={} oldAnchorPts={} anchorWallClockMs={} frontPts={} backPts={} frontLeadMs={} backLeadMs={} waitStreak={} overflowStreak={} futureLeadMs={}",
+    logging::warn("[playback] [gen={}] reanchor reason={} oldTargetPts={} newTargetPts={} oldAnchorPts={} anchorWallClockMs={} frontPts={} backPts={} frontLeadMs={} backLeadMs={} waitStreak={} overflowStreak={} futureLeadMs={}",
                   videoDecodeGeneration_,
+                  reanchorReason,
                   targetPtsMs,
                   newTargetPtsMs,
                   previousAnchorPtsMs,
@@ -655,15 +780,50 @@ void LivePlayerSession::onRenderTick()
         return;
     }
 
-    qint64 targetPtsMs = currentTargetVideoPtsMs();
+    const auto audioClockSnapshot = audioOutput_
+        ? audioOutput_->clockSnapshot()
+        : audio::SdlAudioOutput::ClockSnapshot{};
+    const bool usingAudioMaster = playbackStarted_ && audioClockSnapshot.valid;
+    if (usingAudioMaster && !audioClockMasterActiveLogged_) {
+        audioClockMasterActiveLogged_ = true;
+        appendInfoLog("Audio clock is active. Render tick still drives video, but target video pts now follows audio clock.");
+    }
+
+    qint64 targetPtsMs = currentTargetVideoPtsMs(audioClockSnapshot.valid ? audioClockSnapshot.ptsMs : -1);
     if (targetPtsMs < 0) {
         logPlaybackSnapshot("render_tick_wait_startup", targetPtsMs, false);
         return;
     }
 
+    const qint64 nowMs = steadyNowMs();
+    if (audioClockSnapshot.valid &&
+        nowMs - lastAvDriftLogWallClockMs_ >= kPlaybackSnapshotLogIntervalMs) {
+        lastAvDriftLogWallClockMs_ = nowMs;
+        const qint64 frontVideoPtsMs = videoFrameQueue_.empty() ? -1 : videoFrameQueue_.front().ptsMs;
+        const qint64 backVideoPtsMs = videoFrameQueue_.empty() ? -1 : videoFrameQueue_.back().ptsMs;
+        logging::debug("[av_sync] [gen={}] targetPts={} audioClockPts={} targetVsAudioMs={} usingAudioMaster={} frontVideoPts={} frontVsAudioMs={} backVideoPts={} backVsAudioMs={} lastShownVideoPts={} lastShownVsAudioMs={} audioQueueBytes={} audioQueueMs={} videoDepth={} videoBufferedMs={}",
+                       videoDecodeGeneration_,
+                       targetPtsMs,
+                       audioClockSnapshot.ptsMs,
+                       targetPtsMs - audioClockSnapshot.ptsMs,
+                       usingAudioMaster,
+                       frontVideoPtsMs,
+                       frontVideoPtsMs >= 0 ? frontVideoPtsMs - audioClockSnapshot.ptsMs : -1,
+                       backVideoPtsMs,
+                       backVideoPtsMs >= 0 ? backVideoPtsMs - audioClockSnapshot.ptsMs : -1,
+                       lastRenderedVideoPtsMs_,
+                       lastRenderedVideoPtsMs_ >= 0 ? lastRenderedVideoPtsMs_ - audioClockSnapshot.ptsMs : -1,
+                       audioClockSnapshot.queuedBytes,
+                       audioClockSnapshot.queuedDurationMs,
+                       videoFrameQueue_.size(),
+                       videoFrameQueue_.bufferedDurationMs());
+    }
+
     logPlaybackSnapshot("render_tick", targetPtsMs, false);
     dropLateQueuedVideoFrames(targetPtsMs);
-    targetPtsMs = maybeReanchorPlaybackClock(targetPtsMs);
+    if (!usingAudioMaster) {
+        targetPtsMs = maybeReanchorPlaybackClock(targetPtsMs);
+    }
     tryRenderNextQueuedVideoFrame(targetPtsMs);
 }
 
@@ -796,6 +956,7 @@ void LivePlayerSession::tryRenderNextQueuedVideoFrame(qint64 targetPtsMs)
                       sessionElapsedMs());
     }
 
+    lastRenderedVideoPtsMs_ = queuedFrame.ptsMs;
     handleDecodedVideoFrame(queuedFrame.frame.get());
     videoFrameQueue_.popFront();
 }
@@ -813,6 +974,7 @@ void LivePlayerSession::resetPlaybackResources(bool clearState)
 
     clearQueuedVideoFramesAndClock();
     invalidateVideoDecodeGeneration(clearState ? "session destroy/reset clear state" : "session reset for stop/open");
+    resetAudioPlaybackChain();
     stopVideoDecodeWorker();
     demuxer_.reset();
     resetVideoConverter();
@@ -825,6 +987,65 @@ void LivePlayerSession::resetPlaybackResources(bool clearState)
         currentUrl_.clear();
         state_ = SessionState::Idle;
     }
+}
+
+void LivePlayerSession::startAudioDecodeWorker()
+{
+    stopAudioDecodeWorker();
+    if (audioOutput_) {
+        audioOutput_->stop();
+    }
+
+    audioDecodeWorker_ = std::make_unique<LiveAudioDecodeWorker>(videoDecodeGeneration_);
+    logging::info("[session] [gen={}] startAudioDecodeWorker create worker", videoDecodeGeneration_);
+    audioDecodeWorker_->setLogCallback([this](const QString &message, quint64 generation) {
+        QMetaObject::invokeMethod(this,
+                                  [this, message, generation]() {
+                                      appendWorkerLog(message, generation);
+                                  },
+                                  Qt::QueuedConnection);
+    });
+    audioDecodeWorker_->setErrorCallback([this](const QString &message, quint64 generation) {
+        QMetaObject::invokeMethod(this,
+                                  [this, message, generation]() {
+                                      handleWorkerAudioDecodeError(message, generation);
+                                  },
+                                  Qt::QueuedConnection);
+    });
+    audioDecodeWorker_->setPcmReadyCallback([this](
+                                                QByteArray pcm,
+                                                qint64 ptsMs,
+                                                int sampleRate,
+                                                int channels,
+                                                int sampleCount,
+                                                quint64 generation) {
+        QMetaObject::invokeMethod(this,
+                                  [this, pcm, ptsMs, sampleRate, channels, sampleCount, generation]() {
+                                      handleWorkerDecodedAudioPcm(pcm,
+                                                                  ptsMs,
+                                                                  sampleRate,
+                                                                  channels,
+                                                                  sampleCount,
+                                                                  generation);
+                                  },
+                                  Qt::QueuedConnection);
+    });
+    audioDecodeWorker_->start();
+
+    appendInfoLog("Audio decode worker started. Audio tags now follow a sibling queue + worker path beside video.");
+}
+
+void LivePlayerSession::stopAudioDecodeWorker()
+{
+    if (!audioDecodeWorker_) {
+        logging::debug("[session] [gen={}] stopAudioDecodeWorker skipped because worker is null", videoDecodeGeneration_);
+        return;
+    }
+
+    logging::info("[session] [gen={}] stopAudioDecodeWorker begin", videoDecodeGeneration_);
+    audioDecodeWorker_->stop();
+    audioDecodeWorker_.reset();
+    logging::info("[session] [gen={}] stopAudioDecodeWorker finished", videoDecodeGeneration_);
 }
 
 void LivePlayerSession::startVideoDecodeWorker()
@@ -884,6 +1105,25 @@ void LivePlayerSession::invalidateVideoDecodeGeneration(const char *reason)
                   reason ? reason : "unknown");
 }
 
+bool LivePlayerSession::enqueueAudioTag(const protocol::FlvTag &tag)
+{
+    if (!audioDecodeWorker_) {
+        logging::warn("[audio_flow] [gen={}] enqueueAudioTag skipped because worker is null tag_ts={}ms",
+                      videoDecodeGeneration_,
+                      tag.timestampMs);
+        return false;
+    }
+
+    logging::debug("[audio_flow] [gen={}] enqueueAudioTag tag_ts={}ms payload={} format={} packet_type={} seq={}",
+                   videoDecodeGeneration_,
+                   tag.timestampMs,
+                   tag.payload.size(),
+                   tag.audioSoundFormat,
+                   tag.aacPacketType,
+                   tag.isSequenceHeader);
+    return audioDecodeWorker_->enqueueTag(tag);
+}
+
 bool LivePlayerSession::enqueueVideoTag(const protocol::FlvTag &tag)
 {
     if (!videoDecodeWorker_) {
@@ -909,6 +1149,21 @@ bool LivePlayerSession::enqueueVideoTag(const protocol::FlvTag &tag)
     }
 
     return true;
+}
+
+void LivePlayerSession::disableAudioPipeline(const QString &reason)
+{
+    if (audioPipelineFailed_) {
+        return;
+    }
+
+    audioPipelineFailed_ = true;
+    appendErrorLog(reason);
+    appendWarnLog("Audio pipeline disabled. The current session keeps the existing video path alive and falls back to the wall-clock video target.");
+    logging::error("[audio_flow] [gen={}] audio pipeline disabled reason={}",
+                   videoDecodeGeneration_,
+                   reason.toUtf8().constData());
+    resetAudioPlaybackChain();
 }
 
 void LivePlayerSession::appendInfoLog(const QString &message)
@@ -961,7 +1216,9 @@ void LivePlayerSession::resetCounters()
     firstVideoFrameQueued_ = false;
     firstVideoFrameSubmittedToRender_ = false;
     playbackStarted_ = false;
-    audioDecodeTodoLogged_ = false;
+    unsupportedAudioFormatLogged_ = false;
+    audioPipelineFailed_ = false;
+    audioClockMasterActiveLogged_ = false;
     firstObservedVideoPtsMs_ = -1;
     firstQueuedVideoPtsMs_ = -1;
     consecutiveRenderWaitCount_ = 0;
@@ -969,6 +1226,7 @@ void LivePlayerSession::resetCounters()
     lastPlaybackSnapshotLogWallClockMs_ = 0;
     lastClockPendingLogWallClockMs_ = 0;
     lastPlaybackReanchorWallClockMs_ = 0;
+    lastAvDriftLogWallClockMs_ = 0;
     emit statsChanged(bytesReceived_, audioTagCount_, videoTagCount_, scriptTagCount_);
 }
 
@@ -1012,22 +1270,42 @@ bool LivePlayerSession::drainParsedTags()
 
             if (!firstAudioTagObserved_) {
                 firstAudioTagObserved_ = true;
+                logging::info("[audio_flow] [gen={}] first audio tag observed ts={}ms payload={} format={}",
+                              videoDecodeGeneration_,
+                              tag.timestampMs,
+                              tag.payload.size(),
+                              tag.audioSoundFormat);
                 appendInfoLog(
-                    QString("First audio tag arrived at %1 ms, payload=%2 bytes, format=%3.")
+                    QString("first audio tag observed at %1 ms, payload=%2 bytes, format=%3.")
                         .arg(tag.timestampMs)
                         .arg(tag.payload.size())
                         .arg(audioFormatName(tag.audioSoundFormat)));
             }
 
+            if (tag.audioSoundFormat != 10) {
+                if (!unsupportedAudioFormatLogged_) {
+                    unsupportedAudioFormatLogged_ = true;
+                    appendWarnLog(
+                        QString("Audio format %1 is not wired in the live audio path yet. This milestone only forwards AAC tags into the decoder.")
+                            .arg(audioFormatName(tag.audioSoundFormat)));
+                }
+                break;
+            }
+
             if (tag.isSequenceHeader && !audioSequenceHeaderObserved_) {
                 audioSequenceHeaderObserved_ = true;
+                logging::info("[audio_flow] [gen={}] AAC sequence header received ts={}ms payload={}",
+                              videoDecodeGeneration_,
+                              tag.timestampMs,
+                              tag.payload.size());
                 appendInfoLog(
-                    QString("AAC sequence header observed at %1 ms. This is where your AAC decoder config should be initialized.")
+                    QString("AAC sequence header received at %1 ms. AudioSpecificConfig will be parsed and passed into the AAC decoder.")
                         .arg(tag.timestampMs));
-                appendInfoLog("TODO(user): create a sibling AAC decoder that feeds payload[2..] into FFmpeg instead of delegating audio to an existing black-box player.");
-            } else if (!audioDecodeTodoLogged_) {
-                audioDecodeTodoLogged_ = true;
-                appendInfoLog("TODO(user): audio tags are flowing. Next milestone is AAC decode, audio output, clocking, and A/V sync.");
+            }
+
+            if (!audioPipelineFailed_ && !enqueueAudioTag(tag)) {
+                disableAudioPipeline(
+                    QString("Audio tag queue rejected a live audio packet at %1 ms.").arg(tag.timestampMs));
             }
             break;
 
@@ -1079,6 +1357,54 @@ bool LivePlayerSession::drainParsedTags()
     return true;
 }
 
+void LivePlayerSession::handleWorkerAudioDecodeError(const QString &message, quint64 generation)
+{
+    if (generation != videoDecodeGeneration_) {
+        logging::debug("[audio_flow] [gen={}] drop stale audio worker error from gen={} message={}",
+                       videoDecodeGeneration_,
+                       generation,
+                       message.toUtf8().constData());
+        return;
+    }
+
+    disableAudioPipeline(QString("Audio decode worker stopped: %1").arg(message));
+}
+
+void LivePlayerSession::handleWorkerDecodedAudioPcm(
+    const QByteArray &pcm,
+    qint64 ptsMs,
+    int sampleRate,
+    int channels,
+    int sampleCount,
+    quint64 generation)
+{
+    if (generation != videoDecodeGeneration_ || audioPipelineFailed_) {
+        logging::debug("[audio_flow] [gen={}] drop stale PCM chunk from gen={} pts={}ms bytes={}",
+                       videoDecodeGeneration_,
+                       generation,
+                       ptsMs,
+                       pcm.size());
+        return;
+    }
+
+    if (!audioOutput_) {
+        disableAudioPipeline("Audio output is not available when a PCM chunk arrives.");
+        return;
+    }
+
+    logging::debug("[audio_flow] [gen={}] PCM ready pts={}ms pcm_bytes={} sample_rate={} channels={} samples={}",
+                   generation,
+                   ptsMs,
+                   pcm.size(),
+                   sampleRate,
+                   channels,
+                   sampleCount);
+    if (!audioOutput_->enqueuePcm(pcm, ptsMs, sampleRate, channels, sampleCount)) {
+        disableAudioPipeline(
+            QString("Failed to enqueue decoded PCM into SDL audio output at %1 ms.").arg(ptsMs));
+    }
+}
+
 void LivePlayerSession::handleWorkerDecodeError(const QString &message, quint64 generation)
 {
     if (generation != videoDecodeGeneration_) {
@@ -1101,6 +1427,7 @@ void LivePlayerSession::handleWorkerDecodeError(const QString &message, quint64 
 
     clearQueuedVideoFramesAndClock();
     invalidateVideoDecodeGeneration("worker fatal error");
+    resetAudioPlaybackChain();
     stopVideoDecodeWorker();
 }
 
@@ -1153,7 +1480,7 @@ void LivePlayerSession::handleWorkerDecodedVideoFrame(
     });
 
     const qint64 referenceTargetPtsMs = playbackClockStarted()
-        ? currentTargetVideoPtsMs()
+        ? currentTargetVideoPtsMs(currentAudioClockPtsMs())
         : videoFrameQueue_.front().ptsMs;
     trimQueuedVideoFramesForPlaybackWindow(referenceTargetPtsMs, "enqueue");
 

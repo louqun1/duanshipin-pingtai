@@ -21,7 +21,7 @@ struct QueuedVideoFrame
 class VideoFrameQueue final
 {
 public:
-    static constexpr int kDefaultMaxDepth = 10;
+    static constexpr int kDefaultMaxDepth = 20;
 
     explicit VideoFrameQueue(int maxDepth = kDefaultMaxDepth)
         : maxDepth_(maxDepth > 0 ? maxDepth : kDefaultMaxDepth)
