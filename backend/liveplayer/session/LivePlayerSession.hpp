@@ -9,6 +9,7 @@
 #include <QtGlobal>
 
 #include <chrono>
+#include <atomic>
 #include <memory>
 
 class QWidget;
@@ -87,6 +88,8 @@ private:
     bool enqueueAudioTag(const protocol::FlvTag &tag);
     bool enqueueVideoTag(const protocol::FlvTag &tag);
     void disableAudioPipeline(const QString &reason);
+    void updateDecodeBackpressure();
+    bool shouldThrottleIngress() const;
     void appendInfoLog(const QString &message);
     void appendWarnLog(const QString &message);
     void appendErrorLog(const QString &message);
@@ -101,7 +104,8 @@ private:
         int sampleRate,
         int channels,
         int sampleCount,
-        quint64 generation);
+        quint64 generation,
+        qint64 pcmDurationMs);
     void handleWorkerDecodeError(const QString &message, quint64 generation);
     void handleWorkerDecodedVideoFrame(
         const std::shared_ptr<AVFrame> &frame,
@@ -134,6 +138,9 @@ private:
     bool unsupportedAudioFormatLogged_ = false;
     bool audioPipelineFailed_ = false;
     bool audioClockMasterActiveLogged_ = false;
+    bool audioDecodeBackpressureActive_ = false;
+    bool videoDecodeBackpressureActive_ = false;
+    bool ingressBackpressureActive_ = false;
     quint64 videoDecodeGeneration_ = 0;
     std::chrono::steady_clock::time_point sessionOpenStartedAt_{};
     std::chrono::steady_clock::time_point playbackStartWallClock_{};
@@ -148,6 +155,9 @@ private:
     qint64 lastClockPendingLogWallClockMs_ = 0;
     qint64 lastPlaybackReanchorWallClockMs_ = 0;
     qint64 lastAvDriftLogWallClockMs_ = 0;
+    qint64 lastIngressBackpressureLogWallClockMs_ = 0;
+    std::atomic<qint64> pendingAudioPcmDurationMs_{0};
+    std::atomic<int> pendingAudioPcmCallbackCount_{0};
     SwsContext *videoScaleContext_ = nullptr;
 };
 

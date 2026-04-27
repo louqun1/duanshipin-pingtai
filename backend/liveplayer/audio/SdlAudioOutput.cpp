@@ -10,6 +10,9 @@ namespace backend::liveplayer::audio {
 
 namespace {
 
+constexpr int kPreferredAudioPacketSamples = 512;
+constexpr int kWantedAudioDeviceSamples = 512;
+
 qint64 steadyNowMs()
 {
     return std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -68,23 +71,41 @@ bool SdlAudioOutput::enqueuePcm(
             return false;
         }
 
-        queue_.push_back(QueuedPcmChunk{
-            pcm,
-            ptsMs,
-            0,
-            sampleRate,
-            channels,
-            sampleCount,
-            channels * static_cast<int>(sizeof(qint16)),
-            sampleRate * channels * static_cast<int>(sizeof(qint16)),
-        });
-        queuedBytes_ += pcm.size();
+        const int bytesPerFrame = channels * static_cast<int>(sizeof(qint16));
+        if (bytesPerFrame <= 0 || (pcm.size() % bytesPerFrame) != 0) {
+            logging::error("[audio_output] reject PCM chunk because bytes are not aligned bytes={} bytes_per_frame={}",
+                           pcm.size(),
+                           bytesPerFrame);
+            return false;
+        }
+
+        const int totalFrames = pcm.size() / bytesPerFrame;
+        const int packetFrames = std::max(1, std::min(kPreferredAudioPacketSamples, totalFrames));
+        int frameOffset = 0;
+        int packetCount = 0;
+        while (frameOffset < totalFrames) {
+            const int chunkFrames = std::min(packetFrames, totalFrames - frameOffset);
+            const int chunkBytes = chunkFrames * bytesPerFrame;
+            const qint64 chunkPtsMs = ptsMs + (static_cast<qint64>(frameOffset) * 1000) / sampleRate;
+            if (!enqueuePcmChunkLocked(pcm.mid(frameOffset * bytesPerFrame, chunkBytes),
+                                       chunkPtsMs,
+                                       sampleRate,
+                                       channels,
+                                       chunkFrames)) {
+                return false;
+            }
+            frameOffset += chunkFrames;
+            ++packetCount;
+        }
+
         shouldUnpause = deviceId_ != 0 && callbackCount_ == 0;
 
-        logging::debug("[audio_output] PCM chunk enqueued pts={}ms bytes={} samples={} queue_bytes={} queue_ms={}",
+        logging::debug("[audio_output] PCM packetized pts={}ms bytes={} samples={} packet_samples={} packets={} queue_bytes={} queue_ms={}",
                        ptsMs,
                        pcm.size(),
                        sampleCount,
+                       packetFrames,
+                       packetCount,
                        queuedBytes_,
                        queuedDurationMsLocked());
     }
@@ -93,6 +114,31 @@ bool SdlAudioOutput::enqueuePcm(
         SDL_PauseAudioDevice(deviceId_, 0);
     }
 
+    return true;
+}
+
+bool SdlAudioOutput::enqueuePcmChunkLocked(
+    const QByteArray &pcm,
+    qint64 ptsMs,
+    int sampleRate,
+    int channels,
+    int sampleCount)
+{
+    if (pcm.isEmpty() || sampleCount <= 0) {
+        return true;
+    }
+
+    queue_.push_back(QueuedPcmChunk{
+        pcm,
+        ptsMs,
+        0,
+        sampleRate,
+        channels,
+        sampleCount,
+        channels * static_cast<int>(sizeof(qint16)),
+        sampleRate * channels * static_cast<int>(sizeof(qint16)),
+    });
+    queuedBytes_ += pcm.size();
     return true;
 }
 
@@ -298,7 +344,7 @@ bool SdlAudioOutput::openDeviceIfNeeded(int sampleRate, int channels)
     wantedSpec.format = AUDIO_S16SYS;
     wantedSpec.channels = static_cast<Uint8>(channels);
     wantedSpec.silence = 0;
-    wantedSpec.samples = 2048;
+    wantedSpec.samples = kWantedAudioDeviceSamples;
     wantedSpec.callback = &SdlAudioOutput::sdlAudioCallback;
     wantedSpec.userdata = this;
 

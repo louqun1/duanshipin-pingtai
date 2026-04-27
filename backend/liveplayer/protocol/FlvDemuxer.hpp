@@ -15,7 +15,11 @@ public:
     void reset();
     bool pushBytes(const QByteArray &chunk, FlvFeedReport &report);
     bool takeNextTag(FlvTag &tag);
+    FlvTagType peekNextTagType() const;
+    bool takeNextTagOfType(FlvTagType type, FlvTag &tag);
     QString lastError() const;
+    int parsedTagCount() const;
+    int bufferedByteCount() const;
 
 private:
     bool parseFlvHeader(FlvFeedReport &report);

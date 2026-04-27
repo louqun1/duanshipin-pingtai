@@ -69,6 +69,15 @@ bool HttpFlvStreamReader::isActive() const
     return !activeReply_.isNull();
 }
 
+void HttpFlvStreamReader::setReadThrottled(bool throttled, qint64 bufferBytes)
+{
+    if (!activeReply_) {
+        return;
+    }
+
+    activeReply_->setReadBufferSize(throttled ? bufferBytes : 0);
+}
+
 void HttpFlvStreamReader::handleMetaDataChanged()
 {
     if (!activeReply_ || headersObserved_) {

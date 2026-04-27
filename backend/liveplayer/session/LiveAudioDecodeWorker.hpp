@@ -10,6 +10,7 @@
 #include <QtGlobal>
 
 #include <chrono>
+#include <atomic>
 #include <deque>
 #include <functional>
 
@@ -25,6 +26,7 @@ public:
     void stop();
     void reset();
     bool isStopped();
+    int size();
 
 private:
     quint64 generation_ = 0;
@@ -53,8 +55,10 @@ public:
     void setLogCallback(LogCallback callback);
     void setErrorCallback(ErrorCallback callback);
     void setPcmReadyCallback(PcmReadyCallback callback);
+    void setDecodeBackpressure(bool enabled, qint64 backlogDurationMs, qint64 deviceQueueDurationMs, qint64 pendingPcmDurationMs, int queuedTagCount);
 
     bool enqueueTag(const protocol::FlvTag &tag);
+    int queuedTagCount();
     void stop();
 
 protected:
@@ -70,6 +74,11 @@ private:
     LogCallback logCallback_;
     ErrorCallback errorCallback_;
     PcmReadyCallback pcmReadyCallback_;
+    std::atomic<bool> decodeBackpressureEnabled_{false};
+    std::atomic<qint64> decodeBackpressureBacklogMs_{0};
+    std::atomic<qint64> decodeBackpressureDeviceQueueMs_{0};
+    std::atomic<qint64> decodeBackpressurePendingPcmMs_{0};
+    std::atomic<int> decodeBackpressureQueuedTagCount_{0};
     bool firstFrameDecoded_ = false;
     std::chrono::steady_clock::time_point workerStartedAt_{};
 };

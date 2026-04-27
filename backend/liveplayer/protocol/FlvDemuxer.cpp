@@ -1,10 +1,13 @@
 #include "liveplayer/protocol/FlvDemuxer.hpp"
 
 #include <QtEndian>
+#include <algorithm>
 
 namespace backend::liveplayer::protocol {
 
 namespace {
+
+constexpr int kMaxParsedTagsBuffered = 24;
 
 quint32 readUint24BE(const uchar *data)
 {
@@ -55,7 +58,7 @@ bool FlvDemuxer::pushBytes(const QByteArray &chunk, FlvFeedReport &report)
         return true;
     }
 
-    while (buffer_.size() >= 15) {
+    while (buffer_.size() >= 15 && parsedTags_.size() < kMaxParsedTagsBuffered) {
         /**
          * @brief 将缓冲区数据转换为无符号字符指针
          * @details 标签头部至少需要11字节，加上后续的PreviousTagSize字段4字节，共15字节
@@ -144,9 +147,44 @@ bool FlvDemuxer::takeNextTag(FlvTag &tag)
     return true;
 }
 
+FlvTagType FlvDemuxer::peekNextTagType() const
+{
+    if (parsedTags_.empty()) {
+        return FlvTagType::Unknown;
+    }
+
+    return parsedTags_.front().type;
+}
+
+bool FlvDemuxer::takeNextTagOfType(FlvTagType type, FlvTag &tag)
+{
+    const auto it = std::find_if(parsedTags_.begin(),
+                                 parsedTags_.end(),
+                                 [type](const FlvTag &candidate) {
+                                     return candidate.type == type;
+                                 });
+    if (it == parsedTags_.end()) {
+        return false;
+    }
+
+    tag = std::move(*it);
+    parsedTags_.erase(it);
+    return true;
+}
+
 QString FlvDemuxer::lastError() const
 {
     return lastError_;
+}
+
+int FlvDemuxer::parsedTagCount() const
+{
+    return static_cast<int>(parsedTags_.size());
+}
+
+int FlvDemuxer::bufferedByteCount() const
+{
+    return buffer_.size();
 }
 
 bool FlvDemuxer::parseFlvHeader(FlvFeedReport &report)

@@ -19,6 +19,7 @@ public:
     void open(const QUrl &url);
     void close();
     bool isActive() const;
+    void setReadThrottled(bool throttled, qint64 bufferBytes);
 
 signals:
     void connected(const QString &contentType, int statusCode);

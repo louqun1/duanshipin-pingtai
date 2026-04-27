@@ -57,6 +57,12 @@ private:
     qint64 queuedDurationMsLocked() const;
     qint64 clockPtsForOffsetLocked(const QueuedPcmChunk &chunk) const;
     qint64 outputLatencyMsLocked() const;
+    bool enqueuePcmChunkLocked(
+        const QByteArray &pcm,
+        qint64 ptsMs,
+        int sampleRate,
+        int channels,
+        int sampleCount);
     void emitLog(const QString &message, bool warning) const;
 
     mutable std::mutex mutex_;

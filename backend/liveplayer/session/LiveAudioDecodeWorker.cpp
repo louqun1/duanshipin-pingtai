@@ -95,6 +95,12 @@ bool AudioTagQueue::isStopped()
     return stopped_;
 }
 
+int AudioTagQueue::size()
+{
+    QMutexLocker locker(&mutex_);
+    return static_cast<int>(queue_.size());
+}
+
 LiveAudioDecodeWorker::LiveAudioDecodeWorker(quint64 generation, QObject *parent)
     : QThread(parent)
     , generation_(generation)
@@ -161,9 +167,28 @@ void LiveAudioDecodeWorker::setPcmReadyCallback(PcmReadyCallback callback)
     pcmReadyCallback_ = std::move(callback);
 }
 
+void LiveAudioDecodeWorker::setDecodeBackpressure(
+    bool enabled,
+    qint64 backlogDurationMs,
+    qint64 deviceQueueDurationMs,
+    qint64 pendingPcmDurationMs,
+    int queuedTagCount)
+{
+    decodeBackpressureEnabled_.store(enabled);
+    decodeBackpressureBacklogMs_.store(backlogDurationMs);
+    decodeBackpressureDeviceQueueMs_.store(deviceQueueDurationMs);
+    decodeBackpressurePendingPcmMs_.store(pendingPcmDurationMs);
+    decodeBackpressureQueuedTagCount_.store(queuedTagCount);
+}
+
 bool LiveAudioDecodeWorker::enqueueTag(const protocol::FlvTag &tag)
 {
     return queue_.enqueue(tag);
+}
+
+int LiveAudioDecodeWorker::queuedTagCount()
+{
+    return queue_.size();
 }
 
 void LiveAudioDecodeWorker::stop()
@@ -185,7 +210,34 @@ void LiveAudioDecodeWorker::run()
     logging::info("[audio_worker] [gen={}] worker thread started", generation_);
 
     protocol::FlvTag tag;
-    while (queue_.waitAndPop(tag)) {
+    bool decodeBackpressureLogged = false;
+    while (true) {
+        while (!queue_.isStopped() && decodeBackpressureEnabled_.load()) {
+            if (!decodeBackpressureLogged) {
+                decodeBackpressureLogged = true;
+                logging::debug("[audio_worker] [gen={}] decode_backpressure on backlog_ms={} device_queue_ms={} pending_pcm_ms={} queued_tags={}",
+                               generation_,
+                               decodeBackpressureBacklogMs_.load(),
+                               decodeBackpressureDeviceQueueMs_.load(),
+                               decodeBackpressurePendingPcmMs_.load(),
+                               decodeBackpressureQueuedTagCount_.load());
+            }
+            QThread::msleep(5);
+        }
+        if (decodeBackpressureLogged) {
+            decodeBackpressureLogged = false;
+            logging::debug("[audio_worker] [gen={}] decode_backpressure off backlog_ms={} device_queue_ms={} pending_pcm_ms={} queued_tags={}",
+                           generation_,
+                           decodeBackpressureBacklogMs_.load(),
+                           decodeBackpressureDeviceQueueMs_.load(),
+                           decodeBackpressurePendingPcmMs_.load(),
+                           decodeBackpressureQueuedTagCount_.load());
+        }
+
+        if (!queue_.waitAndPop(tag)) {
+            break;
+        }
+
         logging::debug("[audio_worker] [gen={}] decode tag_ts={}ms payload={} packet_type={} seq={}",
                        generation_,
                        tag.timestampMs,

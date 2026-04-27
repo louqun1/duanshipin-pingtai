@@ -182,6 +182,9 @@ public:
         sonicStreamStruct *audio_speed_convert = nullptr;
         int max_frame_duration = 3600;
         // 统计相关的操作
+        bool logged_first_audio_packet_ = false;
+        bool logged_first_video_packet_ = false;
+        bool logged_demux_backpressure_ = false;
     };
     inline static void ffp_notify_msg1(FFPlayer *ffp, int what)
     {
