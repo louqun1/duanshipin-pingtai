@@ -45,3 +45,15 @@ services:
       - "1935:1935"
       - "1985:1985"
       - "18080:8080"
+
+  coturn:
+    image: coturn/coturn:4.10.0-r1-alpine
+    container_name: vod-coturn
+    restart: unless-stopped
+    network_mode: host
+    command:
+      - -c
+      - /etc/coturn/turnserver.conf
+    volumes:
+      - ./ops/coturn/turnserver.conf:/etc/coturn/turnserver.conf:ro
+      - ./data/coturn:/var/lib/coturn
