@@ -98,7 +98,7 @@ func main() {
 		database:     database,
 		mediaStorage: mediaStorage,
 		events:       newEventBroker(),
-		probeSignals: newProbeSignalHub(),
+		probeSignals: newProbeSignalHub(database),
 	}
 
 	mux := http.NewServeMux()
@@ -107,6 +107,8 @@ func main() {
 	mux.HandleFunc("/api/auth/logout", server.handleLogout)
 	mux.HandleFunc("/api/me", server.handleMe)
 	mux.HandleFunc("/api/events", server.handleEvents)
+	mux.HandleFunc("/api/live-rooms", server.handleLiveRooms)
+	mux.HandleFunc("/api/live-rooms/", server.handleLiveRoomRoute)
 	mux.HandleFunc("/api/videos", server.handleVideos)
 	mux.HandleFunc("/api/videos/upload", server.handleVideoUpload)
 	mux.HandleFunc("/api/videos/", server.handleVideoDetail)

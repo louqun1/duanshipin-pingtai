@@ -41,6 +41,56 @@ func EnsureSchema(ctx context.Context, database *sql.DB) error {
 			CONSTRAINT fk_video_likes_video_id FOREIGN KEY (video_id) REFERENCES videos(id) ON DELETE CASCADE,
 			CONSTRAINT fk_video_likes_user_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 		)`,
+		`CREATE TABLE IF NOT EXISTS live_rooms (
+			id BIGINT PRIMARY KEY AUTO_INCREMENT,
+			room_key VARCHAR(64) NOT NULL UNIQUE,
+			owner_user_id BIGINT NOT NULL,
+			title VARCHAR(128) NULL,
+			status VARCHAR(32) NOT NULL DEFAULT 'live',
+			created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+			INDEX idx_live_rooms_owner_user_id (owner_user_id),
+			INDEX idx_live_rooms_status (status),
+			CONSTRAINT fk_live_rooms_owner_user_id FOREIGN KEY (owner_user_id) REFERENCES users(id) ON DELETE CASCADE
+		)`,
+		`CREATE TABLE IF NOT EXISTS live_room_presences (
+			room_id BIGINT NOT NULL,
+			user_id BIGINT NOT NULL,
+			role VARCHAR(32) NOT NULL,
+			is_online TINYINT(1) NOT NULL DEFAULT 1,
+			joined_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			last_seen_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			left_at TIMESTAMP NULL DEFAULT NULL,
+			PRIMARY KEY (room_id, user_id),
+			INDEX idx_live_room_presences_user_id (user_id),
+			INDEX idx_live_room_presences_online (room_id, is_online, last_seen_at),
+			CONSTRAINT fk_live_room_presences_room_id FOREIGN KEY (room_id) REFERENCES live_rooms(id) ON DELETE CASCADE,
+			CONSTRAINT fk_live_room_presences_user_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+		)`,
+		`CREATE TABLE IF NOT EXISTS linkmic_requests (
+			id BIGINT PRIMARY KEY AUTO_INCREMENT,
+			request_id VARCHAR(128) NOT NULL UNIQUE,
+			room_id BIGINT NOT NULL,
+			request_type VARCHAR(32) NOT NULL,
+			state VARCHAR(32) NOT NULL,
+			initiator_user_id BIGINT NOT NULL,
+			target_user_id BIGINT NOT NULL,
+			accepted_by_user_id BIGINT NULL,
+			ended_by_user_id BIGINT NULL,
+			metadata_json TEXT NULL,
+			created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+			responded_at TIMESTAMP NULL DEFAULT NULL,
+			ended_at TIMESTAMP NULL DEFAULT NULL,
+			INDEX idx_linkmic_requests_room_state (room_id, state, updated_at),
+			INDEX idx_linkmic_requests_initiator_user_id (initiator_user_id),
+			INDEX idx_linkmic_requests_target_user_id (target_user_id),
+			CONSTRAINT fk_linkmic_requests_room_id FOREIGN KEY (room_id) REFERENCES live_rooms(id) ON DELETE CASCADE,
+			CONSTRAINT fk_linkmic_requests_initiator_user_id FOREIGN KEY (initiator_user_id) REFERENCES users(id) ON DELETE CASCADE,
+			CONSTRAINT fk_linkmic_requests_target_user_id FOREIGN KEY (target_user_id) REFERENCES users(id) ON DELETE CASCADE,
+			CONSTRAINT fk_linkmic_requests_accepted_by_user_id FOREIGN KEY (accepted_by_user_id) REFERENCES users(id) ON DELETE SET NULL,
+			CONSTRAINT fk_linkmic_requests_ended_by_user_id FOREIGN KEY (ended_by_user_id) REFERENCES users(id) ON DELETE SET NULL
+		)`,
 	}
 
 	for _, statement := range statements {
