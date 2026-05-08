@@ -98,7 +98,7 @@ func main() {
 		database:     database,
 		mediaStorage: mediaStorage,
 		events:       newEventBroker(),
-		probeSignals: newProbeSignalHub(database),
+		probeSignals: newProbeSignalHub(database, cfg.PublicSignalingURL),
 	}
 
 	mux := http.NewServeMux()

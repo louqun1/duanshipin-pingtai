@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -24,6 +25,13 @@ const (
 	linkMicRequestStateRejected  = "rejected"
 	linkMicRequestStateCancelled = "cancelled"
 	linkMicRequestStateEnded     = "ended"
+
+	crossRoomLinkMicSessionStatusPending   = "pending"
+	crossRoomLinkMicSessionStatusAccepted  = "accepted"
+	crossRoomLinkMicSessionStatusRejected  = "rejected"
+	crossRoomLinkMicSessionStatusCancelled = "cancelled"
+	crossRoomLinkMicSessionStatusConnected = "connected"
+	crossRoomLinkMicSessionStatusEnded     = "ended"
 
 	liveRoomPresenceFreshWindow = 2 * time.Minute
 )
@@ -48,7 +56,8 @@ type liveRoomApplyRequest struct {
 }
 
 type liveRoomInviteRequest struct {
-	TargetUserID int64 `json:"targetUserId"`
+	TargetRoomKey string `json:"targetRoomKey"`
+	TargetUserID  int64  `json:"targetUserId"`
 }
 
 type liveRoomRespondRequest struct {
@@ -138,15 +147,38 @@ type linkMicRequestResponse struct {
 }
 
 type rtcJoinParamsResponse struct {
-	Transport         string `json:"transport"`
-	RoomName          string `json:"roomName"`
-	ParticipantRole   string `json:"participantRole"`
-	SignalingURL      string `json:"signalingUrl"`
-	RequestID         string `json:"requestId"`
-	RequestType       string `json:"requestType"`
-	ControllerUserID  int64  `json:"controllerUserId"`
-	ParticipantUserID int64  `json:"participantUserId"`
+	SessionID    string           `json:"sessionId"`
+	RequestID    string           `json:"requestId"`
+	RoomAKey     string           `json:"roomAKey"`
+	RoomBKey     string           `json:"roomBKey"`
+	SelfRoomKey  string           `json:"selfRoomKey"`
+	PeerRoomKey  string           `json:"peerRoomKey"`
+	SelfUserID   string           `json:"selfUserId"`
+	PeerUserID   string           `json:"peerUserId"`
+	BusinessRole string           `json:"businessRole"`
+	RTCRole      string           `json:"rtcRole"`
+	SignalingURL string           `json:"signalingUrl"`
+	IceServers   []map[string]any `json:"iceServers"`
+	RTCBackend   string           `json:"rtcBackend"`
+	MediaMode    string           `json:"mediaMode"`
+	Metadata     map[string]any   `json:"metadata,omitempty"`
 }
+
+type CrossRoomLinkMicSession struct {
+	SessionID     string    `json:"sessionId"`
+	RequestID     string    `json:"requestId,omitempty"`
+	RoomAKey      string    `json:"roomAKey"`
+	RoomBKey      string    `json:"roomBKey"`
+	AnchorAUserID int64     `json:"anchorAUserId"`
+	AnchorBUserID int64     `json:"anchorBUserId"`
+	InviterUserID int64     `json:"inviterUserId"`
+	InviteeUserID int64     `json:"inviteeUserId"`
+	Status        string    `json:"status"`
+	CreatedAt     time.Time `json:"createdAt"`
+	UpdatedAt     time.Time `json:"updatedAt"`
+}
+
+type crossRoomLinkMicSessionSnapshot = CrossRoomLinkMicSession
 
 type liveRoomResponse struct {
 	ID                int64                    `json:"id"`
@@ -1249,6 +1281,50 @@ func (s *apiServer) findLatestRequestResponseByID(ctx context.Context, roomID in
 	return toLinkMicRequestResponse(*row)
 }
 
+func buildCrossRoomRTCJoinParams(session CrossRoomLinkMicSession, selfRoomKey string, selfUserID int64, signalingURL string) *rtcJoinParamsResponse {
+	selfRoomKey = normalizeLiveRoomKey(selfRoomKey)
+	if session.SessionID == "" || session.RequestID == "" || selfRoomKey == "" || selfUserID <= 0 {
+		return nil
+	}
+
+	peerRoomKey := ""
+	peerUserID := int64(0)
+	switch {
+	case selfRoomKey == session.RoomAKey && selfUserID == session.AnchorAUserID:
+		peerRoomKey = session.RoomBKey
+		peerUserID = session.AnchorBUserID
+	case selfRoomKey == session.RoomBKey && selfUserID == session.AnchorBUserID:
+		peerRoomKey = session.RoomAKey
+		peerUserID = session.AnchorAUserID
+	default:
+		return nil
+	}
+
+	businessRole := "invitee"
+	rtcRole := "answerer"
+	if selfUserID == session.InviterUserID {
+		businessRole = "inviter"
+		rtcRole = "offerer"
+	}
+
+	return &rtcJoinParamsResponse{
+		SessionID:    session.SessionID,
+		RequestID:    session.RequestID,
+		RoomAKey:     session.RoomAKey,
+		RoomBKey:     session.RoomBKey,
+		SelfRoomKey:  selfRoomKey,
+		PeerRoomKey:  peerRoomKey,
+		SelfUserID:   strconv.FormatInt(selfUserID, 10),
+		PeerUserID:   strconv.FormatInt(peerUserID, 10),
+		BusinessRole: businessRole,
+		RTCRole:      rtcRole,
+		SignalingURL: strings.TrimSpace(signalingURL),
+		IceServers:   []map[string]any{},
+		RTCBackend:   "libdatachannel",
+		MediaMode:    "audio-first",
+	}
+}
+
 func (s *apiServer) buildRTCJoinParams(room liveRoomResponse, request linkMicRequestResponse, userID int64) *rtcJoinParamsResponse {
 	if request.State != linkMicRequestStateAccepted {
 		return nil
@@ -1257,29 +1333,29 @@ func (s *apiServer) buildRTCJoinParams(room liveRoomResponse, request linkMicReq
 		return nil
 	}
 
-	participantRole := liveRoomRoleParticipant
-	if room.Owner.ID == userID {
-		participantRole = liveRoomRoleController
-	}
-
 	controllerUserID := room.Owner.ID
 	participantUserID := request.Initiator.ID
 	if request.Initiator.ID == controllerUserID {
 		participantUserID = request.Target.ID
-	} else if request.Target.ID == controllerUserID {
+	}
+	if request.Target.ID == controllerUserID {
 		participantUserID = request.Initiator.ID
 	}
 
-	return &rtcJoinParamsResponse{
-		Transport:         "libdatachannel",
-		RoomName:          room.RoomKey,
-		ParticipantRole:   participantRole,
-		SignalingURL:      s.cfg.PublicSignalingURL,
-		RequestID:         request.RequestID,
-		RequestType:       request.RequestType,
-		ControllerUserID:  controllerUserID,
-		ParticipantUserID: participantUserID,
+	legacySession := CrossRoomLinkMicSession{
+		SessionID:     "legacy-" + request.RequestID,
+		RequestID:     request.RequestID,
+		RoomAKey:      room.RoomKey,
+		RoomBKey:      room.RoomKey,
+		AnchorAUserID: controllerUserID,
+		AnchorBUserID: participantUserID,
+		InviterUserID: request.Initiator.ID,
+		InviteeUserID: request.Target.ID,
+		Status:        crossRoomLinkMicSessionStatusAccepted,
+		CreatedAt:     time.Now().UTC(),
+		UpdatedAt:     time.Now().UTC(),
 	}
+	return buildCrossRoomRTCJoinParams(legacySession, room.RoomKey, userID, s.cfg.PublicSignalingURL)
 }
 
 func (s *apiServer) publishLiveRoomEvent(ctx context.Context, action string, actorUserID int64, roomKey, requestID string) {

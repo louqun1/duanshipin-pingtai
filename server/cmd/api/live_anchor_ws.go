@@ -129,6 +129,10 @@ func (c *probeSignalClient) handleLiveAnchorJoinMessage(data []byte) error {
 	previousUserID := c.anchorUserID
 	replaced := c.hub.bindAnchorClient(c, roomKey, user.ID, user.Username, role)
 	if previousRoomKey != "" && (previousRoomKey != roomKey || previousUserID != user.ID) {
+		outbound := c.hub.closeCrossRoomSessionsForAnchor(previousRoomKey, previousUserID, "anchor-rebound")
+		for _, message := range outbound {
+			message.client.sendRaw(message.message)
+		}
 		if err := markAnchorOfflineByRoomKey(ctx, c.server.database, previousRoomKey, previousUserID); err != nil {
 			log.Printf("anchor rebind cleanup failed: roomKey=%s userId=%d err=%v", previousRoomKey, previousUserID, err)
 		}
@@ -213,6 +217,10 @@ func (c *probeSignalClient) handleLiveAnchorLeaveMessage(data []byte) error {
 
 	userID := c.anchorUserID
 	c.hub.unbindAnchorClient(c)
+	outbound := c.hub.closeCrossRoomSessionsForAnchor(roomKey, userID, "anchor-left-room")
+	for _, message := range outbound {
+		message.client.sendRaw(message.message)
+	}
 	c.sendJSON(liveAnchorLeftMessage{
 		Type:    "live.anchor.left",
 		RoomKey: roomKey,
