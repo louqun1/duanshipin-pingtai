@@ -153,6 +153,7 @@ type liveRoomResponse struct {
 	RoomKey           string                   `json:"roomKey"`
 	Title             string                   `json:"title,omitempty"`
 	Status            string                   `json:"status"`
+	SignalingURL      string                   `json:"signalingUrl,omitempty"`
 	Owner             roomUserResponse         `json:"owner"`
 	OnlineMemberCount int                      `json:"onlineMemberCount"`
 	ActiveRequest     *linkMicRequestResponse  `json:"activeRequest,omitempty"`
@@ -430,6 +431,16 @@ func (s *apiServer) handleLiveRoomPresence(writer http.ResponseWriter, request *
 		return
 	}
 
+	log.Printf("[presence] room presence action=%s roomKey=%s userId=%d role=%s members=%d",
+		action,
+		roomKey,
+		user.ID,
+		role,
+		len(members),
+	)
+	if s.probeSignals != nil {
+		s.probeSignals.broadcastAnchorMemberList(roomKey)
+	}
 	s.publishLiveRoomEvent(ctx, eventAction, user.ID, roomKey, "")
 	writeJSON(writer, http.StatusOK, map[string]any{
 		"room":    roomResponse,
@@ -1217,6 +1228,7 @@ func (s *apiServer) buildLiveRoomResponse(ctx context.Context, room liveRoomRow)
 		ID:                room.ID,
 		RoomKey:           room.RoomKey,
 		Status:            room.Status,
+		SignalingURL:      s.cfg.PublicSignalingURL,
 		Owner:             toRoomUserResponse(roomUserRow{ID: room.OwnerUserID, Username: room.OwnerUsername, Nickname: room.OwnerNickname, AvatarURL: room.OwnerAvatar}),
 		OnlineMemberCount: onlineMemberCount,
 		ActiveRequest:     activeRequestResponse,

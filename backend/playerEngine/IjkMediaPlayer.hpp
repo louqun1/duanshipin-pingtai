@@ -5,7 +5,7 @@
 #include <mutex>
 #include <thread>
 
-#include "FFPlayer.hpp"
+#include "FFplayer.hpp"
 #include "FFMessageQueue.hpp"
 
 namespace media {

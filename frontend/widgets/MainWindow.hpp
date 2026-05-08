@@ -4,9 +4,13 @@
 #include <QString>
 
 class QButtonGroup;
+class QFrame;
+class QLabel;
+class QPropertyAnimation;
 class QPushButton;
 class QShowEvent;
 class QStackedWidget;
+class QTimer;
 class QWidget;
 class VideoPlayerWindow;
 
@@ -32,6 +36,7 @@ class UploadPage;
 class MainWindow final : public QMainWindow
 {
     Q_OBJECT
+    Q_PROPERTY(int sideNavWidth READ sideNavWidth WRITE setSideNavWidth)
 
 public:
     explicit MainWindow(
@@ -54,11 +59,22 @@ private:
 
     void buildUi();
     QWidget *createNavigation();
-    QPushButton *createNavigationButton(const QString &label, int pageIndex);
+    QPushButton *createNavigationButton(
+        const QString &expandedLabel,
+        const QString &collapsedLabel,
+        int pageIndex);
     void connectNavigation();
     void connectPlaybackFlow();
     void connectAccountFlow();
     void switchToPage(int pageIndex);
+    int sideNavWidth() const;
+    void setSideNavWidth(int width);
+    void expandSideNav();
+    void collapseSideNav();
+    void scheduleSideNavCollapse();
+    void stopSideNavCollapse();
+    void animateSideNavTo(int targetWidth);
+    void updateSideNavPresentation();
     void dumpStartupWindowMetrics(const char *stage) const;
     void updateAuthenticatedAccount(
         const QString &username,
@@ -69,8 +85,13 @@ private:
 protected:
     void showEvent(QShowEvent *event) override;
 
+    QFrame *navigationPanel_ = nullptr;
+    QLabel *brandLabel_ = nullptr;
+    QLabel *captionLabel_ = nullptr;
     QButtonGroup *navigationGroup_ = nullptr;
     QStackedWidget *pageStack_ = nullptr;
+    QTimer *sideNavHideTimer_ = nullptr;
+    QPropertyAnimation *sideNavAnim_ = nullptr;
     backend::controller::auth::AuthController &authController_;
     backend::liveplayer::service::LivePlayerController &livePlayerController_;
     backend::playercontroller::service::PlayerController &playerController_;
@@ -82,5 +103,7 @@ protected:
     frontend::pages::StreamPage *streamPage_ = nullptr;
     frontend::pages::UploadPage *uploadPage_ = nullptr;
     frontend::pages::AccountPage *accountPage_ = nullptr;
+    bool sideNavExpanded_ = false;
+    bool sideNavPinned_ = false;
     bool startupMetricsLoggedAfterShow_ = false;
 };

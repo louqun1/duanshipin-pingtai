@@ -236,6 +236,15 @@ func (s *apiServer) requireAuthenticatedUser(ctx context.Context, request *http.
 		return authUserRow{}, errors.New("missing bearer token")
 	}
 
+	return s.authenticateAccessToken(ctx, token)
+}
+
+func (s *apiServer) authenticateAccessToken(ctx context.Context, token string) (authUserRow, error) {
+	token = strings.TrimSpace(token)
+	if token == "" {
+		return authUserRow{}, errors.New("missing access token")
+	}
+
 	user, err := s.findUserByAccessToken(ctx, token)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {

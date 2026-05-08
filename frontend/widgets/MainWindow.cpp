@@ -9,25 +9,66 @@
 #include "pages/UploadPage/UploadPage.hpp"
 #include "widgets/VideoPlayerWindow.hpp"
 
+#include <QAbstractButton>
+#include <QAbstractAnimation>
 #include <QButtonGroup>
+#include <QEasingCurve>
+#include <QEnterEvent>
 #include <QFrame>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QMetaObject>
+#include <QPropertyAnimation>
 #include <QPushButton>
 #include <QStackedWidget>
+#include <QStyle>
 #include <QShowEvent>
+#include <QTimer>
 #include <QVBoxLayout>
 #include <QWidget>
 #include <QtGlobal>
+#include <functional>
 #include <spdlog/spdlog.h>
 
 namespace {
+
+constexpr int kExpandedSideNavWidth = 240;
+constexpr int kCollapsedSideNavWidth = 64;
+constexpr int kSideNavAnimationDurationMs = 180;
+constexpr int kSideNavAutoHideDelayMs = 250;
 
 QString sizeText(const QSize &size)
 {
     return QString("%1x%2").arg(size.width()).arg(size.height());
 }
+
+class HoverAwareNavigationFrame final : public QFrame
+{
+public:
+    using QFrame::QFrame;
+
+    std::function<void()> onEnter;
+    std::function<void()> onLeave;
+
+protected:
+    void enterEvent(QEnterEvent *event) override
+    {
+        QFrame::enterEvent(event);
+
+        if (onEnter) {
+            onEnter();
+        }
+    }
+
+    void leaveEvent(QEvent *event) override
+    {
+        QFrame::leaveEvent(event);
+
+        if (onLeave) {
+            onLeave();
+        }
+    }
+};
 
 class CurrentPageStackedWidget final : public QStackedWidget
 {
@@ -85,6 +126,15 @@ void MainWindow::buildUi()
 
     layout->addWidget(createNavigation());
 
+    sideNavHideTimer_ = new QTimer(this);
+    sideNavHideTimer_->setSingleShot(true);
+    sideNavHideTimer_->setInterval(kSideNavAutoHideDelayMs);
+    connect(sideNavHideTimer_, &QTimer::timeout, this, &MainWindow::collapseSideNav);
+
+    sideNavAnim_ = new QPropertyAnimation(this, "sideNavWidth", this);
+    sideNavAnim_->setDuration(kSideNavAnimationDurationMs);
+    sideNavAnim_->setEasingCurve(QEasingCurve::InOutCubic);
+
     pageStack_ = new CurrentPageStackedWidget(central);
     pageStack_->setObjectName("pageStack");
 
@@ -94,6 +144,7 @@ void MainWindow::buildUi()
     accountPage_ = new frontend::pages::AccountPage(pageStack_);
 
     homePage_->setAuthToken(authController_.sessionToken());
+    streamPage_->setAuthToken(authController_.sessionToken());
     uploadPage_->setAuthToken(authController_.sessionToken());
 
     pageStack_->addWidget(homePage_);
@@ -110,13 +161,21 @@ void MainWindow::buildUi()
         "#brandLabel { color: #f8fafc; font-size: 18px; font-weight: 700; }"
         "#captionLabel { color: #94a3b8; font-size: 12px; }"
         "QPushButton[navButton=\"true\"] {"
-        "  text-align: left;"
         "  border: 0;"
-        "  padding: 14px 16px;"
-        "  margin: 4px 12px;"
         "  border-radius: 10px;"
         "  color: #cbd5e1;"
         "  background: transparent;"
+        "}"
+        "QPushButton[navButton=\"true\"][navExpanded=\"true\"] {"
+        "  text-align: left;"
+        "  padding: 14px 16px;"
+        "  margin: 4px 12px;"
+        "}"
+        "QPushButton[navButton=\"true\"][navExpanded=\"false\"] {"
+        "  text-align: center;"
+        "  padding: 14px 0;"
+        "  margin: 4px 10px;"
+        "  font-weight: 700;"
         "}"
         "QPushButton[navButton=\"true\"]:hover { background: #1f2937; }"
         "QPushButton[navButton=\"true\"]:checked {"
@@ -124,6 +183,10 @@ void MainWindow::buildUi()
         "  background: #2563eb;"
         "}"
         "#pageStack { background: #f4f7fb; }");
+
+    sideNavExpanded_ = false;
+    setSideNavWidth(kCollapsedSideNavWidth);
+    updateSideNavPresentation();
 }
 
 void MainWindow::showEvent(QShowEvent *event)
@@ -142,40 +205,59 @@ void MainWindow::showEvent(QShowEvent *event)
 
 QWidget *MainWindow::createNavigation()
 {
-    auto *panel = new QFrame(this);
+    auto *panel = new HoverAwareNavigationFrame(this);
     panel->setObjectName("navigationPanel");
-    panel->setFixedWidth(240);
+    panel->setMinimumWidth(kCollapsedSideNavWidth);
+    panel->setMaximumWidth(kCollapsedSideNavWidth);
+    panel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    navigationPanel_ = panel;
+
+    panel->onEnter = [this]() {
+        stopSideNavCollapse();
+        expandSideNav();
+    };
+    panel->onLeave = [this]() {
+        scheduleSideNavCollapse();
+    };
 
     auto *layout = new QVBoxLayout(panel);
     layout->setContentsMargins(16, 20, 16, 20);
     layout->setSpacing(6);
 
-    auto *brand = new QLabel("Flashpoint", panel);
-    brand->setObjectName("brandLabel");
-    layout->addWidget(brand);
+    brandLabel_ = new QLabel("Flashpoint", panel);
+    brandLabel_->setObjectName("brandLabel");
+    layout->addWidget(brandLabel_);
 
-    auto *caption = new QLabel("Desktop rebuild skeleton", panel);
-    caption->setObjectName("captionLabel");
-    layout->addWidget(caption);
+    captionLabel_ = new QLabel("Desktop rebuild skeleton", panel);
+    captionLabel_->setObjectName("captionLabel");
+    layout->addWidget(captionLabel_);
     layout->addSpacing(18);
 
     navigationGroup_ = new QButtonGroup(panel);
     navigationGroup_->setExclusive(true);
 
-    layout->addWidget(createNavigationButton("主页", Home));
-    layout->addWidget(createNavigationButton("直播", Stream));
-    layout->addWidget(createNavigationButton("上传", Upload));
-    layout->addWidget(createNavigationButton("我的", Account));
+    layout->addWidget(createNavigationButton("主页", "首", Home));
+    layout->addWidget(createNavigationButton("直播", "播", Stream));
+    layout->addWidget(createNavigationButton("上传", "传", Upload));
+    layout->addWidget(createNavigationButton("我的", "我", Account));
     layout->addStretch();
 
     return panel;
 }
 
-QPushButton *MainWindow::createNavigationButton(const QString &label, int pageIndex)
+QPushButton *MainWindow::createNavigationButton(
+    const QString &expandedLabel,
+    const QString &collapsedLabel,
+    int pageIndex)
 {
-    auto *button = new QPushButton(label, this);
+    auto *button = new QPushButton(expandedLabel, this);
     button->setProperty("navButton", true);
+    button->setProperty("navExpanded", true);
+    button->setProperty("navExpandedText", expandedLabel);
+    button->setProperty("navCollapsedText", collapsedLabel);
     button->setCheckable(true);
+    button->setCursor(Qt::PointingHandCursor);
+    button->setToolTip(expandedLabel);
     navigationGroup_->addButton(button, pageIndex);
     return button;
 }
@@ -222,18 +304,21 @@ void MainWindow::connectAccountFlow()
     connect(&authController_, &backend::controller::auth::AuthController::loginSucceeded,
             this, [this](const QString &username, const QString &email) {
                 homePage_->setAuthToken(authController_.sessionToken());
+                streamPage_->setAuthToken(authController_.sessionToken());
                 uploadPage_->setAuthToken(authController_.sessionToken());
                 updateAuthenticatedAccount(username, email, QString("欢迎回来，%1。").arg(username), true);
             });
     connect(&authController_, &backend::controller::auth::AuthController::registerSucceeded,
             this, [this](const QString &username, const QString &email) {
                 homePage_->setAuthToken(authController_.sessionToken());
+                streamPage_->setAuthToken(authController_.sessionToken());
                 uploadPage_->setAuthToken(authController_.sessionToken());
                 updateAuthenticatedAccount(username, email, QString("已为 %1 创建账户。").arg(username), true);
             });
     connect(&authController_, &backend::controller::auth::AuthController::sessionRestored,
             this, [this](const QString &username, const QString &email) {
                 homePage_->setAuthToken(authController_.sessionToken());
+                streamPage_->setAuthToken(authController_.sessionToken());
                 uploadPage_->setAuthToken(authController_.sessionToken());
                 updateAuthenticatedAccount(username, email, QString("%1，欢迎回来。").arg(username), false);
             });
@@ -256,6 +341,7 @@ void MainWindow::connectAccountFlow()
                 currentUsername_.clear();
                 currentEmail_.clear();
                 homePage_->setAuthToken(QString());
+                streamPage_->setAuthToken(QString());
                 uploadPage_->setAuthToken(QString());
                 accountPage_->showLoggedOutState("您已经退出登录。");
                 switchToPage(Account);
@@ -278,6 +364,118 @@ void MainWindow::switchToPage(int pageIndex)
 
     if (auto *button = navigationGroup_->button(safeIndex)) {
         button->setChecked(true);
+    }
+}
+
+int MainWindow::sideNavWidth() const
+{
+    return navigationPanel_ ? navigationPanel_->maximumWidth() : 0;
+}
+
+void MainWindow::setSideNavWidth(int width)
+{
+    if (!navigationPanel_) {
+        return;
+    }
+
+    const int safeWidth = qBound(kCollapsedSideNavWidth, width, kExpandedSideNavWidth);
+    navigationPanel_->setMinimumWidth(safeWidth);
+    navigationPanel_->setMaximumWidth(safeWidth);
+    navigationPanel_->updateGeometry();
+}
+
+void MainWindow::expandSideNav()
+{
+    stopSideNavCollapse();
+
+    if (sideNavExpanded_
+        && (!sideNavAnim_ || sideNavAnim_->state() != QAbstractAnimation::Running)) {
+        return;
+    }
+
+    sideNavExpanded_ = true;
+    updateSideNavPresentation();
+    animateSideNavTo(kExpandedSideNavWidth);
+}
+
+void MainWindow::collapseSideNav()
+{
+    if (sideNavPinned_) {
+        return;
+    }
+
+    if (!sideNavExpanded_
+        && (!sideNavAnim_ || sideNavAnim_->state() != QAbstractAnimation::Running)) {
+        return;
+    }
+
+    sideNavExpanded_ = false;
+    updateSideNavPresentation();
+    animateSideNavTo(kCollapsedSideNavWidth);
+}
+
+void MainWindow::scheduleSideNavCollapse()
+{
+    if (sideNavPinned_ || !sideNavHideTimer_) {
+        return;
+    }
+
+    sideNavHideTimer_->start();
+}
+
+void MainWindow::stopSideNavCollapse()
+{
+    if (!sideNavHideTimer_) {
+        return;
+    }
+
+    sideNavHideTimer_->stop();
+}
+
+void MainWindow::animateSideNavTo(int targetWidth)
+{
+    if (!sideNavAnim_) {
+        setSideNavWidth(targetWidth);
+        return;
+    }
+
+    sideNavAnim_->stop();
+    sideNavAnim_->setStartValue(sideNavWidth());
+    sideNavAnim_->setEndValue(targetWidth);
+    sideNavAnim_->start();
+}
+
+void MainWindow::updateSideNavPresentation()
+{
+    if (brandLabel_) {
+        brandLabel_->setText(sideNavExpanded_ ? "Flashpoint" : "FP");
+        brandLabel_->setAlignment(sideNavExpanded_
+            ? (Qt::AlignLeft | Qt::AlignVCenter)
+            : Qt::AlignCenter);
+    }
+
+    if (captionLabel_) {
+        captionLabel_->setVisible(sideNavExpanded_);
+    }
+
+    if (!navigationGroup_) {
+        return;
+    }
+
+    const QList<QAbstractButton *> buttons = navigationGroup_->buttons();
+    for (QAbstractButton *abstractButton : buttons) {
+        auto *button = qobject_cast<QPushButton *>(abstractButton);
+        if (!button) {
+            continue;
+        }
+
+        button->setProperty("navExpanded", sideNavExpanded_);
+        button->setText(sideNavExpanded_
+            ? button->property("navExpandedText").toString()
+            : button->property("navCollapsedText").toString());
+        button->style()->unpolish(button);
+        button->style()->polish(button);
+        button->update();
     }
 }
 

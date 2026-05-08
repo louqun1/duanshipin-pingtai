@@ -91,6 +91,7 @@ type probeSignalHub struct {
 	mu       sync.Mutex
 	database *sql.DB
 	rooms    map[string]*probeSignalRoom
+	anchorRooms map[string]map[int64]*probeSignalClient
 }
 
 type probeSignalRoom struct {
@@ -110,6 +111,7 @@ type probeLinkMicSession struct {
 
 type probeSignalClient struct {
 	hub    *probeSignalHub
+	server *apiServer
 	conn   *websocket.Conn
 	send   chan []byte
 	roomID string
@@ -117,6 +119,10 @@ type probeSignalClient struct {
 	role   string
 	mode   string
 	requestID string
+	anchorRoomKey string
+	anchorUserID  int64
+	anchorUsername string
+	anchorRole    string
 }
 
 type outboundMessage struct {
@@ -128,6 +134,7 @@ func newProbeSignalHub(database *sql.DB) *probeSignalHub {
 	return &probeSignalHub{
 		database: database,
 		rooms:    make(map[string]*probeSignalRoom),
+		anchorRooms: make(map[string]map[int64]*probeSignalClient),
 	}
 }
 
@@ -148,9 +155,10 @@ func (s *apiServer) handleProbeSignalingWebSocket(writer http.ResponseWriter, re
 	}
 
 	client := &probeSignalClient{
-		hub:  s.probeSignals,
-		conn: conn,
-		send: make(chan []byte, 32),
+		hub:    s.probeSignals,
+		server: s,
+		conn:   conn,
+		send:   make(chan []byte, 32),
 	}
 
 	log.Printf("probe signaling connected: remote=%s", request.RemoteAddr)
@@ -227,6 +235,12 @@ func (c *probeSignalClient) handleMessage(data []byte) error {
 	switch envelope.Type {
 	case "probe.register":
 		return c.handleRegister(envelope)
+	case "live.anchor.join":
+		return c.handleLiveAnchorJoinMessage(data)
+	case "live.anchor.heartbeat":
+		return c.handleLiveAnchorHeartbeatMessage(data)
+	case "live.anchor.leave":
+		return c.handleLiveAnchorLeaveMessage(data)
 	case "rtc.offer", "rtc.answer", "rtc.ice-candidate":
 		return c.handleRTCRelay(envelope, data)
 	case linkMicTypeApply, linkMicTypeInvite, linkMicTypeAccept, linkMicTypeReject, linkMicTypeCancel, linkMicTypeHangup, linkMicTypeKick:
@@ -356,42 +370,52 @@ func (h *probeSignalHub) register(client *probeSignalClient, roomID, peerID, rol
 }
 
 func (h *probeSignalHub) unregister(client *probeSignalClient) {
-	if client.roomID == "" || client.peerID == "" {
-		return
-	}
+	if client.roomID != "" && client.peerID != "" {
+		roomID := client.roomID
+		leavingPeer := probeRoomPeer{
+			PeerID: client.peerID,
+			Role:   client.role,
+		}
+		var recipients []*probeSignalClient
+		var peers []probeRoomPeer
+		var outbound []outboundMessage
+		removed := false
 
-	roomID := client.roomID
-	leavingPeer := probeRoomPeer{
-		PeerID: client.peerID,
-		Role:   client.role,
-	}
-	var recipients []*probeSignalClient
-	var peers []probeRoomPeer
-	var outbound []outboundMessage
-	removed := false
+		h.mu.Lock()
+		room := h.rooms[roomID]
+		if room != nil && room.peers[client.peerID] == client {
+			delete(room.peers, client.peerID)
+			removed = true
+			outbound = append(outbound, h.buildDisconnectSessionMessagesLocked(roomID, room, client.peerID)...)
+			if len(room.peers) == 0 {
+				delete(h.rooms, roomID)
+			} else {
+				recipients, peers = snapshotRoom(room)
+			}
+		}
+		h.mu.Unlock()
 
-	h.mu.Lock()
-	room := h.rooms[roomID]
-	if room != nil && room.peers[client.peerID] == client {
-		delete(room.peers, client.peerID)
-		removed = true
-		outbound = append(outbound, h.buildDisconnectSessionMessagesLocked(roomID, room, client.peerID)...)
-		if len(room.peers) == 0 {
-			delete(h.rooms, roomID)
-		} else {
-			recipients, peers = snapshotRoom(room)
+		for _, message := range outbound {
+			message.client.sendRaw(message.message)
+		}
+
+		if removed {
+			sendRoomMemberEvent(recipients, roomID, "room.member-leave", leavingPeer)
+			sendRoomMemberList(recipients, roomID, peers)
+			log.Printf("probe signaling disconnected: room_id=%s peer_id=%s", roomID, client.peerID)
 		}
 	}
-	h.mu.Unlock()
 
-	for _, message := range outbound {
-		message.client.sendRaw(message.message)
-	}
+	anchorRoomKey, anchorUserID, anchorRemoved := h.unbindAnchorClient(client)
+	if anchorRemoved {
+		ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+		defer cancel()
 
-	if removed {
-		sendRoomMemberEvent(recipients, roomID, "room.member-leave", leavingPeer)
-		sendRoomMemberList(recipients, roomID, peers)
-		log.Printf("probe signaling disconnected: room_id=%s peer_id=%s", roomID, client.peerID)
+		if err := markAnchorOfflineByRoomKey(ctx, h.database, anchorRoomKey, anchorUserID); err != nil {
+			log.Printf("anchor disconnect cleanup failed: roomKey=%s userId=%d err=%v", anchorRoomKey, anchorUserID, err)
+		}
+		h.broadcastAnchorMemberList(anchorRoomKey)
+		log.Printf("[presence] anchor disconnected roomKey=%s userId=%d", anchorRoomKey, anchorUserID)
 	}
 }
 

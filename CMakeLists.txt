@@ -9,7 +9,12 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_PREFIX_PATH "D:/itffmpeg/Qt/6.10.2/llvm-mingw_64")
+set(FLASHPOINT_QT_ROOT "D:/itffmpeg/Qt/6.10.3/llvm-mingw_64" CACHE PATH
+    "Qt 6 root used for FlashpointShortVideos")
+
+if(EXISTS "${FLASHPOINT_QT_ROOT}/lib/cmake/Qt6/Qt6Config.cmake")
+    list(PREPEND CMAKE_PREFIX_PATH "${FLASHPOINT_QT_ROOT}")
+endif()
 
 # Qt6Gui advertises optional Vulkan headers. On machines without a Vulkan SDK,
 # pre-creating the nolink target keeps configure output clean while still using
@@ -107,9 +112,14 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     )
 endif()
 
-if (EXISTS "D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/bin/windeployqt.exe")
+find_program(FLASHPOINT_WINDEPLOYQT_EXECUTABLE
+    NAMES windeployqt windeployqt6
+    HINTS "${FLASHPOINT_QT_ROOT}/bin"
+)
+
+if (FLASHPOINT_WINDEPLOYQT_EXECUTABLE)
     add_custom_command(TARGET QtFrontend POST_BUILD
-        COMMAND D:/itffmpeg/Qt/6.10.2/llvm-mingw_64/bin/windeployqt.exe
+        COMMAND "${FLASHPOINT_WINDEPLOYQT_EXECUTABLE}"
         --no-system-dxc-compiler
         $<TARGET_FILE:QtFrontend>
     )

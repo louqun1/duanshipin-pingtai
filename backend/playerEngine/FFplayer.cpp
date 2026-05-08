@@ -1,6 +1,6 @@
 #define SONIC_IMPLEMENTATION
 #include "sonic.hpp"
-#include "FFPlayer.hpp"
+#include "FFplayer.hpp"
 #include <cstdio>
 #include <cmath>
 #include <string.h>
@@ -1687,6 +1687,9 @@ int Decoder::decoder_decode_frame(AVFrame *frame)
                             next_pts_tb = tb;
                         }
                     }
+                    break;
+                default:
+                    ret = AVERROR(EAGAIN);
                     break;
                 }
                 // 1.3. 检查解码是否已经结束，解码结束返回0

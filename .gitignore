@@ -1,4 +1,5 @@
 build/
+build-qt-6103-llvm/
 data/
 bin/
 *.exe
