@@ -6,11 +6,13 @@ import (
 	"encoding/json"
 	"errors"
 	"log"
+	"strconv"
 	"strings"
 	"time"
 )
 
 const liveAnchorRole = "anchor"
+const liveAudienceRole = "audience"
 
 type liveAnchorJoinMessage struct {
 	Type    string `json:"type"`
@@ -64,6 +66,13 @@ type businessRoomMemberListMessage struct {
 	TsMs    int64                `json:"tsMs"`
 }
 
+type businessRoomMemberEventMessage struct {
+	Type    string             `json:"type"`
+	RoomKey string             `json:"roomKey"`
+	Member  businessRoomMember `json:"member"`
+	TsMs    int64              `json:"tsMs"`
+}
+
 func (c *probeSignalClient) handleLiveAnchorJoinMessage(data []byte) error {
 	var message liveAnchorJoinMessage
 	if err := json.Unmarshal(data, &message); err != nil {
@@ -82,13 +91,9 @@ func (c *probeSignalClient) handleLiveAnchorJoinMessage(data []byte) error {
 		return nil
 	}
 
-	role := strings.TrimSpace(message.Role)
-	if role == "" {
-		role = liveAnchorRole
-	}
-	if role != liveAnchorRole {
-		c.sendLiveAnchorError(roomKey, "live.anchor.join role must be anchor")
-		return nil
+	requestedRole := strings.TrimSpace(message.Role)
+	if requestedRole == "" {
+		requestedRole = liveAudienceRole
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -114,12 +119,17 @@ func (c *probeSignalClient) handleLiveAnchorJoinMessage(data []byte) error {
 		c.sendLiveAnchorError(roomKey, "live room is not active")
 		return nil
 	}
-	if room.OwnerUserID != user.ID {
-		c.sendLiveAnchorError(roomKey, "only room owner can join as anchor")
-		return nil
+
+	presenceRole := liveRoomRoleParticipant
+	joinedRole := requestedRole
+	if room.OwnerUserID == user.ID {
+		presenceRole = liveRoomRoleController
+		joinedRole = liveAnchorRole
+	} else if joinedRole == liveAnchorRole {
+		joinedRole = liveAudienceRole
 	}
 
-	if err := upsertLiveRoomPresenceQuerier(ctx, c.server.database, room.ID, user.ID, liveRoomRoleController); err != nil {
+	if err := upsertLiveRoomPresenceQuerier(ctx, c.server.database, room.ID, user.ID, presenceRole); err != nil {
 		log.Printf("anchor join upsert presence failed: roomKey=%s userId=%d err=%v", roomKey, user.ID, err)
 		c.sendLiveAnchorError(roomKey, "failed to update anchor presence")
 		return nil
@@ -127,11 +137,20 @@ func (c *probeSignalClient) handleLiveAnchorJoinMessage(data []byte) error {
 
 	previousRoomKey := c.anchorRoomKey
 	previousUserID := c.anchorUserID
-	replaced := c.hub.bindAnchorClient(c, roomKey, user.ID, user.Username, role)
+	previousUsername := c.anchorUsername
+	previousRole := c.anchorRole
+	replaced := c.hub.bindAnchorClient(c, roomKey, user.ID, user.Username, presenceRole)
 	if previousRoomKey != "" && (previousRoomKey != roomKey || previousUserID != user.ID) {
 		if err := markAnchorOfflineByRoomKey(ctx, c.server.database, previousRoomKey, previousUserID); err != nil {
 			log.Printf("anchor rebind cleanup failed: roomKey=%s userId=%d err=%v", previousRoomKey, previousUserID, err)
 		}
+		c.hub.buildAndSendBusinessDisconnectSessionMessages(previousRoomKey, previousUserID)
+		c.hub.broadcastBusinessRoomMemberEvent(previousRoomKey, "room.member-leave", businessRoomMember{
+			UserID:   previousUserID,
+			Username: previousUsername,
+			Role:     previousRole,
+			Online:   false,
+		})
 		c.hub.broadcastAnchorMemberList(previousRoomKey)
 	}
 	if replaced != nil && replaced != c {
@@ -143,11 +162,17 @@ func (c *probeSignalClient) handleLiveAnchorJoinMessage(data []byte) error {
 		Type:    "live.anchor.joined",
 		RoomKey: roomKey,
 		UserID:  user.ID,
-		Role:    role,
+		Role:    joinedRole,
 		TsMs:    nowUnixMilli(),
 	})
+	c.hub.broadcastBusinessRoomMemberEvent(roomKey, "room.member-join", businessRoomMember{
+		UserID:   user.ID,
+		Username: user.Username,
+		Role:     presenceRole,
+		Online:   true,
+	})
 	c.hub.broadcastAnchorMemberList(roomKey)
-	log.Printf("[presence] anchor joined roomKey=%s userId=%d", roomKey, user.ID)
+	log.Printf("[presence] business websocket joined roomKey=%s userId=%d role=%s", roomKey, user.ID, presenceRole)
 	return nil
 }
 
@@ -212,11 +237,20 @@ func (c *probeSignalClient) handleLiveAnchorLeaveMessage(data []byte) error {
 	}
 
 	userID := c.anchorUserID
+	username := c.anchorUsername
+	role := c.anchorRole
 	c.hub.unbindAnchorClient(c)
+	c.hub.buildAndSendBusinessDisconnectSessionMessages(roomKey, userID)
 	c.sendJSON(liveAnchorLeftMessage{
 		Type:    "live.anchor.left",
 		RoomKey: roomKey,
 		TsMs:    nowUnixMilli(),
+	})
+	c.hub.broadcastBusinessRoomMemberEvent(roomKey, "room.member-leave", businessRoomMember{
+		UserID:   userID,
+		Username: username,
+		Role:     role,
+		Online:   false,
 	})
 	c.hub.broadcastAnchorMemberList(roomKey)
 	log.Printf("[presence] anchor left roomKey=%s userId=%d", roomKey, userID)
@@ -228,22 +262,23 @@ func (h *probeSignalHub) bindAnchorClient(client *probeSignalClient, roomKey str
 	defer h.mu.Unlock()
 
 	if client.anchorRoomKey != "" {
-		if existingRoom := h.anchorRooms[client.anchorRoomKey]; existingRoom != nil && existingRoom[client.anchorUserID] == client {
-			delete(existingRoom, client.anchorUserID)
-			if len(existingRoom) == 0 {
-				delete(h.anchorRooms, client.anchorRoomKey)
+		if existingRoom := h.businessRooms[client.anchorRoomKey]; existingRoom != nil && existingRoom.peers[strconv.FormatInt(client.anchorUserID, 10)] == client {
+			delete(existingRoom.peers, strconv.FormatInt(client.anchorUserID, 10))
+			if len(existingRoom.peers) == 0 {
+				delete(h.businessRooms, client.anchorRoomKey)
 			}
 		}
 	}
 
-	room := h.anchorRooms[roomKey]
+	room := h.businessRooms[roomKey]
 	if room == nil {
-		room = make(map[int64]*probeSignalClient)
-		h.anchorRooms[roomKey] = room
+		room = newProbeSignalRoom()
+		h.businessRooms[roomKey] = room
 	}
 
-	replaced := room[userID]
-	room[userID] = client
+	peerID := strconv.FormatInt(userID, 10)
+	replaced := room.peers[peerID]
+	room.peers[peerID] = client
 	client.anchorRoomKey = roomKey
 	client.anchorUserID = userID
 	client.anchorUsername = username
@@ -261,11 +296,12 @@ func (h *probeSignalHub) unbindAnchorClient(client *probeSignalClient) (string, 
 
 	roomKey := client.anchorRoomKey
 	userID := client.anchorUserID
-	room := h.anchorRooms[roomKey]
-	if room != nil && room[userID] == client {
-		delete(room, userID)
-		if len(room) == 0 {
-			delete(h.anchorRooms, roomKey)
+	room := h.businessRooms[roomKey]
+	peerID := strconv.FormatInt(userID, 10)
+	if room != nil && room.peers[peerID] == client {
+		delete(room.peers, peerID)
+		if len(room.peers) == 0 {
+			delete(h.businessRooms, roomKey)
 		}
 		client.anchorRoomKey = ""
 		client.anchorUserID = 0
@@ -321,16 +357,49 @@ func (h *probeSignalHub) snapshotAnchorRoom(roomKey string) []*probeSignalClient
 	h.mu.Lock()
 	defer h.mu.Unlock()
 
-	room := h.anchorRooms[roomKey]
+	room := h.businessRooms[roomKey]
 	if room == nil {
 		return nil
 	}
 
-	recipients := make([]*probeSignalClient, 0, len(room))
-	for _, client := range room {
+	recipients := make([]*probeSignalClient, 0, len(room.peers))
+	for _, client := range room.peers {
 		recipients = append(recipients, client)
 	}
 	return recipients
+}
+
+func (h *probeSignalHub) broadcastBusinessRoomMemberEvent(roomKey, eventType string, member businessRoomMember) {
+	roomKey = normalizeLiveRoomKey(roomKey)
+	if roomKey == "" {
+		return
+	}
+
+	recipients := h.snapshotAnchorRoom(roomKey)
+	if len(recipients) == 0 {
+		return
+	}
+
+	encoded, err := json.Marshal(businessRoomMemberEventMessage{
+		Type:    eventType,
+		RoomKey: roomKey,
+		Member:  member,
+		TsMs:    nowUnixMilli(),
+	})
+	if err != nil {
+		log.Printf("marshal business %s failed: roomKey=%s err=%v", eventType, roomKey, err)
+		return
+	}
+
+	for _, client := range recipients {
+		client.sendRaw(encoded)
+	}
+}
+
+func (h *probeSignalHub) buildAndSendBusinessDisconnectSessionMessages(roomKey string, userID int64) {
+	for _, message := range h.buildBusinessDisconnectSessionMessages(roomKey, strconv.FormatInt(userID, 10)) {
+		message.client.sendRaw(message.message)
+	}
 }
 
 func (c *probeSignalClient) isBoundAnchor(roomKey string) bool {

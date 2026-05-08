@@ -1,10 +1,12 @@
 #include "pages/StreamPage/StreamPage.hpp"
 
+#include "linkmic/LiveRoomSignalingClient.hpp"
 #include "liveplayer/service/LivePlayerController.hpp"
 #include "widgets/VideoOpenGLWidget.hpp"
 
 #include <QFrame>
 #include <QGridLayout>
+#include <QHeaderView>
 #include <QHideEvent>
 #include <QHBoxLayout>
 #include <QJsonArray>
@@ -17,12 +19,16 @@
 #include <QNetworkRequest>
 #include <QPushButton>
 #include <QScrollArea>
+#include <QSignalBlocker>
 #include <QSizePolicy>
 #include <QStringList>
+#include <QTableWidget>
+#include <QTableWidgetItem>
 #include <QTimer>
 #include <QToolButton>
 #include <QUrl>
 #include <QVBoxLayout>
+#include <algorithm>
 #include <spdlog/spdlog.h>
 
 namespace frontend::pages {
@@ -152,6 +158,29 @@ QString liveRoomPresenceUrl(const QString &baseUrl, const QString &roomKey)
     return QString("%1/api/live-rooms/%2/presence").arg(baseUrl, roomKey);
 }
 
+QString liveRoomDetailUrl(const QString &baseUrl, const QString &roomKey)
+{
+    return QString("%1/api/live-rooms/%2").arg(baseUrl, roomKey);
+}
+
+QString meUrl(const QString &baseUrl)
+{
+    return QString("%1/api/me").arg(baseUrl);
+}
+
+QUrl defaultSignalingUrl()
+{
+    QUrl url(apiBaseUrl());
+    const QString scheme = url.scheme().compare(QStringLiteral("https"), Qt::CaseInsensitive) == 0
+        ? QStringLiteral("wss")
+        : QStringLiteral("ws");
+    url.setScheme(scheme);
+    url.setPath(QStringLiteral("/ws"));
+    url.setQuery(QString());
+    url.setFragment(QString());
+    return url;
+}
+
 QJsonObject parseReplyObject(const QByteArray &bytes)
 {
     const QJsonDocument document = QJsonDocument::fromJson(bytes);
@@ -168,6 +197,22 @@ QString extractApiErrorMessage(const QString &fallback, const QJsonObject &objec
     return apiError.isEmpty() ? fallback : apiError;
 }
 
+qint64 jsonInt64(const QJsonValue &value)
+{
+    return static_cast<qint64>(value.toInteger());
+}
+
+QString roleDisplayText(const QString &role)
+{
+    if (role.compare(QStringLiteral("controller"), Qt::CaseInsensitive) == 0) {
+        return QStringLiteral("Controller");
+    }
+    if (role.compare(QStringLiteral("participant"), Qt::CaseInsensitive) == 0) {
+        return QStringLiteral("Participant");
+    }
+    return QStringLiteral("Unknown");
+}
+
 }  // namespace
 
 StreamPage::StreamPage(
@@ -177,6 +222,7 @@ StreamPage::StreamPage(
     , livePlayerController_(livePlayerController)
 {
     networkManager_ = new QNetworkAccessManager(this);
+    signalingClient_ = new frontend::linkmic::LiveRoomSignalingClient(this);
     presenceHeartbeatTimer_ = new QTimer(this);
     presenceHeartbeatTimer_->setInterval(kPresenceHeartbeatIntervalMs);
     presenceHeartbeatTimer_->setSingleShot(false);
@@ -192,12 +238,95 @@ StreamPage::StreamPage(
             true);
     });
 
+    linkMicSession_.setUpdateHandler([this]() {
+        refreshLinkMicPanel();
+        updateRoomInfo();
+    });
+    linkMicSession_.setMessageSender(
+        [this](const QString &type,
+               const QString &roomId,
+               const QString &fromUserId,
+               const QString &toUserId,
+               const QString &requestId,
+               const QJsonObject &payload) {
+            return sendLinkMicMessage(type, roomId, fromUserId, toUserId, requestId, payload);
+        });
+    linkMicSession_.setRtcSignalHandler([this](const QJsonObject &message) {
+        const QString type = message.value(QStringLiteral("type")).toString().trimmed();
+        const QString requestId = message.value(QStringLiteral("request_id")).toString().trimmed();
+        const QString targetUserId = message.value(QStringLiteral("to_user_id")).toString().trimmed();
+        appendLog(
+            QString("RTC signaling placeholder recv %1 room=%2 from=%3 to=%4 request=%5. TODO(user): forward this into the later RTC audio module.")
+                .arg(type,
+                     currentRoomKeyDisplay(),
+                     message.value(QStringLiteral("from_user_id")).toString().trimmed(),
+                     targetUserId,
+                     requestId));
+    });
+
+    connect(signalingClient_,
+            &frontend::linkmic::LiveRoomSignalingClient::stateChanged,
+            this,
+            [this](frontend::linkmic::LiveRoomSignalingClient::State state, const QString &detail) {
+                using SignalState = frontend::linkmic::SignalingConnectionState;
+
+                if (linkMicSessionBound_) {
+                    SignalState mappedState = SignalState::disconnected;
+                    switch (state) {
+                    case frontend::linkmic::LiveRoomSignalingClient::State::Disconnected:
+                        mappedState = SignalState::disconnected;
+                        break;
+                    case frontend::linkmic::LiveRoomSignalingClient::State::Connecting:
+                        mappedState = SignalState::connecting;
+                        break;
+                    case frontend::linkmic::LiveRoomSignalingClient::State::Joined:
+                        mappedState = SignalState::connected;
+                        break;
+                    case frontend::linkmic::LiveRoomSignalingClient::State::Error:
+                        mappedState = SignalState::failed;
+                        break;
+                    }
+                    linkMicSession_.setTransportState(mappedState, detail);
+                }
+
+                if (state == frontend::linkmic::LiveRoomSignalingClient::State::Disconnected) {
+                    activeSignalRoomKey_.clear();
+                    activeSignalAuthToken_.clear();
+                    activeSignalUrl_.clear();
+                }
+
+                refreshLinkMicPanel();
+                updateRoomInfo();
+            });
+
+    connect(signalingClient_,
+            &frontend::linkmic::LiveRoomSignalingClient::messageReceived,
+            this,
+            [this](const QJsonObject &message) {
+                const QString type = message.value(QStringLiteral("type")).toString().trimmed();
+                if (type == QStringLiteral("live.anchor.joined")) {
+                    currentUserNumericId_ = jsonInt64(message.value(QStringLiteral("userId")));
+                    if (currentUserNumericId_ > 0) {
+                        currentUserId_ = QString::number(currentUserNumericId_);
+                    }
+                    activeSignalRoomKey_ = message.value(QStringLiteral("roomKey")).toString().trimmed();
+                    activeSignalAuthToken_ = authToken_;
+                } else if (type == QStringLiteral("room.member-list")) {
+                    lastKnownRoomOnlineCount_ = message.value(QStringLiteral("members")).toArray().size();
+                }
+
+                linkMicSession_.processSignalMessage(message);
+                refreshLinkMicPanel();
+                updateRoomInfo();
+            });
+
     buildUi();
     connectController();
     livePlayerController_.attachVideoSurface(liveVideoSurface_);
     updateState(PlaybackState::Idle, "Live HTTP-FLV learning pipeline is ready.");
     updatePresenceStatus("Presence idle.\nSign in and enter a room key to report join/heartbeat/leave.");
     updateStats(0, 0, 0, 0);
+    refreshLinkMicPanel();
     appendLog("Current milestone: HTTP chunk -> FLV tag -> H.264(ffmpeg) -> VideoOpenGLWidget. Audio stays TODO(user).");
 }
 
@@ -213,6 +342,11 @@ void StreamPage::setAuthToken(const QString &token)
     authToken_ = normalized;
 
     if (authToken_.isEmpty()) {
+        currentUserId_.clear();
+        currentUsername_.clear();
+        currentUserNumericId_ = 0;
+        stopBusinessSignaling(QStringLiteral("Signing out; leaving business signaling room."));
+
         if (!activePresenceRoomKey_.isEmpty()) {
             appendLog("Auth token cleared while room presence is active; sending leave.");
 
@@ -234,13 +368,17 @@ void StreamPage::setAuthToken(const QString &token)
         }
 
         updatePresenceStatus("Presence idle.\nSign in and enter a room key to report join/heartbeat/leave.");
+        refreshLinkMicPanel();
         return;
     }
 
     if (!watchedRoomKey_.isEmpty() && activePresenceRoomKey_.isEmpty()) {
         appendLog("Auth token restored while live watch is running; retrying room presence join.");
         ensurePresenceForCurrentWatch();
-        return;
+    }
+    if (!watchedRoomKey_.isEmpty() && activeSignalRoomKey_.isEmpty()) {
+        appendLog("Auth token restored while live watch is running; retrying business websocket join.");
+        ensureSignalingForCurrentWatch();
     }
 
     if (!activePresenceRoomKey_.isEmpty() && previousPresenceToken != authToken_) {
@@ -259,6 +397,14 @@ void StreamPage::setAuthToken(const QString &token)
         sendPresenceAction(QStringLiteral("leave"), roomKeyToLeave, tokenToLeave, false);
         ensurePresenceForCurrentWatch();
     }
+
+    if (!activeSignalRoomKey_.isEmpty() && previousAuthToken != authToken_) {
+        appendLog("Auth token changed while business websocket is active; reconnecting signaling.");
+        stopBusinessSignaling(QStringLiteral("Auth token changed; reconnecting business signaling."));
+        ensureSignalingForCurrentWatch();
+    }
+
+    refreshLinkMicPanel();
 }
 
 void StreamPage::hideEvent(QHideEvent *event)
@@ -538,6 +684,140 @@ void StreamPage::buildUi()
     streamStatusLayout->addLayout(streamStatusGrid);
     sideLayout->addWidget(streamStatusSection);
 
+    QVBoxLayout *linkMicLayout = nullptr;
+    auto *linkMicSection = createSidebarSection(sidePanel, "Link Mic", &linkMicLayout);
+    auto *linkMicGrid = new QGridLayout();
+    linkMicGrid->setContentsMargins(0, 0, 0, 0);
+    linkMicGrid->setHorizontalSpacing(8);
+    linkMicGrid->setVerticalSpacing(8);
+    linkMicGrid->setColumnStretch(1, 1);
+
+    signalValueLabel_ = createStatusValueLabel(linkMicSection);
+    signalRoleValueLabel_ = createInfoValueLabel(linkMicSection);
+    signalRoomValueLabel_ = createInfoValueLabel(linkMicSection);
+    signalTargetValueLabel_ = createInfoValueLabel(linkMicSection);
+
+    linkMicGrid->addWidget(createRowLabel("Signal", linkMicSection), 0, 0);
+    linkMicGrid->addWidget(signalValueLabel_, 0, 1);
+    linkMicGrid->addWidget(
+        createHelpButton(
+            "REST presence keeps online/heartbeat compatibility. Link mic routing itself requires the business websocket to join the roomKey first.",
+            linkMicSection),
+        0,
+        2,
+        Qt::AlignTop);
+
+    linkMicGrid->addWidget(createRowLabel("Role", linkMicSection), 1, 0);
+    linkMicGrid->addWidget(signalRoleValueLabel_, 1, 1);
+
+    linkMicGrid->addWidget(createRowLabel("Signal Room", linkMicSection), 2, 0);
+    linkMicGrid->addWidget(signalRoomValueLabel_, 2, 1);
+
+    linkMicGrid->addWidget(createRowLabel("Target", linkMicSection), 3, 0);
+    linkMicGrid->addWidget(signalTargetValueLabel_, 3, 1);
+
+    linkMicLayout->addLayout(linkMicGrid);
+
+    auto *membersLabel = new QLabel("Online Members", linkMicSection);
+    membersLabel->setStyleSheet("font-size: 12px; font-weight: 700; color: #0f172a;");
+    linkMicLayout->addWidget(membersLabel);
+
+    linkMicMemberTable_ = new QTableWidget(0, 3, linkMicSection);
+    linkMicMemberTable_->setSelectionBehavior(QAbstractItemView::SelectRows);
+    linkMicMemberTable_->setSelectionMode(QAbstractItemView::SingleSelection);
+    linkMicMemberTable_->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    linkMicMemberTable_->setMinimumHeight(180);
+    linkMicMemberTable_->setHorizontalHeaderLabels({QStringLiteral("User"), QStringLiteral("Role"), QStringLiteral("Online")});
+    linkMicMemberTable_->verticalHeader()->setVisible(false);
+    linkMicMemberTable_->horizontalHeader()->setStretchLastSection(false);
+    linkMicMemberTable_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    linkMicMemberTable_->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+    linkMicMemberTable_->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
+    linkMicMemberTable_->setStyleSheet(
+        "QTableWidget {"
+        "  border: 1px solid #dbe4f0;"
+        "  border-radius: 12px;"
+        "  background: #ffffff;"
+        "  gridline-color: #e2e8f0;"
+        "}"
+        "QHeaderView::section {"
+        "  background: #eef2ff;"
+        "  color: #334155;"
+        "  border: 0;"
+        "  padding: 6px 8px;"
+        "  font-size: 11px;"
+        "  font-weight: 700;"
+        "}");
+    linkMicLayout->addWidget(linkMicMemberTable_);
+
+    auto *linkMicPrimaryButtonRow = new QHBoxLayout();
+    linkMicPrimaryButtonRow->setContentsMargins(0, 0, 0, 0);
+    linkMicPrimaryButtonRow->setSpacing(8);
+
+    inviteLinkMicButton_ = new QPushButton("Invite", linkMicSection);
+    inviteLinkMicButton_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    inviteLinkMicButton_->setStyleSheet(
+        "padding: 8px 12px;"
+        "border: 0;"
+        "border-radius: 10px;"
+        "font-weight: 700;"
+        "color: #f8fafc;"
+        "background: #1d4ed8;");
+    linkMicPrimaryButtonRow->addWidget(inviteLinkMicButton_);
+
+    applyLinkMicButton_ = new QPushButton("Apply", linkMicSection);
+    applyLinkMicButton_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    applyLinkMicButton_->setStyleSheet(
+        "padding: 8px 12px;"
+        "border: 0;"
+        "border-radius: 10px;"
+        "font-weight: 700;"
+        "color: #f8fafc;"
+        "background: #0f766e;");
+    linkMicPrimaryButtonRow->addWidget(applyLinkMicButton_);
+
+    linkMicLayout->addLayout(linkMicPrimaryButtonRow);
+
+    auto *linkMicSecondaryButtonRow = new QHBoxLayout();
+    linkMicSecondaryButtonRow->setContentsMargins(0, 0, 0, 0);
+    linkMicSecondaryButtonRow->setSpacing(8);
+
+    acceptLinkMicButton_ = new QPushButton("Accept", linkMicSection);
+    acceptLinkMicButton_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    acceptLinkMicButton_->setStyleSheet(
+        "padding: 8px 12px;"
+        "border: 0;"
+        "border-radius: 10px;"
+        "font-weight: 700;"
+        "color: #f8fafc;"
+        "background: #16a34a;");
+    linkMicSecondaryButtonRow->addWidget(acceptLinkMicButton_);
+
+    rejectLinkMicButton_ = new QPushButton("Reject", linkMicSection);
+    rejectLinkMicButton_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    rejectLinkMicButton_->setStyleSheet(
+        "padding: 8px 12px;"
+        "border: 0;"
+        "border-radius: 10px;"
+        "font-weight: 700;"
+        "color: #f8fafc;"
+        "background: #dc2626;");
+    linkMicSecondaryButtonRow->addWidget(rejectLinkMicButton_);
+
+    hangupLinkMicButton_ = new QPushButton("Hangup", linkMicSection);
+    hangupLinkMicButton_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    hangupLinkMicButton_->setStyleSheet(
+        "padding: 8px 12px;"
+        "border: 1px solid #cbd5e1;"
+        "border-radius: 10px;"
+        "font-weight: 700;"
+        "color: #0f172a;"
+        "background: #ffffff;");
+    linkMicSecondaryButtonRow->addWidget(hangupLinkMicButton_);
+
+    linkMicLayout->addLayout(linkMicSecondaryButtonRow);
+    sideLayout->addWidget(linkMicSection);
+
     auto *debugSection = new QFrame(sidePanel);
     debugSection->setStyleSheet(
         "background: #f8fafc;"
@@ -612,8 +892,48 @@ void StreamPage::connectController()
         stopWatching(true, "Stopped live watch and room presence.");
     });
 
+    connect(inviteLinkMicButton_, &QPushButton::clicked, this, [this]() {
+        if (!linkMicSession_.invite(selectedLinkMicTargetUserId())) {
+            appendLog("Link mic invite is unavailable in the current state.");
+            refreshLinkMicPanel();
+        }
+    });
+
+    connect(applyLinkMicButton_, &QPushButton::clicked, this, [this]() {
+        if (!linkMicSession_.apply(selectedLinkMicTargetUserId())) {
+            appendLog("Link mic apply is unavailable in the current state.");
+            refreshLinkMicPanel();
+        }
+    });
+
+    connect(acceptLinkMicButton_, &QPushButton::clicked, this, [this]() {
+        if (!linkMicSession_.accept()) {
+            appendLog("Link mic accept is unavailable in the current state.");
+            refreshLinkMicPanel();
+        }
+    });
+
+    connect(rejectLinkMicButton_, &QPushButton::clicked, this, [this]() {
+        if (!linkMicSession_.reject()) {
+            appendLog("Link mic reject is unavailable in the current state.");
+            refreshLinkMicPanel();
+        }
+    });
+
+    connect(hangupLinkMicButton_, &QPushButton::clicked, this, [this]() {
+        if (!linkMicSession_.hangup()) {
+            appendLog("Link mic hangup is unavailable in the current state.");
+            refreshLinkMicPanel();
+        }
+    });
+
     connect(roomKeyEdit_, &QLineEdit::textChanged, this, [this]() {
         updateRoomInfo();
+        refreshLinkMicPanel();
+    });
+
+    connect(linkMicMemberTable_, &QTableWidget::itemSelectionChanged, this, [this]() {
+        refreshLinkMicPanel();
     });
 
     connect(&livePlayerController_,
@@ -722,6 +1042,188 @@ void StreamPage::ensurePresenceForCurrentWatch()
         true);
 }
 
+void StreamPage::ensureSignalingForCurrentWatch()
+{
+    if (watchedRoomKey_.isEmpty()) {
+        refreshLinkMicPanel();
+        return;
+    }
+
+    if (authToken_.isEmpty()) {
+        appendLog("Business websocket join skipped because there is no auth token.");
+        refreshLinkMicPanel();
+        return;
+    }
+
+    if (!signalingClient_ || !signalingClient_->isAvailable()) {
+        appendLog("Business websocket join skipped because Qt6 WebSockets is unavailable in this build.");
+        refreshLinkMicPanel();
+        return;
+    }
+
+    if (activeSignalRoomKey_ == watchedRoomKey_ &&
+        activeSignalAuthToken_ == authToken_ &&
+        signalingClient_->isJoined())
+    {
+        refreshLinkMicPanel();
+        return;
+    }
+
+    if (!activeSignalRoomKey_.isEmpty() ||
+        linkMicSessionBound_ ||
+        signalingClient_->state() != frontend::linkmic::LiveRoomSignalingClient::State::Disconnected)
+    {
+        stopBusinessSignaling(QStringLiteral("Refreshing business websocket room join."));
+    }
+
+    const quint64 revision = ++signalRequestRevision_;
+    appendLog(QString("Loading business signaling context for room %1.").arg(watchedRoomKey_));
+
+    QNetworkRequest request(QUrl(meUrl(apiBaseUrl())));
+    request.setAttribute(
+        QNetworkRequest::RedirectPolicyAttribute,
+        QNetworkRequest::NoLessSafeRedirectPolicy);
+    applyAuthHeader(request, authToken_);
+
+    const QString requestedRoomKey = watchedRoomKey_;
+    const QString requestedToken = authToken_;
+    auto *reply = networkManager_->get(request);
+    connect(reply, &QNetworkReply::finished, this, [this, reply, requestedRoomKey, requestedToken, revision]() {
+        handleCurrentUserReply(reply, requestedRoomKey, requestedToken, revision);
+    });
+}
+
+void StreamPage::handleCurrentUserReply(
+    QNetworkReply *reply,
+    const QString &roomKey,
+    const QString &token,
+    quint64 revision)
+{
+    if (!reply) {
+        return;
+    }
+
+    const QByteArray responseBytes = reply->readAll();
+    const QJsonObject responseObject = parseReplyObject(responseBytes);
+    const QNetworkReply::NetworkError networkError = reply->error();
+    const QString replyErrorString = reply->errorString();
+    reply->deleteLater();
+
+    if (revision != signalRequestRevision_ ||
+        roomKey != watchedRoomKey_ ||
+        token != authToken_)
+    {
+        return;
+    }
+
+    if (networkError != QNetworkReply::NoError) {
+        const QString errorMessage = extractApiErrorMessage(replyErrorString, responseObject);
+        appendLog(QString("Failed to load /api/me before business websocket join: %1").arg(errorMessage));
+        refreshLinkMicPanel();
+        return;
+    }
+
+    const QJsonObject userObject = responseObject.value(QStringLiteral("user")).toObject();
+    currentUserNumericId_ = jsonInt64(userObject.value(QStringLiteral("id")));
+    currentUserId_ = currentUserNumericId_ > 0
+        ? QString::number(currentUserNumericId_)
+        : QString();
+    currentUsername_ = userObject.value(QStringLiteral("username")).toString().trimmed();
+
+    QNetworkRequest request(QUrl(liveRoomDetailUrl(apiBaseUrl(), roomKey)));
+    request.setAttribute(
+        QNetworkRequest::RedirectPolicyAttribute,
+        QNetworkRequest::NoLessSafeRedirectPolicy);
+    applyAuthHeader(request, token);
+
+    auto *roomReply = networkManager_->get(request);
+    connect(roomReply, &QNetworkReply::finished, this, [this, roomReply, roomKey, token, revision]() {
+        handleLiveRoomDetailReply(roomReply, roomKey, token, revision);
+    });
+}
+
+void StreamPage::handleLiveRoomDetailReply(
+    QNetworkReply *reply,
+    const QString &roomKey,
+    const QString &token,
+    quint64 revision)
+{
+    if (!reply) {
+        return;
+    }
+
+    const QByteArray responseBytes = reply->readAll();
+    const QJsonObject responseObject = parseReplyObject(responseBytes);
+    const QNetworkReply::NetworkError networkError = reply->error();
+    const QString replyErrorString = reply->errorString();
+    reply->deleteLater();
+
+    if (revision != signalRequestRevision_ ||
+        roomKey != watchedRoomKey_ ||
+        token != authToken_)
+    {
+        return;
+    }
+
+    if (networkError != QNetworkReply::NoError) {
+        const QString errorMessage = extractApiErrorMessage(replyErrorString, responseObject);
+        appendLog(QString("Failed to load live room %1 before business websocket join: %2").arg(roomKey, errorMessage));
+        refreshLinkMicPanel();
+        return;
+    }
+
+    const QJsonObject roomObject = responseObject.value(QStringLiteral("room")).toObject();
+    const QJsonObject ownerObject = roomObject.value(QStringLiteral("owner")).toObject();
+    currentRoomOwnerUserId_ = jsonInt64(ownerObject.value(QStringLiteral("id")));
+    lastKnownRoomOnlineCount_ = roomObject.value(QStringLiteral("onlineMemberCount")).toInt(0);
+
+    QUrl signalingUrl = QUrl::fromUserInput(roomObject.value(QStringLiteral("signalingUrl")).toString().trimmed());
+    if (!signalingUrl.isValid() || signalingUrl.toString(QUrl::FullyEncoded).trimmed().isEmpty()) {
+        signalingUrl = defaultSignalingUrl();
+    }
+    activeSignalUrl_ = signalingUrl.toString(QUrl::FullyEncoded);
+
+    const QString scopedRole = currentRoomScopedRole();
+    if (currentUserId_.isEmpty() || currentRoomOwnerUserId_ <= 0 || scopedRole == QStringLiteral("unknown")) {
+        appendLog(QString("Business websocket join skipped because room role could not be resolved for room %1.").arg(roomKey));
+        refreshLinkMicPanel();
+        return;
+    }
+
+    frontend::linkmic::LinkMicSessionConfig linkMicConfig;
+    linkMicConfig.signalingUrl = signalingUrl;
+    linkMicConfig.roomId = roomKey;
+    linkMicConfig.userId = currentUserId_;
+    linkMicConfig.displayName = currentUsername_.isEmpty() ? currentUserId_ : currentUsername_;
+    linkMicConfig.role = scopedRole;
+    linkMicConfig.requestTimeoutMs = 10000;
+
+    linkMicSessionBound_ = linkMicSession_.connectToRoom(linkMicConfig);
+    if (!linkMicSessionBound_) {
+        appendLog(QString("Failed to bind LinkMicSession for room %1.").arg(roomKey));
+        refreshLinkMicPanel();
+        return;
+    }
+
+    activeSignalRoomKey_ = roomKey;
+    activeSignalAuthToken_ = token;
+
+    frontend::linkmic::LiveRoomSignalingClient::Config signalingConfig;
+    signalingConfig.signalingUrl = signalingUrl;
+    signalingConfig.roomKey = roomKey;
+    signalingConfig.accessToken = token;
+    signalingConfig.currentUserId = currentUserId_;
+    signalingConfig.roomRole = scopedRole;
+    signalingConfig.joinRole = currentJoinRole();
+    signalingConfig.heartbeatIntervalMs = kPresenceHeartbeatIntervalMs;
+
+    // REST presence keeps backward-compatible online/member updates, but only the
+    // business websocket join makes this watcher routable in businessRooms[roomKey].
+    signalingClient_->connectToRoom(signalingConfig);
+    refreshLinkMicPanel();
+    updateRoomInfo();
+}
+
 void StreamPage::handlePresenceReply(
     QNetworkReply *reply,
     const QString &action,
@@ -769,6 +1271,9 @@ void StreamPage::handlePresenceReply(
     const QJsonObject roomObject = responseObject.value("room").toObject();
     const int onlineMemberCount = roomObject.value("onlineMemberCount").toInt(-1);
     const int memberCount = responseObject.value("members").toArray().size();
+    if (onlineMemberCount >= 0) {
+        lastKnownRoomOnlineCount_ = onlineMemberCount;
+    }
 
     if (action == "leave") {
         appendLog(QString("Presence leave ok for room %1.").arg(roomKey));
@@ -807,6 +1312,28 @@ void StreamPage::handlePresenceReply(
             .arg(action, roomKey, countDetail));
 }
 
+bool StreamPage::sendLinkMicMessage(
+    const QString &type,
+    const QString &roomId,
+    const QString &fromUserId,
+    const QString &toUserId,
+    const QString &requestId,
+    const QJsonObject &payload)
+{
+    if (!signalingClient_) {
+        return false;
+    }
+
+    if (roomId.trimmed() != activeSignalRoomKey_) {
+        appendLog(
+            QString("Refusing to send %1 because the active signaling room is %2, not %3.")
+                .arg(type, activeSignalRoomKey_, roomId));
+        return false;
+    }
+
+    return signalingClient_->sendBusinessMessage(type, fromUserId, toUserId, requestId, payload);
+}
+
 void StreamPage::requestStartWatch()
 {
     const QString liveUrl = streamUrlEdit_ ? streamUrlEdit_->text().trimmed() : QString();
@@ -818,7 +1345,11 @@ void StreamPage::requestStartWatch()
 
     const QString roomKey = normalizeRoomKey(roomKeyEdit_ ? roomKeyEdit_->text() : QString());
     const bool hasExistingWatch =
-        !watchedStreamUrl_.isEmpty() || !watchedRoomKey_.isEmpty() || !activePresenceRoomKey_.isEmpty();
+        !watchedStreamUrl_.isEmpty() ||
+        !watchedRoomKey_.isEmpty() ||
+        !activePresenceRoomKey_.isEmpty() ||
+        !activeSignalRoomKey_.isEmpty() ||
+        linkMicSessionBound_;
     if (hasExistingWatch && (watchedStreamUrl_ != liveUrl || watchedRoomKey_ != roomKey)) {
         stopWatching(false, "Restarting previous room presence before opening a new stream.");
     }
@@ -832,6 +1363,7 @@ void StreamPage::requestStartWatch()
         updatePresenceStatus("Presence idle.\nEnter a room key to report join/heartbeat/leave.");
     } else {
         ensurePresenceForCurrentWatch();
+        ensureSignalingForCurrentWatch();
     }
 
     livePlayerController_.openStream(liveUrl);
@@ -868,17 +1400,47 @@ void StreamPage::sendPresenceAction(
     });
 }
 
+void StreamPage::stopBusinessSignaling(const QString &reason)
+{
+    ++signalRequestRevision_;
+
+    if (!reason.trimmed().isEmpty()) {
+        appendLog(reason);
+    }
+
+    if (signalingClient_) {
+        signalingClient_->disconnectFromRoom(reason);
+    }
+    if (linkMicSessionBound_) {
+        linkMicSession_.disconnectFromRoom();
+    }
+
+    linkMicSessionBound_ = false;
+    activeSignalRoomKey_.clear();
+    activeSignalAuthToken_.clear();
+    activeSignalUrl_.clear();
+    currentRoomOwnerUserId_ = 0;
+    lastKnownRoomOnlineCount_ = 0;
+    refreshLinkMicPanel();
+    updateRoomInfo();
+}
+
 void StreamPage::stopWatching(bool stopPlayback, const QString &reason)
 {
     const bool hadWatchTarget = !watchedStreamUrl_.isEmpty() || !watchedRoomKey_.isEmpty();
     const bool hadPresence = !activePresenceRoomKey_.isEmpty();
+    const bool hadSignal =
+        !activeSignalRoomKey_.isEmpty() ||
+        linkMicSessionBound_ ||
+        (signalingClient_ &&
+         signalingClient_->state() != frontend::linkmic::LiveRoomSignalingClient::State::Disconnected);
     const PlaybackState playbackState = livePlayerController_.playbackState();
     const bool shouldStopPlayback =
         stopPlayback &&
         playbackState != PlaybackState::Idle &&
         playbackState != PlaybackState::Stopped;
 
-    if (!hadWatchTarget && !hadPresence && !shouldStopPlayback) {
+    if (!hadWatchTarget && !hadPresence && !hadSignal && !shouldStopPlayback) {
         return;
     }
 
@@ -890,6 +1452,7 @@ void StreamPage::stopWatching(bool stopPlayback, const QString &reason)
     const QString tokenToLeave = activePresenceAuthToken_.isEmpty()
         ? authToken_
         : activePresenceAuthToken_;
+    const bool shouldStopSignal = hadSignal;
 
     watchedStreamUrl_.clear();
     watchedRoomKey_.clear();
@@ -899,6 +1462,10 @@ void StreamPage::stopWatching(bool stopPlayback, const QString &reason)
 
     if (presenceHeartbeatTimer_) {
         presenceHeartbeatTimer_->stop();
+    }
+
+    if (shouldStopSignal) {
+        stopBusinessSignaling(QStringLiteral("Leaving business websocket room."));
     }
 
     if (!roomKeyToLeave.isEmpty()) {
@@ -917,6 +1484,10 @@ void StreamPage::stopWatching(bool stopPlayback, const QString &reason)
 
 QString StreamPage::currentRoomKeyDisplay() const
 {
+    if (!activeSignalRoomKey_.trimmed().isEmpty()) {
+        return activeSignalRoomKey_.trimmed();
+    }
+
     if (!watchedRoomKey_.trimmed().isEmpty()) {
         return watchedRoomKey_.trimmed();
     }
@@ -929,6 +1500,41 @@ QString StreamPage::currentRoomKeyDisplay() const
     }
 
     return QStringLiteral("--");
+}
+
+QString StreamPage::currentRoomScopedRole() const
+{
+    if (currentUserNumericId_ <= 0 || currentRoomOwnerUserId_ <= 0) {
+        return QStringLiteral("unknown");
+    }
+
+    return currentUserNumericId_ == currentRoomOwnerUserId_
+        ? QStringLiteral("controller")
+        : QStringLiteral("participant");
+}
+
+QString StreamPage::currentRoomScopedRoleDisplay() const
+{
+    return roleDisplayText(currentRoomScopedRole());
+}
+
+QString StreamPage::currentJoinRole() const
+{
+    return currentRoomScopedRole() == QStringLiteral("controller")
+        ? QStringLiteral("anchor")
+        : QStringLiteral("audience");
+}
+
+QString StreamPage::selectedLinkMicTargetUserId() const
+{
+    if (linkMicMemberTable_ && linkMicMemberTable_->currentRow() >= 0) {
+        const auto *item = linkMicMemberTable_->item(linkMicMemberTable_->currentRow(), 0);
+        if (item) {
+            return item->data(Qt::UserRole).toString().trimmed();
+        }
+    }
+
+    return linkMicSession_.roomState().remoteUserId();
 }
 
 QString StreamPage::summarizePresenceValue(const QString &message) const
@@ -970,9 +1576,153 @@ void StreamPage::updateRoomInfo()
     }
 
     if (onlineCountValueLabel_) {
-        onlineCountValueLabel_->setText(QStringLiteral("0"));
+        const int memberCount = linkMicSession_.memberDirectory().onlineCount();
+        const int onlineCount = memberCount > 0 ? memberCount : lastKnownRoomOnlineCount_;
+        onlineCountValueLabel_->setText(QString::number(std::max(onlineCount, 0)));
         onlineCountValueLabel_->setToolTip(
-            QStringLiteral("A dedicated viewer count backend is not wired yet, so this field stays 0 for now."));
+            memberCount > 0
+                ? QStringLiteral("Business websocket member list count.")
+                : QStringLiteral("Latest room online count from REST room/presence response."));
+    }
+}
+
+void StreamPage::populateLinkMicMemberTable()
+{
+    if (!linkMicMemberTable_) {
+        return;
+    }
+
+    const QString previouslySelectedUserId = selectedLinkMicTargetUserId();
+    const auto &members = linkMicSession_.memberDirectory().members();
+
+    const QSignalBlocker blocker(linkMicMemberTable_);
+    linkMicMemberTable_->setRowCount(members.size());
+
+    int selectedRow = -1;
+    int firstRemoteRow = -1;
+    for (int row = 0; row < members.size(); ++row) {
+        const auto &member = members.at(row);
+        const bool isLocalUser = member.userId == currentUserId_;
+
+        auto *userIdItem = new QTableWidgetItem(
+            isLocalUser ? member.userId + QStringLiteral(" (you)") : member.userId);
+        userIdItem->setData(Qt::UserRole, member.userId);
+
+        auto *roleItem = new QTableWidgetItem(
+            member.role.trimmed().isEmpty() ? roleDisplayText(isLocalUser ? currentRoomScopedRole() : QStringLiteral("participant"))
+                                            : member.role);
+        auto *onlineItem = new QTableWidgetItem(member.online ? QStringLiteral("Yes") : QStringLiteral("No"));
+
+        linkMicMemberTable_->setItem(row, 0, userIdItem);
+        linkMicMemberTable_->setItem(row, 1, roleItem);
+        linkMicMemberTable_->setItem(row, 2, onlineItem);
+
+        if (member.userId == previouslySelectedUserId) {
+            selectedRow = row;
+        }
+        if (!isLocalUser && firstRemoteRow < 0) {
+            firstRemoteRow = row;
+        }
+    }
+
+    if (selectedRow >= 0) {
+        linkMicMemberTable_->selectRow(selectedRow);
+    } else if (firstRemoteRow >= 0) {
+        linkMicMemberTable_->selectRow(firstRemoteRow);
+    } else {
+        linkMicMemberTable_->clearSelection();
+    }
+}
+
+void StreamPage::refreshLinkMicPanel()
+{
+    if (!signalValueLabel_) {
+        return;
+    }
+
+    const QString signalState = signalingClient_ ? signalingClient_->stateText() : QStringLiteral("Disconnected");
+    const QString signalDetail = [this]() {
+        if (!authToken_.isEmpty() && !watchedRoomKey_.isEmpty() && signalingClient_ &&
+            signalingClient_->state() == frontend::linkmic::LiveRoomSignalingClient::State::Disconnected)
+        {
+            return QStringLiteral("Start Watch to join the business websocket for this room.");
+        }
+        if (authToken_.isEmpty()) {
+            return QStringLiteral("Sign in first. HTTP-FLV playback can continue, but link mic signaling stays disabled.");
+        }
+        if (!signalingClient_ || !signalingClient_->isAvailable()) {
+            return QStringLiteral("Qt6 WebSockets is unavailable in this build.");
+        }
+        const QString lastError = signalingClient_ ? signalingClient_->lastError() : QString();
+        if (!lastError.isEmpty()) {
+            return lastError;
+        }
+        const QString roomStateError = linkMicSession_.roomState().lastError();
+        if (!roomStateError.isEmpty()) {
+            return roomStateError;
+        }
+        return QStringLiteral("Business websocket join binds the watcher to server-side businessRooms[roomKey].peers[userId].");
+    }();
+
+    signalValueLabel_->setText(signalState);
+    signalValueLabel_->setToolTip(signalDetail);
+    if (signalState == QStringLiteral("Joined")) {
+        setValueTone(signalValueLabel_, QStringLiteral("#0f766e"));
+    } else if (signalState == QStringLiteral("Connecting")) {
+        setValueTone(signalValueLabel_, QStringLiteral("#b45309"));
+    } else if (signalState == QStringLiteral("Error")) {
+        setValueTone(signalValueLabel_, QStringLiteral("#dc2626"));
+    } else {
+        setValueTone(signalValueLabel_, QStringLiteral("#475569"));
+    }
+
+    if (signalRoleValueLabel_) {
+        signalRoleValueLabel_->setText(currentRoomScopedRoleDisplay());
+        signalRoleValueLabel_->setToolTip(
+            QStringLiteral("Room-scoped role is derived from currentUserId == room.ownerUserId, not from a fixed account identity."));
+    }
+    if (signalRoomValueLabel_) {
+        signalRoomValueLabel_->setText(currentRoomKeyDisplay());
+        signalRoomValueLabel_->setToolTip(activeSignalUrl_.isEmpty()
+            ? QStringLiteral("Business signaling URL is not loaded yet.")
+            : activeSignalUrl_);
+    }
+    if (signalTargetValueLabel_) {
+        const QString targetUserId = selectedLinkMicTargetUserId();
+        signalTargetValueLabel_->setText(targetUserId.isEmpty() ? QStringLiteral("--") : targetUserId);
+        signalTargetValueLabel_->setToolTip(targetUserId.isEmpty()
+            ? QStringLiteral("Select an online member or wait for an incoming request.")
+            : targetUserId);
+    }
+
+    populateLinkMicMemberTable();
+    updateLinkMicActionButtons();
+}
+
+void StreamPage::updateLinkMicActionButtons()
+{
+    const QString selectedUserId = selectedLinkMicTargetUserId();
+    const auto selectedMember = linkMicSession_.memberDirectory().memberById(selectedUserId);
+    const bool selectedInLinkMic = selectedMember.has_value() && selectedMember->inLinkMic;
+    const bool selectedIsLocal = !selectedUserId.isEmpty() && selectedUserId == currentUserId_;
+    const auto &roomState = linkMicSession_.roomState();
+
+    if (inviteLinkMicButton_) {
+        inviteLinkMicButton_->setEnabled(!selectedIsLocal &&
+            roomState.canInvite(selectedUserId, selectedInLinkMic));
+    }
+    if (applyLinkMicButton_) {
+        applyLinkMicButton_->setEnabled(!selectedIsLocal &&
+            roomState.canApply(selectedUserId, selectedInLinkMic));
+    }
+    if (acceptLinkMicButton_) {
+        acceptLinkMicButton_->setEnabled(roomState.canAccept());
+    }
+    if (rejectLinkMicButton_) {
+        rejectLinkMicButton_->setEnabled(roomState.canReject());
+    }
+    if (hangupLinkMicButton_) {
+        hangupLinkMicButton_->setEnabled(roomState.canTerminate());
     }
 }
 

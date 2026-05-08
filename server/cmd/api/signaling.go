@@ -50,6 +50,8 @@ var probeSignalUpgrader = websocket.Upgrader{
 type probeSignalEnvelope struct {
 	Type       string          `json:"type"`
 	RoomID     string          `json:"room_id,omitempty"`
+	RoomKey    string          `json:"roomKey,omitempty"`
+	RoomKeyAlt string          `json:"room_key,omitempty"`
 	PeerID     string          `json:"peer_id,omitempty"`
 	Role       string          `json:"role,omitempty"`
 	Mode       string          `json:"mode,omitempty"`
@@ -81,27 +83,33 @@ type roomMemberListMessage struct {
 }
 
 type signalErrorMessage struct {
-	Type    string `json:"type"`
-	RoomID  string `json:"room_id,omitempty"`
-	Message string `json:"message"`
-	TsMs    int64  `json:"ts_ms"`
+	Type       string `json:"type"`
+	RoomID     string `json:"room_id,omitempty"`
+	RoomKey    string `json:"roomKey,omitempty"`
+	RoomKeyAlt string `json:"room_key,omitempty"`
+	RequestID  string `json:"request_id,omitempty"`
+	Reason     string `json:"reason,omitempty"`
+	Message    string `json:"message"`
+	TsMs       int64  `json:"ts_ms"`
 }
 
 type probeSignalHub struct {
-	mu       sync.Mutex
-	database *sql.DB
-	rooms    map[string]*probeSignalRoom
-	anchorRooms map[string]map[int64]*probeSignalClient
+	mu            sync.Mutex
+	database      *sql.DB
+	rooms         map[string]*probeSignalRoom
+	businessRooms map[string]*probeSignalRoom
 }
 
 type probeSignalRoom struct {
-	peers   map[string]*probeSignalClient
-	session *probeLinkMicSession
+	peers    map[string]*probeSignalClient
+	session  *probeLinkMicSession
+	requests map[string]*probeLinkMicSession
 }
 
 type probeLinkMicSession struct {
 	RequestID     string
 	RequestType   string
+	RequestState  string
 	ControllerID  string
 	ParticipantID string
 	State         string
@@ -132,10 +140,52 @@ type outboundMessage struct {
 
 func newProbeSignalHub(database *sql.DB) *probeSignalHub {
 	return &probeSignalHub{
-		database: database,
-		rooms:    make(map[string]*probeSignalRoom),
-		anchorRooms: make(map[string]map[int64]*probeSignalClient),
+		database:      database,
+		rooms:         make(map[string]*probeSignalRoom),
+		businessRooms: make(map[string]*probeSignalRoom),
 	}
+}
+
+type signalRoutingError struct {
+	roomID    string
+	roomKey   string
+	requestID string
+	reason    string
+	message   string
+}
+
+func (e *signalRoutingError) Error() string {
+	if e == nil {
+		return ""
+	}
+	return e.message
+}
+
+func newSignalRoutingError(roomID, roomKey, requestID, reason, message string) error {
+	return &signalRoutingError{
+		roomID:    strings.TrimSpace(roomID),
+		roomKey:   normalizeLiveRoomKey(roomKey),
+		requestID: strings.TrimSpace(requestID),
+		reason:    strings.TrimSpace(reason),
+		message:   strings.TrimSpace(message),
+	}
+}
+
+func newProbeSignalRoom() *probeSignalRoom {
+	return &probeSignalRoom{
+		peers:    make(map[string]*probeSignalClient),
+		requests: make(map[string]*probeLinkMicSession),
+	}
+}
+
+func (e probeSignalEnvelope) normalizedBusinessRoomKey() string {
+	if roomKey := normalizeLiveRoomKey(e.RoomKey); roomKey != "" {
+		return roomKey
+	}
+	if roomKey := normalizeLiveRoomKey(e.RoomKeyAlt); roomKey != "" {
+		return roomKey
+	}
+	return ""
 }
 
 func (s *apiServer) handleProbeSignalingWebSocket(writer http.ResponseWriter, request *http.Request) {
@@ -187,13 +237,13 @@ func (c *probeSignalClient) readPump() {
 			return
 		}
 		if messageType != websocket.TextMessage {
-			c.sendError("", "only text websocket messages are supported")
+			c.sendError("", "", "", "", "only text websocket messages are supported")
 			continue
 		}
 
 		if err := c.handleMessage(data); err != nil {
 			log.Printf("probe signaling message rejected: peer_id=%s room_id=%s err=%v", c.peerID, c.roomID, err)
-			c.sendError(c.roomID, err.Error())
+			c.sendSignalError(err)
 		}
 	}
 }
@@ -280,7 +330,7 @@ func (c *probeSignalClient) handleRegister(envelope probeSignalEnvelope) error {
 
 	replacedPeer := c.hub.register(c, roomID, peerID, role, mode, requestID)
 	if replacedPeer != nil {
-		replacedPeer.sendError(roomID, "peer_id replaced by a newer session")
+		replacedPeer.sendError(roomID, "", requestID, "", "peer_id replaced by a newer session")
 		_ = replacedPeer.conn.Close()
 	}
 
@@ -303,6 +353,10 @@ func (c *probeSignalClient) handleRegister(envelope probeSignalEnvelope) error {
 }
 
 func (c *probeSignalClient) handleRTCRelay(envelope probeSignalEnvelope, rawMessage []byte) error {
+	if c.anchorUserID > 0 || envelope.normalizedBusinessRoomKey() != "" {
+		return c.handleBusinessRTCRelay(envelope, rawMessage)
+	}
+
 	if c.peerID == "" || c.roomID == "" {
 		return fmt.Errorf("probe must register before rtc signaling")
 	}
@@ -331,6 +385,10 @@ func (c *probeSignalClient) handleRTCRelay(envelope probeSignalEnvelope, rawMess
 }
 
 func (c *probeSignalClient) handleLinkMicSignal(envelope probeSignalEnvelope, rawMessage []byte) error {
+	if c.anchorUserID > 0 || envelope.normalizedBusinessRoomKey() != "" {
+		return c.handleBusinessLinkMicSignal(envelope, rawMessage)
+	}
+
 	if c.peerID == "" || c.roomID == "" {
 		return fmt.Errorf("probe must register before linkmic signaling")
 	}
@@ -353,9 +411,7 @@ func (h *probeSignalHub) register(client *probeSignalClient, roomID, peerID, rol
 
 	room := h.rooms[roomID]
 	if room == nil {
-		room = &probeSignalRoom{
-			peers: make(map[string]*probeSignalClient),
-		}
+		room = newProbeSignalRoom()
 		h.rooms[roomID] = room
 	}
 
@@ -408,12 +464,25 @@ func (h *probeSignalHub) unregister(client *probeSignalClient) {
 
 	anchorRoomKey, anchorUserID, anchorRemoved := h.unbindAnchorClient(client)
 	if anchorRemoved {
+		leavingMember := businessRoomMember{
+			UserID:   anchorUserID,
+			Username: client.anchorUsername,
+			Role:     client.anchorRole,
+			Online:   false,
+		}
+
+		var outbound []outboundMessage
 		ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 		defer cancel()
 
 		if err := markAnchorOfflineByRoomKey(ctx, h.database, anchorRoomKey, anchorUserID); err != nil {
 			log.Printf("anchor disconnect cleanup failed: roomKey=%s userId=%d err=%v", anchorRoomKey, anchorUserID, err)
 		}
+		outbound = h.buildBusinessDisconnectSessionMessages(anchorRoomKey, strconv.FormatInt(anchorUserID, 10))
+		for _, message := range outbound {
+			message.client.sendRaw(message.message)
+		}
+		h.broadcastBusinessRoomMemberEvent(anchorRoomKey, "room.member-leave", leavingMember)
 		h.broadcastAnchorMemberList(anchorRoomKey)
 		log.Printf("[presence] anchor disconnected roomKey=%s userId=%d", anchorRoomKey, anchorUserID)
 	}
@@ -441,27 +510,7 @@ func (h *probeSignalHub) handleLinkMicSignal(sender *probeSignalClient, envelope
 		return fmt.Errorf("target peer not found: %s", targetID)
 	}
 
-	var outbound []outboundMessage
-	var err error
-
-	switch envelope.Type {
-	case linkMicTypeApply:
-		outbound, err = h.handleLinkMicApplyLocked(room, sender, target, envelope, rawMessage)
-	case linkMicTypeInvite:
-		outbound, err = h.handleLinkMicInviteLocked(room, sender, target, envelope, rawMessage)
-	case linkMicTypeAccept:
-		outbound, err = h.handleLinkMicAcceptLocked(room, sender, target, envelope, rawMessage)
-	case linkMicTypeReject:
-		outbound, err = h.handleLinkMicRejectLocked(room, sender, target, envelope, rawMessage)
-	case linkMicTypeCancel:
-		outbound, err = h.handleLinkMicCancelLocked(room, sender, target, envelope, rawMessage)
-	case linkMicTypeHangup:
-		outbound, err = h.handleLinkMicHangupLocked(room, sender, target, envelope, rawMessage)
-	case linkMicTypeKick:
-		outbound, err = h.handleLinkMicKickLocked(room, sender, target, envelope, rawMessage)
-	default:
-		err = fmt.Errorf("unsupported message type: %s", envelope.Type)
-	}
+	outbound, err := h.handleLinkMicSignalLocked(room, sender, target, envelope, rawMessage)
 	h.mu.Unlock()
 
 	if err != nil {
@@ -475,6 +524,186 @@ func (h *probeSignalHub) handleLinkMicSignal(sender *probeSignalClient, envelope
 	log.Printf("probe signaling handled: room_id=%s type=%s request_id=%s from=%s to=%s",
 		sender.roomID, envelope.Type, envelope.RequestID, sender.peerID, targetID)
 	return nil
+}
+
+func (h *probeSignalHub) handleLinkMicSignalLocked(room *probeSignalRoom, sender, target *probeSignalClient, envelope probeSignalEnvelope, rawMessage []byte) ([]outboundMessage, error) {
+	switch envelope.Type {
+	case linkMicTypeApply:
+		return h.handleLinkMicApplyLocked(room, sender, target, envelope, rawMessage)
+	case linkMicTypeInvite:
+		return h.handleLinkMicInviteLocked(room, sender, target, envelope, rawMessage)
+	case linkMicTypeAccept:
+		return h.handleLinkMicAcceptLocked(room, sender, target, envelope, rawMessage)
+	case linkMicTypeReject:
+		return h.handleLinkMicRejectLocked(room, sender, target, envelope, rawMessage)
+	case linkMicTypeCancel:
+		return h.handleLinkMicCancelLocked(room, sender, target, envelope, rawMessage)
+	case linkMicTypeHangup:
+		return h.handleLinkMicHangupLocked(room, sender, target, envelope, rawMessage)
+	case linkMicTypeKick:
+		return h.handleLinkMicKickLocked(room, sender, target, envelope, rawMessage)
+	default:
+		return nil, fmt.Errorf("unsupported message type: %s", envelope.Type)
+	}
+}
+
+func (c *probeSignalClient) handleBusinessRTCRelay(envelope probeSignalEnvelope, rawMessage []byte) error {
+	roomKey := envelope.normalizedBusinessRoomKey()
+	if roomKey == "" {
+		roomKey = normalizeLiveRoomKey(c.anchorRoomKey)
+	}
+	if roomKey == "" {
+		return newSignalRoutingError("", "", envelope.RequestID, "", fmt.Sprintf("%s requires roomKey", envelope.Type))
+	}
+	if !c.isBoundAnchor(roomKey) {
+		return newSignalRoutingError("", roomKey, envelope.RequestID, "", "business websocket is not joined to the requested room")
+	}
+
+	localUserID := strconv.FormatInt(c.anchorUserID, 10)
+	if strings.TrimSpace(envelope.FromUserID) != localUserID {
+		return newSignalRoutingError("", roomKey, envelope.RequestID, "", fmt.Sprintf("%s from_user_id mismatch", envelope.Type))
+	}
+
+	targetUserID := strings.TrimSpace(envelope.ToUserID)
+	if targetUserID == "" {
+		return newSignalRoutingError("", roomKey, envelope.RequestID, "", fmt.Sprintf("%s requires to_user_id", envelope.Type))
+	}
+	if targetUserID == localUserID {
+		return newSignalRoutingError("", roomKey, envelope.RequestID, "", fmt.Sprintf("%s target must be another user", envelope.Type))
+	}
+
+	var target *probeSignalClient
+
+	c.hub.mu.Lock()
+	room := c.hub.businessRooms[roomKey]
+	if room != nil {
+		target = room.peers[targetUserID]
+	}
+	if target == nil {
+		c.hub.mu.Unlock()
+		return newSignalRoutingError("", roomKey, envelope.RequestID, "target offline", "target offline")
+	}
+	if err := validateAcceptedBusinessRTCRelayLocked(room, localUserID, targetUserID, strings.TrimSpace(envelope.RequestID)); err != nil {
+		c.hub.mu.Unlock()
+		return enrichSignalRoutingError(err, roomKey, envelope.RequestID)
+	}
+	c.hub.mu.Unlock()
+
+	target.sendRaw(cloneBytes(rawMessage))
+	log.Printf("business signaling relayed rtc: room_key=%s type=%s request_id=%s from=%s to=%s",
+		roomKey, envelope.Type, strings.TrimSpace(envelope.RequestID), localUserID, targetUserID)
+	return nil
+}
+
+func (c *probeSignalClient) handleBusinessLinkMicSignal(envelope probeSignalEnvelope, rawMessage []byte) error {
+	roomKey := envelope.normalizedBusinessRoomKey()
+	if roomKey == "" {
+		roomKey = normalizeLiveRoomKey(c.anchorRoomKey)
+	}
+	if roomKey == "" {
+		return newSignalRoutingError("", "", envelope.RequestID, "", fmt.Sprintf("%s requires roomKey", envelope.Type))
+	}
+	if !c.isBoundAnchor(roomKey) {
+		return newSignalRoutingError("", roomKey, envelope.RequestID, "", "business websocket is not joined to the requested room")
+	}
+
+	localUserID := strconv.FormatInt(c.anchorUserID, 10)
+	if strings.TrimSpace(envelope.FromUserID) != localUserID {
+		return newSignalRoutingError("", roomKey, envelope.RequestID, "", fmt.Sprintf("%s from_user_id mismatch", envelope.Type))
+	}
+	if strings.TrimSpace(envelope.RequestID) == "" {
+		return newSignalRoutingError("", roomKey, "", "", fmt.Sprintf("%s requires request_id", envelope.Type))
+	}
+
+	targetUserID := strings.TrimSpace(envelope.ToUserID)
+	if targetUserID == "" {
+		return newSignalRoutingError("", roomKey, envelope.RequestID, "", fmt.Sprintf("%s requires to_user_id", envelope.Type))
+	}
+	if targetUserID == localUserID {
+		return newSignalRoutingError("", roomKey, envelope.RequestID, "", fmt.Sprintf("%s target must be another user", envelope.Type))
+	}
+
+	c.hub.mu.Lock()
+	room := c.hub.businessRooms[roomKey]
+	if room == nil {
+		c.hub.mu.Unlock()
+		return newSignalRoutingError("", roomKey, envelope.RequestID, "", "room not found")
+	}
+
+	target := room.peers[targetUserID]
+	if target == nil {
+		c.hub.mu.Unlock()
+		return newSignalRoutingError("", roomKey, envelope.RequestID, "target offline", "target offline")
+	}
+
+	outbound, err := c.hub.handleLinkMicSignalLocked(room, c.withBusinessRole(), target.withBusinessRole(), envelope, rawMessage)
+	c.hub.mu.Unlock()
+	if err != nil {
+		return enrichSignalRoutingError(err, roomKey, envelope.RequestID)
+	}
+
+	for _, message := range outbound {
+		message.client.sendRaw(message.message)
+	}
+
+	log.Printf("business signaling handled: room_key=%s type=%s request_id=%s from=%s to=%s",
+		roomKey, envelope.Type, envelope.RequestID, localUserID, targetUserID)
+	return nil
+}
+
+func (c *probeSignalClient) businessPeerID() string {
+	if c.anchorUserID <= 0 {
+		return ""
+	}
+	return strconv.FormatInt(c.anchorUserID, 10)
+}
+
+func (c *probeSignalClient) withBusinessRole() *probeSignalClient {
+	clone := *c
+	clone.roomID = normalizeLiveRoomKey(c.anchorRoomKey)
+	clone.peerID = c.businessPeerID()
+	clone.role = strings.TrimSpace(c.anchorRole)
+	return &clone
+}
+
+func validateAcceptedBusinessRTCRelayLocked(room *probeSignalRoom, fromUserID, toUserID, requestID string) error {
+	requestID = strings.TrimSpace(requestID)
+	if requestID == "" {
+		return newSignalRoutingError("", "", "", "request not found", "request not found")
+	}
+	if room == nil || room.requests == nil {
+		return newSignalRoutingError("", "", requestID, "request not found", "request not found")
+	}
+
+	request := room.requests[requestID]
+	if request == nil {
+		return newSignalRoutingError("", "", requestID, "request not found", "request not found")
+	}
+	if request.RequestState != linkMicRequestStateAccepted {
+		return newSignalRoutingError("", "", requestID, "request expired", "request expired")
+	}
+	if !sessionHasPeer(*request, fromUserID) || !sessionHasPeer(*request, toUserID) {
+		return fmt.Errorf("rtc signaling peers do not match the accepted request")
+	}
+	return nil
+}
+
+func enrichSignalRoutingError(err error, roomKey, requestID string) error {
+	if err == nil {
+		return nil
+	}
+
+	routingErr, ok := err.(*signalRoutingError)
+	if !ok {
+		return newSignalRoutingError("", roomKey, requestID, "", err.Error())
+	}
+	if routingErr.roomKey == "" {
+		routingErr.roomKey = normalizeLiveRoomKey(roomKey)
+	}
+	if routingErr.requestID == "" {
+		routingErr.requestID = strings.TrimSpace(requestID)
+	}
+	return routingErr
 }
 
 func (h *probeSignalHub) handleLinkMicApplyLocked(room *probeSignalRoom, sender, target *probeSignalClient, envelope probeSignalEnvelope, rawMessage []byte) ([]outboundMessage, error) {
@@ -492,12 +721,14 @@ func (h *probeSignalHub) handleLinkMicApplyLocked(room *probeSignalRoom, sender,
 	room.session = &probeLinkMicSession{
 		RequestID:     envelope.RequestID,
 		RequestType:   envelope.Type,
+		RequestState:  linkMicRequestStatePending,
 		ControllerID:  target.peerID,
 		ParticipantID: sender.peerID,
 		State:         linkMicStateApplying,
 		CreatedAtMs:   now,
 		UpdatedAtMs:   now,
 	}
+	recordRoomRequestLocked(room, room.session)
 
 	outbound := []outboundMessage{
 		{client: target, message: cloneBytes(rawMessage)},
@@ -521,12 +752,14 @@ func (h *probeSignalHub) handleLinkMicInviteLocked(room *probeSignalRoom, sender
 	room.session = &probeLinkMicSession{
 		RequestID:     envelope.RequestID,
 		RequestType:   envelope.Type,
+		RequestState:  linkMicRequestStatePending,
 		ControllerID:  sender.peerID,
 		ParticipantID: target.peerID,
 		State:         linkMicStateInviting,
 		CreatedAtMs:   now,
 		UpdatedAtMs:   now,
 	}
+	recordRoomRequestLocked(room, room.session)
 
 	outbound := []outboundMessage{
 		{client: target, message: cloneBytes(rawMessage)},
@@ -536,7 +769,7 @@ func (h *probeSignalHub) handleLinkMicInviteLocked(room *probeSignalRoom, sender
 }
 
 func (h *probeSignalHub) handleLinkMicAcceptLocked(room *probeSignalRoom, sender, target *probeSignalClient, envelope probeSignalEnvelope, rawMessage []byte) ([]outboundMessage, error) {
-	session, err := requireMatchingSession(room.session, envelope.RequestID)
+	session, err := requireActiveRoomSession(room, envelope.RequestID)
 	if err != nil {
 		return nil, err
 	}
@@ -553,6 +786,7 @@ func (h *probeSignalHub) handleLinkMicAcceptLocked(room *probeSignalRoom, sender
 	}
 
 	session.State = linkMicStateActive
+	session.RequestState = linkMicRequestStateAccepted
 	session.UpdatedAtMs = nowUnixMilli()
 
 	outbound := []outboundMessage{
@@ -565,7 +799,7 @@ func (h *probeSignalHub) handleLinkMicAcceptLocked(room *probeSignalRoom, sender
 }
 
 func (h *probeSignalHub) handleLinkMicRejectLocked(room *probeSignalRoom, sender, target *probeSignalClient, envelope probeSignalEnvelope, rawMessage []byte) ([]outboundMessage, error) {
-	session, err := requireMatchingSession(room.session, envelope.RequestID)
+	session, err := requireActiveRoomSession(room, envelope.RequestID)
 	if err != nil {
 		return nil, err
 	}
@@ -584,13 +818,15 @@ func (h *probeSignalHub) handleLinkMicRejectLocked(room *probeSignalRoom, sender
 	outbound := []outboundMessage{
 		{client: target, message: cloneBytes(rawMessage)},
 	}
+	session.RequestState = linkMicRequestStateRejected
+	session.UpdatedAtMs = nowUnixMilli()
 	outbound = append(outbound, buildResetStateMessages(room, sender.roomID, *session, "linkmic-rejected")...)
 	room.session = nil
 	return outbound, nil
 }
 
 func (h *probeSignalHub) handleLinkMicCancelLocked(room *probeSignalRoom, sender, target *probeSignalClient, envelope probeSignalEnvelope, rawMessage []byte) ([]outboundMessage, error) {
-	session, err := requireMatchingSession(room.session, envelope.RequestID)
+	session, err := requireActiveRoomSession(room, envelope.RequestID)
 	if err != nil {
 		return nil, err
 	}
@@ -603,13 +839,15 @@ func (h *probeSignalHub) handleLinkMicCancelLocked(room *probeSignalRoom, sender
 	outbound := []outboundMessage{
 		{client: target, message: cloneBytes(rawMessage)},
 	}
+	session.RequestState = linkMicRequestStateCancelled
+	session.UpdatedAtMs = nowUnixMilli()
 	outbound = append(outbound, buildResetStateMessages(room, sender.roomID, *session, "linkmic-cancelled")...)
 	room.session = nil
 	return outbound, nil
 }
 
 func (h *probeSignalHub) handleLinkMicHangupLocked(room *probeSignalRoom, sender, target *probeSignalClient, envelope probeSignalEnvelope, rawMessage []byte) ([]outboundMessage, error) {
-	session, err := requireMatchingSession(room.session, envelope.RequestID)
+	session, err := requireActiveRoomSession(room, envelope.RequestID)
 	if err != nil {
 		return nil, err
 	}
@@ -620,13 +858,15 @@ func (h *probeSignalHub) handleLinkMicHangupLocked(room *probeSignalRoom, sender
 	outbound := []outboundMessage{
 		{client: target, message: cloneBytes(rawMessage)},
 	}
+	session.RequestState = linkMicRequestStateEnded
+	session.UpdatedAtMs = nowUnixMilli()
 	outbound = append(outbound, buildResetStateMessages(room, sender.roomID, *session, "linkmic-hangup")...)
 	room.session = nil
 	return outbound, nil
 }
 
 func (h *probeSignalHub) handleLinkMicKickLocked(room *probeSignalRoom, sender, target *probeSignalClient, envelope probeSignalEnvelope, rawMessage []byte) ([]outboundMessage, error) {
-	session, err := requireMatchingSession(room.session, envelope.RequestID)
+	session, err := requireActiveRoomSession(room, envelope.RequestID)
 	if err != nil {
 		return nil, err
 	}
@@ -637,6 +877,8 @@ func (h *probeSignalHub) handleLinkMicKickLocked(room *probeSignalRoom, sender, 
 	outbound := []outboundMessage{
 		{client: target, message: cloneBytes(rawMessage)},
 	}
+	session.RequestState = linkMicRequestStateEnded
+	session.UpdatedAtMs = nowUnixMilli()
 	outbound = append(outbound, buildResetStateMessages(room, sender.roomID, *session, "linkmic-kicked")...)
 	room.session = nil
 	return outbound, nil
@@ -653,6 +895,12 @@ func (h *probeSignalHub) buildDisconnectSessionMessagesLocked(roomID string, roo
 		otherPeerID = session.ParticipantID
 	}
 	otherClient := room.peers[otherPeerID]
+	if session.State == linkMicStateApplying || session.State == linkMicStateInviting {
+		session.RequestState = linkMicRequestStateCancelled
+	} else {
+		session.RequestState = linkMicRequestStateEnded
+	}
+	session.UpdatedAtMs = nowUnixMilli()
 	room.session = nil
 	if otherClient == nil {
 		return nil
@@ -690,6 +938,17 @@ func (h *probeSignalHub) findPeer(roomID, peerID string) *probeSignalClient {
 		return nil
 	}
 	return room.peers[peerID]
+}
+
+func (h *probeSignalHub) buildBusinessDisconnectSessionMessages(roomKey, leavingUserID string) []outboundMessage {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+
+	room := h.businessRooms[normalizeLiveRoomKey(roomKey)]
+	if room == nil {
+		return nil
+	}
+	return h.buildDisconnectSessionMessagesLocked(normalizeLiveRoomKey(roomKey), room, strings.TrimSpace(leavingUserID))
 }
 
 func (h *probeSignalHub) broadcastRoomMemberEvent(roomID, eventType string, peer probeRoomPeer) {
@@ -778,14 +1037,33 @@ func sendRoomMemberList(recipients []*probeSignalClient, roomID string, peers []
 	}
 }
 
-func requireMatchingSession(session *probeLinkMicSession, requestID string) (*probeLinkMicSession, error) {
-	if session == nil {
-		return nil, fmt.Errorf("no pending or active linkmic session")
+func recordRoomRequestLocked(room *probeSignalRoom, session *probeLinkMicSession) {
+	if room == nil || session == nil {
+		return
 	}
-	if session.RequestID != requestID {
-		return nil, fmt.Errorf("request_id mismatch")
+	if room.requests == nil {
+		room.requests = make(map[string]*probeLinkMicSession)
 	}
-	return session, nil
+	room.requests[session.RequestID] = session
+}
+
+func requireActiveRoomSession(room *probeSignalRoom, requestID string) (*probeLinkMicSession, error) {
+	requestID = strings.TrimSpace(requestID)
+	if requestID == "" {
+		return nil, newSignalRoutingError("", "", "", "request not found", "request not found")
+	}
+	if room == nil {
+		return nil, newSignalRoutingError("", "", requestID, "request not found", "request not found")
+	}
+
+	request := room.requests[requestID]
+	if request == nil {
+		return nil, newSignalRoutingError("", "", requestID, "request not found", "request not found")
+	}
+	if room.session == nil || room.session.RequestID != requestID {
+		return nil, newSignalRoutingError("", "", requestID, "request expired", "request expired")
+	}
+	return request, nil
 }
 
 func sessionEndpoints(session *probeLinkMicSession) (initiatorID string, responderID string) {
@@ -1149,13 +1427,39 @@ func resolveAcceptedRTCUserIDs(room liveRoomRow, requestRow linkMicRequestRow) (
 	return controllerUserID, participantUserID, nil
 }
 
-func (c *probeSignalClient) sendError(roomID, message string) {
+func (c *probeSignalClient) sendError(roomID, roomKey, requestID, reason, message string) {
 	c.sendJSON(signalErrorMessage{
-		Type:    "signal.error",
-		RoomID:  roomID,
-		Message: message,
-		TsMs:    nowUnixMilli(),
+		Type:       "signal.error",
+		RoomID:     strings.TrimSpace(roomID),
+		RoomKey:    normalizeLiveRoomKey(roomKey),
+		RoomKeyAlt: normalizeLiveRoomKey(roomKey),
+		RequestID:  strings.TrimSpace(requestID),
+		Reason:     strings.TrimSpace(reason),
+		Message:    strings.TrimSpace(message),
+		TsMs:       nowUnixMilli(),
 	})
+}
+
+func (c *probeSignalClient) sendSignalError(err error) {
+	if err == nil {
+		return
+	}
+
+	routingErr, ok := err.(*signalRoutingError)
+	if !ok {
+		c.sendError(c.roomID, c.anchorRoomKey, "", "", err.Error())
+		return
+	}
+
+	roomID := routingErr.roomID
+	if roomID == "" {
+		roomID = c.roomID
+	}
+	roomKey := routingErr.roomKey
+	if roomKey == "" {
+		roomKey = c.anchorRoomKey
+	}
+	c.sendError(roomID, roomKey, routingErr.requestID, routingErr.reason, routingErr.message)
 }
 
 func (c *probeSignalClient) sendJSON(payload any) {
