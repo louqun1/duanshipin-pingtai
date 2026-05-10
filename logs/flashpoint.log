@@ -1,0 +1,7 @@
+[2026-05-08 16:03:29.795] [info] [thread 204648] Logging initialized, file=D:\itffmpeg\av_media\online\duanshipin-pingtai\logs\flashpoint.log
+[2026-05-08 16:03:29.798] [info] [thread 204648] Starting desktop rebuild skeleton
+[2026-05-08 16:03:29.824] [info] [thread 204648] [live/session] Live render surface attached. Decoded AVFrames from your manual HTTP-FLV path will be copied here.
+[2026-05-08 16:03:29.825] [info] [thread 204648] [stream/page] Live render surface attached. Decoded AVFrames from your manual HTTP-FLV path will be copied here.
+[2026-05-08 16:03:29.826] [info] [thread 204648] [stream/page] Current milestone: HTTP chunk -> FLV tag -> H.264(ffmpeg) -> VideoOpenGLWidget. Audio stays TODO(user).
+[2026-05-08 16:03:29.861] [info] [thread 204648] [ui/mainwindow] stage=after_build_ui window_size=1280x600 window_min=0x0 window_min_hint=519x313 window_hint=519x313 central_min=0x0 central_min_hint=519x313 page_stack_min=0x0 page_stack_min_hint=455x173 current_page=frontend::pages::HomePage current_page_min=0x0 current_page_min_hint=455x173 current_page_hint=455x173
+[2026-05-08 16:03:30.386] [info] [thread 204648] [ui/mainwindow] stage=after_first_show window_size=1280x600 window_min=519x313 window_min_hint=519x313 window_hint=519x313 central_min=0x0 central_min_hint=519x313 page_stack_min=0x0 page_stack_min_hint=455x173 current_page=frontend::pages::HomePage current_page_min=0x0 current_page_min_hint=455x173 current_page_hint=455x173

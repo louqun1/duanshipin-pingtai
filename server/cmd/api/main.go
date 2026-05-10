@@ -60,7 +60,7 @@ type apiServer struct {
 	database     *sql.DB
 	mediaStorage *storage.MinIOStorage
 	events       *eventBroker
-	probeSignals *probeSignalHub
+	liveSignals *liveSignalHub
 }
 
 func main() {
@@ -98,7 +98,7 @@ func main() {
 		database:     database,
 		mediaStorage: mediaStorage,
 		events:       newEventBroker(),
-		probeSignals: newProbeSignalHub(database, cfg.PublicSignalingURL),
+		liveSignals: newLiveSignalHub(database, cfg.PublicSignalingURL),
 	}
 
 	mux := http.NewServeMux()
@@ -115,7 +115,7 @@ func main() {
 	mux.HandleFunc("/internal/events/video-updated", server.handleVideoUpdatedNotification)
 	mux.HandleFunc("/vod/", server.handleVODObject)
 	mux.HandleFunc("/image/", server.handleImageObject)
-	mux.HandleFunc("/ws", server.handleProbeSignalingWebSocket)
+	mux.HandleFunc("/ws", server.handleLiveSignalingWebSocket)
 	mux.HandleFunc("/healthz", handleHealthz)//健康检查接口
 
 	log.Printf("api listening on %s", cfg.HTTPAddr)

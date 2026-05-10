@@ -470,8 +470,8 @@ func (s *apiServer) handleLiveRoomPresence(writer http.ResponseWriter, request *
 		role,
 		len(members),
 	)
-	if s.probeSignals != nil {
-		s.probeSignals.broadcastAnchorMemberList(roomKey)
+	if s.liveSignals != nil {
+		s.liveSignals.broadcastAnchorMemberList(roomKey)
 	}
 	s.publishLiveRoomEvent(ctx, eventAction, user.ID, roomKey, "")
 	writeJSON(writer, http.StatusOK, map[string]any{

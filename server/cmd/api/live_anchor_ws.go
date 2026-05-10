@@ -64,7 +64,7 @@ type businessRoomMemberListMessage struct {
 	TsMs    int64                `json:"tsMs"`
 }
 
-func (c *probeSignalClient) handleLiveAnchorJoinMessage(data []byte) error {
+func (c *liveSignalClient) handleLiveAnchorJoinMessage(data []byte) error {
 	var message liveAnchorJoinMessage
 	if err := json.Unmarshal(data, &message); err != nil {
 		c.sendLiveAnchorError("", "invalid live.anchor.join payload")
@@ -155,7 +155,7 @@ func (c *probeSignalClient) handleLiveAnchorJoinMessage(data []byte) error {
 	return nil
 }
 
-func (c *probeSignalClient) handleLiveAnchorHeartbeatMessage(data []byte) error {
+func (c *liveSignalClient) handleLiveAnchorHeartbeatMessage(data []byte) error {
 	var message liveAnchorHeartbeatMessage
 	if err := json.Unmarshal(data, &message); err != nil {
 		c.sendLiveAnchorError("", "invalid live.anchor.heartbeat payload")
@@ -189,7 +189,7 @@ func (c *probeSignalClient) handleLiveAnchorHeartbeatMessage(data []byte) error 
 	return nil
 }
 
-func (c *probeSignalClient) handleLiveAnchorLeaveMessage(data []byte) error {
+func (c *liveSignalClient) handleLiveAnchorLeaveMessage(data []byte) error {
 	var message liveAnchorLeaveMessage
 	if err := json.Unmarshal(data, &message); err != nil {
 		c.sendLiveAnchorError("", "invalid live.anchor.leave payload")
@@ -231,7 +231,7 @@ func (c *probeSignalClient) handleLiveAnchorLeaveMessage(data []byte) error {
 	return nil
 }
 
-func (h *probeSignalHub) bindAnchorClient(client *probeSignalClient, roomKey string, userID int64, username, role string) *probeSignalClient {
+func (h *liveSignalHub) bindAnchorClient(client *liveSignalClient, roomKey string, userID int64, username, role string) *liveSignalClient {
 	h.mu.Lock()
 	defer h.mu.Unlock()
 
@@ -246,7 +246,7 @@ func (h *probeSignalHub) bindAnchorClient(client *probeSignalClient, roomKey str
 
 	room := h.anchorRooms[roomKey]
 	if room == nil {
-		room = make(map[int64]*probeSignalClient)
+		room = make(map[int64]*liveSignalClient)
 		h.anchorRooms[roomKey] = room
 	}
 
@@ -259,7 +259,7 @@ func (h *probeSignalHub) bindAnchorClient(client *probeSignalClient, roomKey str
 	return replaced
 }
 
-func (h *probeSignalHub) unbindAnchorClient(client *probeSignalClient) (string, int64, bool) {
+func (h *liveSignalHub) unbindAnchorClient(client *liveSignalClient) (string, int64, bool) {
 	h.mu.Lock()
 	defer h.mu.Unlock()
 
@@ -289,7 +289,7 @@ func (h *probeSignalHub) unbindAnchorClient(client *probeSignalClient) (string, 
 	return roomKey, userID, false
 }
 
-func (h *probeSignalHub) broadcastAnchorMemberList(roomKey string) {
+func (h *liveSignalHub) broadcastAnchorMemberList(roomKey string) {
 	roomKey = normalizeLiveRoomKey(roomKey)
 	if roomKey == "" || h.database == nil {
 		return
@@ -325,7 +325,7 @@ func (h *probeSignalHub) broadcastAnchorMemberList(roomKey string) {
 	}
 }
 
-func (h *probeSignalHub) snapshotAnchorRoom(roomKey string) []*probeSignalClient {
+func (h *liveSignalHub) snapshotAnchorRoom(roomKey string) []*liveSignalClient {
 	h.mu.Lock()
 	defer h.mu.Unlock()
 
@@ -334,18 +334,18 @@ func (h *probeSignalHub) snapshotAnchorRoom(roomKey string) []*probeSignalClient
 		return nil
 	}
 
-	recipients := make([]*probeSignalClient, 0, len(room))
+	recipients := make([]*liveSignalClient, 0, len(room))
 	for _, client := range room {
 		recipients = append(recipients, client)
 	}
 	return recipients
 }
 
-func (c *probeSignalClient) isBoundAnchor(roomKey string) bool {
+func (c *liveSignalClient) isBoundAnchor(roomKey string) bool {
 	return c.anchorUserID > 0 && normalizeLiveRoomKey(c.anchorRoomKey) == normalizeLiveRoomKey(roomKey)
 }
 
-func (c *probeSignalClient) sendLiveAnchorError(roomKey, message string) {
+func (c *liveSignalClient) sendLiveAnchorError(roomKey, message string) {
 	c.sendJSON(liveAnchorErrorMessage{
 		Type:    "live.anchor.error",
 		RoomKey: normalizeLiveRoomKey(roomKey),

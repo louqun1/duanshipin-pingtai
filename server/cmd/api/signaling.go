@@ -17,10 +17,10 @@ import (
 )
 
 const (
-	probeSignalWriteWait      = 10 * time.Second
-	probeSignalPongWait       = 60 * time.Second
-	probeSignalPingPeriod     = probeSignalPongWait * 9 / 10
-	probeSignalMaxMessageSize = 1 << 20
+	liveSignalWriteWait      = 10 * time.Second
+	liveSignalPongWait       = 60 * time.Second
+	liveSignalPingPeriod     = liveSignalPongWait * 9 / 10
+	liveSignalMaxMessageSize = 1 << 20
 
 	linkMicTypeApply      = "linkmic.apply"
 	linkMicTypeInvite     = "linkmic.invite"
@@ -39,7 +39,7 @@ const (
 	linkMicStateRtcActive = "rtc-active"
 )
 
-var probeSignalUpgrader = websocket.Upgrader{
+var liveSignalUpgrader = websocket.Upgrader{
 	ReadBufferSize:  4096,
 	WriteBufferSize: 4096,
 	CheckOrigin: func(_ *http.Request) bool {
@@ -47,7 +47,7 @@ var probeSignalUpgrader = websocket.Upgrader{
 	},
 }
 
-type probeSignalEnvelope struct {
+type liveSignalEnvelope struct {
 	Type             string          `json:"type"`
 	RoomID           string          `json:"room_id,omitempty"`
 	PeerID           string          `json:"peer_id,omitempty"`
@@ -70,12 +70,12 @@ type probeSignalEnvelope struct {
 	TsMsCamel        int64           `json:"tsMs,omitempty"`
 }
 
-type probeRoomPeer struct {
+type liveSignalPeer struct {
 	PeerID string `json:"peer_id"`
 	Role   string `json:"role,omitempty"`
 }
 
-type probeRegisteredMessage struct {
+type liveSignalRegisteredMessage struct {
 	Type   string `json:"type"`
 	RoomID string `json:"room_id"`
 	PeerID string `json:"peer_id"`
@@ -86,7 +86,7 @@ type probeRegisteredMessage struct {
 type roomMemberListMessage struct {
 	Type   string          `json:"type"`
 	RoomID string          `json:"room_id"`
-	Peers  []probeRoomPeer `json:"peers"`
+	Peers  []liveSignalPeer `json:"peers"`
 	TsMs   int64           `json:"ts_ms"`
 }
 
@@ -97,21 +97,21 @@ type signalErrorMessage struct {
 	TsMs    int64  `json:"ts_ms"`
 }
 
-type probeSignalHub struct {
+type liveSignalHub struct {
 	mu       sync.Mutex
 	database *sql.DB
 	publicSignalingURL string
-	rooms              map[string]*probeSignalRoom
-	anchorRooms        map[string]map[int64]*probeSignalClient
+	rooms              map[string]*liveSignalRoom
+	anchorRooms        map[string]map[int64]*liveSignalClient
 	crossRoomSessions map[string]*crossRoomSessionRuntime
 }
 
-type probeSignalRoom struct {
-	peers   map[string]*probeSignalClient
-	session *probeLinkMicSession
+type liveSignalRoom struct {
+	peers   map[string]*liveSignalClient
+	session *liveSignalLinkMicSession
 }
 
-type probeLinkMicSession struct {
+type liveSignalLinkMicSession struct {
 	RequestID     string
 	RequestType   string
 	ControllerID  string
@@ -121,8 +121,8 @@ type probeLinkMicSession struct {
 	UpdatedAtMs   int64
 }
 
-type probeSignalClient struct {
-	hub    *probeSignalHub
+type liveSignalClient struct {
+	hub    *liveSignalHub
 	server *apiServer
 	conn   *websocket.Conn
 	send   chan []byte
@@ -143,16 +143,16 @@ type crossRoomSessionRuntime struct {
 }
 
 type outboundMessage struct {
-	client  *probeSignalClient
+	client  *liveSignalClient
 	message []byte
 }
 
-func newProbeSignalHub(database *sql.DB, publicSignalingURL string) *probeSignalHub {
-	return &probeSignalHub{
+func newLiveSignalHub(database *sql.DB, publicSignalingURL string) *liveSignalHub {
+	return &liveSignalHub{
 		database:           database,
 		publicSignalingURL: strings.TrimSpace(publicSignalingURL),
-		rooms:              make(map[string]*probeSignalRoom),
-		anchorRooms:        make(map[string]map[int64]*probeSignalClient),
+		rooms:              make(map[string]*liveSignalRoom),
+		anchorRooms:        make(map[string]map[int64]*liveSignalClient),
 		crossRoomSessions:  make(map[string]*crossRoomSessionRuntime),
 	}
 }
@@ -167,42 +167,42 @@ func firstNonEmptyString(values ...string) string {
 	return ""
 }
 
-func (e probeSignalEnvelope) sessionID() string {
+func (e liveSignalEnvelope) sessionID() string {
 	return firstNonEmptyString(e.SessionID, e.SessionIDLegacy)
 }
 
-func (e probeSignalEnvelope) fromRoomKey() string {
+func (e liveSignalEnvelope) fromRoomKey() string {
 	return normalizeLiveRoomKey(firstNonEmptyString(e.FromRoomKey, e.FromRoomKeySnake))
 }
 
-func (e probeSignalEnvelope) toRoomKey() string {
+func (e liveSignalEnvelope) toRoomKey() string {
 	return normalizeLiveRoomKey(firstNonEmptyString(e.ToRoomKey, e.ToRoomKeySnake))
 }
 
-func (e probeSignalEnvelope) fromUserID() string {
+func (e liveSignalEnvelope) fromUserID() string {
 	return firstNonEmptyString(e.FromUserIDCamel, e.FromUserID)
 }
 
-func (e probeSignalEnvelope) toUserID() string {
+func (e liveSignalEnvelope) toUserID() string {
 	return firstNonEmptyString(e.ToUserIDCamel, e.ToUserID)
 }
 
-func (e probeSignalEnvelope) requestID() string {
+func (e liveSignalEnvelope) requestID() string {
 	return firstNonEmptyString(e.RequestIDCamel, e.RequestID)
 }
 
-func (e probeSignalEnvelope) timestampMs() int64 {
+func (e liveSignalEnvelope) timestampMs() int64 {
 	if e.TsMsCamel > 0 {
 		return e.TsMsCamel
 	}
 	return e.TsMs
 }
 
-func (e probeSignalEnvelope) isCrossRoomMessage() bool {
+func (e liveSignalEnvelope) isCrossRoomMessage() bool {
 	return e.sessionID() != "" || e.fromRoomKey() != "" || e.toRoomKey() != ""
 }
 
-func (c *probeSignalClient) isAnchorBound() bool {
+func (c *liveSignalClient) isAnchorBound() bool {
 	return normalizeLiveRoomKey(c.anchorRoomKey) != "" && c.anchorUserID > 0
 }
 
@@ -231,7 +231,7 @@ func isCrossRoomSessionRelayReady(status string) bool {
 	}
 }
 
-func (s *apiServer) handleProbeSignalingWebSocket(writer http.ResponseWriter, request *http.Request) {
+func (s *apiServer) handleLiveSignalingWebSocket(writer http.ResponseWriter, request *http.Request) {
 	if request.Method != http.MethodGet {
 		writeMethodNotAllowed(writer)
 		return
@@ -241,41 +241,41 @@ func (s *apiServer) handleProbeSignalingWebSocket(writer http.ResponseWriter, re
 		return
 	}
 
-	conn, err := probeSignalUpgrader.Upgrade(writer, request, nil)
+	conn, err := liveSignalUpgrader.Upgrade(writer, request, nil)
 	if err != nil {
-		log.Printf("probe signaling upgrade failed: %v", err)
+		log.Printf("live signaling upgrade failed: %v", err)
 		return
 	}
 
-	client := &probeSignalClient{
-		hub:    s.probeSignals,
+	client := &liveSignalClient{
+		hub:    s.liveSignals,
 		server: s,
 		conn:   conn,
 		send:   make(chan []byte, 32),
 	}
 
-	log.Printf("probe signaling connected: remote=%s", request.RemoteAddr)
+	log.Printf("live signaling connected: remote=%s", request.RemoteAddr)
 	go client.writePump()
 	client.readPump()
 }
 
-func (c *probeSignalClient) readPump() {
+func (c *liveSignalClient) readPump() {
 	defer func() {
 		c.hub.unregister(c)
 		_ = c.conn.Close()
 	}()
 
-	c.conn.SetReadLimit(probeSignalMaxMessageSize)
-	_ = c.conn.SetReadDeadline(time.Now().Add(probeSignalPongWait))
+	c.conn.SetReadLimit(liveSignalMaxMessageSize)
+	_ = c.conn.SetReadDeadline(time.Now().Add(liveSignalPongWait))
 	c.conn.SetPongHandler(func(string) error {
-		return c.conn.SetReadDeadline(time.Now().Add(probeSignalPongWait))
+		return c.conn.SetReadDeadline(time.Now().Add(liveSignalPongWait))
 	})
 
 	for {
 		messageType, data, err := c.conn.ReadMessage()
 		if err != nil {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
-				log.Printf("probe signaling read failed: peer_id=%s room_id=%s err=%v", c.peerID, c.roomID, err)
+				log.Printf("live signaling read failed: peer_id=%s room_id=%s err=%v", c.peerID, c.roomID, err)
 			}
 			return
 		}
@@ -285,14 +285,14 @@ func (c *probeSignalClient) readPump() {
 		}
 
 		if err := c.handleMessage(data); err != nil {
-			log.Printf("probe signaling message rejected: peer_id=%s room_id=%s err=%v", c.peerID, c.roomID, err)
+			log.Printf("live signaling message rejected: peer_id=%s room_id=%s err=%v", c.peerID, c.roomID, err)
 			c.sendError(c.roomID, err.Error())
 		}
 	}
 }
 
-func (c *probeSignalClient) writePump() {
-	ticker := time.NewTicker(probeSignalPingPeriod)
+func (c *liveSignalClient) writePump() {
+	ticker := time.NewTicker(liveSignalPingPeriod)
 	defer func() {
 		ticker.Stop()
 		_ = c.conn.Close()
@@ -301,7 +301,7 @@ func (c *probeSignalClient) writePump() {
 	for {
 		select {
 		case message, ok := <-c.send:
-			_ = c.conn.SetWriteDeadline(time.Now().Add(probeSignalWriteWait))
+			_ = c.conn.SetWriteDeadline(time.Now().Add(liveSignalWriteWait))
 			if !ok {
 				_ = c.conn.WriteMessage(websocket.CloseMessage, nil)
 				return
@@ -311,7 +311,7 @@ func (c *probeSignalClient) writePump() {
 				return
 			}
 		case <-ticker.C:
-			_ = c.conn.SetWriteDeadline(time.Now().Add(probeSignalWriteWait))
+			_ = c.conn.SetWriteDeadline(time.Now().Add(liveSignalWriteWait))
 			if err := c.conn.WriteMessage(websocket.PingMessage, nil); err != nil {
 				return
 			}
@@ -319,8 +319,8 @@ func (c *probeSignalClient) writePump() {
 	}
 }
 
-func (c *probeSignalClient) handleMessage(data []byte) error {
-	var envelope probeSignalEnvelope
+func (c *liveSignalClient) handleMessage(data []byte) error {
+	var envelope liveSignalEnvelope
 	if err := json.Unmarshal(data, &envelope); err != nil {
 		return fmt.Errorf("invalid json message")
 	}
@@ -354,7 +354,7 @@ func (c *probeSignalClient) handleMessage(data []byte) error {
 	}
 }
 
-func (c *probeSignalClient) handleRegister(envelope probeSignalEnvelope) error {
+func (c *liveSignalClient) handleRegister(envelope liveSignalEnvelope) error {
 	roomID := strings.TrimSpace(envelope.RoomID)
 	peerID := strings.TrimSpace(envelope.PeerID)
 	role := strings.TrimSpace(envelope.Role)
@@ -362,16 +362,16 @@ func (c *probeSignalClient) handleRegister(envelope probeSignalEnvelope) error {
 	requestID := strings.TrimSpace(envelope.requestID())
 
 	if roomID == "" {
-		return fmt.Errorf("probe.register requires room_id")
+		return fmt.Errorf("signaling register requires room_id")
 	}
 	if peerID == "" {
-		return fmt.Errorf("probe.register requires peer_id")
+		return fmt.Errorf("signaling register requires peer_id")
 	}
 	if role == "" {
-		return fmt.Errorf("probe.register requires role")
+		return fmt.Errorf("signaling register requires role")
 	}
 	if c.peerID != "" {
-		return fmt.Errorf("probe already registered")
+		return fmt.Errorf("signaling client already registered")
 	}
 	if requestID != "" {
 		ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
@@ -388,7 +388,7 @@ func (c *probeSignalClient) handleRegister(envelope probeSignalEnvelope) error {
 		_ = replacedPeer.conn.Close()
 	}
 
-	c.sendJSON(probeRegisteredMessage{
+	c.sendJSON(liveSignalRegisteredMessage{
 		Type:   "probe.registered",
 		RoomID: roomID,
 		PeerID: peerID,
@@ -396,19 +396,19 @@ func (c *probeSignalClient) handleRegister(envelope probeSignalEnvelope) error {
 		TsMs:   nowUnixMilli(),
 	})
 
-	c.hub.broadcastRoomMemberEvent(roomID, "room.member-join", probeRoomPeer{
+	c.hub.broadcastRoomMemberEvent(roomID, "room.member-join", liveSignalPeer{
 		PeerID: peerID,
 		Role:   role,
 	})
 	c.hub.broadcastRoomMemberList(roomID)
 
-	log.Printf("probe signaling registered: room_id=%s peer_id=%s role=%s mode=%s request_id=%s", roomID, peerID, role, mode, requestID)
+	log.Printf("live signaling registered: room_id=%s peer_id=%s role=%s mode=%s request_id=%s", roomID, peerID, role, mode, requestID)
 	return nil
 }
 
-func (c *probeSignalClient) handleRTCRelay(envelope probeSignalEnvelope, rawMessage []byte) error {
+func (c *liveSignalClient) handleRTCRelay(envelope liveSignalEnvelope, rawMessage []byte) error {
 	if c.peerID == "" || c.roomID == "" {
-		return fmt.Errorf("probe must register before rtc signaling")
+		return fmt.Errorf("signaling client must register before rtc signaling")
 	}
 	if strings.TrimSpace(envelope.RoomID) != c.roomID {
 		return fmt.Errorf("%s room_id mismatch", envelope.Type)
@@ -434,9 +434,9 @@ func (c *probeSignalClient) handleRTCRelay(envelope probeSignalEnvelope, rawMess
 	return nil
 }
 
-func (c *probeSignalClient) handleLinkMicSignal(envelope probeSignalEnvelope, rawMessage []byte) error {
+func (c *liveSignalClient) handleLinkMicSignal(envelope liveSignalEnvelope, rawMessage []byte) error {
 	if c.peerID == "" || c.roomID == "" {
-		return fmt.Errorf("probe must register before linkmic signaling")
+		return fmt.Errorf("signaling client must register before linkmic signaling")
 	}
 	if strings.TrimSpace(envelope.RoomID) != c.roomID {
 		return fmt.Errorf("%s room_id mismatch", envelope.Type)
@@ -464,7 +464,7 @@ func parseCrossRoomUserID(fieldName, rawValue string) (int64, error) {
 	return userID, nil
 }
 
-func (c *probeSignalClient) validateCrossRoomEnvelopeDirection(envelope probeSignalEnvelope) (string, int64, string, int64, error) {
+func (c *liveSignalClient) validateCrossRoomEnvelopeDirection(envelope liveSignalEnvelope) (string, int64, string, int64, error) {
 	if !c.isAnchorBound() {
 		return "", 0, "", 0, fmt.Errorf("live.anchor.join is required before cross-room signaling")
 	}
@@ -511,7 +511,7 @@ func (c *probeSignalClient) validateCrossRoomEnvelopeDirection(envelope probeSig
 	return fromRoomKey, fromUserID, toRoomKey, toUserID, nil
 }
 
-func (c *probeSignalClient) handleCrossRoomRTCRelay(envelope probeSignalEnvelope, rawMessage []byte) error {
+func (c *liveSignalClient) handleCrossRoomRTCRelay(envelope liveSignalEnvelope, rawMessage []byte) error {
 	fromRoomKey, fromUserID, toRoomKey, toUserID, err := c.validateCrossRoomEnvelopeDirection(envelope)
 	if err != nil {
 		return err
@@ -520,7 +520,7 @@ func (c *probeSignalClient) handleCrossRoomRTCRelay(envelope probeSignalEnvelope
 	return c.hub.handleCrossRoomRTCSignal(c, envelope, rawMessage, fromRoomKey, fromUserID, toRoomKey, toUserID)
 }
 
-func (c *probeSignalClient) handleCrossRoomLinkMicSignal(envelope probeSignalEnvelope, rawMessage []byte) error {
+func (c *liveSignalClient) handleCrossRoomLinkMicSignal(envelope liveSignalEnvelope, rawMessage []byte) error {
 	if envelope.Type == linkMicTypeApply {
 		return fmt.Errorf("cross-room anchor signaling does not support linkmic.apply")
 	}
@@ -533,14 +533,14 @@ func (c *probeSignalClient) handleCrossRoomLinkMicSignal(envelope probeSignalEnv
 	return c.hub.handleCrossRoomLinkMicSignal(c, envelope, rawMessage, fromRoomKey, fromUserID, toRoomKey, toUserID)
 }
 
-func (h *probeSignalHub) register(client *probeSignalClient, roomID, peerID, role, mode, requestID string) *probeSignalClient {
+func (h *liveSignalHub) register(client *liveSignalClient, roomID, peerID, role, mode, requestID string) *liveSignalClient {
 	h.mu.Lock()
 	defer h.mu.Unlock()
 
 	room := h.rooms[roomID]
 	if room == nil {
-		room = &probeSignalRoom{
-			peers: make(map[string]*probeSignalClient),
+		room = &liveSignalRoom{
+			peers: make(map[string]*liveSignalClient),
 		}
 		h.rooms[roomID] = room
 	}
@@ -555,15 +555,15 @@ func (h *probeSignalHub) register(client *probeSignalClient, roomID, peerID, rol
 	return replacedPeer
 }
 
-func (h *probeSignalHub) unregister(client *probeSignalClient) {
+func (h *liveSignalHub) unregister(client *liveSignalClient) {
 	if client.roomID != "" && client.peerID != "" {
 		roomID := client.roomID
-		leavingPeer := probeRoomPeer{
+		leavingPeer := liveSignalPeer{
 			PeerID: client.peerID,
 			Role:   client.role,
 		}
-		var recipients []*probeSignalClient
-		var peers []probeRoomPeer
+		var recipients []*liveSignalClient
+		var peers []liveSignalPeer
 		var outbound []outboundMessage
 		removed := false
 
@@ -588,7 +588,7 @@ func (h *probeSignalHub) unregister(client *probeSignalClient) {
 		if removed {
 			sendRoomMemberEvent(recipients, roomID, "room.member-leave", leavingPeer)
 			sendRoomMemberList(recipients, roomID, peers)
-			log.Printf("probe signaling disconnected: room_id=%s peer_id=%s", roomID, client.peerID)
+			log.Printf("live signaling disconnected: room_id=%s peer_id=%s", roomID, client.peerID)
 		}
 	}
 
@@ -651,7 +651,7 @@ func (runtime *crossRoomSessionRuntime) setStatus(status string) {
 	runtime.session.UpdatedAt = time.Now().UTC()
 }
 
-func (h *probeSignalHub) findAnchorClientLocked(roomKey string, userID int64) *probeSignalClient {
+func (h *liveSignalHub) findAnchorClientLocked(roomKey string, userID int64) *liveSignalClient {
 	room := h.anchorRooms[normalizeLiveRoomKey(roomKey)]
 	if room == nil {
 		return nil
@@ -659,7 +659,7 @@ func (h *probeSignalHub) findAnchorClientLocked(roomKey string, userID int64) *p
 	return room[userID]
 }
 
-func (h *probeSignalHub) findActiveCrossRoomSessionForAnchorLocked(roomKey string, userID int64, excludeSessionID string) *crossRoomSessionRuntime {
+func (h *liveSignalHub) findActiveCrossRoomSessionForAnchorLocked(roomKey string, userID int64, excludeSessionID string) *crossRoomSessionRuntime {
 	for sessionID, runtime := range h.crossRoomSessions {
 		if sessionID == excludeSessionID {
 			continue
@@ -674,7 +674,7 @@ func (h *probeSignalHub) findActiveCrossRoomSessionForAnchorLocked(roomKey strin
 	return nil
 }
 
-func (h *probeSignalHub) requireCrossRoomSessionLocked(envelope probeSignalEnvelope) (*crossRoomSessionRuntime, error) {
+func (h *liveSignalHub) requireCrossRoomSessionLocked(envelope liveSignalEnvelope) (*crossRoomSessionRuntime, error) {
 	sessionID := envelope.sessionID()
 	if sessionID == "" {
 		return nil, fmt.Errorf("%s requires sessionId", envelope.Type)
@@ -727,7 +727,7 @@ func buildCrossRoomEnvelopePayload(messageType string,
 	return json.Marshal(envelope)
 }
 
-func (h *probeSignalHub) buildCrossRoomJoinParamsMessagesLocked(runtime *crossRoomSessionRuntime) []outboundMessage {
+func (h *liveSignalHub) buildCrossRoomJoinParamsMessagesLocked(runtime *crossRoomSessionRuntime) []outboundMessage {
 	session := runtime.session
 	recipients := []struct {
 		roomKey string
@@ -769,7 +769,7 @@ func (h *probeSignalHub) buildCrossRoomJoinParamsMessagesLocked(runtime *crossRo
 	return messages
 }
 
-func (h *probeSignalHub) closeCrossRoomSessionsForAnchor(roomKey string, userID int64, reason string) []outboundMessage {
+func (h *liveSignalHub) closeCrossRoomSessionsForAnchor(roomKey string, userID int64, reason string) []outboundMessage {
 	roomKey = normalizeLiveRoomKey(roomKey)
 	if roomKey == "" || userID <= 0 {
 		return nil
@@ -816,8 +816,8 @@ func (h *probeSignalHub) closeCrossRoomSessionsForAnchor(roomKey string, userID 
 	return messages
 }
 
-func (h *probeSignalHub) handleCrossRoomRTCSignal(_ *probeSignalClient,
-	envelope probeSignalEnvelope,
+func (h *liveSignalHub) handleCrossRoomRTCSignal(_ *liveSignalClient,
+	envelope liveSignalEnvelope,
 	rawMessage []byte,
 	fromRoomKey string,
 	fromUserID int64,
@@ -863,8 +863,8 @@ func (h *probeSignalHub) handleCrossRoomRTCSignal(_ *probeSignalClient,
 	return nil
 }
 
-func (h *probeSignalHub) handleCrossRoomLinkMicSignal(_ *probeSignalClient,
-	envelope probeSignalEnvelope,
+func (h *liveSignalHub) handleCrossRoomLinkMicSignal(_ *liveSignalClient,
+	envelope liveSignalEnvelope,
 	rawMessage []byte,
 	fromRoomKey string,
 	fromUserID int64,
@@ -1015,7 +1015,7 @@ func (h *probeSignalHub) handleCrossRoomLinkMicSignal(_ *probeSignalClient,
 	return nil
 }
 
-func (h *probeSignalHub) handleLinkMicSignal(sender *probeSignalClient, envelope probeSignalEnvelope, rawMessage []byte) error {
+func (h *liveSignalHub) handleLinkMicSignal(sender *liveSignalClient, envelope liveSignalEnvelope, rawMessage []byte) error {
 	targetID := strings.TrimSpace(envelope.toUserID())
 	if targetID == "" {
 		return fmt.Errorf("%s requires to_user_id", envelope.Type)
@@ -1068,12 +1068,12 @@ func (h *probeSignalHub) handleLinkMicSignal(sender *probeSignalClient, envelope
 		message.client.sendRaw(message.message)
 	}
 
-	log.Printf("probe signaling handled: room_id=%s type=%s request_id=%s from=%s to=%s",
+	log.Printf("live signaling handled: room_id=%s type=%s request_id=%s from=%s to=%s",
 		sender.roomID, envelope.Type, envelope.requestID(), sender.peerID, targetID)
 	return nil
 }
 
-func (h *probeSignalHub) handleLinkMicApplyLocked(room *probeSignalRoom, sender, target *probeSignalClient, envelope probeSignalEnvelope, rawMessage []byte) ([]outboundMessage, error) {
+func (h *liveSignalHub) handleLinkMicApplyLocked(room *liveSignalRoom, sender, target *liveSignalClient, envelope liveSignalEnvelope, rawMessage []byte) ([]outboundMessage, error) {
 	if sender.role == "controller" {
 		return nil, fmt.Errorf("linkmic.apply must be sent by a non-controller peer")
 	}
@@ -1085,7 +1085,7 @@ func (h *probeSignalHub) handleLinkMicApplyLocked(room *probeSignalRoom, sender,
 	}
 
 	now := nowUnixMilli()
-	room.session = &probeLinkMicSession{
+	room.session = &liveSignalLinkMicSession{
 		RequestID:     envelope.requestID(),
 		RequestType:   envelope.Type,
 		ControllerID:  target.peerID,
@@ -1102,7 +1102,7 @@ func (h *probeSignalHub) handleLinkMicApplyLocked(room *probeSignalRoom, sender,
 	return outbound, nil
 }
 
-func (h *probeSignalHub) handleLinkMicInviteLocked(room *probeSignalRoom, sender, target *probeSignalClient, envelope probeSignalEnvelope, rawMessage []byte) ([]outboundMessage, error) {
+func (h *liveSignalHub) handleLinkMicInviteLocked(room *liveSignalRoom, sender, target *liveSignalClient, envelope liveSignalEnvelope, rawMessage []byte) ([]outboundMessage, error) {
 	if sender.role != "controller" {
 		return nil, fmt.Errorf("linkmic.invite must be sent by controller")
 	}
@@ -1114,7 +1114,7 @@ func (h *probeSignalHub) handleLinkMicInviteLocked(room *probeSignalRoom, sender
 	}
 
 	now := nowUnixMilli()
-	room.session = &probeLinkMicSession{
+	room.session = &liveSignalLinkMicSession{
 		RequestID:     envelope.requestID(),
 		RequestType:   envelope.Type,
 		ControllerID:  sender.peerID,
@@ -1131,7 +1131,7 @@ func (h *probeSignalHub) handleLinkMicInviteLocked(room *probeSignalRoom, sender
 	return outbound, nil
 }
 
-func (h *probeSignalHub) handleLinkMicAcceptLocked(room *probeSignalRoom, sender, target *probeSignalClient, envelope probeSignalEnvelope, rawMessage []byte) ([]outboundMessage, error) {
+func (h *liveSignalHub) handleLinkMicAcceptLocked(room *liveSignalRoom, sender, target *liveSignalClient, envelope liveSignalEnvelope, rawMessage []byte) ([]outboundMessage, error) {
 	session, err := requireMatchingSession(room.session, envelope.requestID())
 	if err != nil {
 		return nil, err
@@ -1160,7 +1160,7 @@ func (h *probeSignalHub) handleLinkMicAcceptLocked(room *probeSignalRoom, sender
 	return outbound, nil
 }
 
-func (h *probeSignalHub) handleLinkMicRejectLocked(room *probeSignalRoom, sender, target *probeSignalClient, envelope probeSignalEnvelope, rawMessage []byte) ([]outboundMessage, error) {
+func (h *liveSignalHub) handleLinkMicRejectLocked(room *liveSignalRoom, sender, target *liveSignalClient, envelope liveSignalEnvelope, rawMessage []byte) ([]outboundMessage, error) {
 	session, err := requireMatchingSession(room.session, envelope.requestID())
 	if err != nil {
 		return nil, err
@@ -1185,7 +1185,7 @@ func (h *probeSignalHub) handleLinkMicRejectLocked(room *probeSignalRoom, sender
 	return outbound, nil
 }
 
-func (h *probeSignalHub) handleLinkMicCancelLocked(room *probeSignalRoom, sender, target *probeSignalClient, envelope probeSignalEnvelope, rawMessage []byte) ([]outboundMessage, error) {
+func (h *liveSignalHub) handleLinkMicCancelLocked(room *liveSignalRoom, sender, target *liveSignalClient, envelope liveSignalEnvelope, rawMessage []byte) ([]outboundMessage, error) {
 	session, err := requireMatchingSession(room.session, envelope.requestID())
 	if err != nil {
 		return nil, err
@@ -1204,7 +1204,7 @@ func (h *probeSignalHub) handleLinkMicCancelLocked(room *probeSignalRoom, sender
 	return outbound, nil
 }
 
-func (h *probeSignalHub) handleLinkMicHangupLocked(room *probeSignalRoom, sender, target *probeSignalClient, envelope probeSignalEnvelope, rawMessage []byte) ([]outboundMessage, error) {
+func (h *liveSignalHub) handleLinkMicHangupLocked(room *liveSignalRoom, sender, target *liveSignalClient, envelope liveSignalEnvelope, rawMessage []byte) ([]outboundMessage, error) {
 	session, err := requireMatchingSession(room.session, envelope.requestID())
 	if err != nil {
 		return nil, err
@@ -1221,7 +1221,7 @@ func (h *probeSignalHub) handleLinkMicHangupLocked(room *probeSignalRoom, sender
 	return outbound, nil
 }
 
-func (h *probeSignalHub) handleLinkMicKickLocked(room *probeSignalRoom, sender, target *probeSignalClient, envelope probeSignalEnvelope, rawMessage []byte) ([]outboundMessage, error) {
+func (h *liveSignalHub) handleLinkMicKickLocked(room *liveSignalRoom, sender, target *liveSignalClient, envelope liveSignalEnvelope, rawMessage []byte) ([]outboundMessage, error) {
 	session, err := requireMatchingSession(room.session, envelope.requestID())
 	if err != nil {
 		return nil, err
@@ -1238,7 +1238,7 @@ func (h *probeSignalHub) handleLinkMicKickLocked(room *probeSignalRoom, sender, 
 	return outbound, nil
 }
 
-func (h *probeSignalHub) buildDisconnectSessionMessagesLocked(roomID string, room *probeSignalRoom, leavingPeerID string) []outboundMessage {
+func (h *liveSignalHub) buildDisconnectSessionMessagesLocked(roomID string, room *liveSignalRoom, leavingPeerID string) []outboundMessage {
 	session := room.session
 	if session == nil || !sessionHasPeer(*session, leavingPeerID) {
 		return nil
@@ -1254,7 +1254,7 @@ func (h *probeSignalHub) buildDisconnectSessionMessagesLocked(roomID string, roo
 		return nil
 	}
 
-	hangupMessage, err := marshalEnvelope(probeSignalEnvelope{
+	hangupMessage, err := marshalEnvelope(liveSignalEnvelope{
 		Type:       linkMicTypeHangup,
 		RoomID:     roomID,
 		FromUserID: leavingPeerID,
@@ -1266,7 +1266,7 @@ func (h *probeSignalHub) buildDisconnectSessionMessagesLocked(roomID string, roo
 		TsMs: nowUnixMilli(),
 	})
 	if err != nil {
-		log.Printf("probe signaling marshal disconnect hangup failed: room_id=%s peer_id=%s err=%v", roomID, leavingPeerID, err)
+		log.Printf("live signaling marshal disconnect hangup failed: room_id=%s peer_id=%s err=%v", roomID, leavingPeerID, err)
 		return nil
 	}
 
@@ -1277,7 +1277,7 @@ func (h *probeSignalHub) buildDisconnectSessionMessagesLocked(roomID string, roo
 	return outbound
 }
 
-func (h *probeSignalHub) findPeer(roomID, peerID string) *probeSignalClient {
+func (h *liveSignalHub) findPeer(roomID, peerID string) *liveSignalClient {
 	h.mu.Lock()
 	defer h.mu.Unlock()
 
@@ -1288,7 +1288,7 @@ func (h *probeSignalHub) findPeer(roomID, peerID string) *probeSignalClient {
 	return room.peers[peerID]
 }
 
-func (h *probeSignalHub) broadcastRoomMemberEvent(roomID, eventType string, peer probeRoomPeer) {
+func (h *liveSignalHub) broadcastRoomMemberEvent(roomID, eventType string, peer liveSignalPeer) {
 	recipients, _, ok := h.snapshotRoom(roomID)
 	if !ok {
 		return
@@ -1296,30 +1296,30 @@ func (h *probeSignalHub) broadcastRoomMemberEvent(roomID, eventType string, peer
 	sendRoomMemberEvent(recipients, roomID, eventType, peer)
 }
 
-func (h *probeSignalHub) broadcastRoomMemberList(roomID string) {
+func (h *liveSignalHub) broadcastRoomMemberList(roomID string) {
 	recipients, peers, _ := h.snapshotRoom(roomID)
 	sendRoomMemberList(recipients, roomID, peers)
 }
 
-func (h *probeSignalHub) snapshotRoom(roomID string) ([]*probeSignalClient, []probeRoomPeer, bool) {
+func (h *liveSignalHub) snapshotRoom(roomID string) ([]*liveSignalClient, []liveSignalPeer, bool) {
 	h.mu.Lock()
 	defer h.mu.Unlock()
 
 	room := h.rooms[roomID]
 	if room == nil {
-		return nil, []probeRoomPeer{}, false
+		return nil, []liveSignalPeer{}, false
 	}
 
 	recipients, peers := snapshotRoom(room)
 	return recipients, peers, true
 }
 
-func snapshotRoom(room *probeSignalRoom) ([]*probeSignalClient, []probeRoomPeer) {
-	recipients := make([]*probeSignalClient, 0, len(room.peers))
-	peers := make([]probeRoomPeer, 0, len(room.peers))
+func snapshotRoom(room *liveSignalRoom) ([]*liveSignalClient, []liveSignalPeer) {
+	recipients := make([]*liveSignalClient, 0, len(room.peers))
+	peers := make([]liveSignalPeer, 0, len(room.peers))
 	for _, client := range room.peers {
 		recipients = append(recipients, client)
-		peers = append(peers, probeRoomPeer{
+		peers = append(peers, liveSignalPeer{
 			PeerID: client.peerID,
 			Role:   client.role,
 		})
@@ -1332,12 +1332,12 @@ func snapshotRoom(room *probeSignalRoom) ([]*probeSignalClient, []probeRoomPeer)
 	return recipients, peers
 }
 
-func sendRoomMemberEvent(recipients []*probeSignalClient, roomID, eventType string, peer probeRoomPeer) {
+func sendRoomMemberEvent(recipients []*liveSignalClient, roomID, eventType string, peer liveSignalPeer) {
 	if len(recipients) == 0 {
 		return
 	}
 
-	encoded, err := marshalEnvelope(probeSignalEnvelope{
+	encoded, err := marshalEnvelope(liveSignalEnvelope{
 		Type:   eventType,
 		RoomID: roomID,
 		Payload: mustMarshalRaw(map[string]any{
@@ -1346,7 +1346,7 @@ func sendRoomMemberEvent(recipients []*probeSignalClient, roomID, eventType stri
 		TsMs: nowUnixMilli(),
 	})
 	if err != nil {
-		log.Printf("probe signaling marshal %s failed: room_id=%s err=%v", eventType, roomID, err)
+		log.Printf("live signaling marshal %s failed: room_id=%s err=%v", eventType, roomID, err)
 		return
 	}
 
@@ -1355,7 +1355,7 @@ func sendRoomMemberEvent(recipients []*probeSignalClient, roomID, eventType stri
 	}
 }
 
-func sendRoomMemberList(recipients []*probeSignalClient, roomID string, peers []probeRoomPeer) {
+func sendRoomMemberList(recipients []*liveSignalClient, roomID string, peers []liveSignalPeer) {
 	message := roomMemberListMessage{
 		Type:   "room.member-list",
 		RoomID: roomID,
@@ -1365,7 +1365,7 @@ func sendRoomMemberList(recipients []*probeSignalClient, roomID string, peers []
 
 	encoded, err := json.Marshal(message)
 	if err != nil {
-		log.Printf("probe signaling marshal room.member-list failed: room_id=%s err=%v", roomID, err)
+		log.Printf("live signaling marshal room.member-list failed: room_id=%s err=%v", roomID, err)
 		return
 	}
 
@@ -1374,7 +1374,7 @@ func sendRoomMemberList(recipients []*probeSignalClient, roomID string, peers []
 	}
 }
 
-func requireMatchingSession(session *probeLinkMicSession, requestID string) (*probeLinkMicSession, error) {
+func requireMatchingSession(session *liveSignalLinkMicSession, requestID string) (*liveSignalLinkMicSession, error) {
 	if session == nil {
 		return nil, fmt.Errorf("no pending or active linkmic session")
 	}
@@ -1384,18 +1384,18 @@ func requireMatchingSession(session *probeLinkMicSession, requestID string) (*pr
 	return session, nil
 }
 
-func sessionEndpoints(session *probeLinkMicSession) (initiatorID string, responderID string) {
+func sessionEndpoints(session *liveSignalLinkMicSession) (initiatorID string, responderID string) {
 	if session.RequestType == linkMicTypeApply {
 		return session.ParticipantID, session.ControllerID
 	}
 	return session.ControllerID, session.ParticipantID
 }
 
-func sessionHasPeer(session probeLinkMicSession, peerID string) bool {
+func sessionHasPeer(session liveSignalLinkMicSession, peerID string) bool {
 	return session.ControllerID == peerID || session.ParticipantID == peerID
 }
 
-func buildStateSyncMessages(room *probeSignalRoom, roomID string, session probeLinkMicSession, reason string) []outboundMessage {
+func buildStateSyncMessages(room *liveSignalRoom, roomID string, session liveSignalLinkMicSession, reason string) []outboundMessage {
 	controller := room.peers[session.ControllerID]
 	participant := room.peers[session.ParticipantID]
 	if controller == nil && participant == nil {
@@ -1404,7 +1404,7 @@ func buildStateSyncMessages(room *probeSignalRoom, roomID string, session probeL
 
 	messages := make([]outboundMessage, 0, 2)
 	if controller != nil {
-		encoded, err := marshalEnvelope(probeSignalEnvelope{
+		encoded, err := marshalEnvelope(liveSignalEnvelope{
 			Type:       linkMicTypeStateSync,
 			RoomID:     roomID,
 			FromUserID: session.ParticipantID,
@@ -1422,11 +1422,11 @@ func buildStateSyncMessages(room *probeSignalRoom, roomID string, session probeL
 		if err == nil {
 			messages = append(messages, outboundMessage{client: controller, message: encoded})
 		} else {
-			log.Printf("probe signaling marshal state sync failed: room_id=%s peer_id=%s err=%v", roomID, session.ControllerID, err)
+			log.Printf("live signaling marshal state sync failed: room_id=%s peer_id=%s err=%v", roomID, session.ControllerID, err)
 		}
 	}
 	if participant != nil {
-		encoded, err := marshalEnvelope(probeSignalEnvelope{
+		encoded, err := marshalEnvelope(liveSignalEnvelope{
 			Type:       linkMicTypeStateSync,
 			RoomID:     roomID,
 			FromUserID: session.ControllerID,
@@ -1444,14 +1444,14 @@ func buildStateSyncMessages(room *probeSignalRoom, roomID string, session probeL
 		if err == nil {
 			messages = append(messages, outboundMessage{client: participant, message: encoded})
 		} else {
-			log.Printf("probe signaling marshal state sync failed: room_id=%s peer_id=%s err=%v", roomID, session.ParticipantID, err)
+			log.Printf("live signaling marshal state sync failed: room_id=%s peer_id=%s err=%v", roomID, session.ParticipantID, err)
 		}
 	}
 
 	return messages
 }
 
-func buildResetStateMessages(room *probeSignalRoom, roomID string, session probeLinkMicSession, reason string) []outboundMessage {
+func buildResetStateMessages(room *liveSignalRoom, roomID string, session liveSignalLinkMicSession, reason string) []outboundMessage {
 	controller := room.peers[session.ControllerID]
 	participant := room.peers[session.ParticipantID]
 	if controller == nil && participant == nil {
@@ -1460,7 +1460,7 @@ func buildResetStateMessages(room *probeSignalRoom, roomID string, session probe
 
 	messages := make([]outboundMessage, 0, 2)
 	if controller != nil {
-		encoded, err := marshalEnvelope(probeSignalEnvelope{
+		encoded, err := marshalEnvelope(liveSignalEnvelope{
 			Type:       linkMicTypeStateSync,
 			RoomID:     roomID,
 			FromUserID: session.ParticipantID,
@@ -1478,11 +1478,11 @@ func buildResetStateMessages(room *probeSignalRoom, roomID string, session probe
 		if err == nil {
 			messages = append(messages, outboundMessage{client: controller, message: encoded})
 		} else {
-			log.Printf("probe signaling marshal reset state failed: room_id=%s peer_id=%s err=%v", roomID, session.ControllerID, err)
+			log.Printf("live signaling marshal reset state failed: room_id=%s peer_id=%s err=%v", roomID, session.ControllerID, err)
 		}
 	}
 	if participant != nil {
-		encoded, err := marshalEnvelope(probeSignalEnvelope{
+		encoded, err := marshalEnvelope(liveSignalEnvelope{
 			Type:       linkMicTypeStateSync,
 			RoomID:     roomID,
 			FromUserID: session.ControllerID,
@@ -1500,14 +1500,14 @@ func buildResetStateMessages(room *probeSignalRoom, roomID string, session probe
 		if err == nil {
 			messages = append(messages, outboundMessage{client: participant, message: encoded})
 		} else {
-			log.Printf("probe signaling marshal reset state failed: room_id=%s peer_id=%s err=%v", roomID, session.ParticipantID, err)
+			log.Printf("live signaling marshal reset state failed: room_id=%s peer_id=%s err=%v", roomID, session.ParticipantID, err)
 		}
 	}
 
 	return messages
 }
 
-func buildRTCJoinParamsMessages(room *probeSignalRoom, roomID string, session probeLinkMicSession) []outboundMessage {
+func buildRTCJoinParamsMessages(room *liveSignalRoom, roomID string, session liveSignalLinkMicSession) []outboundMessage {
 	controller := room.peers[session.ControllerID]
 	participant := room.peers[session.ParticipantID]
 	if controller == nil && participant == nil {
@@ -1516,7 +1516,7 @@ func buildRTCJoinParamsMessages(room *probeSignalRoom, roomID string, session pr
 
 	messages := make([]outboundMessage, 0, 2)
 	if controller != nil {
-		encoded, err := marshalEnvelope(probeSignalEnvelope{
+		encoded, err := marshalEnvelope(liveSignalEnvelope{
 			Type:       "rtc.join-params",
 			RoomID:     roomID,
 			FromUserID: session.ParticipantID,
@@ -1535,11 +1535,11 @@ func buildRTCJoinParamsMessages(room *probeSignalRoom, roomID string, session pr
 		if err == nil {
 			messages = append(messages, outboundMessage{client: controller, message: encoded})
 		} else {
-			log.Printf("probe signaling marshal rtc.join-params failed: room_id=%s peer_id=%s err=%v", roomID, session.ControllerID, err)
+			log.Printf("live signaling marshal rtc.join-params failed: room_id=%s peer_id=%s err=%v", roomID, session.ControllerID, err)
 		}
 	}
 	if participant != nil {
-		encoded, err := marshalEnvelope(probeSignalEnvelope{
+		encoded, err := marshalEnvelope(liveSignalEnvelope{
 			Type:       "rtc.join-params",
 			RoomID:     roomID,
 			FromUserID: session.ControllerID,
@@ -1558,14 +1558,14 @@ func buildRTCJoinParamsMessages(room *probeSignalRoom, roomID string, session pr
 		if err == nil {
 			messages = append(messages, outboundMessage{client: participant, message: encoded})
 		} else {
-			log.Printf("probe signaling marshal rtc.join-params failed: room_id=%s peer_id=%s err=%v", roomID, session.ParticipantID, err)
+			log.Printf("live signaling marshal rtc.join-params failed: room_id=%s peer_id=%s err=%v", roomID, session.ParticipantID, err)
 		}
 	}
 
 	return messages
 }
 
-func buildLinkMicConnectedMessages(room *probeSignalRoom, roomID string, session probeLinkMicSession) []outboundMessage {
+func buildLinkMicConnectedMessages(room *liveSignalRoom, roomID string, session liveSignalLinkMicSession) []outboundMessage {
 	controller := room.peers[session.ControllerID]
 	participant := room.peers[session.ParticipantID]
 	if controller == nil && participant == nil {
@@ -1574,7 +1574,7 @@ func buildLinkMicConnectedMessages(room *probeSignalRoom, roomID string, session
 
 	messages := make([]outboundMessage, 0, 2)
 	if controller != nil {
-		encoded, err := marshalEnvelope(probeSignalEnvelope{
+		encoded, err := marshalEnvelope(liveSignalEnvelope{
 			Type:       linkMicTypeConnected,
 			RoomID:     roomID,
 			FromUserID: session.ParticipantID,
@@ -1590,11 +1590,11 @@ func buildLinkMicConnectedMessages(room *probeSignalRoom, roomID string, session
 		if err == nil {
 			messages = append(messages, outboundMessage{client: controller, message: encoded})
 		} else {
-			log.Printf("probe signaling marshal linkmic.connected failed: room_id=%s peer_id=%s err=%v", roomID, session.ControllerID, err)
+			log.Printf("live signaling marshal linkmic.connected failed: room_id=%s peer_id=%s err=%v", roomID, session.ControllerID, err)
 		}
 	}
 	if participant != nil {
-		encoded, err := marshalEnvelope(probeSignalEnvelope{
+		encoded, err := marshalEnvelope(liveSignalEnvelope{
 			Type:       linkMicTypeConnected,
 			RoomID:     roomID,
 			FromUserID: session.ControllerID,
@@ -1610,14 +1610,14 @@ func buildLinkMicConnectedMessages(room *probeSignalRoom, roomID string, session
 		if err == nil {
 			messages = append(messages, outboundMessage{client: participant, message: encoded})
 		} else {
-			log.Printf("probe signaling marshal linkmic.connected failed: room_id=%s peer_id=%s err=%v", roomID, session.ParticipantID, err)
+			log.Printf("live signaling marshal linkmic.connected failed: room_id=%s peer_id=%s err=%v", roomID, session.ParticipantID, err)
 		}
 	}
 
 	return messages
 }
 
-func stateForPeer(session probeLinkMicSession, peerID string) string {
+func stateForPeer(session liveSignalLinkMicSession, peerID string) string {
 	switch session.State {
 	case linkMicStateApplying:
 		if peerID == session.ControllerID {
@@ -1642,7 +1642,7 @@ func stateForPeer(session probeLinkMicSession, peerID string) string {
 	}
 }
 
-func marshalEnvelope(envelope probeSignalEnvelope) ([]byte, error) {
+func marshalEnvelope(envelope liveSignalEnvelope) ([]byte, error) {
 	if envelope.TsMs == 0 {
 		envelope.TsMs = nowUnixMilli()
 	}
@@ -1652,7 +1652,7 @@ func marshalEnvelope(envelope probeSignalEnvelope) ([]byte, error) {
 func mustMarshalRaw(payload any) json.RawMessage {
 	encoded, err := json.Marshal(payload)
 	if err != nil {
-		log.Printf("probe signaling marshal payload failed: %v", err)
+		log.Printf("live signaling marshal payload failed: %v", err)
 		return nil
 	}
 	return encoded
@@ -1662,7 +1662,7 @@ func cloneBytes(source []byte) []byte {
 	return append([]byte(nil), source...)
 }
 
-func validateBoundRTCRequest(sender, target *probeSignalClient, envelope probeSignalEnvelope) error {
+func validateBoundRTCRequest(sender, target *liveSignalClient, envelope liveSignalEnvelope) error {
 	senderRequestID := strings.TrimSpace(sender.requestID)
 	targetRequestID := strings.TrimSpace(target.requestID)
 	if senderRequestID == "" && targetRequestID == "" {
@@ -1683,9 +1683,9 @@ func validateBoundRTCRequest(sender, target *probeSignalClient, envelope probeSi
 	return nil
 }
 
-func (h *probeSignalHub) validateAcceptedRTCRegistration(ctx context.Context, roomID, peerID, role, requestID string) error {
+func (h *liveSignalHub) validateAcceptedRTCRegistration(ctx context.Context, roomID, peerID, role, requestID string) error {
 	if h.database == nil {
-		return fmt.Errorf("probe signaling database is not configured")
+		return fmt.Errorf("live signaling database is not configured")
 	}
 
 	room, err := findLiveRoomByKeyQuerier(ctx, h.database, roomID)
@@ -1719,7 +1719,7 @@ func (h *probeSignalHub) validateAcceptedRTCRegistration(ctx context.Context, ro
 	case liveRoomRoleParticipant:
 		expectedPeerID = strconv.FormatInt(participantUserID, 10)
 	default:
-		return fmt.Errorf("unsupported probe role for request binding: %s", role)
+		return fmt.Errorf("unsupported signaling role for request binding: %s", role)
 	}
 
 	if peerID != expectedPeerID {
@@ -1745,7 +1745,7 @@ func resolveAcceptedRTCUserIDs(room liveRoomRow, requestRow linkMicRequestRow) (
 	return controllerUserID, participantUserID, nil
 }
 
-func (c *probeSignalClient) sendError(roomID, message string) {
+func (c *liveSignalClient) sendError(roomID, message string) {
 	c.sendJSON(signalErrorMessage{
 		Type:    "signal.error",
 		RoomID:  roomID,
@@ -1754,20 +1754,20 @@ func (c *probeSignalClient) sendError(roomID, message string) {
 	})
 }
 
-func (c *probeSignalClient) sendJSON(payload any) {
+func (c *liveSignalClient) sendJSON(payload any) {
 	encoded, err := json.Marshal(payload)
 	if err != nil {
-		log.Printf("probe signaling marshal failed: peer_id=%s room_id=%s err=%v", c.peerID, c.roomID, err)
+		log.Printf("live signaling marshal failed: peer_id=%s room_id=%s err=%v", c.peerID, c.roomID, err)
 		return
 	}
 	c.sendRaw(encoded)
 }
 
-func (c *probeSignalClient) sendRaw(message []byte) {
+func (c *liveSignalClient) sendRaw(message []byte) {
 	select {
 	case c.send <- message:
 	default:
-		log.Printf("probe signaling send queue full: peer_id=%s room_id=%s", c.peerID, c.roomID)
+		log.Printf("live signaling send queue full: peer_id=%s room_id=%s", c.peerID, c.roomID)
 	}
 }
 
