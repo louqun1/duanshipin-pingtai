@@ -129,9 +129,12 @@ func (c *liveSignalClient) handleLiveAnchorJoinMessage(data []byte) error {
 	previousUserID := c.anchorUserID
 	replaced := c.hub.bindAnchorClient(c, roomKey, user.ID, user.Username, role)
 	if previousRoomKey != "" && (previousRoomKey != roomKey || previousUserID != user.ID) {
-		outbound := c.hub.closeCrossRoomSessionsForAnchor(previousRoomKey, previousUserID, "anchor-rebound")
+		outbound, endedSessions := c.hub.closeCrossRoomSessionsForAnchor(previousRoomKey, previousUserID, "anchor-rebound")
 		for _, message := range outbound {
 			message.client.sendRaw(message.message)
+		}
+		for _, session := range endedSessions {
+			c.server.syncCrossRoomMixOnSignal(linkMicTypeHangup, previousUserID, session)
 		}
 		if err := markAnchorOfflineByRoomKey(ctx, c.server.database, previousRoomKey, previousUserID); err != nil {
 			log.Printf("anchor rebind cleanup failed: roomKey=%s userId=%d err=%v", previousRoomKey, previousUserID, err)
@@ -217,9 +220,12 @@ func (c *liveSignalClient) handleLiveAnchorLeaveMessage(data []byte) error {
 
 	userID := c.anchorUserID
 	c.hub.unbindAnchorClient(c)
-	outbound := c.hub.closeCrossRoomSessionsForAnchor(roomKey, userID, "anchor-left-room")
+	outbound, endedSessions := c.hub.closeCrossRoomSessionsForAnchor(roomKey, userID, "anchor-left-room")
 	for _, message := range outbound {
 		message.client.sendRaw(message.message)
+	}
+	for _, session := range endedSessions {
+		c.server.syncCrossRoomMixOnSignal(linkMicTypeHangup, userID, session)
 	}
 	c.sendJSON(liveAnchorLeftMessage{
 		Type:    "live.anchor.left",

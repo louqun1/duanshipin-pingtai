@@ -18,6 +18,7 @@ import (
 	"vod-platform-server/internal/config"
 	"vod-platform-server/internal/db"
 	"vod-platform-server/internal/ingest"
+	"vod-platform-server/internal/linkmicmix"
 	"vod-platform-server/internal/storage"
 )
 
@@ -60,7 +61,8 @@ type apiServer struct {
 	database     *sql.DB
 	mediaStorage *storage.MinIOStorage
 	events       *eventBroker
-	liveSignals *liveSignalHub
+	liveSignals  *liveSignalHub
+	mixManager   *linkmicmix.Manager
 }
 
 func main() {
@@ -98,7 +100,8 @@ func main() {
 		database:     database,
 		mediaStorage: mediaStorage,
 		events:       newEventBroker(),
-		liveSignals: newLiveSignalHub(database, cfg.PublicSignalingURL),
+		liveSignals:  newLiveSignalHub(database, cfg.PublicSignalingURL),
+		mixManager:   mustNewLinkMicMixManager(cfg),
 	}
 
 	mux := http.NewServeMux()
@@ -126,6 +129,14 @@ func main() {
 
 func handleHealthz(writer http.ResponseWriter, _ *http.Request) {
 	writeJSON(writer, http.StatusOK, map[string]string{"status": "ok"})
+}
+
+func mustNewLinkMicMixManager(cfg config.Config) *linkmicmix.Manager {
+	manager, err := linkmicmix.NewManager(cfg)
+	if err != nil {
+		log.Fatalf("init linkmic mix manager: %v", err)
+	}
+	return manager
 }
 
 func (s *apiServer) handleVideos(writer http.ResponseWriter, request *http.Request) {

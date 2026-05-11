@@ -530,7 +530,20 @@ func (c *liveSignalClient) handleCrossRoomLinkMicSignal(envelope liveSignalEnvel
 		return err
 	}
 
-	return c.hub.handleCrossRoomLinkMicSignal(c, envelope, rawMessage, fromRoomKey, fromUserID, toRoomKey, toUserID)
+	session, err := c.hub.handleCrossRoomLinkMicSignal(c, envelope, rawMessage, fromRoomKey, fromUserID, toRoomKey, toUserID)
+	if err != nil {
+		return err
+	}
+
+	if c.server != nil {
+		switch envelope.Type {
+		case linkMicTypeInvite:
+			c.server.publishCrossRoomLiveRoomEvent(envelope.Type, fromUserID, session)
+		case linkMicTypeAccept, linkMicTypeReject, linkMicTypeCancel, linkMicTypeHangup, linkMicTypeKick, linkMicTypeConnected:
+			c.server.syncCrossRoomMixOnSignal(envelope.Type, fromUserID, session)
+		}
+	}
+	return nil
 }
 
 func (h *liveSignalHub) register(client *liveSignalClient, roomID, peerID, role, mode, requestID string) *liveSignalClient {
@@ -594,9 +607,14 @@ func (h *liveSignalHub) unregister(client *liveSignalClient) {
 
 	anchorRoomKey, anchorUserID, anchorRemoved := h.unbindAnchorClient(client)
 	if anchorRemoved {
-		outbound := h.closeCrossRoomSessionsForAnchor(anchorRoomKey, anchorUserID, "anchor-disconnected")
+		outbound, endedSessions := h.closeCrossRoomSessionsForAnchor(anchorRoomKey, anchorUserID, "anchor-disconnected")
 		for _, message := range outbound {
 			message.client.sendRaw(message.message)
+		}
+		if client.server != nil {
+			for _, session := range endedSessions {
+				client.server.syncCrossRoomMixOnSignal(linkMicTypeHangup, anchorUserID, session)
+			}
 		}
 
 		ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
@@ -630,6 +648,29 @@ func (runtime *crossRoomSessionRuntime) peerOf(roomKey string, userID int64) (st
 		return runtime.session.RoomAKey, runtime.session.AnchorAUserID, true
 	}
 	return "", 0, false
+}
+
+func (h *liveSignalHub) findRelayReadyCrossRoomSession(roomKey string) (CrossRoomLinkMicSession, string, bool) {
+	roomKey = normalizeLiveRoomKey(roomKey)
+	if roomKey == "" {
+		return CrossRoomLinkMicSession{}, "", false
+	}
+
+	h.mu.Lock()
+	defer h.mu.Unlock()
+
+	for _, runtime := range h.crossRoomSessions {
+		if !isCrossRoomSessionRelayReady(runtime.session.Status) {
+			continue
+		}
+		if roomKey == normalizeLiveRoomKey(runtime.session.RoomAKey) {
+			return runtime.session, runtime.session.RoomBKey, true
+		}
+		if roomKey == normalizeLiveRoomKey(runtime.session.RoomBKey) {
+			return runtime.session, runtime.session.RoomAKey, true
+		}
+	}
+	return CrossRoomLinkMicSession{}, "", false
 }
 
 func (runtime *crossRoomSessionRuntime) businessRoleFor(userID int64) string {
@@ -769,22 +810,24 @@ func (h *liveSignalHub) buildCrossRoomJoinParamsMessagesLocked(runtime *crossRoo
 	return messages
 }
 
-func (h *liveSignalHub) closeCrossRoomSessionsForAnchor(roomKey string, userID int64, reason string) []outboundMessage {
+func (h *liveSignalHub) closeCrossRoomSessionsForAnchor(roomKey string, userID int64, reason string) ([]outboundMessage, []CrossRoomLinkMicSession) {
 	roomKey = normalizeLiveRoomKey(roomKey)
 	if roomKey == "" || userID <= 0 {
-		return nil
+		return nil, nil
 	}
 
 	h.mu.Lock()
 	defer h.mu.Unlock()
 
 	messages := make([]outboundMessage, 0)
+	endedSessions := make([]CrossRoomLinkMicSession, 0)
 	for _, runtime := range h.crossRoomSessions {
 		if !isCrossRoomSessionActiveStatus(runtime.session.Status) || !runtime.hasAnchor(roomKey, userID) {
 			continue
 		}
 
 		runtime.setStatus(crossRoomLinkMicSessionStatusEnded)
+		endedSessions = append(endedSessions, runtime.session)
 		peerRoomKey, peerUserID, ok := runtime.peerOf(roomKey, userID)
 		if !ok {
 			continue
@@ -813,7 +856,7 @@ func (h *liveSignalHub) closeCrossRoomSessionsForAnchor(roomKey string, userID i
 		}
 		messages = append(messages, outboundMessage{client: peerClient, message: encoded})
 	}
-	return messages
+	return messages, endedSessions
 }
 
 func (h *liveSignalHub) handleCrossRoomRTCSignal(_ *liveSignalClient,
@@ -869,7 +912,7 @@ func (h *liveSignalHub) handleCrossRoomLinkMicSignal(_ *liveSignalClient,
 	fromRoomKey string,
 	fromUserID int64,
 	toRoomKey string,
-	toUserID int64) error {
+	toUserID int64) (CrossRoomLinkMicSession, error) {
 	h.mu.Lock()
 	defer h.mu.Unlock()
 
@@ -877,16 +920,16 @@ func (h *liveSignalHub) handleCrossRoomLinkMicSignal(_ *liveSignalClient,
 	case linkMicTypeInvite:
 		target := h.findAnchorClientLocked(toRoomKey, toUserID)
 		if target == nil {
-			return fmt.Errorf("target anchor is offline: roomKey=%s userId=%d", toRoomKey, toUserID)
+			return CrossRoomLinkMicSession{}, fmt.Errorf("target anchor is offline: roomKey=%s userId=%d", toRoomKey, toUserID)
 		}
 		if active := h.findActiveCrossRoomSessionForAnchorLocked(fromRoomKey, fromUserID, ""); active != nil {
-			return fmt.Errorf("inviter anchor already has an active cross-room session: %s", active.session.SessionID)
+			return CrossRoomLinkMicSession{}, fmt.Errorf("inviter anchor already has an active cross-room session: %s", active.session.SessionID)
 		}
 		if active := h.findActiveCrossRoomSessionForAnchorLocked(toRoomKey, toUserID, ""); active != nil {
-			return fmt.Errorf("invitee anchor already has an active cross-room session: %s", active.session.SessionID)
+			return CrossRoomLinkMicSession{}, fmt.Errorf("invitee anchor already has an active cross-room session: %s", active.session.SessionID)
 		}
 		if existing := h.crossRoomSessions[envelope.sessionID()]; existing != nil && isCrossRoomSessionActiveStatus(existing.session.Status) {
-			return fmt.Errorf("cross-room session already exists: %s", envelope.sessionID())
+			return CrossRoomLinkMicSession{}, fmt.Errorf("cross-room session already exists: %s", envelope.sessionID())
 		}
 
 		now := time.Now().UTC()
@@ -916,20 +959,20 @@ func (h *liveSignalHub) handleCrossRoomLinkMicSignal(_ *liveSignalClient,
 			toRoomKey,
 			toUserID,
 		)
-		return nil
+		return h.crossRoomSessions[envelope.sessionID()].session, nil
 	}
 
 	runtime, err := h.requireCrossRoomSessionLocked(envelope)
 	if err != nil {
-		return err
+		return CrossRoomLinkMicSession{}, err
 	}
 
 	expectedRoomKey, expectedUserID, ok := runtime.peerOf(fromRoomKey, fromUserID)
 	if !ok {
-		return fmt.Errorf("%s sender does not belong to session %s", envelope.Type, runtime.session.SessionID)
+		return CrossRoomLinkMicSession{}, fmt.Errorf("%s sender does not belong to session %s", envelope.Type, runtime.session.SessionID)
 	}
 	if normalizeLiveRoomKey(expectedRoomKey) != normalizeLiveRoomKey(toRoomKey) || expectedUserID != toUserID {
-		return fmt.Errorf("%s target does not match cross-room session peer", envelope.Type)
+		return CrossRoomLinkMicSession{}, fmt.Errorf("%s target does not match cross-room session peer", envelope.Type)
 	}
 
 	target := h.findAnchorClientLocked(expectedRoomKey, expectedUserID)
@@ -943,59 +986,59 @@ func (h *liveSignalHub) handleCrossRoomLinkMicSignal(_ *liveSignalClient,
 	switch envelope.Type {
 	case linkMicTypeAccept:
 		if runtime.session.Status != crossRoomLinkMicSessionStatusPending {
-			return fmt.Errorf("linkmic.accept requires a pending cross-room session")
+			return CrossRoomLinkMicSession{}, fmt.Errorf("linkmic.accept requires a pending cross-room session")
 		}
 		if fromUserID != runtime.session.InviteeUserID || toUserID != runtime.session.InviterUserID {
-			return fmt.Errorf("linkmic.accept direction does not match the pending invite")
+			return CrossRoomLinkMicSession{}, fmt.Errorf("linkmic.accept direction does not match the pending invite")
 		}
 		if target == nil {
-			return fmt.Errorf("inviter anchor is offline: roomKey=%s userId=%d", expectedRoomKey, expectedUserID)
+			return CrossRoomLinkMicSession{}, fmt.Errorf("inviter anchor is offline: roomKey=%s userId=%d", expectedRoomKey, expectedUserID)
 		}
 		runtime.setStatus(crossRoomLinkMicSessionStatusAccepted)
 		sendRawToTarget()
 		outbound = append(outbound, h.buildCrossRoomJoinParamsMessagesLocked(runtime)...)
 	case linkMicTypeReject:
 		if runtime.session.Status != crossRoomLinkMicSessionStatusPending {
-			return fmt.Errorf("linkmic.reject requires a pending cross-room session")
+			return CrossRoomLinkMicSession{}, fmt.Errorf("linkmic.reject requires a pending cross-room session")
 		}
 		if fromUserID != runtime.session.InviteeUserID || toUserID != runtime.session.InviterUserID {
-			return fmt.Errorf("linkmic.reject direction does not match the pending invite")
+			return CrossRoomLinkMicSession{}, fmt.Errorf("linkmic.reject direction does not match the pending invite")
 		}
 		runtime.setStatus(crossRoomLinkMicSessionStatusRejected)
 		sendRawToTarget()
 	case linkMicTypeCancel:
 		if runtime.session.Status != crossRoomLinkMicSessionStatusPending {
-			return fmt.Errorf("linkmic.cancel requires a pending cross-room session")
+			return CrossRoomLinkMicSession{}, fmt.Errorf("linkmic.cancel requires a pending cross-room session")
 		}
 		if fromUserID != runtime.session.InviterUserID || toUserID != runtime.session.InviteeUserID {
-			return fmt.Errorf("linkmic.cancel must be sent by the inviter")
+			return CrossRoomLinkMicSession{}, fmt.Errorf("linkmic.cancel must be sent by the inviter")
 		}
 		runtime.setStatus(crossRoomLinkMicSessionStatusCancelled)
 		sendRawToTarget()
 	case linkMicTypeHangup:
 		if !isCrossRoomSessionRelayReady(runtime.session.Status) {
-			return fmt.Errorf("linkmic.hangup requires an accepted or connected cross-room session")
+			return CrossRoomLinkMicSession{}, fmt.Errorf("linkmic.hangup requires an accepted or connected cross-room session")
 		}
 		runtime.setStatus(crossRoomLinkMicSessionStatusEnded)
 		sendRawToTarget()
 	case linkMicTypeKick:
 		if !isCrossRoomSessionRelayReady(runtime.session.Status) {
-			return fmt.Errorf("linkmic.kick requires an accepted or connected cross-room session")
+			return CrossRoomLinkMicSession{}, fmt.Errorf("linkmic.kick requires an accepted or connected cross-room session")
 		}
 		if fromUserID != runtime.session.InviterUserID {
-			return fmt.Errorf("linkmic.kick must be sent by the inviter anchor")
+			return CrossRoomLinkMicSession{}, fmt.Errorf("linkmic.kick must be sent by the inviter anchor")
 		}
 		runtime.setStatus(crossRoomLinkMicSessionStatusEnded)
 		sendRawToTarget()
 	case linkMicTypeConnected:
 		if !isCrossRoomSessionRelayReady(runtime.session.Status) {
-			return fmt.Errorf("linkmic.connected requires an accepted cross-room session")
+			return CrossRoomLinkMicSession{}, fmt.Errorf("linkmic.connected requires an accepted cross-room session")
 		}
 		runtime.connectedAnchorKey[crossRoomAnchorKey(fromRoomKey, fromUserID)] = true
 		runtime.setStatus(crossRoomLinkMicSessionStatusConnected)
 		sendRawToTarget()
 	default:
-		return fmt.Errorf("unsupported cross-room linkmic signal: %s", envelope.Type)
+		return CrossRoomLinkMicSession{}, fmt.Errorf("unsupported cross-room linkmic signal: %s", envelope.Type)
 	}
 
 	for _, message := range outbound {
@@ -1012,7 +1055,7 @@ func (h *liveSignalHub) handleCrossRoomLinkMicSignal(_ *liveSignalClient,
 		toUserID,
 		runtime.session.Status,
 	)
-	return nil
+	return runtime.session, nil
 }
 
 func (h *liveSignalHub) handleLinkMicSignal(sender *liveSignalClient, envelope liveSignalEnvelope, rawMessage []byte) error {

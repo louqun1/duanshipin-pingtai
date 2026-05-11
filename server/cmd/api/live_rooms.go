@@ -189,6 +189,7 @@ type liveRoomResponse struct {
 	Owner             roomUserResponse         `json:"owner"`
 	OnlineMemberCount int                      `json:"onlineMemberCount"`
 	ActiveRequest     *linkMicRequestResponse  `json:"activeRequest,omitempty"`
+	MixedStream       *liveRoomMixedStreamResponse `json:"mixedStream,omitempty"`
 	CreatedAt         string                   `json:"createdAt"`
 	UpdatedAt         string                   `json:"updatedAt"`
 }
@@ -447,9 +448,16 @@ func (s *apiServer) handleLiveRoomPresence(writer http.ResponseWriter, request *
 			writeServerError(writer, fmt.Errorf("leave room presence: %w", err))
 			return
 		}
-		if err := s.endLiveRoomRequestForLeavingUser(ctx, room.ID, user.ID); err != nil {
+		_, err := s.endLiveRoomRequestForLeavingUser(ctx, room.ID, user.ID)
+		if err != nil {
 			writeServerError(writer, fmt.Errorf("end live room request on leave: %w", err))
 			return
+		}
+		if room.OwnerUserID == user.ID {
+			s.closeCrossRoomMixForAnchor(user.ID, room.RoomKey, "owner-presence-left")
+			if err := s.stopRoomMixedStream(ctx, room.RoomKey); err != nil {
+				log.Printf("stop room mixed stream on owner leave failed: room_key=%s err=%v", room.RoomKey, err)
+			}
 		}
 		eventAction = "presence.leave"
 	default:
@@ -577,7 +585,6 @@ func (s *apiServer) handleLiveRoomCancel(writer http.ResponseWriter, request *ht
 		writeLiveRoomMutationError(writer, err)
 		return
 	}
-
 	s.publishLiveRoomEvent(ctx, "linkmic.cancel", user.ID, room.RoomKey, requestResponse.RequestID)
 	writeJSON(writer, http.StatusOK, map[string]any{
 		"room":    room,
@@ -601,7 +608,6 @@ func (s *apiServer) handleLiveRoomHangup(writer http.ResponseWriter, request *ht
 		writeLiveRoomMutationError(writer, err)
 		return
 	}
-
 	s.publishLiveRoomEvent(ctx, "linkmic.hangup", user.ID, room.RoomKey, requestResponse.RequestID)
 	writeJSON(writer, http.StatusOK, map[string]any{
 		"room":    room,
@@ -638,6 +644,10 @@ func (s *apiServer) handleCloseLiveRoom(writer http.ResponseWriter, _ *http.Requ
 	if err != nil {
 		writeLiveRoomMutationError(writer, err)
 		return
+	}
+	s.closeCrossRoomMixForAnchor(user.ID, room.RoomKey, "room-closed")
+	if err := s.stopRoomMixedStream(ctx, room.RoomKey); err != nil {
+		log.Printf("stop room mixed stream on room close failed: room_key=%s err=%v", room.RoomKey, err)
 	}
 
 	s.publishLiveRoomEvent(ctx, "room.closed", user.ID, room.RoomKey, "")
@@ -1137,16 +1147,16 @@ func (s *apiServer) closeLiveRoom(ctx context.Context, roomKey string, user auth
 	return s.getLiveRoomResponseByKey(ctx, roomKey)
 }
 
-func (s *apiServer) endLiveRoomRequestForLeavingUser(ctx context.Context, roomID, userID int64) error {
+func (s *apiServer) endLiveRoomRequestForLeavingUser(ctx context.Context, roomID, userID int64) (*linkMicRequestResponse, error) {
 	requestRow, err := findCurrentLinkMicRequestQuerier(ctx, s.database, roomID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return nil
+			return nil, nil
 		}
-		return err
+		return nil, err
 	}
 	if requestRow.Initiator.ID != userID && requestRow.Target.ID != userID {
-		return nil
+		return nil, nil
 	}
 
 	nextState := linkMicRequestStateCancelled
@@ -1164,7 +1174,10 @@ func (s *apiServer) endLiveRoomRequestForLeavingUser(ctx context.Context, roomID
 		roomID,
 		requestRow.RequestID,
 	)
-	return err
+	if err != nil {
+		return nil, err
+	}
+	return s.findLatestRequestResponseByID(ctx, roomID, requestRow.RequestID)
 }
 
 func (s *apiServer) upsertLiveRoomPresence(ctx context.Context, roomID, userID int64, role string) error {
@@ -1270,6 +1283,7 @@ func (s *apiServer) buildLiveRoomResponse(ctx context.Context, room liveRoomRow)
 	if room.Title.Valid {
 		response.Title = room.Title.String
 	}
+	response.MixedStream = s.buildLiveRoomMixedStreamResponse(room.RoomKey)
 	return response, nil
 }
 
