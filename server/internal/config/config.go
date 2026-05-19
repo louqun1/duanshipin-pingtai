@@ -1,6 +1,8 @@
 package config
 
 import (
+	"net"
+	"net/url"
 	"os"
 	"strconv"
 	"strings"
@@ -17,6 +19,8 @@ type Config struct {
 	LinkMicMixLogDir    string
 	LinkMicMixInputBase  string
 	LinkMicMixOutputBase string
+	LinkMicMixPlaybackBase  string
+	LinkMicMixRoomStreamMap map[string]string
 	MinIOEndpoint       string
 	MinIOAccess         string
 	MinIOSecret         string
@@ -39,6 +43,8 @@ func Load() Config {
 		LinkMicMixLogDir:    getEnv("LINKMIC_MIX_LOGDIR", "./runtime/linkmicmix/logs"),
 		LinkMicMixInputBase:  getEnv("LINKMIC_MIX_INPUT_BASE", "rtmp://127.0.0.1/live"),
 		LinkMicMixOutputBase: getEnv("LINKMIC_MIX_OUTPUT_BASE", "rtmp://127.0.0.1/live"),
+		LinkMicMixPlaybackBase:  getEnv("LINKMIC_MIX_PLAYBACK_BASE", deriveHTTPFLVPlaybackBaseURL(publicBaseURL)),
+		LinkMicMixRoomStreamMap: parseEnvKeyValueMap("LINKMIC_MIX_ROOM_STREAM_MAP"),
 		MinIOEndpoint:       getEnv("MINIO_ENDPOINT", "127.0.0.1:9000"),
 		MinIOAccess:         getEnv("MINIO_ACCESS_KEY", "minioadmin"),
 		MinIOSecret:         getEnv("MINIO_SECRET_KEY", "minioadmin123"),
@@ -47,6 +53,32 @@ func Load() Config {
 		VODBucket:           getEnv("MINIO_VOD_BUCKET", "vod-media"),
 		ImageBucket:         getEnv("MINIO_IMAGE_BUCKET", "image-assets"),
 	}
+}
+
+func deriveHTTPFLVPlaybackBaseURL(publicBaseURL string) string {
+	trimmed := strings.TrimRight(strings.TrimSpace(publicBaseURL), "/")
+	if trimmed == "" {
+		return "http://192.168.3.28:18080/live"
+	}
+	if !strings.Contains(trimmed, "://") {
+		trimmed = "http://" + trimmed
+	}
+
+	parsed, err := url.Parse(trimmed)
+	if err != nil || parsed.Host == "" {
+		return "http://192.168.3.28:18080/live"
+	}
+
+	host := parsed.Hostname()
+	if host == "" {
+		return "http://192.168.3.28:18080/live"
+	}
+
+	scheme := "http"
+	if parsed.Scheme == "https" {
+		scheme = "https"
+	}
+	return scheme + "://" + net.JoinHostPort(host, "18080") + "/live"
 }
 
 func derivePublicSignalingURL(publicBaseURL string) string {
@@ -87,4 +119,40 @@ func getEnvBool(key string, fallback bool) bool {
 		return fallback
 	}
 	return parsed
+}
+
+func parseEnvKeyValueMap(key string) map[string]string {
+	raw := strings.TrimSpace(os.Getenv(key))
+	if raw == "" {
+		return nil
+	}
+
+	entries := strings.FieldsFunc(raw, func(r rune) bool {
+		return r == ',' || r == ';' || r == '\n' || r == '\r'
+	})
+	result := make(map[string]string, len(entries))
+	for _, entry := range entries {
+		entry = strings.TrimSpace(entry)
+		if entry == "" {
+			continue
+		}
+
+		parts := strings.SplitN(entry, "=", 2)
+		if len(parts) != 2 {
+			continue
+		}
+
+		roomKey := strings.ToLower(strings.TrimSpace(parts[0]))
+		streamKey := strings.TrimSpace(parts[1])
+		if roomKey == "" || streamKey == "" {
+			continue
+		}
+
+		result[roomKey] = strings.TrimLeft(streamKey, "/")
+	}
+
+	if len(result) == 0 {
+		return nil
+	}
+	return result
 }

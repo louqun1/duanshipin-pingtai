@@ -75,12 +75,14 @@ type persistedSession struct {
 }
 
 type Manager struct {
-	enabled    bool
-	ffmpegBin  string
-	workDir    string
-	logDir     string
-	inputBase  string
-	outputBase string
+	enabled             bool
+	ffmpegBin           string
+	workDir             string
+	logDir              string
+	inputBase           string
+	outputBase          string
+	playbackBase        string
+	roomInputStreamKeys map[string]string
 
 	mu        sync.Mutex
 	processes map[string]*managedProcess
@@ -97,13 +99,15 @@ type managedProcess struct {
 
 func NewManager(cfg config.Config) (*Manager, error) {
 	manager := &Manager{
-		enabled:    cfg.LinkMicMixEnable,
-		ffmpegBin:  strings.TrimSpace(cfg.LinkMicMixFFmpegBin),
-		workDir:    strings.TrimSpace(cfg.LinkMicMixWorkDir),
-		logDir:     strings.TrimSpace(cfg.LinkMicMixLogDir),
-		inputBase:  strings.TrimSpace(cfg.LinkMicMixInputBase),
-		outputBase: strings.TrimSpace(cfg.LinkMicMixOutputBase),
-		processes:  make(map[string]*managedProcess),
+		enabled:             cfg.LinkMicMixEnable,
+		ffmpegBin:           strings.TrimSpace(cfg.LinkMicMixFFmpegBin),
+		workDir:             strings.TrimSpace(cfg.LinkMicMixWorkDir),
+		logDir:              strings.TrimSpace(cfg.LinkMicMixLogDir),
+		inputBase:           strings.TrimSpace(cfg.LinkMicMixInputBase),
+		outputBase:          strings.TrimSpace(cfg.LinkMicMixOutputBase),
+		playbackBase:        strings.TrimSpace(cfg.LinkMicMixPlaybackBase),
+		roomInputStreamKeys: normalizeRoomStreamMap(cfg.LinkMicMixRoomStreamMap),
+		processes:           make(map[string]*managedProcess),
 	}
 
 	if manager.ffmpegBin == "" {
@@ -138,17 +142,25 @@ func (m *Manager) Enabled() bool {
 }
 
 func (m *Manager) BuildRoomOutput(roomKey string) (RoomOutput, error) {
+	return m.BuildRoomOutputForInputStream(roomKey, m.resolveInputStreamKey(roomKey))
+}
+
+func (m *Manager) BuildRoomOutputForInputStream(roomKey, inputStreamKey string) (RoomOutput, error) {
 	roomKey = normalizeRoomKey(roomKey)
+	inputStreamKey = strings.TrimLeft(strings.TrimSpace(inputStreamKey), "/")
 	if roomKey == "" {
 		return RoomOutput{}, errors.New("room key is required")
+	}
+	if inputStreamKey == "" {
+		return RoomOutput{}, errors.New("input stream key is required")
 	}
 	if strings.TrimSpace(m.outputBase) == "" {
 		return RoomOutput{}, errors.New("linkmic mix output base is not configured")
 	}
 
-	mixedStreamKey := roomKey + "-mixed"
+	mixedStreamKey := buildMixedOutputStreamKey(inputStreamKey)
 	outputURL := joinStreamURL(m.outputBase, mixedStreamKey)
-	playbackURL, err := derivePlaybackURL(outputURL)
+	playbackURL, err := m.buildPlaybackURL(mixedStreamKey, outputURL)
 	if err != nil {
 		return RoomOutput{}, err
 	}
@@ -162,10 +174,30 @@ func (m *Manager) BuildRoomOutput(roomKey string) (RoomOutput, error) {
 }
 
 func (m *Manager) BuildRoomSession(roomKey, peerRoomKey, sessionID, requestID string) (SessionSpec, error) {
+	return m.BuildRoomSessionForInputStreams(
+		roomKey,
+		peerRoomKey,
+		sessionID,
+		requestID,
+		m.resolveInputStreamKey(roomKey),
+		m.resolveInputStreamKey(peerRoomKey),
+	)
+}
+
+func (m *Manager) BuildRoomSessionForInputStreams(
+	roomKey,
+	peerRoomKey,
+	sessionID,
+	requestID,
+	primaryInputStreamKey,
+	peerInputStreamKey string,
+) (SessionSpec, error) {
 	roomKey = normalizeRoomKey(roomKey)
 	peerRoomKey = normalizeRoomKey(peerRoomKey)
 	sessionID = strings.TrimSpace(sessionID)
 	requestID = strings.TrimSpace(requestID)
+	primaryInputStreamKey = strings.TrimLeft(strings.TrimSpace(primaryInputStreamKey), "/")
+	peerInputStreamKey = strings.TrimLeft(strings.TrimSpace(peerInputStreamKey), "/")
 
 	if roomKey == "" {
 		return SessionSpec{}, errors.New("room key is required")
@@ -182,8 +214,14 @@ func (m *Manager) BuildRoomSession(roomKey, peerRoomKey, sessionID, requestID st
 	if strings.TrimSpace(m.inputBase) == "" {
 		return SessionSpec{}, errors.New("linkmic mix input base is not configured")
 	}
+	if primaryInputStreamKey == "" {
+		return SessionSpec{}, errors.New("primary input stream key is required")
+	}
+	if peerInputStreamKey == "" {
+		return SessionSpec{}, errors.New("peer input stream key is required")
+	}
 
-	output, err := m.BuildRoomOutput(roomKey)
+	output, err := m.BuildRoomOutputForInputStream(roomKey, primaryInputStreamKey)
 	if err != nil {
 		return SessionSpec{}, err
 	}
@@ -194,11 +232,11 @@ func (m *Manager) BuildRoomSession(roomKey, peerRoomKey, sessionID, requestID st
 		RequestID:             requestID,
 		RoomKey:               roomKey,
 		PeerRoomKey:           peerRoomKey,
-		PrimaryInputStreamKey: roomKey,
-		PeerInputStreamKey:    peerRoomKey,
+		PrimaryInputStreamKey: primaryInputStreamKey,
+		PeerInputStreamKey:    peerInputStreamKey,
 		MixedStreamKey:        output.MixedStreamKey,
-		PrimaryInputURL:       joinStreamURL(m.inputBase, roomKey),
-		PeerInputURL:          joinStreamURL(m.inputBase, peerRoomKey),
+		PrimaryInputURL:       joinStreamURL(m.inputBase, primaryInputStreamKey),
+		PeerInputURL:          joinStreamURL(m.inputBase, peerInputStreamKey),
 		OutputURL:             output.OutputURL,
 		PlaybackURL:           output.PlaybackURL,
 	}, nil
@@ -264,12 +302,15 @@ func (m *Manager) Start(ctx context.Context, spec SessionSpec) error {
 	cmd.Stderr = logFile
 
 	startedAt := time.Now().UTC()
-	_, _ = fmt.Fprintf(logFile, "\n[%s] start process=%s room=%s peer=%s session=%s command=%s %s\n",
+	_, _ = fmt.Fprintf(logFile, "\n[%s] start process=%s room=%s peer=%s session=%s primary_input=%s peer_input=%s output=%s command=%s %s\n",
 		startedAt.Format(time.RFC3339),
 		spec.ProcessKey,
 		spec.RoomKey,
 		spec.PeerRoomKey,
 		spec.SessionID,
+		spec.PrimaryInputURL,
+		spec.PeerInputURL,
+		spec.OutputURL,
 		m.ffmpegBin,
 		strings.Join(args, " "),
 	)
@@ -674,6 +715,24 @@ func derivePlaybackURL(outputURL string) (string, error) {
 	return fmt.Sprintf("%s://%s/%s/%s.flv", scheme, playbackHost, appName, streamKey), nil
 }
 
+func (m *Manager) buildPlaybackURL(streamKey, outputURL string) (string, error) {
+	if m != nil && strings.TrimSpace(m.playbackBase) != "" {
+		return joinPlaybackURL(m.playbackBase, streamKey), nil
+	}
+	return derivePlaybackURL(outputURL)
+}
+
+func joinPlaybackURL(base, streamKey string) string {
+	streamKey = strings.TrimLeft(strings.TrimSpace(streamKey), "/")
+	if streamKey == "" {
+		return strings.TrimRight(strings.TrimSpace(base), "/")
+	}
+	if !strings.HasSuffix(strings.ToLower(streamKey), ".flv") {
+		streamKey += ".flv"
+	}
+	return joinStreamURL(base, streamKey)
+}
+
 func joinStreamURL(base, streamKey string) string {
 	base = strings.TrimRight(strings.TrimSpace(base), "/")
 	streamKey = strings.TrimLeft(strings.TrimSpace(streamKey), "/")
@@ -686,8 +745,53 @@ func joinStreamURL(base, streamKey string) string {
 	return base + "/" + streamKey
 }
 
+func buildMixedOutputStreamKey(inputStreamKey string) string {
+	streamKey := strings.TrimLeft(strings.TrimSpace(inputStreamKey), "/")
+	if streamKey == "" {
+		return ""
+	}
+	if strings.HasSuffix(strings.ToLower(streamKey), "-mixed") {
+		return streamKey
+	}
+	return streamKey + "-mixed"
+}
+
+func normalizeRoomStreamMap(values map[string]string) map[string]string {
+	if len(values) == 0 {
+		return nil
+	}
+
+	result := make(map[string]string, len(values))
+	for roomKey, streamKey := range values {
+		normalizedRoomKey := normalizeRoomKey(roomKey)
+		normalizedStreamKey := strings.TrimLeft(strings.TrimSpace(streamKey), "/")
+		if normalizedRoomKey == "" || normalizedStreamKey == "" {
+			continue
+		}
+		result[normalizedRoomKey] = normalizedStreamKey
+	}
+	if len(result) == 0 {
+		return nil
+	}
+	return result
+}
+
 func normalizeRoomKey(roomKey string) string {
 	return strings.ToLower(strings.TrimSpace(roomKey))
+}
+
+func (m *Manager) resolveInputStreamKey(roomKey string) string {
+	roomKey = normalizeRoomKey(roomKey)
+	if roomKey == "" {
+		return ""
+	}
+	if m == nil || len(m.roomInputStreamKeys) == 0 {
+		return roomKey
+	}
+	if streamKey := strings.TrimSpace(m.roomInputStreamKeys[roomKey]); streamKey != "" {
+		return strings.TrimLeft(streamKey, "/")
+	}
+	return roomKey
 }
 
 func firstNonEmpty(values ...string) string {
@@ -704,6 +808,12 @@ func sameSession(left, right SessionSpec) bool {
 	return normalizeRoomKey(left.ProcessKey) == normalizeRoomKey(right.ProcessKey) &&
 		normalizeRoomKey(left.RoomKey) == normalizeRoomKey(right.RoomKey) &&
 		normalizeRoomKey(left.PeerRoomKey) == normalizeRoomKey(right.PeerRoomKey) &&
+		strings.TrimSpace(left.PrimaryInputStreamKey) == strings.TrimSpace(right.PrimaryInputStreamKey) &&
+		strings.TrimSpace(left.PeerInputStreamKey) == strings.TrimSpace(right.PeerInputStreamKey) &&
+		strings.TrimSpace(left.MixedStreamKey) == strings.TrimSpace(right.MixedStreamKey) &&
+		strings.TrimSpace(left.PrimaryInputURL) == strings.TrimSpace(right.PrimaryInputURL) &&
+		strings.TrimSpace(left.PeerInputURL) == strings.TrimSpace(right.PeerInputURL) &&
+		strings.TrimSpace(left.OutputURL) == strings.TrimSpace(right.OutputURL) &&
 		strings.TrimSpace(left.SessionID) == strings.TrimSpace(right.SessionID) &&
 		strings.TrimSpace(left.RequestID) == strings.TrimSpace(right.RequestID)
 }

@@ -1,387 +1,232 @@
-# 短视频平台重写说明
+# 短视频音视频平台原型
 
-## 1. 项目目标
+本项目是一个统一音视频平台原型，重点不是做通用 CRUD 产品，而是围绕音视频工程链路做学习和验证。
 
-本项目将重写为一个面向桌面端的短视频平台，采用“前后端分离”的工程组织方式：
+当前仓库同时覆盖三条主线：
 
-- `frontend` 负责界面展示、页面导航、用户交互
-- `backend` 负责业务逻辑、状态管理、数据访问、媒体能力
-- `app` 负责程序启动和模块装配
+- 自研播放器内核：Qt + FFmpeg + SDL2 + OpenGL，关注 demux、decode、A/V sync、seek、渲染和音频输出。
+- 点播链路：上传、对象存储、转码、HLS 产物、封面生成、播放入口。
+- 直播与连麦：RTMP 推流、HTTP-FLV 拉流、WebSocket 信令、WebRTC 连麦房间流转。
 
-当前仓库中的旧实现不再继续扩展。后续开发以本 README 作为重写基线，按新的分层架构逐步恢复功能。
+## 项目定位
 
-## 2. 重写原则
+这是一个偏工程学习型的项目。优先级最高的是把音视频数据流看清楚、拆小、手写关键路径，而不是一次性堆出完整产品功能。
 
-### 2.1 只保留清晰的职责边界
+学习核心包括：
 
-- `MainWindow` 只做主窗口、导航容器、页面切换
-- 页面类只负责输入收集和数据展示
-- 业务逻辑不进入 UI 类
-- 数据访问不直接暴露给 UI
+- 播放器内核：解复用、解码、音视频同步、seek、渲染队列。
+- 点播流水线：上传原片、转码任务、HLS 切片、播放 URL 组织。
+- 直播观看：RTMP ingest、HTTP-FLV 拉流、FLV tag 解析、H.264/AAC 解码。
+- WebRTC 连麦：信令协议、房间成员、申请/邀请/接受/拒绝/挂断流程。
 
-### 2.2 优先做小而稳定的骨架
-
-先搭建可运行、可扩展、可维护的最小工程，再一项项补功能，不从旧代码中直接搬运复杂逻辑。
-
-### 2.3 为后续扩展预留空间
-
-项目未来会逐步接入以下能力：
-
-- 用户登录 / 注册 / 登出
-- 账户中心
-- 视频流展示
-- 上传与发布
-- 播放器能力
-- 媒体处理
-- 网络接口对接
-
-## 3. 推荐目录结构
+## 仓库结构
 
 ```text
 app/
-  main.cpp
-  bootstrap/
+  Qt 桌面端启动入口和模块装配
 
 frontend/
-  CMakeLists.txt
-  widgets/
-    MainWindow.hpp
-    MainWindow.cpp
-  pages/
-    HomePage/
-    StreamPage/
-    UploadPage/
-    AccountPage/
-  components/
-    NavigationBar/
-    VideoCard/
-    Common/
+  Qt Widgets 页面、播放器窗口、直播页、上传页、账户页
 
 backend/
-  CMakeLists.txt
-  domain/
-    user/
-    video/
-  service/
-    auth/
-    profile/
-    feed/
-  repository/
-    user/
-    video/
-  infrastructure/
-    database/
-    network/
-    media/
-    player/
-  controller/
-    auth/
-    profile/
+  C++ 侧业务分层、播放器内核、HTTP-FLV 学习链路、SQLite/Repository/Service/Controller
+
+server/
+  Go 后端服务，包含 HTTP API、WebSocket 信令、VOD 导入、转码 worker、直播连麦状态接口
+
+ops/
+  coturn 等运行配置
+
+docs/
+  阶段设计、排查记录、音视频链路说明和面试梳理资料
+
+docker-compose.yml
+  MySQL、Redis、MinIO、SRS、coturn 等本地依赖
 ```
 
-说明：
+## 技术栈
 
-- `domain` 定义核心数据模型，不依赖 UI
-- `service` 封装业务规则
-- `repository` 负责数据读写接口
-- `infrastructure` 放具体实现，例如 SQLite、HTTP、FFmpeg、播放器
-- `controller` 负责衔接前端信号和后端服务
+桌面端：
 
-## 4. 分层架构
-
-### 4.1 Presentation Layer
-
-包括：
-
-- `MainWindow`
-- 各业务页面
-- 可复用 UI 组件
-
-职责：
-
-- 展示界面
-- 收集用户输入
-- 发出信号
-- 响应控制器返回结果
-
-限制：
-
-- 不直接访问数据库
-- 不直接编写认证、校验、上传等业务逻辑
-
-### 4.2 Controller Layer
-
-包括：
-
-- `AuthController`
-- `ProfileController`
-- 后续的 `FeedController`、`UploadController`
-
-职责：
-
-- 接收页面信号
-- 调用对应 Service
-- 将结果转成 UI 可消费的信号
-
-### 4.3 Service Layer
-
-包括：
-
-- `AuthService`
-- `ProfileService`
-- `FeedService`
-- `UploadService`
-
-职责：
-
-- 封装业务规则
-- 维护业务流程
-- 处理校验、权限、状态切换
-
-限制：
-
-- 不依赖具体页面
-- 不弹窗、不操作 QWidget
-
-### 4.4 Repository Layer
-
-包括：
-
-- `UserRepository`
-- `VideoRepository`
-
-职责：
-
-- 提供统一的数据访问接口
-- 隔离数据库和缓存等具体实现
-
-### 4.5 Infrastructure Layer
-
-包括：
-
-- `SQLite` 数据实现
-- HTTP / WebSocket 网络实现
-- FFmpeg 媒体处理
-- 播放器封装
-
-职责：
-
-- 提供具体技术实现
-- 被 Repository 或 Service 调用
-
-## 5. MainWindow 的最终职责
-
-`MainWindow` 是后续重写的第一个稳定入口，但它只保留下列职责：
-
-- 创建主布局
-- 挂载左侧导航或顶部导航
-- 管理页面栈
-- 切换页面
-- 接收控制器结果并更新当前显示页面
-
-`MainWindow` 不负责：
-
-- 登录鉴权
-- 注册校验
-- 用户信息查询
-- 数据库存取
-- 上传流程编排
-
-一句话总结：
-
-`MainWindow` 只做“壳”，不做“业务中心”。
-
-## 6. 页面规划
-
-第一阶段保留以下页面：
-
-- `HomePage`：短视频流首页
-- `StreamPage`：直播或流媒体入口页
-- `UploadPage`：上传入口页
-- `AccountPage`：统一的账户页
-
-`AccountPage` 采用双状态设计：
-
-- 未登录态：显示登录 / 注册表单，提示用户需要先登录
-- 已登录态：显示基础个人资料、账户信息、登出按钮
-
-每个页面遵守统一规则：
-
-- 页面只暴露必要信号
-- 页面不依赖数据库类
-- 页面不保存核心业务状态
-- 页面之间不直接互相操控内部逻辑
-
-## 7. 第二阶段账户页方案
-
-第二阶段不再拆成 `LoginPage + ProfilePage` 两个独立页面，而是统一为一个 `AccountPage`。
-
-这样做的原因：
-
-- 用户路径更简单：进入“我的”就是账户中心
-- 交互更自然：未登录时提示登录，登录成功后原地切换到个人展示
-- 页面更少，更适合当前重写阶段快速落地
-- 不影响分层架构，因为业务逻辑仍然放在后端层
-
-需要注意的边界：
-
-- `AccountPage` 可以管理“页面状态”，但不能管理认证业务
-- `AccountPage` 可以显示用户资料，但资料来源必须通过 Controller / Service 获取
-- `MainWindow` 只负责切到 `AccountPage`，不负责判断账号密码
-
-## 8. 典型交互流程
-
-### 8.1 进入账户页
-
-1. 用户点击导航中的“我的”
-2. `MainWindow` 切换到 `AccountPage`
-3. 如果当前未登录，则 `AccountPage` 显示未登录态
-4. 如果当前已登录，则 `AccountPage` 显示个人资料态
-
-### 8.2 登录流程
-
-1. 用户在 `AccountPage` 的未登录态输入账号密码
-2. `AccountPage` 发出 `loginRequested(...)`
-3. `AuthController` 接收信号并调用 `AuthService`
-4. `AuthService` 通过 `UserRepository` 查询用户并校验
-5. `AuthController` 发出成功或失败信号
-6. 登录成功后，`AccountPage` 自动切换到个人资料态
-
-### 8.3 注册流程
-
-1. 用户在 `AccountPage` 的未登录态提交注册信息
-2. `AccountPage` 发出 `registerRequested(...)`
-3. `AuthController` 调用 `AuthService`
-4. 注册成功后，系统进入已登录态并显示基础个人资料
-
-### 8.4 登出流程
-
-1. 用户在 `AccountPage` 的已登录态点击登出
-2. 页面发出 `logoutRequested()`
-3. 控制器或会话管理模块清理当前登录状态
-4. `AccountPage` 切回未登录态
-
-### 8.5 上传流程
-
-1. 用户在 `UploadPage` 选择视频
-2. 页面发出上传请求信号
-3. `UploadController` 调用 `UploadService`
-4. `UploadService` 调用媒体处理和网络接口
-5. 返回上传状态给前端页面
-
-## 9. 当前阶段的开发策略
-
-### 第一阶段：只搭骨架
-
-目标：
-
-- 清理当前 `MainWindow`
-- 建立基础页面结构
-- 建立 controller / service / repository 目录
-- 保证工程可编译、可运行、可切页
-
-此阶段不追求功能完整，只追求结构稳定。
-
-### 第二阶段：先恢复用户系统
-
-目标：
-
-- 登录
-- 注册
-- 登出
-- 基础个人页展示
-- `AccountPage` 双状态切换
-
-第二阶段的完成标准：
-
-- 点击“我的”始终进入 `AccountPage`
-- 未登录时，页面明确提示需要登录
-- 登录成功后，页面自动切换到个人资料展示
-- 登出后，页面恢复到未登录态
-
-### 第三阶段：恢复短视频核心能力
-
-目标：
-
-- 首页视频流
-- 视频卡片
-- 基础播放器
-- 上传入口
-
-### 第四阶段：接入媒体与网络能力
-
-目标：
-
+- C++17
+- Qt 6 Widgets / Network / Sql / OpenGLWidgets
 - FFmpeg
-- 网络请求
-- 数据持久化
-- 发布流程
+- SDL2
+- CMake
 
-## 10. 当前工程规范
+服务端：
 
-### 10.1 CMake 组织
+- Go
+- MySQL
+- MinIO
+- gorilla/websocket
+- ffmpeg / ffprobe
 
-顶层：
+基础设施：
 
-- `app` 生成可执行程序
-- `frontend` 生成前端库
-- `backend` 生成后端库
+- SRS：RTMP ingest 和 HTTP-FLV 分发
+- coturn：WebRTC STUN/TURN
+- Redis：后续在线状态和分布式状态扩展预留
 
-要求：
+## 核心数据流
 
-- 前端库不直接依赖数据库实现细节
-- 后端库尽量按模块拆分，避免所有源码继续堆在一个目标里
-- 后续优先显式列出源码文件，减少对 `GLOB_RECURSE` 的依赖
+### 1. 本地播放器链路
 
-### 10.2 编码规范
+```text
+媒体 URL / 本地文件
+  -> FFmpeg avformat 打开输入
+  -> demux 音视频包
+  -> 音频/视频解码队列
+  -> 音频重采样与 SDL 回调输出
+  -> 视频帧转换与 OpenGL 渲染
+  -> 播放状态、进度、seek、暂停/恢复
+```
 
-- 头文件和实现文件命名保持一致
-- 公共接口优先放在稳定目录
-- Qt 对象由父子关系管理时，不重复引入不必要的所有权复杂度
-- 业务结果优先返回明确的结果对象，而不是在 UI 层硬编码字符串分支
+这一部分是学习重点，后续改动应该优先解释数据流，再拆成小里程碑实现。
 
-## 11. 不再沿用的旧做法
+### 2. HTTP-FLV 直播观看链路
 
-以下做法后续不再继续：
+```text
+SRS HTTP-FLV URL
+  -> Qt QNetworkReply 接收 chunk
+  -> 手写/半手写 FLV 解析
+  -> 分离 audio tag / video tag
+  -> FFmpeg 解码 H.264 / AAC
+  -> 视频帧进入渲染队列
+  -> 音频帧进入音频输出队列
+```
 
-- `MainWindow` 直接调用 `DatabaseManager`
-- `MainWindow` 直接维护完整登录流程
-- 页面直接访问底层数据
-- UI 层保存过多业务状态
-- 旧代码中“边写界面边塞业务”的方式
+当前分支重点在“自己处理 HTTP-FLV”，因此这条链路尽量保留可观察日志和阶段性 TODO，方便逐段验证。
 
-## 12. 里程碑验收标准
+### 3. 点播上传与转码链路
 
-### M1：骨架完成
+```text
+客户端选择视频
+  -> Go API 接收上传
+  -> 原始文件进入 MinIO raw-media
+  -> MySQL 写入 video / transcode job
+  -> worker 调用 ffmpeg 转 HLS
+  -> HLS 切片和封面进入 MinIO vod-media / image-assets
+  -> API 返回播放信息
+```
 
-- 工程能启动
-- 主窗口能显示
-- 页面能切换
-- 前后端目录职责清晰
+更详细的服务端说明见 [server/README.md](server/README.md)。
 
-### M2：用户系统完成
+### 4. 直播连麦链路
 
-- 登录 / 注册 / 登出完整可用
-- 账户页能在未登录态和已登录态之间正确切换
-- 登录成功后自动进入个人资料展示
-- 业务逻辑已从 UI 中抽离
+```text
+主播创建直播间
+  -> 观众进入房间并上报 presence
+  -> apply / invite / accept / reject / hangup
+  -> WebSocket/SSE 同步房间和连麦状态
+  -> 下发 WebRTC join params
+  -> 客户端完成 offer / answer / ICE candidate 交换
+```
 
-### M3：短视频浏览完成
+这部分关注房间流转和信令正确性，媒体混流、多人扩展、持久化和多实例广播应分阶段推进。
 
-- 首页可展示视频列表
-- 可进入播放
+## 开发原则
 
-### M4：上传发布完成
+音视频核心任务采用小步学习方式：
 
-- 支持基本上传
-- 支持发布流程
+- 先画清楚数据流，再写代码。
+- 先做最小可验证 milestone，再扩展完整功能。
+- 对 demux、decode、A/V sync、seek、HTTP-FLV、RTMP、WebRTC 等核心点，优先保留 skeleton + TODO。
+- 关键代码尽量自己手写，提交后再 review。
 
-## 13. 结论
+交付型任务可以直接实现：
 
-本项目后续重写遵循一个核心原则：
+- DTO
+- 路由注册
+- 配置加载
+- 日志和中间件
+- 简单后台页面
+- 普通 CRUD
 
-先搭稳定骨架，再逐步恢复功能；先保证分层合理，再追求功能丰富。
+## 桌面端构建
 
-第二阶段采用统一 `AccountPage` 的方案是合理的，但前提是不把认证逻辑重新塞回页面类里。页面可以统一，职责边界不能回退。
+根目录 CMake 工程会生成 `QtFrontend`。
 
-后续所有代码调整，优先判断是否符合本 README 的职责边界。如果与本 README 冲突，以本 README 的分层设计为准。
+依赖路径可以通过 CMake cache 配置：
+
+- `FLASHPOINT_QT_ROOT`：Qt 6 安装路径
+- `FLASHPOINT_FFMPEG_ROOT`：FFmpeg 开发包路径
+- `FLASHPOINT_SDL2_ROOT`：SDL2 开发包路径
+
+Windows 示例：
+
+```powershell
+cmake -S . -B build -G Ninja `
+  -DFLASHPOINT_QT_ROOT=D:/itffmpeg/Qt/6.10.3/llvm-mingw_64
+
+cmake --build build
+```
+
+运行产物通常位于：
+
+```text
+build/bin/QtFrontend.exe
+```
+
+## 服务端启动
+
+先启动基础依赖：
+
+```powershell
+docker compose up -d mysql redis minio srs coturn
+```
+
+再启动 Go API：
+
+```powershell
+cd server
+go mod tidy
+go run ./cmd/api
+```
+
+健康检查：
+
+```powershell
+curl http://127.0.0.1:8080/healthz
+```
+
+期望返回：
+
+```json
+{"status":"ok"}
+```
+
+更多环境变量、端口和 probe 联调命令见 [server/README.md](server/README.md)。
+
+## 常用验证
+
+桌面端最小验证：
+
+- CMake configure 成功。
+- `QtFrontend` 能启动。
+- 首页、直播页、上传页、账户页能切换。
+- HTTP-FLV 页面输入可访问 URL 后能看到网络接收、FLV 解析、视频解码或明确错误日志。
+
+服务端最小验证：
+
+- `docker compose ps` 中 MySQL、MinIO、SRS、coturn 状态正常。
+- `/healthz` 返回 `ok`。
+- 上传接口能写入 MinIO 和 MySQL。
+- worker 能把原始视频转成 HLS。
+- `/ws` 能完成最小 probe 信令注册和消息转发。
+
+## 当前限制
+
+- 播放器内核仍处于学习和重构阶段，部分逻辑保留 TODO。
+- HTTP-FLV 链路优先验证视频解析和渲染，音频输出、同步和异常恢复会继续拆阶段推进。
+- WebRTC 连麦当前偏 probe 和业务信令验证，完整鉴权、多实例广播、正式 RTC 票据仍需后续补齐。
+- VOD worker 依赖本机 ffmpeg / ffprobe 可用。
+
+## 目标
+
+最终希望这个仓库能沉淀成一个可讲清楚、可运行、可扩展的音视频工程样板：
+
+- 桌面端能播放本地/点播/直播媒体。
+- 服务端能完成上传、转码、存储、播放信息分发。
+- 直播链路能跑通 RTMP ingest、HTTP-FLV 观看和 WebRTC 连麦信令。
+- 每条核心链路都有清晰的阶段说明、验证方法和可复盘的学习记录。

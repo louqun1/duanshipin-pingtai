@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 	"time"
@@ -43,12 +44,16 @@ type dbQuerier interface {
 }
 
 type createLiveRoomRequest struct {
-	RoomKey string `json:"roomKey"`
-	Title   string `json:"title"`
+	RoomKey   string `json:"roomKey"`
+	Title     string `json:"title"`
+	StreamKey string `json:"streamKey"`
+	StreamURL string `json:"streamUrl"`
 }
 
 type liveRoomPresenceRequest struct {
-	Action string `json:"action"`
+	Action    string `json:"action"`
+	StreamKey string `json:"streamKey"`
+	StreamURL string `json:"streamUrl"`
 }
 
 type liveRoomApplyRequest struct {
@@ -88,6 +93,7 @@ type liveRoomRow struct {
 	OwnerNickname sql.NullString
 	OwnerAvatar   sql.NullString
 	Title         sql.NullString
+	StreamKey     sql.NullString
 	Status        string
 	CreatedAt     time.Time
 	UpdatedAt     time.Time
@@ -186,6 +192,7 @@ type liveRoomResponse struct {
 	Title             string                   `json:"title,omitempty"`
 	Status            string                   `json:"status"`
 	SignalingURL      string                   `json:"signalingUrl,omitempty"`
+	StreamKey         string                   `json:"streamKey,omitempty"`
 	Owner             roomUserResponse         `json:"owner"`
 	OnlineMemberCount int                      `json:"onlineMemberCount"`
 	ActiveRequest     *linkMicRequestResponse  `json:"activeRequest,omitempty"`
@@ -442,6 +449,15 @@ func (s *apiServer) handleLiveRoomPresence(writer http.ResponseWriter, request *
 			writeServerError(writer, fmt.Errorf("upsert room presence: %w", err))
 			return
 		}
+		if role == liveRoomRoleController {
+			streamKey := normalizeLiveStreamKey(firstNonEmptyString(payload.StreamKey, payload.StreamURL))
+			if streamKey != "" {
+				if err := s.updateLiveRoomStreamKey(ctx, room.ID, streamKey); err != nil {
+					writeServerError(writer, fmt.Errorf("update live room stream key: %w", err))
+					return
+				}
+			}
+		}
 		eventAction = "presence." + action
 	case "leave":
 		if err := s.leaveLiveRoomPresence(ctx, room.ID, user.ID); err != nil {
@@ -659,6 +675,7 @@ func (s *apiServer) handleCloseLiveRoom(writer http.ResponseWriter, _ *http.Requ
 func (s *apiServer) createLiveRoom(ctx context.Context, owner authUserRow, payload createLiveRoomRequest) (*liveRoomResponse, error) {
 	title := strings.TrimSpace(payload.Title)
 	roomKey := normalizeLiveRoomKey(payload.RoomKey)
+	streamKey := normalizeLiveStreamKey(firstNonEmptyString(payload.StreamKey, payload.StreamURL))
 	var err error
 	if roomKey == "" {
 		roomKey, err = s.generateLiveRoomKey(ctx, owner.Username)
@@ -691,11 +708,12 @@ func (s *apiServer) createLiveRoom(ctx context.Context, owner authUserRow, paylo
 
 	result, err := tx.ExecContext(
 		ctx,
-		`INSERT INTO live_rooms (room_key, owner_user_id, title, status)
-		 VALUES (?, ?, ?, ?)`,
+		`INSERT INTO live_rooms (room_key, owner_user_id, title, stream_key, status)
+		 VALUES (?, ?, ?, ?, ?)`,
 		roomKey,
 		owner.ID,
 		nullIfEmpty(title),
+		nullIfEmpty(streamKey),
 		liveRoomStatusLive,
 	)
 	if err != nil {
@@ -724,7 +742,7 @@ func (s *apiServer) createLiveRoom(ctx context.Context, owner authUserRow, paylo
 func (s *apiServer) listLiveRoomResponses(ctx context.Context) ([]liveRoomResponse, error) {
 	rows, err := s.database.QueryContext(
 		ctx,
-		`SELECT room.id, room.room_key, room.owner_user_id, owner.username, owner.nickname, owner.avatar_url, room.title, room.status, room.created_at, room.updated_at
+		`SELECT room.id, room.room_key, room.owner_user_id, owner.username, owner.nickname, owner.avatar_url, room.title, room.stream_key, room.status, room.created_at, room.updated_at
 		 FROM live_rooms room
 		 INNER JOIN users owner ON owner.id = room.owner_user_id
 		 WHERE room.status = ?
@@ -748,6 +766,7 @@ func (s *apiServer) listLiveRoomResponses(ctx context.Context) ([]liveRoomRespon
 			&row.OwnerNickname,
 			&row.OwnerAvatar,
 			&row.Title,
+			&row.StreamKey,
 			&row.Status,
 			&row.CreatedAt,
 			&row.UpdatedAt,
@@ -1200,6 +1219,23 @@ func (s *apiServer) findLiveRoomByKey(ctx context.Context, roomKey string) (live
 	return findLiveRoomByKeyQuerier(ctx, s.database, roomKey)
 }
 
+func (s *apiServer) updateLiveRoomStreamKey(ctx context.Context, roomID int64, streamKey string) error {
+	streamKey = normalizeLiveStreamKey(streamKey)
+	if streamKey == "" {
+		return nil
+	}
+
+	_, err := s.database.ExecContext(
+		ctx,
+		`UPDATE live_rooms
+		 SET stream_key = ?, updated_at = NOW()
+		 WHERE id = ?`,
+		streamKey,
+		roomID,
+	)
+	return err
+}
+
 func (s *apiServer) findLiveRoomMembers(ctx context.Context, roomID int64) ([]liveRoomMemberRow, error) {
 	rows, err := s.database.QueryContext(
 		ctx,
@@ -1283,7 +1319,10 @@ func (s *apiServer) buildLiveRoomResponse(ctx context.Context, room liveRoomRow)
 	if room.Title.Valid {
 		response.Title = room.Title.String
 	}
-	response.MixedStream = s.buildLiveRoomMixedStreamResponse(room.RoomKey)
+	if room.StreamKey.Valid {
+		response.StreamKey = room.StreamKey.String
+	}
+	response.MixedStream = s.buildLiveRoomMixedStreamResponse(room.RoomKey, response.StreamKey)
 	return response, nil
 }
 
@@ -1398,7 +1437,7 @@ func (s *apiServer) publishLiveRoomEvent(ctx context.Context, action string, act
 func findLiveRoomByKeyQuerier(ctx context.Context, q dbQuerier, roomKey string) (liveRoomRow, error) {
 	row := q.QueryRowContext(
 		ctx,
-		`SELECT room.id, room.room_key, room.owner_user_id, owner.username, owner.nickname, owner.avatar_url, room.title, room.status, room.created_at, room.updated_at
+		`SELECT room.id, room.room_key, room.owner_user_id, owner.username, owner.nickname, owner.avatar_url, room.title, room.stream_key, room.status, room.created_at, room.updated_at
 		 FROM live_rooms room
 		 INNER JOIN users owner ON owner.id = room.owner_user_id
 		 WHERE room.room_key = ?`,
@@ -1414,6 +1453,7 @@ func findLiveRoomByKeyQuerier(ctx context.Context, q dbQuerier, roomKey string) 
 		&result.OwnerNickname,
 		&result.OwnerAvatar,
 		&result.Title,
+		&result.StreamKey,
 		&result.Status,
 		&result.CreatedAt,
 		&result.UpdatedAt,
@@ -1424,7 +1464,7 @@ func findLiveRoomByKeyQuerier(ctx context.Context, q dbQuerier, roomKey string) 
 func findLiveRoomByKeyForUpdateQuerier(ctx context.Context, q dbQuerier, roomKey string) (liveRoomRow, error) {
 	row := q.QueryRowContext(
 		ctx,
-		`SELECT room.id, room.room_key, room.owner_user_id, owner.username, owner.nickname, owner.avatar_url, room.title, room.status, room.created_at, room.updated_at
+		`SELECT room.id, room.room_key, room.owner_user_id, owner.username, owner.nickname, owner.avatar_url, room.title, room.stream_key, room.status, room.created_at, room.updated_at
 		 FROM live_rooms room
 		 INNER JOIN users owner ON owner.id = room.owner_user_id
 		 WHERE room.room_key = ?
@@ -1441,6 +1481,7 @@ func findLiveRoomByKeyForUpdateQuerier(ctx context.Context, q dbQuerier, roomKey
 		&result.OwnerNickname,
 		&result.OwnerAvatar,
 		&result.Title,
+		&result.StreamKey,
 		&result.Status,
 		&result.CreatedAt,
 		&result.UpdatedAt,
@@ -1451,7 +1492,7 @@ func findLiveRoomByKeyForUpdateQuerier(ctx context.Context, q dbQuerier, roomKey
 func findLiveRoomByOwnerAndStatusQuerier(ctx context.Context, q dbQuerier, ownerUserID int64, status string) (liveRoomRow, error) {
 	row := q.QueryRowContext(
 		ctx,
-		`SELECT room.id, room.room_key, room.owner_user_id, owner.username, owner.nickname, owner.avatar_url, room.title, room.status, room.created_at, room.updated_at
+		`SELECT room.id, room.room_key, room.owner_user_id, owner.username, owner.nickname, owner.avatar_url, room.title, room.stream_key, room.status, room.created_at, room.updated_at
 		 FROM live_rooms room
 		 INNER JOIN users owner ON owner.id = room.owner_user_id
 		 WHERE room.owner_user_id = ?
@@ -1471,6 +1512,7 @@ func findLiveRoomByOwnerAndStatusQuerier(ctx context.Context, q dbQuerier, owner
 		&result.OwnerNickname,
 		&result.OwnerAvatar,
 		&result.Title,
+		&result.StreamKey,
 		&result.Status,
 		&result.CreatedAt,
 		&result.UpdatedAt,
@@ -1716,6 +1758,53 @@ func normalizeLiveRoomKey(roomKey string) string {
 	normalized := strings.Trim(builder.String(), "-_")
 	if len(normalized) > 64 {
 		normalized = normalized[:64]
+	}
+	return normalized
+}
+
+func normalizeLiveStreamKey(value string) string {
+	value = strings.TrimSpace(value)
+	if value == "" {
+		return ""
+	}
+
+	if parsed, err := url.Parse(value); err == nil && parsed.Scheme != "" && parsed.Host != "" {
+		value = parsed.Path
+	}
+
+	value = strings.SplitN(value, "?", 2)[0]
+	value = strings.SplitN(value, "#", 2)[0]
+	value = strings.Trim(strings.TrimSpace(value), "/")
+	if value == "" {
+		return ""
+	}
+	parts := strings.Split(value, "/")
+	value = strings.TrimSpace(parts[len(parts)-1])
+	if strings.HasSuffix(strings.ToLower(value), ".flv") {
+		value = value[:len(value)-len(".flv")]
+	}
+
+	var builder strings.Builder
+	lastWasDash := false
+	for _, ch := range value {
+		switch {
+		case ch >= 'a' && ch <= 'z',
+			ch >= 'A' && ch <= 'Z',
+			ch >= '0' && ch <= '9',
+			ch == '_' || ch == '-' || ch == '.':
+			builder.WriteRune(ch)
+			lastWasDash = false
+		default:
+			if !lastWasDash {
+				builder.WriteRune('-')
+				lastWasDash = true
+			}
+		}
+	}
+
+	normalized := strings.Trim(builder.String(), "-_.")
+	if len(normalized) > 128 {
+		normalized = normalized[:128]
 	}
 	return normalized
 }

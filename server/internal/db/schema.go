@@ -46,6 +46,7 @@ func EnsureSchema(ctx context.Context, database *sql.DB) error {
 			room_key VARCHAR(64) NOT NULL UNIQUE,
 			owner_user_id BIGINT NOT NULL,
 			title VARCHAR(128) NULL,
+			stream_key VARCHAR(128) NULL,
 			status VARCHAR(32) NOT NULL DEFAULT 'live',
 			created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -101,6 +102,28 @@ func EnsureSchema(ctx context.Context, database *sql.DB) error {
 
 	if err := ensureVideosUserIDColumn(ctx, database); err != nil {
 		return err
+	}
+	if err := ensureLiveRoomsStreamKeyColumn(ctx, database); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func ensureLiveRoomsStreamKeyColumn(ctx context.Context, database *sql.DB) error {
+	exists, err := hasColumn(ctx, database, "live_rooms", "stream_key")
+	if err != nil {
+		return fmt.Errorf("check live_rooms.stream_key column: %w", err)
+	}
+	if exists {
+		return nil
+	}
+
+	if _, err := database.ExecContext(
+		ctx,
+		`ALTER TABLE live_rooms ADD COLUMN stream_key VARCHAR(128) NULL AFTER title`,
+	); err != nil {
+		return fmt.Errorf("add live_rooms.stream_key column: %w", err)
 	}
 
 	return nil

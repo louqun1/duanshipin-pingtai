@@ -23,8 +23,9 @@ type liveRoomMixedStreamResponse struct {
 	LastError   string `json:"lastError,omitempty"`
 }
 
-func (s *apiServer) buildLiveRoomMixedStreamResponse(roomKey string) *liveRoomMixedStreamResponse {
+func (s *apiServer) buildLiveRoomMixedStreamResponse(roomKey, streamKey string) *liveRoomMixedStreamResponse {
 	roomKey = normalizeLiveRoomKey(roomKey)
+	streamKey = normalizeLiveStreamKey(streamKey)
 	if roomKey == "" {
 		return nil
 	}
@@ -36,7 +37,14 @@ func (s *apiServer) buildLiveRoomMixedStreamResponse(roomKey string) *liveRoomMi
 	}
 
 	if s.mixManager != nil {
-		if output, err := s.mixManager.BuildRoomOutput(roomKey); err == nil {
+		var output linkmicmix.RoomOutput
+		var err error
+		if streamKey != "" {
+			output, err = s.mixManager.BuildRoomOutputForInputStream(roomKey, streamKey)
+		} else {
+			output, err = s.mixManager.BuildRoomOutput(roomKey)
+		}
+		if err == nil {
 			response.StreamKey = output.MixedStreamKey
 			response.PublishURL = output.OutputURL
 			response.PlayURL = output.PlaybackURL
@@ -89,13 +97,13 @@ func applyLiveRoomMixedStreamStatus(response *liveRoomMixedStreamResponse, statu
 	if peerRoomKey := normalizeLiveRoomKey(status.PeerRoomKey); peerRoomKey != "" {
 		response.PeerRoomKey = peerRoomKey
 	}
-	if streamKey := strings.TrimSpace(status.MixedStreamKey); streamKey != "" {
+	if streamKey := strings.TrimSpace(status.MixedStreamKey); streamKey != "" && strings.TrimSpace(response.StreamKey) == "" {
 		response.StreamKey = streamKey
 	}
-	if publishURL := strings.TrimSpace(status.OutputURL); publishURL != "" {
+	if publishURL := strings.TrimSpace(status.OutputURL); publishURL != "" && strings.TrimSpace(response.PublishURL) == "" {
 		response.PublishURL = publishURL
 	}
-	if playURL := strings.TrimSpace(status.PlaybackURL); playURL != "" {
+	if playURL := strings.TrimSpace(status.PlaybackURL); playURL != "" && strings.TrimSpace(response.PlayURL) == "" {
 		response.PlayURL = playURL
 	}
 	response.LastError = strings.TrimSpace(status.LastError)
@@ -107,11 +115,34 @@ func (s *apiServer) startCrossRoomLinkMicMix(ctx context.Context, session CrossR
 		return nil
 	}
 
-	roomASpec, err := s.mixManager.BuildRoomSession(session.RoomAKey, session.RoomBKey, session.SessionID, session.RequestID)
+	roomAInputStreamKey, err := s.resolveLiveRoomInputStreamKey(ctx, session.RoomAKey)
+	if err != nil {
+		return fmt.Errorf("resolve roomA input stream: %w", err)
+	}
+	roomBInputStreamKey, err := s.resolveLiveRoomInputStreamKey(ctx, session.RoomBKey)
+	if err != nil {
+		return fmt.Errorf("resolve roomB input stream: %w", err)
+	}
+
+	roomASpec, err := s.mixManager.BuildRoomSessionForInputStreams(
+		session.RoomAKey,
+		session.RoomBKey,
+		session.SessionID,
+		session.RequestID,
+		roomAInputStreamKey,
+		roomBInputStreamKey,
+	)
 	if err != nil {
 		return err
 	}
-	roomBSpec, err := s.mixManager.BuildRoomSession(session.RoomBKey, session.RoomAKey, session.SessionID, session.RequestID)
+	roomBSpec, err := s.mixManager.BuildRoomSessionForInputStreams(
+		session.RoomBKey,
+		session.RoomAKey,
+		session.SessionID,
+		session.RequestID,
+		roomBInputStreamKey,
+		roomAInputStreamKey,
+	)
 	if err != nil {
 		return err
 	}
@@ -124,6 +155,19 @@ func (s *apiServer) startCrossRoomLinkMicMix(ctx context.Context, session CrossR
 		return fmt.Errorf("start roomB mixed stream: %w", err)
 	}
 	return nil
+}
+
+func (s *apiServer) resolveLiveRoomInputStreamKey(ctx context.Context, roomKey string) (string, error) {
+	room, err := s.findLiveRoomByKey(ctx, roomKey)
+	if err != nil {
+		return "", err
+	}
+	if room.StreamKey.Valid {
+		if streamKey := normalizeLiveStreamKey(room.StreamKey.String); streamKey != "" {
+			return streamKey, nil
+		}
+	}
+	return normalizeLiveRoomKey(room.RoomKey), nil
 }
 
 func (s *apiServer) stopCrossRoomLinkMicMix(ctx context.Context, session CrossRoomLinkMicSession) error {

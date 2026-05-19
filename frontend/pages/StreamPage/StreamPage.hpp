@@ -2,6 +2,8 @@
 
 #include "liveplayer/service/LivePlayerController.hpp"
 
+#include <QByteArray>
+#include <QJsonObject>
 #include <QWidget>
 
 class QFrame;
@@ -35,20 +37,31 @@ private:
     void connectController();
     void applyAuthHeader(QNetworkRequest &request, const QString &token) const;
     void appendLog(const QString &message);
+    void connectRoomEventStream();
+    void disconnectRoomEventStream();
     void ensurePresenceForCurrentWatch();
+    void handleCurrentRoomStateReply(QNetworkReply *reply, const QString &reason);
+    void handleRoomEventStreamFinished(QNetworkReply *reply);
+    void handleRoomEventStreamReadyRead(QNetworkReply *reply);
     void handlePresenceReply(
         QNetworkReply *reply,
         const QString &action,
         const QString &roomKey,
         const QString &token,
         bool tracksActiveSession);
+    void processRoomEventStreamMessage(const QByteArray &message);
     void requestStartWatch();
+    void requestCurrentRoomState(const QString &reason);
+    void retryMixedPlayback();
+    void scheduleRoomEventStreamReconnect();
     void sendPresenceAction(
         const QString &action,
         const QString &roomKey,
         const QString &token,
         bool tracksActiveSession);
+    void switchPlaybackTarget(const QString &targetUrl, const QString &reason);
     void stopWatching(bool stopPlayback, const QString &reason);
+    void syncPlaybackTargetFromRoomState(const QJsonObject &roomObject, const QString &reason);
     void updatePresenceStatus(const QString &message);
     void updateState(
         backend::liveplayer::service::LivePlayerController::PlaybackState state,
@@ -77,19 +90,27 @@ private:
     QLabel *avSyncValueLabel_ = nullptr;
     QLabel *hintValueLabel_ = nullptr;
     QNetworkAccessManager *networkManager_ = nullptr;
+    QTimer *mixedPlaybackRetryTimer_ = nullptr;
     QTimer *presenceHeartbeatTimer_ = nullptr;
+    QTimer *roomEventStreamReconnectTimer_ = nullptr;
     QString authToken_;
+    QString baseWatchStreamUrl_;
     QString watchedRoomKey_;
     QString watchedStreamUrl_;
     QString activePresenceRoomKey_;
     QString activePresenceAuthToken_;
+    QString roomEventStreamBaseUrl_;
+    QString mixedPlaybackUrl_;
     QString currentPlaybackMessage_;
+    QByteArray roomEventStreamBuffer_;
     qint64 lastBytesReceived_ = 0;
     int lastAudioTagCount_ = 0;
     int lastVideoTagCount_ = 0;
     int lastScriptTagCount_ = 0;
+    QNetworkReply *roomEventStreamReply_ = nullptr;
     backend::liveplayer::service::LivePlayerController::PlaybackState lastPlaybackState_ =
         backend::liveplayer::service::LivePlayerController::PlaybackState::Idle;
+    bool mixedPlaybackActive_ = false;
     bool presenceJoined_ = false;
 };
 

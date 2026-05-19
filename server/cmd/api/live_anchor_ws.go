@@ -13,15 +13,19 @@ import (
 const liveAnchorRole = "anchor"
 
 type liveAnchorJoinMessage struct {
-	Type    string `json:"type"`
-	Token   string `json:"token"`
-	RoomKey string `json:"roomKey"`
-	Role    string `json:"role"`
+	Type      string `json:"type"`
+	Token     string `json:"token"`
+	RoomKey   string `json:"roomKey"`
+	Role      string `json:"role"`
+	StreamKey string `json:"streamKey"`
+	StreamURL string `json:"streamUrl"`
 }
 
 type liveAnchorHeartbeatMessage struct {
-	Type    string `json:"type"`
-	RoomKey string `json:"roomKey"`
+	Type      string `json:"type"`
+	RoomKey   string `json:"roomKey"`
+	StreamKey string `json:"streamKey"`
+	StreamURL string `json:"streamUrl"`
 }
 
 type liveAnchorLeaveMessage struct {
@@ -119,6 +123,15 @@ func (c *liveSignalClient) handleLiveAnchorJoinMessage(data []byte) error {
 		return nil
 	}
 
+	streamKey := normalizeLiveStreamKey(firstNonEmptyString(message.StreamKey, message.StreamURL))
+	if streamKey != "" {
+		if err := c.server.updateLiveRoomStreamKey(ctx, room.ID, streamKey); err != nil {
+			log.Printf("anchor join update stream key failed: roomKey=%s userId=%d streamKey=%s err=%v", roomKey, user.ID, streamKey, err)
+			c.sendLiveAnchorError(roomKey, "failed to update anchor stream key")
+			return nil
+		}
+	}
+
 	if err := upsertLiveRoomPresenceQuerier(ctx, c.server.database, room.ID, user.ID, liveRoomRoleController); err != nil {
 		log.Printf("anchor join upsert presence failed: roomKey=%s userId=%d err=%v", roomKey, user.ID, err)
 		c.sendLiveAnchorError(roomKey, "failed to update anchor presence")
@@ -183,6 +196,15 @@ func (c *liveSignalClient) handleLiveAnchorHeartbeatMessage(data []byte) error {
 		log.Printf("anchor heartbeat failed: roomKey=%s userId=%d err=%v", roomKey, c.anchorUserID, err)
 		c.sendLiveAnchorError(roomKey, "failed to refresh anchor presence")
 		return nil
+	}
+
+	streamKey := normalizeLiveStreamKey(firstNonEmptyString(message.StreamKey, message.StreamURL))
+	if streamKey != "" {
+		if err := updateLiveRoomStreamKeyByRoomKey(ctx, c.hub.database, roomKey, c.anchorUserID, streamKey); err != nil {
+			log.Printf("anchor heartbeat update stream key failed: roomKey=%s userId=%d streamKey=%s err=%v", roomKey, c.anchorUserID, streamKey, err)
+			c.sendLiveAnchorError(roomKey, "failed to update anchor stream key")
+			return nil
+		}
 	}
 
 	log.Printf("[presence] anchor heartbeat roomKey=%s userId=%d", roomKey, c.anchorUserID)
@@ -372,6 +394,25 @@ func markAnchorOfflineByRoomKey(ctx context.Context, q dbQuerier, roomKey string
 		   AND presence.user_id = ?`,
 		roomKey,
 		userID,
+	)
+	return err
+}
+
+func updateLiveRoomStreamKeyByRoomKey(ctx context.Context, q dbQuerier, roomKey string, ownerUserID int64, streamKey string) error {
+	streamKey = normalizeLiveStreamKey(streamKey)
+	if streamKey == "" {
+		return nil
+	}
+
+	_, err := q.ExecContext(
+		ctx,
+		`UPDATE live_rooms
+		 SET stream_key = ?, updated_at = NOW()
+		 WHERE room_key = ?
+		   AND owner_user_id = ?`,
+		streamKey,
+		roomKey,
+		ownerUserID,
 	)
 	return err
 }

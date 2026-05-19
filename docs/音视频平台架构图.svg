@@ -1,0 +1,163 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1050" viewBox="0 0 1600 1050">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155"/>
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#059669"/>
+    </marker>
+    <marker id="arrow-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#ea580c"/>
+    </marker>
+    <style>
+      .title { font: 700 34px "Microsoft YaHei", "Noto Sans CJK SC", "Segoe UI", Arial, sans-serif; fill: #0f172a; }
+      .subtitle { font: 400 16px "Microsoft YaHei", "Noto Sans CJK SC", "Segoe UI", Arial, sans-serif; fill: #475569; }
+      .section-title { font: 700 22px "Microsoft YaHei", "Noto Sans CJK SC", "Segoe UI", Arial, sans-serif; fill: #0f172a; }
+      .box-title { font: 700 18px "Microsoft YaHei", "Noto Sans CJK SC", "Segoe UI", Arial, sans-serif; fill: #0f172a; }
+      .box-text { font: 400 14px "Microsoft YaHei", "Noto Sans CJK SC", "Segoe UI", Arial, sans-serif; fill: #334155; }
+      .small { font: 400 13px "Microsoft YaHei", "Noto Sans CJK SC", "Segoe UI", Arial, sans-serif; fill: #475569; }
+      .tag { font: 700 12px "Microsoft YaHei", "Noto Sans CJK SC", "Segoe UI", Arial, sans-serif; }
+      .panel { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 2; }
+      .client { fill: #eff6ff; stroke: #60a5fa; stroke-width: 2; }
+      .anchor { fill: #fff7ed; stroke: #fb923c; stroke-width: 2; }
+      .server { fill: #ecfdf5; stroke: #34d399; stroke-width: 2; }
+      .infra { fill: #f5f3ff; stroke: #a78bfa; stroke-width: 2; }
+      .future { fill: #fdf2f8; stroke: #f472b6; stroke-width: 2; stroke-dasharray: 8 6; }
+      .flow { fill: none; stroke: #334155; stroke-width: 2.2; marker-end: url(#arrow); }
+      .flow-blue { fill: none; stroke: #2563eb; stroke-width: 2.6; marker-end: url(#arrow-blue); }
+      .flow-green { fill: none; stroke: #059669; stroke-width: 2.6; marker-end: url(#arrow-green); }
+      .flow-orange { fill: none; stroke: #ea580c; stroke-width: 2.6; marker-end: url(#arrow-orange); }
+      .dash { stroke-dasharray: 8 7; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="1050" fill="#ffffff"/>
+
+  <text x="60" y="62" class="title">统一音视频平台架构图</text>
+  <text x="60" y="92" class="subtitle">点播上传转码 + RTMP 推流 + HTTP-FLV 观看 + WebRTC 连麦 + 后续多人通话/弹幕/录制规划</text>
+
+  <g transform="translate(60,125)">
+    <rect x="0" y="0" width="1480" height="860" rx="18" class="panel"/>
+
+    <text x="34" y="45" class="section-title">客户端与主播端</text>
+    <text x="555" y="45" class="section-title">Go 平台服务端</text>
+    <text x="1075" y="45" class="section-title">虚拟机 Docker 基础设施</text>
+
+    <!-- User client -->
+    <rect x="30" y="70" width="430" height="300" rx="12" class="client"/>
+    <text x="55" y="105" class="box-title">Qt/C++ 用户端</text>
+    <rect x="55" y="125" width="160" height="30" rx="15" fill="#dbeafe"/>
+    <text x="82" y="145" class="tag" fill="#1d4ed8">已完成</text>
+    <text x="55" y="180" class="box-text">首页视频流 / 上传 / 账户登录</text>
+    <text x="55" y="207" class="box-text">点赞状态：likeCount + likedByMe</text>
+    <text x="55" y="234" class="box-text">点播播放器：命令流 + 事件流 + 状态机</text>
+    <text x="55" y="261" class="box-text">直播观看：HTTP-FLV 读流/拆包/解码</text>
+    <text x="55" y="288" class="box-text">SDL 音频输出 + OpenGL YUV 渲染</text>
+    <text x="55" y="315" class="box-text">SSE 接收视频和房间状态更新</text>
+
+    <!-- Anchor client -->
+    <rect x="30" y="410" width="430" height="320" rx="12" class="anchor"/>
+    <text x="55" y="445" class="box-title">Windows 主播端</text>
+    <rect x="55" y="465" width="160" height="30" rx="15" fill="#ffedd5"/>
+    <text x="82" y="485" class="tag" fill="#c2410c">已完成</text>
+    <text x="55" y="520" class="box-text">Media Foundation 摄像头采集</text>
+    <text x="55" y="547" class="box-text">WASAPI 麦克风采集 / 本地预览</text>
+    <text x="55" y="574" class="box-text">H.264 / AAC 编码</text>
+    <text x="55" y="601" class="box-text">FLV 封装 + RTMP Publisher</text>
+    <text x="55" y="628" class="box-text">采集/编码/发送多线程流水线</text>
+    <text x="55" y="655" class="box-text">WebSocket 接入房间与连麦信令</text>
+    <text x="55" y="682" class="box-text">RTC media tap 复用已有采集源</text>
+
+    <!-- Server -->
+    <rect x="520" y="70" width="450" height="660" rx="12" class="server"/>
+    <text x="545" y="105" class="box-title">Go API + Worker</text>
+    <rect x="545" y="125" width="160" height="30" rx="15" fill="#d1fae5"/>
+    <text x="572" y="145" class="tag" fill="#047857">已完成</text>
+    <text x="545" y="180" class="box-text">用户 / 会话 / 视频 / 点赞</text>
+    <text x="545" y="207" class="box-text">上传入口 + 转码任务创建</text>
+    <text x="545" y="234" class="box-text">Worker 调 FFmpeg 转 HLS</text>
+    <text x="545" y="261" class="box-text">SSE：video.updated / room.updated</text>
+    <text x="545" y="288" class="box-text">直播房间 / 成员在线 / 连麦请求</text>
+    <text x="545" y="315" class="box-text">WebSocket：room / linkmic / rtc 信令</text>
+    <text x="545" y="342" class="box-text">服务端混流：双路输入合成单路输出</text>
+
+    <rect x="545" y="385" width="390" height="145" rx="10" class="future"/>
+    <text x="570" y="420" class="box-title">后续扩展规划</text>
+    <text x="570" y="452" class="box-text">多人视频通话：LiveKit C++ SDK + SFU</text>
+    <text x="570" y="479" class="box-text">弹幕/评论：Redis 热数据 + MySQL 持久化</text>
+    <text x="570" y="506" class="box-text">直播录制：后端启动录制任务，完成后下载</text>
+
+    <rect x="545" y="565" width="390" height="125" rx="10" fill="#dcfce7" stroke="#86efac" stroke-width="1.5"/>
+    <text x="570" y="600" class="box-title">数据职责</text>
+    <text x="570" y="632" class="box-text">Redis：在线/心跳/弹幕热流/麦位/计数</text>
+    <text x="570" y="659" class="box-text">MySQL：用户/视频/评论/房间/录制记录</text>
+
+    <!-- Infra -->
+    <rect x="1030" y="70" width="420" height="660" rx="12" class="infra"/>
+    <text x="1055" y="105" class="box-title">Docker 基础设施</text>
+    <text x="1055" y="145" class="box-text">MySQL：用户、视频、点赞、房间、录制记录</text>
+    <text x="1055" y="185" class="box-text">Redis：热数据、在线状态、弹幕流、缓存</text>
+    <text x="1055" y="225" class="box-text">MinIO：原片、HLS、封面、录制文件</text>
+    <text x="1055" y="265" class="box-text">SRS：RTMP ingest -> HTTP-FLV watch</text>
+    <text x="1055" y="305" class="box-text">coturn：WebRTC STUN/TURN</text>
+    <text x="1055" y="345" class="box-text">LiveKit SFU：多人视频通话规划</text>
+
+    <rect x="1055" y="400" width="360" height="285" rx="10" fill="#ede9fe" stroke="#c4b5fd" stroke-width="1.5"/>
+    <text x="1080" y="435" class="box-title">媒体流向</text>
+    <text x="1080" y="470" class="box-text">点播：上传 -> 转码 -> HLS -> 播放</text>
+    <text x="1080" y="505" class="box-text">直播：RTMP -> SRS -> HTTP-FLV</text>
+    <text x="1080" y="540" class="box-text">连麦：WebSocket 信令 + WebRTC 媒体</text>
+    <text x="1080" y="575" class="box-text">多人：LiveKit 转发，客户端订阅</text>
+    <text x="1080" y="610" class="box-text">录制：后端任务 -> 文件存储 -> 下载</text>
+
+    <!-- Flow labels and arrows -->
+    <path d="M 460 160 C 500 160, 500 160, 520 160" class="flow-blue"/>
+    <text x="472" y="145" class="small" fill="#1d4ed8">上传 / 点赞 / 拉列表</text>
+
+    <path d="M 520 235 C 500 235, 500 235, 460 235" class="flow-blue"/>
+    <text x="464" y="260" class="small" fill="#1d4ed8">SSE 状态通知</text>
+
+    <path d="M 970 205 C 1000 205, 1000 205, 1030 205" class="flow-green"/>
+    <text x="980" y="190" class="small" fill="#047857">写入媒体/数据</text>
+
+    <path d="M 460 575 C 500 575, 500 575, 520 575" class="flow-orange"/>
+    <text x="470" y="560" class="small" fill="#c2410c">房间/连麦信令</text>
+
+    <path d="M 460 620 C 690 760, 1000 720, 1080 505" class="flow-orange"/>
+    <text x="655" y="760" class="small" fill="#c2410c">RTMP 推流</text>
+
+    <path d="M 1080 500 C 900 795, 520 805, 260 370" class="flow-orange"/>
+    <text x="490" y="795" class="small" fill="#c2410c">HTTP-FLV 观看</text>
+
+    <path d="M 1030 305 C 845 332, 675 360, 460 650" class="flow"/>
+    <text x="700" y="330" class="small">STUN/TURN / RTC</text>
+
+    <path d="M 935 455 C 970 455, 995 455, 1030 455" class="flow dash"/>
+    <text x="950" y="440" class="small">LiveKit / 录制 / 弹幕规划</text>
+
+    <path d="M 1030 225 C 875 225, 1020 665, 935 665" class="flow-green"/>
+    <text x="945" y="690" class="small" fill="#047857">录制文件 / HLS / 封面</text>
+
+    <!-- Legend -->
+    <rect x="30" y="775" width="1420" height="62" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+    <rect x="55" y="795" width="90" height="24" rx="12" fill="#dbeafe"/>
+    <text x="80" y="812" class="tag" fill="#1d4ed8">用户端</text>
+    <rect x="170" y="795" width="90" height="24" rx="12" fill="#ffedd5"/>
+    <text x="195" y="812" class="tag" fill="#c2410c">主播端</text>
+    <rect x="285" y="795" width="90" height="24" rx="12" fill="#d1fae5"/>
+    <text x="310" y="812" class="tag" fill="#047857">服务端</text>
+    <rect x="400" y="795" width="90" height="24" rx="12" fill="#ede9fe"/>
+    <text x="425" y="812" class="tag" fill="#6d28d9">基础设施</text>
+    <rect x="515" y="795" width="90" height="24" rx="12" fill="#fdf2f8" stroke="#f472b6" stroke-dasharray="6 5"/>
+    <text x="540" y="812" class="tag" fill="#be185d">规划项</text>
+    <line x1="655" y1="807" x2="740" y2="807" class="flow-blue"/>
+    <text x="760" y="812" class="small">点播/业务 API</text>
+    <line x1="900" y1="807" x2="985" y2="807" class="flow-orange"/>
+    <text x="1005" y="812" class="small">直播媒体流</text>
+    <line x1="1155" y1="807" x2="1240" y2="807" class="flow dash"/>
+    <text x="1260" y="812" class="small">后续扩展</text>
+  </g>
+</svg>

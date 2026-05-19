@@ -32,6 +32,8 @@ using PlaybackState = backend::liveplayer::service::LivePlayerController::Playba
 namespace {
 
 constexpr int kPresenceHeartbeatIntervalMs = 60 * 1000;
+constexpr int kMixedPlaybackRetryDelayMs = 3000;
+constexpr int kRoomEventStreamReconnectDelayMs = 2000;
 
 QFrame *createSidebarSection(QWidget *parent, const QString &title, QVBoxLayout **sectionLayout)
 {
@@ -152,6 +154,30 @@ QString liveRoomPresenceUrl(const QString &baseUrl, const QString &roomKey)
     return QString("%1/api/live-rooms/%2/presence").arg(baseUrl, roomKey);
 }
 
+QString apiEventsUrl(const QString &baseUrl)
+{
+    return QString("%1/api/events").arg(baseUrl);
+}
+
+QString liveRoomDetailUrl(const QString &baseUrl, const QString &roomKey)
+{
+    return QString("%1/api/live-rooms/%2").arg(baseUrl, roomKey);
+}
+
+QString deriveBaseWatchStreamUrl(const QString &watchUrl)
+{
+    const QString trimmed = watchUrl.trimmed();
+    if (!trimmed.endsWith(".flv", Qt::CaseInsensitive) ||
+        !trimmed.contains("-mixed", Qt::CaseInsensitive))
+    {
+        return trimmed;
+    }
+
+    QString derived = trimmed;
+    derived.replace("-mixed.flv", ".flv", Qt::CaseInsensitive);
+    return derived;
+}
+
 QJsonObject parseReplyObject(const QByteArray &bytes)
 {
     const QJsonDocument document = QJsonDocument::fromJson(bytes);
@@ -177,9 +203,16 @@ StreamPage::StreamPage(
     , livePlayerController_(livePlayerController)
 {
     networkManager_ = new QNetworkAccessManager(this);
+    mixedPlaybackRetryTimer_ = new QTimer(this);
     presenceHeartbeatTimer_ = new QTimer(this);
+    roomEventStreamReconnectTimer_ = new QTimer(this);
+    mixedPlaybackRetryTimer_->setInterval(kMixedPlaybackRetryDelayMs);
+    mixedPlaybackRetryTimer_->setSingleShot(true);
     presenceHeartbeatTimer_->setInterval(kPresenceHeartbeatIntervalMs);
     presenceHeartbeatTimer_->setSingleShot(false);
+    roomEventStreamReconnectTimer_->setInterval(kRoomEventStreamReconnectDelayMs);
+    roomEventStreamReconnectTimer_->setSingleShot(true);
+    connect(mixedPlaybackRetryTimer_, &QTimer::timeout, this, &StreamPage::retryMixedPlayback);
     connect(presenceHeartbeatTimer_, &QTimer::timeout, this, [this]() {
         if (activePresenceRoomKey_.isEmpty() || activePresenceAuthToken_.isEmpty()) {
             return;
@@ -190,6 +223,9 @@ StreamPage::StreamPage(
             activePresenceRoomKey_,
             activePresenceAuthToken_,
             true);
+    });
+    connect(roomEventStreamReconnectTimer_, &QTimer::timeout, this, [this]() {
+        connectRoomEventStream();
     });
 
     buildUi();
@@ -623,8 +659,30 @@ void StreamPage::connectController()
                 updateState(state, message);
 
                 if (state == PlaybackState::Stopped) {
+                    if (mixedPlaybackActive_ &&
+                        watchedStreamUrl_ == mixedPlaybackUrl_ &&
+                        !baseWatchStreamUrl_.isEmpty())
+                    {
+                        appendLog("Mixed playback stopped before stream became stable; falling back to base stream.");
+                        switchPlaybackTarget(baseWatchStreamUrl_, "mixed fallback");
+                        if (mixedPlaybackRetryTimer_) {
+                            mixedPlaybackRetryTimer_->start();
+                        }
+                        return;
+                    }
                     stopWatching(false, "Live playback stopped; leaving room presence.");
                 } else if (state == PlaybackState::Error) {
+                    if (mixedPlaybackActive_ &&
+                        watchedStreamUrl_ == mixedPlaybackUrl_ &&
+                        !baseWatchStreamUrl_.isEmpty())
+                    {
+                        appendLog("Mixed playback failed; falling back to base stream and waiting to retry.");
+                        switchPlaybackTarget(baseWatchStreamUrl_, "mixed fallback");
+                        if (mixedPlaybackRetryTimer_) {
+                            mixedPlaybackRetryTimer_->start();
+                        }
+                        return;
+                    }
                     stopWatching(false, "Live playback failed; leaving room presence.");
                 }
             });
@@ -662,6 +720,291 @@ void StreamPage::appendLog(const QString &message)
 
     const QByteArray utf8Message = message.toUtf8();
     spdlog::info("[stream/page] {}", utf8Message.constData());
+}
+
+void StreamPage::connectRoomEventStream()
+{
+    if (watchedRoomKey_.isEmpty()) {
+        disconnectRoomEventStream();
+        return;
+    }
+
+    const QString baseUrl = apiBaseUrl().trimmed();
+    if (baseUrl.isEmpty()) {
+        return;
+    }
+
+    if (roomEventStreamReply_ && roomEventStreamBaseUrl_ == baseUrl) {
+        return;
+    }
+
+    disconnectRoomEventStream();
+    if (roomEventStreamReconnectTimer_) {
+        roomEventStreamReconnectTimer_->stop();
+    }
+
+    roomEventStreamBaseUrl_ = baseUrl;
+    roomEventStreamBuffer_.clear();
+
+    QNetworkRequest request(QUrl(apiEventsUrl(baseUrl)));
+    request.setAttribute(
+        QNetworkRequest::RedirectPolicyAttribute,
+        QNetworkRequest::NoLessSafeRedirectPolicy);
+    request.setRawHeader("Accept", "text/event-stream");
+    applyAuthHeader(request, authToken_);
+
+    auto *reply = networkManager_->get(request);
+    roomEventStreamReply_ = reply;
+
+    connect(reply, &QNetworkReply::readyRead, this, [this, reply]() {
+        handleRoomEventStreamReadyRead(reply);
+    });
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        handleRoomEventStreamFinished(reply);
+    });
+}
+
+void StreamPage::disconnectRoomEventStream()
+{
+    if (roomEventStreamReconnectTimer_) {
+        roomEventStreamReconnectTimer_->stop();
+    }
+
+    if (!roomEventStreamReply_) {
+        roomEventStreamBuffer_.clear();
+        roomEventStreamBaseUrl_.clear();
+        return;
+    }
+
+    auto *reply = roomEventStreamReply_;
+    roomEventStreamReply_ = nullptr;
+    roomEventStreamBuffer_.clear();
+    roomEventStreamBaseUrl_.clear();
+
+    disconnect(reply, nullptr, this, nullptr);
+    reply->abort();
+    reply->deleteLater();
+}
+
+void StreamPage::handleRoomEventStreamReadyRead(QNetworkReply *reply)
+{
+    if (!reply || reply != roomEventStreamReply_) {
+        return;
+    }
+
+    roomEventStreamBuffer_.append(reply->readAll());
+
+    int messageBoundary = roomEventStreamBuffer_.indexOf("\n\n");
+    while (messageBoundary >= 0) {
+        const QByteArray message = roomEventStreamBuffer_.left(messageBoundary);
+        roomEventStreamBuffer_.remove(0, messageBoundary + 2);
+        processRoomEventStreamMessage(message);
+        messageBoundary = roomEventStreamBuffer_.indexOf("\n\n");
+    }
+}
+
+void StreamPage::handleRoomEventStreamFinished(QNetworkReply *reply)
+{
+    if (!reply) {
+        return;
+    }
+
+    const bool isActiveReply = (reply == roomEventStreamReply_);
+    if (isActiveReply) {
+        roomEventStreamReply_ = nullptr;
+        roomEventStreamBuffer_.clear();
+    }
+    reply->deleteLater();
+
+    if (isActiveReply) {
+        scheduleRoomEventStreamReconnect();
+    }
+}
+
+void StreamPage::processRoomEventStreamMessage(const QByteArray &message)
+{
+    QByteArray eventName;
+    QByteArray eventData;
+
+    for (QByteArray line : message.split('\n')) {
+        if (line.endsWith('\r')) {
+            line.chop(1);
+        }
+        if (line.isEmpty() || line.startsWith(':')) {
+            continue;
+        }
+
+        const int separatorIndex = line.indexOf(':');
+        const QByteArray fieldName = separatorIndex >= 0 ? line.left(separatorIndex) : line;
+        QByteArray fieldValue = separatorIndex >= 0 ? line.mid(separatorIndex + 1) : QByteArray();
+        if (fieldValue.startsWith(' ')) {
+            fieldValue.remove(0, 1);
+        }
+
+        if (fieldName == "event") {
+            eventName = fieldValue;
+        } else if (fieldName == "data") {
+            if (!eventData.isEmpty()) {
+                eventData.append('\n');
+            }
+            eventData.append(fieldValue);
+        }
+    }
+
+    if (eventName != "linkmic.room.updated" || eventData.isEmpty()) {
+        return;
+    }
+
+    const QJsonDocument document = QJsonDocument::fromJson(eventData);
+    if (!document.isObject()) {
+        return;
+    }
+
+    const QJsonObject payload = document.object();
+    QJsonObject roomObject = payload.value("room").toObject();
+    QString roomKey = normalizeRoomKey(payload.value("roomKey").toString());
+    if (roomKey.isEmpty()) {
+        roomKey = normalizeRoomKey(roomObject.value("roomKey").toString());
+    }
+    if (roomKey.isEmpty() || roomKey != watchedRoomKey_) {
+        return;
+    }
+
+    if (roomObject.isEmpty()) {
+        requestCurrentRoomState("room update event without snapshot");
+        return;
+    }
+
+    syncPlaybackTargetFromRoomState(roomObject, "room update event");
+}
+
+void StreamPage::scheduleRoomEventStreamReconnect()
+{
+    if (watchedRoomKey_.isEmpty()) {
+        return;
+    }
+    if (roomEventStreamReconnectTimer_ && !roomEventStreamReconnectTimer_->isActive()) {
+        roomEventStreamReconnectTimer_->start();
+    }
+}
+
+void StreamPage::requestCurrentRoomState(const QString &reason)
+{
+    if (watchedRoomKey_.isEmpty()) {
+        return;
+    }
+    if (authToken_.isEmpty()) {
+        appendLog("Room snapshot skipped because auth token is empty.");
+        return;
+    }
+
+    const QString baseUrl = apiBaseUrl().trimmed();
+    if (baseUrl.isEmpty()) {
+        return;
+    }
+
+    QNetworkRequest request(QUrl(liveRoomDetailUrl(baseUrl, watchedRoomKey_)));
+    request.setAttribute(
+        QNetworkRequest::RedirectPolicyAttribute,
+        QNetworkRequest::NoLessSafeRedirectPolicy);
+    applyAuthHeader(request, authToken_);
+
+    auto *reply = networkManager_->get(request);
+    connect(reply, &QNetworkReply::finished, this, [this, reply, reason]() {
+        handleCurrentRoomStateReply(reply, reason);
+    });
+}
+
+void StreamPage::retryMixedPlayback()
+{
+    if (!mixedPlaybackActive_) {
+        return;
+    }
+    if (watchedRoomKey_.isEmpty()) {
+        return;
+    }
+    if (mixedPlaybackUrl_.trimmed().isEmpty()) {
+        return;
+    }
+    if (watchedStreamUrl_ == mixedPlaybackUrl_) {
+        return;
+    }
+
+    switchPlaybackTarget(mixedPlaybackUrl_, "mixed retry");
+}
+
+void StreamPage::handleCurrentRoomStateReply(QNetworkReply *reply, const QString &reason)
+{
+    if (!reply) {
+        return;
+    }
+
+    const QByteArray responseBytes = reply->readAll();
+    const QJsonObject responseObject = parseReplyObject(responseBytes);
+    const QNetworkReply::NetworkError networkError = reply->error();
+    const QString replyErrorString = reply->errorString();
+    reply->deleteLater();
+
+    if (networkError != QNetworkReply::NoError) {
+        const QString errorMessage = extractApiErrorMessage(replyErrorString, responseObject);
+        appendLog(QString("Load room snapshot failed for %1: %2").arg(watchedRoomKey_, errorMessage));
+        return;
+    }
+
+    const QJsonObject roomObject = responseObject.value("room").toObject();
+    if (roomObject.isEmpty()) {
+        appendLog(QString("Room snapshot for %1 is empty.").arg(watchedRoomKey_));
+        return;
+    }
+
+    syncPlaybackTargetFromRoomState(roomObject, reason);
+}
+
+void StreamPage::switchPlaybackTarget(const QString &targetUrl, const QString &reason)
+{
+    const QString trimmedTargetUrl = targetUrl.trimmed();
+    if (trimmedTargetUrl.isEmpty()) {
+        return;
+    }
+    if (trimmedTargetUrl == watchedStreamUrl_) {
+        return;
+    }
+
+    watchedStreamUrl_ = trimmedTargetUrl;
+    appendLog(
+        QString("Auto switching playback for room %1 to %2 (%3).")
+            .arg(watchedRoomKey_, trimmedTargetUrl, reason));
+    livePlayerController_.openStream(trimmedTargetUrl);
+}
+
+void StreamPage::syncPlaybackTargetFromRoomState(const QJsonObject &roomObject, const QString &reason)
+{
+    if (watchedRoomKey_.isEmpty()) {
+        return;
+    }
+
+    const QString roomKey = normalizeRoomKey(roomObject.value("roomKey").toString());
+    if (!roomKey.isEmpty() && roomKey != watchedRoomKey_) {
+        return;
+    }
+
+    const QJsonObject mixedObject = roomObject.value("mixedStream").toObject();
+    const bool mixedActive = mixedObject.value("active").toBool(false);
+    const QString mixedPlayUrl = mixedObject.value("playUrl").toString().trimmed();
+
+    mixedPlaybackActive_ = mixedActive && !mixedPlayUrl.isEmpty();
+    mixedPlaybackUrl_ = mixedPlayUrl;
+    if (!mixedPlaybackActive_ && mixedPlaybackRetryTimer_) {
+        mixedPlaybackRetryTimer_->stop();
+    }
+
+    if (mixedActive && mixedPlayUrl.isEmpty()) {
+        appendLog(QString("Room %1 reports mixed active but playUrl is empty.").arg(watchedRoomKey_));
+        return;
+    }
+
+    const QString targetUrl = mixedPlaybackActive_ ? mixedPlayUrl : baseWatchStreamUrl_;
+    switchPlaybackTarget(targetUrl, reason);
 }
 
 void StreamPage::ensurePresenceForCurrentWatch()
@@ -819,18 +1162,25 @@ void StreamPage::requestStartWatch()
     const QString roomKey = normalizeRoomKey(roomKeyEdit_ ? roomKeyEdit_->text() : QString());
     const bool hasExistingWatch =
         !watchedStreamUrl_.isEmpty() || !watchedRoomKey_.isEmpty() || !activePresenceRoomKey_.isEmpty();
-    if (hasExistingWatch && (watchedStreamUrl_ != liveUrl || watchedRoomKey_ != roomKey)) {
+    const QString requestedBaseUrl = deriveBaseWatchStreamUrl(liveUrl);
+    if (hasExistingWatch && (baseWatchStreamUrl_ != requestedBaseUrl || watchedRoomKey_ != roomKey)) {
         stopWatching(false, "Restarting previous room presence before opening a new stream.");
     }
 
+    baseWatchStreamUrl_ = requestedBaseUrl;
     watchedStreamUrl_ = liveUrl;
     watchedRoomKey_ = roomKey;
+    mixedPlaybackActive_ = false;
+    mixedPlaybackUrl_.clear();
 
     appendLog(QString("Start requested for %1").arg(liveUrl));
     if (watchedRoomKey_.isEmpty()) {
+        disconnectRoomEventStream();
         appendLog("Room key is empty; skipping room presence join.");
         updatePresenceStatus("Presence idle.\nEnter a room key to report join/heartbeat/leave.");
     } else {
+        connectRoomEventStream();
+        requestCurrentRoomState("watch start");
         ensurePresenceForCurrentWatch();
     }
 
@@ -891,6 +1241,15 @@ void StreamPage::stopWatching(bool stopPlayback, const QString &reason)
         ? authToken_
         : activePresenceAuthToken_;
 
+    if (mixedPlaybackRetryTimer_) {
+        mixedPlaybackRetryTimer_->stop();
+    }
+    disconnectRoomEventStream();
+    roomEventStreamBuffer_.clear();
+    roomEventStreamBaseUrl_.clear();
+    baseWatchStreamUrl_.clear();
+    mixedPlaybackUrl_.clear();
+    mixedPlaybackActive_ = false;
     watchedStreamUrl_.clear();
     watchedRoomKey_.clear();
     activePresenceRoomKey_.clear();
