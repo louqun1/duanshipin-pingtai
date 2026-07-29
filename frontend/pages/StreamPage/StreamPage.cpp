@@ -1,4 +1,4 @@
-#include "pages/StreamPage/StreamPage.hpp"
+﻿#include "pages/StreamPage/StreamPage.hpp"
 
 #include "liveplayer/service/LivePlayerController.hpp"
 #include "widgets/VideoOpenGLWidget.hpp"
@@ -117,20 +117,20 @@ QString stateLabelText(PlaybackState state)
 {
     switch (state) {
     case PlaybackState::Idle:
-        return QStringLiteral("Idle");
+        return QStringLiteral("空闲");
     case PlaybackState::Connecting:
-        return QStringLiteral("Connecting");
+        return QStringLiteral("连接中");
     case PlaybackState::Reading:
-        return QStringLiteral("Watching");
+        return QStringLiteral("观看中");
     case PlaybackState::Playing:
-        return QStringLiteral("Watching");
+        return QStringLiteral("观看中");
     case PlaybackState::Stopped:
-        return QStringLiteral("Stopped");
+        return QStringLiteral("已停止");
     case PlaybackState::Error:
-        return QStringLiteral("Error");
+        return QStringLiteral("错误");
     }
 
-    return QStringLiteral("Unknown");
+    return QStringLiteral("未知");
 }
 
 QString apiBaseUrl()
@@ -140,8 +140,8 @@ QString apiBaseUrl()
         return configured;
     }
 
-    // return QStringLiteral("http://192.168.99.128:8080");
-    return QStringLiteral("http://192.168.3.28:8080");
+    return QStringLiteral("http://192.168.99.128:8080");
+    // return QStringLiteral("http://192.168.3.28:8080");
 }
 
 QString normalizeRoomKey(const QString &roomKey)
@@ -250,7 +250,7 @@ void StreamPage::setAuthToken(const QString &token)
 
     if (authToken_.isEmpty()) {
         if (!activePresenceRoomKey_.isEmpty()) {
-            appendLog("Auth token cleared while room presence is active; sending leave.");
+            appendLog("房间在线状态活跃时认证令牌已清除；正在发送离开。");
 
             const QString roomKeyToLeave = activePresenceRoomKey_;
             const QString tokenToLeave = previousPresenceToken.isEmpty()
@@ -264,7 +264,7 @@ void StreamPage::setAuthToken(const QString &token)
             activePresenceAuthToken_.clear();
             presenceJoined_ = false;
 
-            updatePresenceStatus(QString("Signing out; leaving room %1 ...").arg(roomKeyToLeave));
+            updatePresenceStatus(QString("正在登出；离开房间 %1 ...").arg(roomKeyToLeave));
             sendPresenceAction(QStringLiteral("leave"), roomKeyToLeave, tokenToLeave, false);
             return;
         }
@@ -274,13 +274,13 @@ void StreamPage::setAuthToken(const QString &token)
     }
 
     if (!watchedRoomKey_.isEmpty() && activePresenceRoomKey_.isEmpty()) {
-        appendLog("Auth token restored while live watch is running; retrying room presence join.");
+        appendLog("直播观看运行时认证令牌已恢复；正在重试房间加入。");
         ensurePresenceForCurrentWatch();
         return;
     }
 
     if (!activePresenceRoomKey_.isEmpty() && previousPresenceToken != authToken_) {
-        appendLog("Auth token changed while room presence is active; refreshing the presence session.");
+        appendLog("房间在线状态活跃时认证令牌已更改；正在刷新在线会话。");
 
         const QString roomKeyToLeave = activePresenceRoomKey_;
         const QString tokenToLeave = previousPresenceToken;
@@ -299,7 +299,7 @@ void StreamPage::setAuthToken(const QString &token)
 
 void StreamPage::hideEvent(QHideEvent *event)
 {
-    stopWatching(true, "Stream page hidden; stopped live watch and room presence.");
+    stopWatching(true, "直播页面已隐藏；已停止直播观看和房间在线状态。");
     QWidget::hideEvent(event);
 }
 
@@ -309,12 +309,12 @@ void StreamPage::buildUi()
     layout->setContentsMargins(32, 28, 32, 28);
     layout->setSpacing(20);
 
-    auto *title = new QLabel("Live streaming lab", this);
+    auto *title = new QLabel("直播实验室", this);
     title->setStyleSheet("font-size: 28px; font-weight: 700; color: #0f172a;");
     layout->addWidget(title);
 
     auto *summary = new QLabel(
-        "This page now uses the manual HTTP-FLV learning chain for live watch: Qt reads chunks, FlvDemuxer parses tags, then FFmpeg decodes H.264 video tags. AAC/audio output and A/V sync are intentionally left for the next milestone.",
+        "后续功能占位",
         this);
     summary->setWordWrap(true);
     summary->setStyleSheet("font-size: 14px; color: #475569;");
@@ -339,7 +339,7 @@ void StreamPage::buildUi()
     previewLayout->addWidget(previewTitle);
 
     auto *previewHint = new QLabel(
-        "The live viewport is fed by your own chunk/tag path. This first milestone only wires video decode/render so you can study the data flow end to end.",
+        "后续功能占位",
         previewPanel);
     previewHint->setWordWrap(true);
     previewHint->setStyleSheet("font-size: 14px; color: rgba(248, 250, 252, 0.82);");
@@ -356,7 +356,7 @@ void StreamPage::buildUi()
     viewportLayout->setContentsMargins(18, 18, 18, 18);
     viewportLayout->setSpacing(10);
 
-    auto *viewportTitle = new QLabel("Render target placeholder", videoViewport_);
+    auto *viewportTitle = new QLabel("渲染目标占位", videoViewport_);
     viewportTitle->setStyleSheet("font-size: 22px; font-weight: 700; color: #e2e8f0;");
     viewportLayout->addWidget(viewportTitle);
 
@@ -368,7 +368,7 @@ void StreamPage::buildUi()
     viewportLayout->addWidget(liveVideoSurface_, 1);
 
     hintValueLabel_ = new QLabel(
-        "Render surface for the current HTTP-FLV -> FLV -> FFmpeg video path.",
+        "后续功能占位",
         videoViewport_);
     hintValueLabel_->setWordWrap(true);
     hintValueLabel_->setStyleSheet("font-size: 13px; color: rgba(226, 232, 240, 0.8);");
@@ -397,14 +397,16 @@ void StreamPage::buildUi()
     sideLayout->setSpacing(12);
 
     QVBoxLayout *watchControlLayout = nullptr;
-    auto *watchControlSection = createSidebarSection(sidePanel, "Watch Control", &watchControlLayout);
+    auto *watchControlSection = createSidebarSection(sidePanel, "观看控制", &watchControlLayout);
 
     auto *streamLabel = new QLabel("HTTP-FLV URL", watchControlSection);
     streamLabel->setStyleSheet("font-size: 12px; font-weight: 700; color: #0f172a;");
     watchControlLayout->addWidget(streamLabel);
 
-    streamUrlEdit_ = new QLineEdit("http://192.168.3.28:18080/live/livestream.flv", watchControlSection);
-    streamUrlEdit_->setPlaceholderText("http://192.168.3.28:18080/live/livestream.flv");
+    // streamUrlEdit_ = new QLineEdit("http://192.168.3.28:18080/live/livestream.flv", watchControlSection);
+    // streamUrlEdit_->setPlaceholderText("http://192.168.3.28:18080/live/livestream.flv");
+    streamUrlEdit_ = new QLineEdit("http://192.168.99.128:18080/live/livestream.flv", watchControlSection);
+    streamUrlEdit_->setPlaceholderText("http://192.168.99.128:18080/live/livestream.flv");
     streamUrlEdit_->setClearButtonEnabled(true);
     streamUrlEdit_->setStyleSheet(
         "padding: 9px 12px;"
@@ -414,7 +416,7 @@ void StreamPage::buildUi()
         "color: #333333;");
     watchControlLayout->addWidget(streamUrlEdit_);
 
-    auto *roomKeyLabel = new QLabel("Live Room Key", watchControlSection);
+    auto *roomKeyLabel = new QLabel("直播间 Key", watchControlSection);
     roomKeyLabel->setStyleSheet("font-size: 12px; font-weight: 700; color: #0f172a;");
     watchControlLayout->addWidget(roomKeyLabel);
 
@@ -433,7 +435,7 @@ void StreamPage::buildUi()
     buttonRow->setContentsMargins(0, 0, 0, 0);
     buttonRow->setSpacing(8);
 
-    startButton_ = new QPushButton("Start Watch", watchControlSection);
+    startButton_ = new QPushButton("开始观看", watchControlSection);
     startButton_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     startButton_->setStyleSheet(
         "padding: 9px 14px;"
@@ -444,7 +446,7 @@ void StreamPage::buildUi()
         "background: #0f766e;");
     buttonRow->addWidget(startButton_, 1);
 
-    stopButton_ = new QPushButton("Stop", watchControlSection);
+    stopButton_ = new QPushButton("停止", watchControlSection);
     stopButton_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     stopButton_->setStyleSheet(
         "padding: 9px 14px;"
@@ -477,7 +479,7 @@ void StreamPage::buildUi()
     roomInfoGrid->addWidget(presenceValueLabel_, 1, 1);
     roomInfoGrid->addWidget(
         createHelpButton(
-            "Room presence is reported separately through the room presence API and is not part of HTTP-FLV playback itself.",
+            "房间在线状态通过房间在线 API 单独上报，不属于 HTTP-FLV 播放本身。",
             roomInfoSection),
         1,
         2,
@@ -515,7 +517,7 @@ void StreamPage::buildUi()
     streamStatusGrid->addWidget(statusValueLabel_, 0, 1);
     streamStatusGrid->addWidget(
         createHelpButton(
-            "Overall watch session state: idle, connecting, watching, stopped, or error.",
+            "整体观看会话状态：空闲、连接中、观看中、已停止或错误。",
             streamStatusSection),
         0,
         2,
@@ -555,7 +557,7 @@ void StreamPage::buildUi()
     streamStatusGrid->addWidget(audioValueLabel_, 4, 1);
     streamStatusGrid->addWidget(
         createHelpButton(
-            "Audio path state. AAC tag detection may exist, but full audio output can be implemented in a later milestone.",
+            "音频路径状态。可能存在 AAC 标签检测，但完整音频输出可在后续里程碑中实现。",
             streamStatusSection),
         4,
         2,
@@ -606,7 +608,7 @@ void StreamPage::buildUi()
     debugContentLayout->setSpacing(0);
 
     auto *debugDetailsLabel = new QLabel(
-        "Current code path:\n"
+        "当前代码路径：\n"
         "QNetworkReply chunk\n"
         "-> FlvDemuxer tag\n"
         "-> AVC sequence header\n"
@@ -614,11 +616,11 @@ void StreamPage::buildUi()
         "-> avcodec_receive_frame\n"
         "-> render surface\n\n"
         "Data flow:\n"
-        "Network chunks come from Qt QNetworkReply, then FlvDemuxer turns bytes into script/audio/video tags.\n\n"
+        "网络数据块来自 Qt QNetworkReply，然后 FlvDemuxer 将字节转换为脚本/音频/视频标签。\n\n"
         "Pipeline notes:\n"
         "Video decode/render is wired in the current milestone. Presence is reported through the room presence API, separate from HTTP-FLV playback.\n\n"
         "Milestone notes:\n"
-        "Audio output and A/V sync stay as later milestones.",
+        "音频输出和 A/V 同步留待后续里程碑。",
         debugContent);
     debugDetailsLabel->setWordWrap(true);
     debugDetailsLabel->setStyleSheet("font-size: 13px; color: #334155; line-height: 1.45;");
@@ -645,7 +647,7 @@ void StreamPage::connectController()
     connect(startButton_, &QPushButton::clicked, this, &StreamPage::requestStartWatch);
 
     connect(stopButton_, &QPushButton::clicked, this, [this]() {
-        stopWatching(true, "Stopped live watch and room presence.");
+        stopWatching(true, "已停止直播观看和房间在线状态。");
     });
 
     connect(roomKeyEdit_, &QLineEdit::textChanged, this, [this]() {
@@ -663,27 +665,27 @@ void StreamPage::connectController()
                         watchedStreamUrl_ == mixedPlaybackUrl_ &&
                         !baseWatchStreamUrl_.isEmpty())
                     {
-                        appendLog("Mixed playback stopped before stream became stable; falling back to base stream.");
+                        appendLog("混流播放停止时流尚未稳定；回退到基础流。");
                         switchPlaybackTarget(baseWatchStreamUrl_, "mixed fallback");
                         if (mixedPlaybackRetryTimer_) {
                             mixedPlaybackRetryTimer_->start();
                         }
                         return;
                     }
-                    stopWatching(false, "Live playback stopped; leaving room presence.");
+                    stopWatching(false, "直播播放已停止；正在离开房间在线状态。");
                 } else if (state == PlaybackState::Error) {
                     if (mixedPlaybackActive_ &&
                         watchedStreamUrl_ == mixedPlaybackUrl_ &&
                         !baseWatchStreamUrl_.isEmpty())
                     {
-                        appendLog("Mixed playback failed; falling back to base stream and waiting to retry.");
+                        appendLog("混流播放失败；回退到基础流并等待重试。");
                         switchPlaybackTarget(baseWatchStreamUrl_, "mixed fallback");
                         if (mixedPlaybackRetryTimer_) {
                             mixedPlaybackRetryTimer_->start();
                         }
                         return;
                     }
-                    stopWatching(false, "Live playback failed; leaving room presence.");
+                    stopWatching(false, "直播播放失败；正在离开房间在线状态。");
                 }
             });
 
@@ -894,7 +896,7 @@ void StreamPage::requestCurrentRoomState(const QString &reason)
         return;
     }
     if (authToken_.isEmpty()) {
-        appendLog("Room snapshot skipped because auth token is empty.");
+        appendLog("跳过房间快照，因为认证令牌为空。");
         return;
     }
 
@@ -947,13 +949,13 @@ void StreamPage::handleCurrentRoomStateReply(QNetworkReply *reply, const QString
 
     if (networkError != QNetworkReply::NoError) {
         const QString errorMessage = extractApiErrorMessage(replyErrorString, responseObject);
-        appendLog(QString("Load room snapshot failed for %1: %2").arg(watchedRoomKey_, errorMessage));
+        appendLog(QString("加载房间 %1 快照失败: %2").arg(watchedRoomKey_, errorMessage));
         return;
     }
 
     const QJsonObject roomObject = responseObject.value("room").toObject();
     if (roomObject.isEmpty()) {
-        appendLog(QString("Room snapshot for %1 is empty.").arg(watchedRoomKey_));
+        appendLog(QString("房间 %1 快照为空。").arg(watchedRoomKey_));
         return;
     }
 
@@ -972,7 +974,7 @@ void StreamPage::switchPlaybackTarget(const QString &targetUrl, const QString &r
 
     watchedStreamUrl_ = trimmedTargetUrl;
     appendLog(
-        QString("Auto switching playback for room %1 to %2 (%3).")
+        QString("自动切换房间 %1 播放到 %2 (%3)。")
             .arg(watchedRoomKey_, trimmedTargetUrl, reason));
     livePlayerController_.openStream(trimmedTargetUrl);
 }
@@ -1018,7 +1020,7 @@ void StreamPage::ensurePresenceForCurrentWatch()
         updatePresenceStatus(
             QString("Presence waiting.\nRoom %1 is configured, but sign-in is required before join can be reported.")
                 .arg(watchedRoomKey_));
-        appendLog("Presence join skipped because there is no auth token.");
+        appendLog("跳过房间加入，因为没有认证令牌。");
         return;
     }
 
@@ -1040,7 +1042,7 @@ void StreamPage::ensurePresenceForCurrentWatch()
         (activePresenceRoomKey_ != watchedRoomKey_ || activePresenceAuthToken_ != authToken_))
     {
         appendLog(
-            QString("Switching room presence from %1 to %2.")
+            QString("正在将房间在线状态从 %1 切换到 %2。")
                 .arg(activePresenceRoomKey_, watchedRoomKey_));
         sendPresenceAction(
             QStringLiteral("leave"),
@@ -1057,7 +1059,7 @@ void StreamPage::ensurePresenceForCurrentWatch()
     presenceJoined_ = false;
 
     updatePresenceStatus(QString("Joining room %1 ...").arg(activePresenceRoomKey_));
-    appendLog(QString("Sending presence join for room %1.").arg(activePresenceRoomKey_));
+    appendLog(QString("正在发送房间 %1 的加入请求。").arg(activePresenceRoomKey_));
     sendPresenceAction(
         QStringLiteral("join"),
         activePresenceRoomKey_,
@@ -1097,7 +1099,7 @@ void StreamPage::handlePresenceReply(
                 presenceHeartbeatTimer_->stop();
             }
             updatePresenceStatus(
-                QString("Failed to join room %1.\n%2").arg(roomKey, errorMessage));
+                QString("加入房间 %1 失败。\n%2").arg(roomKey, errorMessage));
         } else if (action == "leave") {
             updatePresenceStatus(
                 QString("Presence idle.\nLeave for room %1 failed: %2").arg(roomKey, errorMessage));
@@ -1114,7 +1116,7 @@ void StreamPage::handlePresenceReply(
     const int memberCount = responseObject.value("members").toArray().size();
 
     if (action == "leave") {
-        appendLog(QString("Presence leave ok for room %1.").arg(roomKey));
+        appendLog(QString("房间 %1 离开成功。").arg(roomKey));
         updatePresenceStatus(QString("Presence idle.\nLeft room %1.").arg(roomKey));
         return;
     }
@@ -1137,7 +1139,7 @@ void StreamPage::handlePresenceReply(
     if (onlineMemberCount >= 0) {
         lines << QString("Online members: %1").arg(onlineMemberCount);
     } else if (responseObject.contains("members")) {
-        lines << QString("Members in response: %1").arg(memberCount);
+        lines << QString("响应中的成员数: %1").arg(memberCount);
     }
     lines << QString("Heartbeat: every %1 seconds").arg(kPresenceHeartbeatIntervalMs / 1000);
     updatePresenceStatus(lines.join('\n'));
@@ -1154,7 +1156,7 @@ void StreamPage::requestStartWatch()
 {
     const QString liveUrl = streamUrlEdit_ ? streamUrlEdit_->text().trimmed() : QString();
     if (liveUrl.isEmpty()) {
-        appendLog("Enter an HTTP-FLV URL before starting.");
+        appendLog("请先输入 HTTP-FLV URL 再开始。");
         updatePresenceStatus("Presence idle.\nStart watch after entering a live URL.");
         return;
     }
@@ -1164,7 +1166,7 @@ void StreamPage::requestStartWatch()
         !watchedStreamUrl_.isEmpty() || !watchedRoomKey_.isEmpty() || !activePresenceRoomKey_.isEmpty();
     const QString requestedBaseUrl = deriveBaseWatchStreamUrl(liveUrl);
     if (hasExistingWatch && (baseWatchStreamUrl_ != requestedBaseUrl || watchedRoomKey_ != roomKey)) {
-        stopWatching(false, "Restarting previous room presence before opening a new stream.");
+        stopWatching(false, "在打开新流之前正在重启之前的房间在线状态。");
     }
 
     baseWatchStreamUrl_ = requestedBaseUrl;
@@ -1173,10 +1175,10 @@ void StreamPage::requestStartWatch()
     mixedPlaybackActive_ = false;
     mixedPlaybackUrl_.clear();
 
-    appendLog(QString("Start requested for %1").arg(liveUrl));
+    appendLog(QString("已请求开始 %1").arg(liveUrl));
     if (watchedRoomKey_.isEmpty()) {
         disconnectRoomEventStream();
-        appendLog("Room key is empty; skipping room presence join.");
+        appendLog("房间 Key 为空；跳过房间在线加入。");
         updatePresenceStatus("Presence idle.\nEnter a room key to report join/heartbeat/leave.");
     } else {
         connectRoomEventStream();
@@ -1294,7 +1296,7 @@ QString StreamPage::summarizePresenceValue(const QString &message) const
 {
     const QString trimmed = message.trimmed();
     if (trimmed.isEmpty()) {
-        return QStringLiteral("Idle");
+        return QStringLiteral("空闲");
     }
 
     if (trimmed.startsWith("Joining room", Qt::CaseInsensitive)) {
@@ -1307,15 +1309,15 @@ QString StreamPage::summarizePresenceValue(const QString &message) const
         return QStringLiteral("Active");
     }
     if (trimmed.startsWith("Leaving room", Qt::CaseInsensitive) ||
-        trimmed.startsWith("Signing out; leaving", Qt::CaseInsensitive))
+        trimmed.startsWith("正在登出；离开中", Qt::CaseInsensitive))
     {
         return QStringLiteral("Leaving");
     }
     if (trimmed.contains("failed", Qt::CaseInsensitive)) {
-        return QStringLiteral("Error");
+        return QStringLiteral("错误");
     }
 
-    return QStringLiteral("Idle");
+    return QStringLiteral("空闲");
 }
 
 void StreamPage::updateRoomInfo()
@@ -1324,7 +1326,7 @@ void StreamPage::updateRoomInfo()
         const QString roomKey = currentRoomKeyDisplay();
         roomKeyValueLabel_->setText(roomKey);
         roomKeyValueLabel_->setToolTip(roomKey == "--"
-            ? QStringLiteral("No room key is active yet.")
+            ? QStringLiteral("尚未激活任何房间 Key。")
             : roomKey);
     }
 
@@ -1358,12 +1360,12 @@ void StreamPage::updateStreamStatus()
     QString networkValue = QStringLiteral("Waiting");
     QString networkColor = QStringLiteral("#475569");
     if (lastPlaybackState_ == PlaybackState::Error) {
-        networkValue = QStringLiteral("Error");
+        networkValue = QStringLiteral("错误");
         networkColor = QStringLiteral("#dc2626");
     } else if (lastPlaybackState_ == PlaybackState::Stopped) {
-        networkValue = QStringLiteral("Stopped");
+        networkValue = QStringLiteral("已停止");
     } else if (lastPlaybackState_ == PlaybackState::Connecting) {
-        networkValue = QStringLiteral("Connecting");
+        networkValue = QStringLiteral("连接中");
         networkColor = QStringLiteral("#b45309");
     } else if (lastBytesReceived_ > 0 || lastPlaybackState_ == PlaybackState::Reading ||
                lastPlaybackState_ == PlaybackState::Playing)
@@ -1373,7 +1375,7 @@ void StreamPage::updateStreamStatus()
     }
     if (networkValueLabel_) {
         networkValueLabel_->setText(networkValue);
-        networkValueLabel_->setToolTip(QString("Bytes received: %1").arg(lastBytesReceived_));
+        networkValueLabel_->setToolTip(QString("已接收字节: %1").arg(lastBytesReceived_));
         setValueTone(networkValueLabel_, networkColor);
     }
 
@@ -1382,10 +1384,10 @@ void StreamPage::updateStreamStatus()
     const bool hasAnyTag =
         lastScriptTagCount_ > 0 || lastAudioTagCount_ > 0 || lastVideoTagCount_ > 0;
     if (lastPlaybackState_ == PlaybackState::Error) {
-        demuxValue = QStringLiteral("Error");
+        demuxValue = QStringLiteral("错误");
         demuxColor = QStringLiteral("#dc2626");
     } else if (lastPlaybackState_ == PlaybackState::Stopped) {
-        demuxValue = QStringLiteral("Stopped");
+        demuxValue = QStringLiteral("已停止");
     } else if (hasAnyTag) {
         demuxValue = QStringLiteral("Parsing");
         demuxColor = QStringLiteral("#0f766e");
@@ -1393,7 +1395,7 @@ void StreamPage::updateStreamStatus()
     if (demuxValueLabel_) {
         demuxValueLabel_->setText(demuxValue);
         demuxValueLabel_->setToolTip(
-            QString("Script tags: %1\nAudio tags: %2\nVideo tags: %3")
+            QString("脚本标签: %1\n音频标签: %2\n视频标签: %3")
                 .arg(lastScriptTagCount_)
                 .arg(lastAudioTagCount_)
                 .arg(lastVideoTagCount_));
@@ -1403,7 +1405,7 @@ void StreamPage::updateStreamStatus()
     QString videoValue = QStringLiteral("Ready");
     QString videoColor = QStringLiteral("#1d4ed8");
     if (lastPlaybackState_ == PlaybackState::Error) {
-        videoValue = QStringLiteral("Error");
+        videoValue = QStringLiteral("错误");
         videoColor = QStringLiteral("#dc2626");
     } else if (lastVideoTagCount_ > 0 || lastPlaybackState_ == PlaybackState::Playing) {
         videoValue = QStringLiteral("Active");
@@ -1411,7 +1413,7 @@ void StreamPage::updateStreamStatus()
     }
     if (videoValueLabel_) {
         videoValueLabel_->setText(videoValue);
-        videoValueLabel_->setToolTip(QString("Video tags: %1").arg(lastVideoTagCount_));
+        videoValueLabel_->setToolTip(QString("视频标签: %1").arg(lastVideoTagCount_));
         setValueTone(videoValueLabel_, videoColor);
     }
 
@@ -1423,14 +1425,14 @@ void StreamPage::updateStreamStatus()
         : QStringLiteral("#475569");
     if (audioValueLabel_) {
         audioValueLabel_->setText(audioValue);
-        audioValueLabel_->setToolTip(QString("Audio tags: %1").arg(lastAudioTagCount_));
+        audioValueLabel_->setToolTip(QString("音频标签: %1").arg(lastAudioTagCount_));
         setValueTone(audioValueLabel_, audioColor);
     }
 
     if (avSyncValueLabel_) {
         avSyncValueLabel_->setText(QStringLiteral("Pending"));
         avSyncValueLabel_->setToolTip(
-            QStringLiteral("Audio clock and sync policy are not enabled in this milestone yet."));
+            QStringLiteral("音频时钟和同步策略在当前里程碑中尚未启用。"));
         setValueTone(avSyncValueLabel_, QStringLiteral("#475569"));
     }
 }
@@ -1445,11 +1447,11 @@ void StreamPage::updatePresenceStatus(const QString &message)
     presenceValueLabel_->setText(summary);
     presenceValueLabel_->setToolTip(message);
 
-    if (summary == "Active") {
+    if (summary == "活跃") {
         setValueTone(presenceValueLabel_, QStringLiteral("#0f766e"));
-    } else if (summary == "Joining" || summary == "Waiting Auth" || summary == "Leaving") {
+    } else if (summary == "加入中" || summary == "等待认证" || summary == "离开中") {
         setValueTone(presenceValueLabel_, QStringLiteral("#b45309"));
-    } else if (summary == "Error") {
+    } else if (summary == "错误") {
         setValueTone(presenceValueLabel_, QStringLiteral("#dc2626"));
     } else {
         setValueTone(presenceValueLabel_, QStringLiteral("#475569"));
@@ -1470,10 +1472,10 @@ void StreamPage::updateState(PlaybackState state, const QString &message)
 
     if (state == PlaybackState::Playing) {
         hintValueLabel_->setText(
-            "Decoded video frames are reaching this surface.");
+            "已解码的视频帧正在到达此渲染表面。");
     } else {
         hintValueLabel_->setText(
-            "Render surface for the current HTTP-FLV -> FLV -> FFmpeg video path.");
+            "后续功能占位。");
     }
 }
 

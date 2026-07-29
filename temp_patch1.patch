@@ -1,0 +1,28 @@
+﻿*** Begin Patch
+*** Update File: D:\itffmpeg\av_media\online\duanshipin-pingtai\frontend\pages\LoginPage\LoginPage.cpp
+@@
+-    auto *title = new QLabel("Login workspace", this);
++    auto *title = new QLabel("登录工作区", this);
+@@
+-    auto *summary = new QLabel(
+-        "Signals are ready here for the future AuthController, but the actual auth flow will be added in the next phase.",
+-        this);
++    auto *summary = new QLabel(
++        "此处为未来 AuthController 预留了信号接口，实际认证流程将在下一阶段添加。",
++        this);
+@@
+-    usernameEdit_->setPlaceholderText("Username");
++    usernameEdit_->setPlaceholderText("用户名");
+@@
+-    passwordEdit_->setPlaceholderText("Password");
++    passwordEdit_->setPlaceholderText("密码");
+@@
+-    emailEdit_->setPlaceholderText("Email (for registration)");
++    emailEdit_->setPlaceholderText("邮箱（注册用）");
+@@
+-    auto *loginButton = new QPushButton("Emit login signal", card);
++    auto *loginButton = new QPushButton("发送登录信号", card);
+@@
+-    auto *registerButton = new QPushButton("Emit register signal", card);
++    auto *registerButton = new QPushButton("发送注册信号", card);
+*** End Patch

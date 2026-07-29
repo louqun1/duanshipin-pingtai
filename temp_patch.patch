@@ -1,0 +1,28 @@
+﻿*** Begin Patch
+*** Update File: D:\itffmpeg\av_media\online\duanshipin-pingtai\frontend\pages\LoginPage\LoginPage.cpp
+@@
+-    auto *title = new QLabel("Login workspace", this);
++    auto *title = new QLabel("\u767b\u5f55\u5de5\u4f5c\u533a", this);
+@@
+-    auto *summary = new QLabel(
+-        "Signals are ready here for the future AuthController, but the actual auth flow will be added in the next phase.",
+-        this);
++    auto *summary = new QLabel(
++        "\u6b64\u5904\u4e3a\u672a\u6765 AuthController \u9884\u7559\u4e86\u4fe1\u53f7\u63a5\u53e3\uff0c\u5b9e\u9645\u8ba4\u8bc1\u6d41\u7a0b\u5c06\u5728\u4e0b\u4e00\u9636\u6bb5\u6dfb\u52a0\u3002",
++        this);
+@@
+-    usernameEdit_->setPlaceholderText("Username");
++    usernameEdit_->setPlaceholderText("\u7528\u6237\u540d");
+@@
+-    passwordEdit_->setPlaceholderText("Password");
++    passwordEdit_->setPlaceholderText("\u5bc6\u7801");
+@@
+-    emailEdit_->setPlaceholderText("Email (for registration)");
++    emailEdit_->setPlaceholderText("\u90ae\u7bb1\uff08\u6ce8\u518c\u7528\uff09");
+@@
+-    auto *loginButton = new QPushButton("Emit login signal", card);
++    auto *loginButton = new QPushButton("\u53d1\u9001\u767b\u5f55\u4fe1\u53f7", card);
+@@
+-    auto *registerButton = new QPushButton("Emit register signal", card);
++    auto *registerButton = new QPushButton("\u53d1\u9001\u6ce8\u518c\u4fe1\u53f7", card);
+*** End Patch

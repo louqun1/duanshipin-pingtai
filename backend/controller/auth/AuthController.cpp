@@ -23,8 +23,8 @@ QString apiBaseUrl()
         return configured;
     }
 
-    return QStringLiteral("http://192.168.3.28:8080");
-    // return QStringLiteral("http://192.168.99.128:8080");
+    // return QStringLiteral("http://192.168.3.28:8080");
+    return QStringLiteral("http://192.168.99.128:8080");
 }
 
 QString authLoginUrl()

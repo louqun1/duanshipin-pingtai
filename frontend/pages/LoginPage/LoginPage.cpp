@@ -15,12 +15,12 @@ LoginPage::LoginPage(QWidget *parent)
     auto *rootLayout = new QVBoxLayout(this);
     rootLayout->setContentsMargins(40, 36, 40, 36);
 
-    auto *title = new QLabel("Login workspace", this);
+    auto *title = new QLabel("登录工作区", this);
     title->setStyleSheet("font-size: 28px; font-weight: 700; color: #0f172a;");
     rootLayout->addWidget(title);
 
     auto *summary = new QLabel(
-        "Signals are ready here for the future AuthController, but the actual auth flow will be added in the next phase.",
+        "此处为未来 AuthController 预留了信号接口，实际认证流程将在下一阶段添加。",
         this);
     summary->setWordWrap(true);
     summary->setStyleSheet("font-size: 14px; color: #475569;");
@@ -38,24 +38,24 @@ LoginPage::LoginPage(QWidget *parent)
     cardLayout->setSpacing(12);
 
     usernameEdit_ = new QLineEdit(card);
-    usernameEdit_->setPlaceholderText("Username");
+    usernameEdit_->setPlaceholderText("用户名");
     cardLayout->addWidget(usernameEdit_);
 
     passwordEdit_ = new QLineEdit(card);
-    passwordEdit_->setPlaceholderText("Password");
+    passwordEdit_->setPlaceholderText("密码");
     passwordEdit_->setEchoMode(QLineEdit::Password);
     cardLayout->addWidget(passwordEdit_);
 
     emailEdit_ = new QLineEdit(card);
-    emailEdit_->setPlaceholderText("Email (for registration)");
+    emailEdit_->setPlaceholderText("邮箱（注册用）");
     cardLayout->addWidget(emailEdit_);
 
     auto *actions = new QHBoxLayout();
 
-    auto *loginButton = new QPushButton("Emit login signal", card);
+    auto *loginButton = new QPushButton("发送登录信号", card);
     actions->addWidget(loginButton);
 
-    auto *registerButton = new QPushButton("Emit register signal", card);
+    auto *registerButton = new QPushButton("发送注册信号", card);
     actions->addWidget(registerButton);
 
     cardLayout->addLayout(actions);

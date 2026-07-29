@@ -1,4 +1,4 @@
-#include "pages/AccountPage/AccountPage.hpp"
+﻿#include "pages/AccountPage/AccountPage.hpp"
 
 #include <QFormLayout>
 #include <QHBoxLayout>
@@ -68,28 +68,20 @@ namespace frontend::pages
         layout->addWidget(stateStack_, 1);
 
         showLoggedOutState("请登录以查看您的账户详情。");
-        // 添加调试
-        qDebug() << "\n=== AccountPage constructor end ===";
-
-    }
+}
 
     QWidget *AccountPage::buildGuestPanel()
     {
-        qDebug() << "\n=== Starting buildGuestPanel ===";
         auto *panel = new QWidget(this);
         panel->setObjectName("accountGuestPanel");
         panel->setStyleSheet("#accountGuestPanel { background: white; border-radius: 18px; border: 1px solid #dbe3ef; }");
 
         auto *layout = new QVBoxLayout(panel);
-        qDebug() << "Panel created:" << panel;
-        // qDebug() << "Panel initial visible:" << panel->isVisible();
         layout->setContentsMargins(28, 28, 28, 28);
         layout->setSpacing(16);
-        // qDebug() << "Layout created, margins:" << layout->contentsMargins();
         auto *headline = new QLabel("未登录", panel);
         headline->setStyleSheet("font-size: 22px; font-weight: 700; color: #0f172a;");
         layout->addWidget(headline);
-        // qDebug() << "Headline added, visible:" << headline->isVisible();
 
         auto *description = new QLabel(
             "使用同一个账户页面进行登录、注册，然后继续进入您的基本个人资料页面。",
@@ -97,30 +89,21 @@ namespace frontend::pages
         description->setWordWrap(true);
         description->setStyleSheet("font-size: 14px; color: #64748b;");
         layout->addWidget(description);
-        // qDebug() << "Description added, visible:" << description->isVisible();
 
         guestStatusLabel_ = new QLabel(panel);
         guestStatusLabel_->setWordWrap(true);
         guestStatusLabel_->setStyleSheet("font-size: 13px;");
         layout->addWidget(guestStatusLabel_);
-        // qDebug() << "Guest status label created:" << guestStatusLabel_;
-        // qDebug() << "Guest status label visible:" << guestStatusLabel_->isVisible();
 
         // 创建表单
-        qDebug() << "\n--- Creating form ---";
         auto *form = new QFormLayout();
-        // qDebug() << "Form layout created:" << form;
-        // // 调试：检查 form 的属性
-        // qDebug() << "Form spacing - horizontal:" << form->horizontalSpacing()
         //          << "vertical:" << form->verticalSpacing();
-        // qDebug() << "Form margins:" << form->contentsMargins();
         form->setLabelAlignment(Qt::AlignLeft);
         form->setFormAlignment(Qt::AlignLeft | Qt::AlignTop);
         form->setHorizontalSpacing(16);
         form->setVerticalSpacing(12);
 
         // 创建用户名输入框
-        qDebug() << "\n--- Creating username edit ---";
         usernameEdit_ = new QLineEdit(panel);
 
         usernameEdit_->setPlaceholderText("用户名");
@@ -137,7 +120,6 @@ namespace frontend::pages
         styleFormLabel(form, usernameEdit_);
 
         // 创建密码输入框
-        qDebug() << "\n--- Creating password edit ---";
         passwordEdit_ = new QLineEdit(panel);
         passwordEdit_->setStyleSheet(
             "QLineEdit {"
@@ -150,11 +132,8 @@ namespace frontend::pages
         );
         passwordEdit_->setPlaceholderText("密码");
         passwordEdit_->setEchoMode(QLineEdit::Password);
-        // qDebug() << "Password mode set, visible:" << passwordEdit_->isVisible();
         form->addRow("密码", passwordEdit_);
         styleFormLabel(form, passwordEdit_);
-        // qDebug() << "After addRow - password edit visible:" << passwordEdit_->isVisible();
-        // qDebug() << "After addRow - password edit parent:" << passwordEdit_->parent();
 
         // 创建邮箱输入框
         emailEdit_ = new QLineEdit(panel);
@@ -170,10 +149,8 @@ namespace frontend::pages
         );
         form->addRow("邮箱", emailEdit_);
         styleFormLabel(form, emailEdit_);
-        // qDebug() << "Form row count:" << form->rowCount(); // 应该输出 3
 
         layout->addLayout(form); // 添加 form 到主布局
-
 
         auto *actions = new QHBoxLayout();
         actions->setSpacing(12);
@@ -229,11 +206,11 @@ namespace frontend::pages
         infoLayout->setVerticalSpacing(12);
 
         profileUsernameValue_ = new QLabel(panel);
-        infoLayout->addRow("Username", profileUsernameValue_);
+        infoLayout->addRow("用户名", profileUsernameValue_);
         styleFormLabel(infoLayout, profileUsernameValue_);
 
         profileEmailValue_ = new QLabel(panel);
-        infoLayout->addRow("Email", profileEmailValue_);
+        infoLayout->addRow("邮箱", profileEmailValue_);
         styleFormLabel(infoLayout, profileEmailValue_);
 
         layout->addLayout(infoLayout);
@@ -243,7 +220,7 @@ namespace frontend::pages
         profileStatusLabel_->setStyleSheet("font-size: 13px; color: #2563eb;");
         layout->addWidget(profileStatusLabel_);
 
-        auto *logoutButton = new QPushButton("Log out", panel);
+        auto *logoutButton = new QPushButton("退出登录", panel);
         logoutButton->setFixedWidth(120);
         logoutButton->setStyleSheet("color: #b91c1c; font-size: 14px; font-weight: 600; background: transparent; border: 1px solid #b91c1c;");
         layout->addWidget(logoutButton, 0, Qt::AlignLeft);

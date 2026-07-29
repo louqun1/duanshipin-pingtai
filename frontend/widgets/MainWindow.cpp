@@ -1,4 +1,4 @@
-#include "widgets/MainWindow.hpp"
+﻿#include "widgets/MainWindow.hpp"
 
 #include "controller/auth/AuthController.hpp"
 #include "liveplayer/service/LivePlayerController.hpp"
@@ -16,6 +16,7 @@
 #include <QEnterEvent>
 #include <QFrame>
 #include <QHBoxLayout>
+#include <QIcon>
 #include <QLabel>
 #include <QMetaObject>
 #include <QPropertyAnimation>
@@ -116,7 +117,7 @@ MainWindow::MainWindow(
 
 void MainWindow::buildUi()
 {
-    setWindowTitle("Flashpoint Short Videos");
+    setWindowTitle("Flashpoint 短视频");
     resize(1280, 600);
 
     auto *central = new QWidget(this);
@@ -183,24 +184,16 @@ void MainWindow::buildUi()
         "  background: #2563eb;"
         "}"
         "#pageStack { background: #f4f7fb; }");
-
-    sideNavExpanded_ = false;
-    setSideNavWidth(kCollapsedSideNavWidth);
-    updateSideNavPresentation();
 }
 
 void MainWindow::showEvent(QShowEvent *event)
 {
     QMainWindow::showEvent(event);
 
-    if (startupMetricsLoggedAfterShow_) {
-        return;
+    if (!startupMetricsLoggedAfterShow_) {
+        startupMetricsLoggedAfterShow_ = true;
+        dumpStartupWindowMetrics("after_showEvent");
     }
-
-    startupMetricsLoggedAfterShow_ = true;
-    QMetaObject::invokeMethod(this, [this]() {
-        dumpStartupWindowMetrics("after_first_show");
-    }, Qt::QueuedConnection);
 }
 
 QWidget *MainWindow::createNavigation()
@@ -228,7 +221,7 @@ QWidget *MainWindow::createNavigation()
     brandLabel_->setObjectName("brandLabel");
     layout->addWidget(brandLabel_);
 
-    captionLabel_ = new QLabel("Desktop rebuild skeleton", panel);
+    captionLabel_ = new QLabel("桌面端骨架重建", panel);
     captionLabel_->setObjectName("captionLabel");
     layout->addWidget(captionLabel_);
     layout->addSpacing(18);
@@ -236,10 +229,10 @@ QWidget *MainWindow::createNavigation()
     navigationGroup_ = new QButtonGroup(panel);
     navigationGroup_->setExclusive(true);
 
-    layout->addWidget(createNavigationButton("主页", "首", Home));
-    layout->addWidget(createNavigationButton("直播", "播", Stream));
-    layout->addWidget(createNavigationButton("上传", "传", Upload));
-    layout->addWidget(createNavigationButton("我的", "我", Account));
+    layout->addWidget(createNavigationButton("主页", "首", ":/nav-icons/home.png", Home));
+    layout->addWidget(createNavigationButton("直播", "播", ":/nav-icons/live.png", Stream));
+    layout->addWidget(createNavigationButton("上传", "传", ":/nav-icons/upload.png", Upload));
+    layout->addWidget(createNavigationButton("我的", "我", ":/nav-icons/me.png", Account));
     layout->addStretch();
 
     return panel;
@@ -248,6 +241,7 @@ QWidget *MainWindow::createNavigation()
 QPushButton *MainWindow::createNavigationButton(
     const QString &expandedLabel,
     const QString &collapsedLabel,
+    const QString &iconPath,
     int pageIndex)
 {
     auto *button = new QPushButton(expandedLabel, this);
@@ -255,9 +249,11 @@ QPushButton *MainWindow::createNavigationButton(
     button->setProperty("navExpanded", true);
     button->setProperty("navExpandedText", expandedLabel);
     button->setProperty("navCollapsedText", collapsedLabel);
+    button->setProperty("navIconPath", iconPath);
     button->setCheckable(true);
     button->setCursor(Qt::PointingHandCursor);
     button->setToolTip(expandedLabel);
+    button->setIconSize(QSize(28, 28));
     navigationGroup_->addButton(button, pageIndex);
     return button;
 }
@@ -286,9 +282,9 @@ void MainWindow::connectPlaybackFlow()
                 }
 
                 videoPlayerWindow_->showSelectedVideo(mediaUrl, videoId, title, creator, duration);
-                videoPlayerWindow_->show();
                 videoPlayerWindow_->raise();
                 videoPlayerWindow_->activateWindow();
+                videoPlayerWindow_->show();
             });
 }
 
@@ -303,73 +299,34 @@ void MainWindow::connectAccountFlow()
 
     connect(&authController_, &backend::controller::auth::AuthController::loginSucceeded,
             this, [this](const QString &username, const QString &email) {
-                homePage_->setAuthToken(authController_.sessionToken());
-                streamPage_->setAuthToken(authController_.sessionToken());
-                uploadPage_->setAuthToken(authController_.sessionToken());
-                updateAuthenticatedAccount(username, email, QString("欢迎回来，%1。").arg(username), true);
+                updateAuthenticatedAccount(username, email, QString(), true);
             });
     connect(&authController_, &backend::controller::auth::AuthController::registerSucceeded,
             this, [this](const QString &username, const QString &email) {
-                homePage_->setAuthToken(authController_.sessionToken());
-                streamPage_->setAuthToken(authController_.sessionToken());
-                uploadPage_->setAuthToken(authController_.sessionToken());
-                updateAuthenticatedAccount(username, email, QString("已为 %1 创建账户。").arg(username), true);
+                updateAuthenticatedAccount(username, email, QString(), true);
             });
     connect(&authController_, &backend::controller::auth::AuthController::sessionRestored,
             this, [this](const QString &username, const QString &email) {
-                homePage_->setAuthToken(authController_.sessionToken());
-                streamPage_->setAuthToken(authController_.sessionToken());
-                uploadPage_->setAuthToken(authController_.sessionToken());
-                updateAuthenticatedAccount(username, email, QString("%1，欢迎回来。").arg(username), false);
-            });
-    connect(&authController_, &backend::controller::auth::AuthController::loginFailed,
-            this, [this](const QString &message) {
-                currentUsername_.clear();
-                currentEmail_.clear();
-                accountPage_->showLoggedOutState(message);
-                switchToPage(Account);
-            });
-    connect(&authController_, &backend::controller::auth::AuthController::registerFailed,
-            this, [this](const QString &message) {
-                currentUsername_.clear();
-                currentEmail_.clear();
-                accountPage_->showLoggedOutState(message);
-                switchToPage(Account);
-            });
-    connect(&authController_, &backend::controller::auth::AuthController::logoutSucceeded,
-            this, [this](const QString &) {
-                currentUsername_.clear();
-                currentEmail_.clear();
-                homePage_->setAuthToken(QString());
-                streamPage_->setAuthToken(QString());
-                uploadPage_->setAuthToken(QString());
-                accountPage_->showLoggedOutState("您已经退出登录。");
-                switchToPage(Account);
-            });
-    connect(&authController_, &backend::controller::auth::AuthController::logoutFailed,
-            this, [this](const QString &message) {
-                accountPage_->showAuthenticatedState(currentUsername_, currentEmail_, message);
-                switchToPage(Account);
+                updateAuthenticatedAccount(username, email, QString(), false);
             });
 }
 
 void MainWindow::switchToPage(int pageIndex)
 {
-    if (!pageStack_) {
+    if (!pageStack_ || !navigationGroup_) {
         return;
     }
 
-    const int safeIndex = qBound(0, pageIndex, pageStack_->count() - 1);
-    pageStack_->setCurrentIndex(safeIndex);
-
-    if (auto *button = navigationGroup_->button(safeIndex)) {
+    pageStack_->setCurrentIndex(pageIndex);
+    QAbstractButton *button = navigationGroup_->button(pageIndex);
+    if (button) {
         button->setChecked(true);
     }
 }
 
 int MainWindow::sideNavWidth() const
 {
-    return navigationPanel_ ? navigationPanel_->maximumWidth() : 0;
+    return navigationPanel_ ? navigationPanel_->width() : kCollapsedSideNavWidth;
 }
 
 void MainWindow::setSideNavWidth(int width)
@@ -378,7 +335,7 @@ void MainWindow::setSideNavWidth(int width)
         return;
     }
 
-    const int safeWidth = qBound(kCollapsedSideNavWidth, width, kExpandedSideNavWidth);
+    const int safeWidth = qMax(kCollapsedSideNavWidth, qMin(width, kExpandedSideNavWidth));
     navigationPanel_->setMinimumWidth(safeWidth);
     navigationPanel_->setMaximumWidth(safeWidth);
     navigationPanel_->updateGeometry();
@@ -470,9 +427,16 @@ void MainWindow::updateSideNavPresentation()
         }
 
         button->setProperty("navExpanded", sideNavExpanded_);
-        button->setText(sideNavExpanded_
-            ? button->property("navExpandedText").toString()
-            : button->property("navCollapsedText").toString());
+
+        if (sideNavExpanded_) {
+            button->setText(button->property("navExpandedText").toString());
+            button->setIcon(QIcon());
+        } else {
+            const QString iconPath = button->property("navIconPath").toString();
+            button->setText(QString());
+            button->setIcon(QIcon(iconPath));
+        }
+
         button->style()->unpolish(button);
         button->style()->polish(button);
         button->update();
@@ -533,3 +497,4 @@ void MainWindow::updateAuthenticatedAccount(
         switchToPage(Account);
     }
 }
+

@@ -1,4 +1,4 @@
-#include "widgets/VideoOpenGLWidget.hpp"
+﻿#include "widgets/VideoOpenGLWidget.hpp"
 #include "widgets/VideoPlayerWindow.hpp"
 
 #include "playercontroller/service/PlayerController.hpp"
@@ -84,20 +84,20 @@ QString volumeButtonText(int volume, bool muted)
 {
     if (muted || volume <= 0)
     {
-        return "Muted";
+        return "静音";
     }
 
     if (volume < 35)
     {
-        return "Vol Low";
+        return "低音量";
     }
 
     if (volume < 70)
     {
-        return "Vol Mid";
+        return "中音量";
     }
 
-    return "Vol High";
+    return "高音量";
 }
 
 QIcon playerControlIcon(const QString &alias)
@@ -254,8 +254,8 @@ void VideoPlayerWindow::showSelectedVideo(
     const QString &creator,
     const QString &duration)
 {
-    playerTitleLabel_->setText("Opening from Home feed...");
-    playerHintLabel_->setText(QString("Forwarding OpenMedia to PlayerController for %1.").arg(videoId));
+    playerTitleLabel_->setText("正在从首页打开...");
+    playerHintLabel_->setText(QString("正在转发 OpenMedia 到 PlayerController，视频: %1。").arg(videoId));
     playButton_->setEnabled(false);
     updatePlayButton(PlaybackState::Opening);
     progressSlider_->setEnabled(false);
@@ -340,10 +340,10 @@ void VideoPlayerWindow::connectPlayerController()
                 videoTitleLabel_->setText(title);
                 videoMetaLabel_->setText(QString("%1  |  Duration %2  |  ID %3").arg(creator, duration, videoId));
                 videoDescriptionLabel_->setText(
-                    "The Home -> MainWindow -> VideoPlayerWindow -> PlayerController flow is now connected. "
-                    "The video viewport now hosts a reusable overlay control bar.");
+                    "后续功能占位"
+                    "后续功能占位");
                 queueLabel_->setText(
-                    QString("Next player steps\n1. Reuse one control bar in windowed/fullscreen modes\n2. Keep render output on this surface\n3. Translate engine callbacks into UI events for %1").arg(creator));
+                    QString("后续功能占位: %1").arg(creator));
                 refreshViewportChrome();
             });
 
@@ -351,37 +351,37 @@ void VideoPlayerWindow::connectPlayerController()
             this, [this](PlaybackState state, const QString &message) {
                 switch (state) {
                 case PlaybackState::Idle:
-                    playerTitleLabel_->setText("No video selected yet");
+                    playerTitleLabel_->setText("尚未选择视频");
                     playButton_->setEnabled(false);
                     progressSlider_->setEnabled(false);
                     break;
                 case PlaybackState::Opening:
-                    playerTitleLabel_->setText("PlayerController is opening media");
+                    playerTitleLabel_->setText("PlayerController 正在打开媒体");
                     playButton_->setEnabled(false);
                     progressSlider_->setEnabled(false);
                     break;
                 case PlaybackState::Prepared:
-                    playerTitleLabel_->setText("PlayerController prepared the media");
+                    playerTitleLabel_->setText("PlayerController 已准备媒体");
                     playButton_->setEnabled(true);
                     progressSlider_->setEnabled(progressSlider_->maximum() > 0);
                     break;
                 case PlaybackState::Playing:
-                    playerTitleLabel_->setText("Playback is running through PlayerController");
+                    playerTitleLabel_->setText("播放通过 PlayerController 运行中");
                     playButton_->setEnabled(true);
                     progressSlider_->setEnabled(progressSlider_->maximum() > 0);
                     break;
                 case PlaybackState::Paused:
-                    playerTitleLabel_->setText("Playback paused");
+                    playerTitleLabel_->setText("播放已暂停");
                     playButton_->setEnabled(true);
                     progressSlider_->setEnabled(progressSlider_->maximum() > 0);
                     break;
                 case PlaybackState::Stopped:
-                    playerTitleLabel_->setText("Playback stopped");
+                    playerTitleLabel_->setText("播放已停止");
                     playButton_->setEnabled(true);
                     progressSlider_->setEnabled(progressSlider_->maximum() > 0);
                     break;
                 case PlaybackState::Error:
-                    playerTitleLabel_->setText("Playback error");
+                    playerTitleLabel_->setText("播放错误");
                     playButton_->setEnabled(true);
                     progressSlider_->setEnabled(false);
                     break;
@@ -430,14 +430,14 @@ void VideoPlayerWindow::connectPlayerController()
 
     connect(&playerController_, &backend::playercontroller::service::PlayerController::ijkPlayerCreated,
             this, [this]() {
-                playerHintLabel_->setText("PlayerController created the ijkPlayer placeholder instance.");
+                playerHintLabel_->setText("PlayerController 已创建 ijkPlayer 占位实例。");
                 refreshViewportChrome();
             });
 
     connect(&playerController_, &backend::playercontroller::service::PlayerController::ijkPlayerOpenRequested,
             this, [this](const QString &videoId, const QString &title) {
                 playerHintLabel_->setText(
-                    QString("Reserved ijkPlayer call: open %1 (%2).").arg(title, videoId));
+                    QString("预留 ijkPlayer 调用: open %1 (%2)。").arg(title, videoId));
                 refreshViewportChrome();
             });
 
@@ -492,8 +492,8 @@ void VideoPlayerWindow::buildUi()
     headerLayout->addWidget(headerTitle);
 
     auto *headerSummary = new QLabel(
-        "Windowed and fullscreen playback now share one reusable control bar. "
-        "In fullscreen, the controls float over the video and fade in on mouse movement.",
+        "窗口和全屏播放现在共享一个可复用控制栏。"
+        "全屏模式下，控制栏浮于视频上方，鼠标移动时淡入显示。",
         headerWidget_);
     headerSummary->setWordWrap(true);
     headerSummary->setStyleSheet("font-size: 14px; color: #475569;");
@@ -675,15 +675,15 @@ void VideoPlayerWindow::buildUi()
 
 void VideoPlayerWindow::showEmptyState()
 {
-    playerTitleLabel_->setText("No video selected yet");
+    playerTitleLabel_->setText("尚未选择视频");
     playerHintLabel_->setText(
-        "Open any short-video card from HomePage. The selected item will be sent to PlayerController from this window.");
-    videoTitleLabel_->setText("Choose a short video from Home");
-    videoMetaLabel_->setText("No card has been opened yet.");
+        "从首页打开任意短视频卡片。所选项目将从此窗口发送到 PlayerController。");
+    videoTitleLabel_->setText("从首页选择短视频");
+    videoMetaLabel_->setText("尚未打开任何卡片。");
     videoDescriptionLabel_->setText(
-        "This window owns the PlayerController connection and can now reuse the same transport bar in normal and fullscreen modes.");
+        "此窗口拥有 PlayerController 连接，现在可以在普通和全屏模式下复用同一个传输栏。");
     queueLabel_->setText(
-        "What fits here now\n1. Open a video from Home\n2. Reuse the overlay control bar\n3. Enter fullscreen with the button, double-click, or F11");
+        "当前可用功能\n1. 从首页打开视频\n2. 复用覆盖控制栏\n3. 通过按钮、双击或 F11 进入全屏");
     playButton_->setEnabled(false);
     updatePlayButton(PlaybackState::Idle);
     progressSlider_->setEnabled(false);
@@ -706,20 +706,20 @@ void VideoPlayerWindow::updatePlayButton(PlaybackState state)
     switch (state)
     {
     case PlaybackState::Idle:
-        tooltipText = "No video selected";
+        tooltipText = "未选择视频";
         break;
     case PlaybackState::Opening:
-        tooltipText = "Opening video";
+        tooltipText = "正在打开视频";
         break;
     case PlaybackState::Prepared:
     case PlaybackState::Stopped:
         tooltipText = "Play";
         break;
     case PlaybackState::Playing:
-        tooltipText = "Pause";
+        tooltipText = "暂停";
         break;
     case PlaybackState::Paused:
-        tooltipText = "Resume playback";
+        tooltipText = "继续播放";
         break;
     case PlaybackState::Error:
         tooltipText = "Retry playback";
@@ -824,7 +824,7 @@ void VideoPlayerWindow::updateFullscreenButton()
 {
     fullscreenButton_->setIcon(playerControlIcon("fullscreen.png"));
     fullscreenButton_->setText(QString());
-    fullscreenButton_->setToolTip(isFullscreen_ ? "Exit fullscreen" : "Enter fullscreen");
+    fullscreenButton_->setToolTip(isFullscreen_ ? "退出全屏" : "进入全屏");
 }
 
 void VideoPlayerWindow::refreshViewportChrome()

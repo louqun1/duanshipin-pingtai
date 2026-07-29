@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <QMainWindow>
 #include <QString>
@@ -62,6 +62,7 @@ private:
     QPushButton *createNavigationButton(
         const QString &expandedLabel,
         const QString &collapsedLabel,
+        const QString &iconPath,
         int pageIndex);
     void connectNavigation();
     void connectPlaybackFlow();

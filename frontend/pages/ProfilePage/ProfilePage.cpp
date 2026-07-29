@@ -12,12 +12,12 @@ ProfilePage::ProfilePage(QWidget *parent)
     layout->setContentsMargins(40, 36, 40, 36);
     layout->setSpacing(12);
 
-    auto *title = new QLabel("Profile center", this);
+    auto *title = new QLabel("个人中心", this);
     title->setStyleSheet("font-size: 28px; font-weight: 700; color: #0f172a;");
     layout->addWidget(title);
 
     auto *summary = new QLabel(
-        "User profile, creator center, and account settings will be driven by backend services rather than stored inside MainWindow.",
+        "用户资料、创作者中心和账户设置将由后端服务驱动，而非在 MainWindow 中存储。",
         this);
     summary->setWordWrap(true);
     summary->setStyleSheet("font-size: 14px; color: #475569;");

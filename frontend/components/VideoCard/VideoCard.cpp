@@ -1,4 +1,4 @@
-#include "components/VideoCard/VideoCard.hpp"
+﻿#include "components/VideoCard/VideoCard.hpp"
 
 #include <QHBoxLayout>
 #include <QLabel>
@@ -85,7 +85,7 @@ VideoCard::VideoCard(const VideoCardData &data, QWidget *parent)
     badgeRow->setContentsMargins(0, 0, 0, 0);
     badgeRow->setSpacing(8);
 
-    auto *recommendedBadge = new QLabel("RECOMMENDED", posterWidget_);
+    auto *recommendedBadge = new QLabel("推荐", posterWidget_);
     recommendedBadge->setStyleSheet(
         "padding: 4px 8px;"
         "border-radius: 10px;"
@@ -112,7 +112,7 @@ VideoCard::VideoCard(const VideoCardData &data, QWidget *parent)
 
     posterLayout->addStretch();
 
-    auto *playLabel = new QLabel("Click anywhere on the card to play", posterWidget_);
+    auto *playLabel = new QLabel("点击卡片任意位置播放", posterWidget_);
     playLabel->setWordWrap(true);
     playLabel->setStyleSheet(
         "color: #f8fafc;"
@@ -288,11 +288,11 @@ void VideoCard::updateLikeButtonAppearance()
 
     QString label;
     if (likeBusy_) {
-        label = "Saving...";
+        label = "保存中...";
     } else if (likedByMe_) {
-        label = QString("Liked %1").arg(likeCount_);
+        label = QString("已点赞 %1").arg(likeCount_);
     } else {
-        label = QString("Like %1").arg(likeCount_);
+        label = QString("点赞 %1").arg(likeCount_);
     }
 
     const QString background = likeBusy_
@@ -307,7 +307,7 @@ void VideoCard::updateLikeButtonAppearance()
     const QString hoverBackground = likedByMe_ ? "#bfdbfe" : "#eff6ff";
 
     likeButton_->setText(label);
-    likeButton_->setToolTip(likedByMe_ ? "Remove like" : "Like this video");
+    likeButton_->setToolTip(likedByMe_ ? "取消点赞" : "点赞此视频");
     likeButton_->setEnabled(!likeBusy_);
     likeButton_->setStyleSheet(
         QString(

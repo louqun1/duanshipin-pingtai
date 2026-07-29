@@ -76,8 +76,8 @@ QString apiBaseUrl()
         return configured;
     }
 
-    return QStringLiteral("http://192.168.3.28:8080");
-    // return QStringLiteral("http://192.168.99.128:8080");
+    // return QStringLiteral("http://192.168.3.28:8080");
+    return QStringLiteral("http://192.168.99.128:8080");
 }
 
 QStringList apiBaseUrlCandidates()
@@ -124,7 +124,7 @@ bool isConnectionFailure(QNetworkReply::NetworkError error)
 HomePage::HomePage(QWidget *parent)
     : QWidget(parent)
 {
-    networkManager_ = new QNetworkAccessManager(this);//发送HTTP/HTTPS GET 请求，发送 POST 请求，下载文件，上传数据，处理网络响应等。
+    networkManager_ = new QNetworkAccessManager(this);
     eventStreamReconnectTimer_ = new QTimer(this);
     eventStreamReconnectTimer_->setInterval(kEventStreamReconnectDelayMs);
     eventStreamReconnectTimer_->setSingleShot(true);
@@ -133,7 +133,7 @@ HomePage::HomePage(QWidget *parent)
     });
     apiBaseUrls_ = apiBaseUrlCandidates();
     buildUi();
-    setStatusMessage(QString("Connecting to %1 ...").arg(apiVideosUrl(apiBaseUrls_.value(apiBaseUrlIndex_))));
+    setStatusMessage(QString("正在连接 %1 ...").arg(apiVideosUrl(apiBaseUrls_.value(apiBaseUrlIndex_))));
     fetchFeed();
 }
 
@@ -159,7 +159,7 @@ void HomePage::setAuthToken(const QString &token)
 
 void HomePage::refreshFeed()
 {
-    setStatusMessage(QString("Refreshing %1 ...").arg(apiVideosUrl(apiBaseUrls_.value(apiBaseUrlIndex_, apiBaseUrl()))));
+    setStatusMessage(QString("正在刷新 %1 ...").arg(apiVideosUrl(apiBaseUrls_.value(apiBaseUrlIndex_, apiBaseUrl()))));
     if (feedRequested_) {
         feedRefreshQueued_ = true;
         return;
@@ -330,7 +330,7 @@ void HomePage::handleFeedReply(QNetworkReply *reply)
             ++apiBaseUrlIndex_;
             const QString nextBaseUrl = apiBaseUrls_.at(apiBaseUrlIndex_);
             setStatusMessage(
-                QString("Failed to reach %1: %2. Retrying %3 ...")
+                QString("无法连接 %1: %2。正在重试 %3 ...")
                     .arg(apiVideosUrl(attemptedBaseUrl), reply->errorString(), apiVideosUrl(nextBaseUrl)));
 
             QNetworkRequest retryRequest(QUrl(apiVideosUrl(nextBaseUrl)));
@@ -344,7 +344,7 @@ void HomePage::handleFeedReply(QNetworkReply *reply)
 
         feedRequested_ = false;
         setStatusMessage(
-            QString("Failed to load %1: %2. Start server/cmd/api or set FLASHPOINT_API_BASE_URL.")
+            QString("加载 %1 失败: %2。请启动 server/cmd/api 或设置 FLASHPOINT_API_BASE_URL。")
                 .arg(apiVideosUrl(attemptedBaseUrl), reply->errorString()));
         if (feedRefreshQueued_) {
             feedRefreshQueued_ = false;
@@ -356,7 +356,7 @@ void HomePage::handleFeedReply(QNetworkReply *reply)
     const auto document = QJsonDocument::fromJson(reply->readAll());
     if (!document.isObject()) {
         feedRequested_ = false;
-        setStatusMessage(QString("Invalid response from %1.").arg(apiVideosUrl(attemptedBaseUrl)));
+        setStatusMessage(QString("%1 返回无效响应。").arg(apiVideosUrl(attemptedBaseUrl)));
         if (feedRefreshQueued_) {
             feedRefreshQueued_ = false;
             fetchFeed();
@@ -546,7 +546,7 @@ void HomePage::requestLikeToggle(const QString &videoId, bool shouldLike)
         return;
     }
     if (authToken_.isEmpty()) {
-        setStatusMessage("Sign in before liking videos.");
+        setStatusMessage("请登录后再点赞视频。");
         return;
     }
 
@@ -569,7 +569,7 @@ void HomePage::requestLikeToggle(const QString &videoId, bool shouldLike)
     });
 
     setStatusMessage(
-        QString("%1 video %2 ...").arg(shouldLike ? "Saving like for" : "Removing like from").arg(videoId));
+        QString("%1 video %2 ...").arg(shouldLike ? "正在为" : "正在取消").arg(videoId));
 }
 
 void HomePage::handleLikeToggleReply(QNetworkReply *reply, const QString &videoId)
@@ -596,7 +596,7 @@ void HomePage::handleLikeToggleReply(QNetworkReply *reply, const QString &videoI
             errorMessage = apiMessage;
         }
 
-        setStatusMessage(QString("Like request failed: %1").arg(errorMessage));
+        setStatusMessage(QString("点赞请求失败: %1").arg(errorMessage));
         return;
     }
 
@@ -605,8 +605,8 @@ void HomePage::handleLikeToggleReply(QNetworkReply *reply, const QString &videoI
     updateVideoLikeState(videoId, likeCount, likedByMe);
     setStatusMessage(
         likedByMe
-            ? QString("Liked video %1").arg(videoId)
-            : QString("Removed like from video %1").arg(videoId));
+            ? QString("已点赞视频 %1").arg(videoId)
+            : QString("已取消点赞视频 %1").arg(videoId));
 }
 
 void HomePage::handleVideoDetailReply(QNetworkReply *reply, RemoteVideoItem fallbackItem)
@@ -618,14 +618,14 @@ void HomePage::handleVideoDetailReply(QNetworkReply *reply, RemoteVideoItem fall
 
     if (reply->error() != QNetworkReply::NoError) {
         setStatusMessage(
-            QString("Failed to load %1: %2")
+            QString("加载 %1 失败: %2")
                 .arg(apiVideoDetailUrl(baseUrl, fallbackItem.id), reply->errorString()));
         return;
     }
 
     const auto document = QJsonDocument::fromJson(reply->readAll());
     if (!document.isObject()) {
-        setStatusMessage(QString("Invalid response from %1.").arg(apiVideoDetailUrl(baseUrl, fallbackItem.id)));
+        setStatusMessage(QString("%1 返回无效响应。").arg(apiVideoDetailUrl(baseUrl, fallbackItem.id)));
         return;
     }
 
@@ -636,7 +636,7 @@ void HomePage::handleVideoDetailReply(QNetworkReply *reply, RemoteVideoItem fall
     const QString duration = formatDurationMs(object.value("durationMs").toVariant().toLongLong());
 
     if (status != "ready" || playUrl.isEmpty()) {
-        setStatusMessage(QString("Video %1 is not ready yet. Current status: %2").arg(fallbackItem.id, status));
+        setStatusMessage(QString("视频 %1 尚未就绪。当前状态: %2").arg(fallbackItem.id, status));
         return;
     }
 
@@ -646,7 +646,7 @@ void HomePage::handleVideoDetailReply(QNetworkReply *reply, RemoteVideoItem fall
         title,
         fallbackItem.creator,
         duration);
-    setStatusMessage(QString("Opening %1").arg(title));
+    setStatusMessage(QString("正在打开 %1").arg(title));
 }
 
 void HomePage::scheduleEventStreamReconnect()
@@ -729,7 +729,7 @@ void HomePage::relayoutCards()
     const int estimatedVisibleRows = qMax(1, feedScrollArea_->viewport()->height() / 410);
     const int visibleCardCount = qMin(cards_.size(), estimatedVisibleRows * columns);
     feedStatsLabel_->setText(
-        QString("%1 videos  |  %2 per row  |  about %3 visible")
+        QString("%1 个视频  |  每行 %2 个  |  约 %3 个可见")
             .arg(cards_.size())
             .arg(columns)
             .arg(visibleCardCount));

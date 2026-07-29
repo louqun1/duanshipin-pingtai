@@ -1,4 +1,4 @@
-#include "pages/UploadPage/UploadPage.hpp"
+﻿#include "pages/UploadPage/UploadPage.hpp"
 
 #include <QFile>
 #include <QFileDialog>
@@ -34,8 +34,8 @@ QString apiBaseUrl()
         return configured;
     }
 
-    return QStringLiteral("http://192.168.3.28:8080");
-    // return QStringLiteral("http://192.168.99.128:8080");
+    // return QStringLiteral("http://192.168.3.28:8080");
+    return QStringLiteral("http://192.168.99.128:8080");
 }
 
 QString apiVideoUploadUrl(const QString &baseUrl)
@@ -45,7 +45,7 @@ QString apiVideoUploadUrl(const QString &baseUrl)
 
 QString defaultFilePrompt()
 {
-    return QStringLiteral("No file selected yet. Pick a local video file to upload.");
+    return QStringLiteral("尚未选择文件。请选择一个本地视频文件上传。");
 }
 
 }  // namespace
@@ -61,11 +61,11 @@ void UploadPage::setAuthToken(const QString &token)
 {
     authToken_ = token.trimmed();
     if (authToken_.isEmpty()) {
-        setStatusMessage("Sign in before uploading a video.", true);
+        setStatusMessage("请先登录后再上传视频。", true);
         return;
     }
 
-    setStatusMessage(QString("Signed in. Ready to upload to %1").arg(apiVideoUploadUrl(apiBaseUrl())));
+    setStatusMessage(QString("已登录。准备上传到 %1").arg(apiVideoUploadUrl(apiBaseUrl())));
 }
 
 void UploadPage::buildUi()
@@ -87,13 +87,13 @@ void UploadPage::buildUi()
     layout->setContentsMargins(32, 28, 32, 28);
     layout->setSpacing(20);
 
-    auto *title = new QLabel("Upload workspace", this);
+    auto *title = new QLabel("上传工作区", this);
     title->setStyleSheet("font-size: 28px; font-weight: 700; color: #0f172a;");
     layout->addWidget(title);
 
     auto *summary = new QLabel(
-        "Sign in first, then select a local video file and send it to the API server for transcoding. "
-        "If your worker is running on the VM, the uploaded video will move from queued to ready automatically.",
+        "请先登录，然后选择本地视频文件并发送到 API 服务器进行转码。"
+        "如果 Worker 在虚拟机上运行，上传的视频将从排队状态自动转为就绪。",
         this);
     summary->setWordWrap(true);
     summary->setStyleSheet("font-size: 14px; color: #475569;");
@@ -113,12 +113,12 @@ void UploadPage::buildUi()
     formPanelLayout->setContentsMargins(24, 24, 24, 24);
     formPanelLayout->setSpacing(18);
 
-    auto *sectionTitle = new QLabel("Create a queued upload", formPanel);
+    auto *sectionTitle = new QLabel("创建上传任务", formPanel);
     sectionTitle->setStyleSheet("font-size: 22px; font-weight: 700; color: #0f172a;");
     formPanelLayout->addWidget(sectionTitle);
 
     auto *sectionBody = new QLabel(
-        "The API will store the raw file in MinIO raw-media, insert the database records, and create a transcode job.",
+        "API 将把原始文件存入 MinIO raw-media，插入数据库记录，并创建转码任务。",
         formPanel);
     sectionBody->setWordWrap(true);
     sectionBody->setStyleSheet("font-size: 14px; color: #64748b;");
@@ -138,7 +138,7 @@ void UploadPage::buildUi()
     fileInfoLayout->setContentsMargins(0, 0, 0, 0);
     fileInfoLayout->setSpacing(6);
 
-    auto *fileLabel = new QLabel("Video file", fileCard);
+    auto *fileLabel = new QLabel("视频文件", fileCard);
     fileLabel->setStyleSheet("font-size: 14px; font-weight: 700; color: #0f172a;");
     fileInfoLayout->addWidget(fileLabel);
 
@@ -148,7 +148,7 @@ void UploadPage::buildUi()
     fileInfoLayout->addWidget(selectedFileLabel_);
     fileCardLayout->addLayout(fileInfoLayout, 1);
 
-    selectFileButton_ = new QPushButton("Choose file", fileCard);
+    selectFileButton_ = new QPushButton("选择文件", fileCard);
     selectFileButton_->setCursor(Qt::PointingHandCursor);
     selectFileButton_->setStyleSheet(
         "QPushButton {"
@@ -173,7 +173,7 @@ void UploadPage::buildUi()
     form->setVerticalSpacing(14);
 
     titleEdit_ = new QLineEdit(formPanel);
-    titleEdit_->setPlaceholderText("Leave blank to use the file name");
+    titleEdit_->setPlaceholderText("留空则使用文件名");
     titleEdit_->setStyleSheet(
         "QLineEdit {"
         "  color: #0f172a;"
@@ -185,7 +185,7 @@ void UploadPage::buildUi()
     form->addRow("Title", titleEdit_);
 
     descriptionEdit_ = new QTextEdit(formPanel);
-    descriptionEdit_->setPlaceholderText("Optional description shown in the API response and future detail views");
+    descriptionEdit_->setPlaceholderText("API 响应和未来详情视图中显示的可选描述");
     descriptionEdit_->setMinimumHeight(96);
     descriptionEdit_->setStyleSheet(
         "QTextEdit {"
@@ -234,7 +234,7 @@ void UploadPage::buildUi()
     actionRow->setContentsMargins(0, 0, 0, 0);
     actionRow->setSpacing(12);
 
-    uploadButton_ = new QPushButton("Start upload", formPanel);
+    uploadButton_ = new QPushButton("开始上传", formPanel);
     uploadButton_->setCursor(Qt::PointingHandCursor);
     uploadButton_->setStyleSheet(
         "QPushButton {"
@@ -269,7 +269,7 @@ void UploadPage::buildUi()
     notesEyebrow->setStyleSheet("font-size: 11px; font-weight: 700; letter-spacing: 1px; color: #1d4ed8;");
     notesLayout->addWidget(notesEyebrow);
 
-    auto *notesTitle = new QLabel("What happens after you click upload", notesPanel);
+    auto *notesTitle = new QLabel("点击上传后会发生什么", notesPanel);
     notesTitle->setWordWrap(true);
     notesTitle->setStyleSheet("font-size: 22px; font-weight: 700; color: #0f172a;");
     notesLayout->addWidget(notesTitle);
@@ -292,7 +292,7 @@ void UploadPage::buildUi()
     notesLayout->addWidget(notesBody);
 
     auto *workerHint = new QLabel(
-        "If the video stays in queued status, check whether the worker is already running on the VM.",
+        "如果视频一直处于排队状态，请检查 Worker 是否已在虚拟机上运行。",
         notesPanel);
     workerHint->setWordWrap(true);
     workerHint->setStyleSheet("font-size: 13px; color: #64748b;");
@@ -302,7 +302,7 @@ void UploadPage::buildUi()
     contentLayout->addWidget(notesPanel, 2);
     layout->addLayout(contentLayout, 1);
 
-    setStatusMessage("Sign in before uploading a video.");
+    setStatusMessage("请先登录后再上传视频。");
 
     connect(selectFileButton_, &QPushButton::clicked, this, &UploadPage::pickVideoFile);
     connect(uploadButton_, &QPushButton::clicked, this, &UploadPage::submitUpload);
@@ -312,7 +312,7 @@ void UploadPage::pickVideoFile()
 {
     const QString filePath = QFileDialog::getOpenFileName(
         this,
-        "Select a video file",
+        "选择视频文件",
         selectedFilePath_.isEmpty() ? QString() : selectedFilePath_,
         "Video files (*.mp4 *.mov *.mkv *.avi *.m4v *.flv *.wmv);;All files (*.*)");
 
@@ -358,7 +358,7 @@ void UploadPage::submitUpload()
     if (!file->open(QIODevice::ReadOnly)) {
         file->deleteLater();
         multiPart->deleteLater();
-        setStatusMessage("Failed to open the selected file for reading.", true);
+        setStatusMessage("无法打开所选文件进行读取。", true);
         return;
     }
 
@@ -382,7 +382,7 @@ void UploadPage::submitUpload()
     multiPart->setParent(activeReply_);
 
     setUploading(true);
-    setStatusMessage(QString("Uploading %1 ...").arg(fileInfo.fileName()));
+    setStatusMessage(QString("正在上传 %1 ...").arg(fileInfo.fileName()));
 
     connect(activeReply_, &QNetworkReply::uploadProgress, this, [this](qint64 sent, qint64 total) {
         if (!progressBar_) {
@@ -426,7 +426,7 @@ void UploadPage::handleUploadFinished(QNetworkReply *reply)
             errorMessage = apiMessage;
         }
 
-        setStatusMessage(QString("Upload failed: %1").arg(errorMessage), true);
+        setStatusMessage(QString("上传失败: %1").arg(errorMessage), true);
         reply->deleteLater();
         return;
     }
@@ -448,7 +448,7 @@ void UploadPage::handleUploadFinished(QNetworkReply *reply)
     }
 
     setStatusMessage(
-        QString("Upload accepted: video %1 (%2) is now %3. Refreshing the home feed.").arg(id, title, status));
+        QString("上传已接受: 视频 %1 (%2) 当前状态为 %3。正在刷新首页。").arg(id, title, status));
     emit uploadSucceeded();
     reply->deleteLater();
 }
@@ -460,7 +460,7 @@ void UploadPage::setUploading(bool uploading)
     }
     if (uploadButton_) {
         uploadButton_->setEnabled(!uploading);
-        uploadButton_->setText(uploading ? "Uploading..." : "Start upload");
+        uploadButton_->setText(uploading ? "上传中..." : "开始上传");
     }
     if (titleEdit_) {
         titleEdit_->setEnabled(!uploading);
@@ -492,7 +492,7 @@ bool UploadPage::validateForm(QString *errorMessage) const
 {
     if (selectedFilePath_.trimmed().isEmpty()) {
         if (errorMessage) {
-            *errorMessage = "Select a local video file before starting the upload.";
+            *errorMessage = "请先选择本地视频文件再开始上传。";
         }
         return false;
     }
@@ -500,21 +500,21 @@ bool UploadPage::validateForm(QString *errorMessage) const
     const QFileInfo info(selectedFilePath_);
     if (!info.exists() || !info.isFile()) {
         if (errorMessage) {
-            *errorMessage = "The selected file no longer exists. Please choose it again.";
+            *errorMessage = "所选文件已不存在。请重新选择。";
         }
         return false;
     }
 
     if (activeReply_) {
         if (errorMessage) {
-            *errorMessage = "An upload is already in progress.";
+            *errorMessage = "当前已有上传任务正在进行。";
         }
         return false;
     }
 
     if (authToken_.trimmed().isEmpty()) {
         if (errorMessage) {
-            *errorMessage = "Sign in before uploading a video.";
+            *errorMessage = "请先登录后再上传视频。";
         }
         return false;
     }

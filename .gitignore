@@ -1,0 +1,11 @@
+build/
+build-qt-6103-llvm/
+data/
+bin/
+docs/
+*.exe
+*.dll
+*.pdb
+*.obj
+*.lib
+*.ilk
